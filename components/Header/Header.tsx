@@ -11,7 +11,7 @@ export const Header = () => {
   return (
     <header className="container header">
       <div className="content">
-        <Link href="/">
+        <Link href="/" passHref>
           <Button
             unsetStyle
             onClick={() => {

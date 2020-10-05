@@ -11,7 +11,6 @@ export class Auth {
   }
 
   init() {
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     firebase.auth().onAuthStateChanged((user) => this.authStateChanged(user))
     this.initialized = true
   }

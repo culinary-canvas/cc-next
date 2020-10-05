@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/storage'
 
 export class StorageService {
@@ -38,8 +38,9 @@ export class StorageService {
   }
 
   static isRemote(url: string) {
-    return !!url && (
-      url.substring(0, 8) === 'https://' || url.substring(0, 7) === 'http://'
+    return (
+      !!url &&
+      (url.substring(0, 8) === 'https://' || url.substring(0, 7) === 'http://')
     )
   }
 

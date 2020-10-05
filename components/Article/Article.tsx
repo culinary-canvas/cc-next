@@ -3,11 +3,11 @@ import { observer } from 'mobx-react'
 import { Share } from '../Share/Share'
 import { Button } from '../Button/Button'
 import { useRouter } from 'next/router'
-import { authService } from '../../services/auth/Auth.service'
 import { classnames } from '../../services/importHelpers'
 import { Article as ArticleModel } from '../../domain/Article/Article'
 import { dateTimeService } from '../../domain/DateTime/DateTime.service'
 import { Section } from '../Section/Section'
+import {useAuth} from '../../services/auth/Auth'
 
 interface Props {
   article: ArticleModel
@@ -27,10 +27,11 @@ export const Article = observer((props: Props) => {
   } = props
 
   const router = useRouter()
+  const auth = useAuth()
 
   return (
     <>
-      {authService.isSignedIn && (
+      {auth.isSignedIn && (
         <Button
           className="edit-button"
           onClick={
