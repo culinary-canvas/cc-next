@@ -1,13 +1,14 @@
-import {action, computed, observable} from 'mobx'
-import {Article} from './Article'
+import { action, computed, observable } from 'mobx'
+import { Article } from './Article'
 import Store from '../../types/Store'
-import {ArticleApi} from './Article.api'
-import {StorageService} from '../../services/storage/Storage.service'
-import {ImageContent} from '../Image/ImageContent'
-import {ArticleType} from './ArticleType'
-import {ArticleService} from './Article.service'
-import {SortableService} from '../../services/sortable/Sortable.service'
-import {isNil} from '../../services/importHelpers'
+import { ArticleApi } from './Article.api'
+import { StorageService } from '../../services/storage/Storage.service'
+import { ImageContent } from '../Image/ImageContent'
+import { ArticleType } from './ArticleType'
+import { ArticleService } from './Article.service'
+import { SortableService } from '../../services/sortable/Sortable.service'
+import { isNil } from '../../services/importHelpers'
+import { User } from 'firebase'
 
 export class ArticleStore implements Store {
   @observable articles: Article[] = []
@@ -96,6 +97,7 @@ export class ArticleStore implements Store {
 
   async save(
     article: Article,
+    user: User,
     onProgress: (progress: number, message: string) => any = (p, m) =>
       console.debug(m, p),
   ) {
@@ -116,7 +118,7 @@ export class ArticleStore implements Store {
 
     onProgress(0.8, 'Saving...')
     article.titleForUrl = ArticleService.createTitleForUrl(article)
-    const persisted = await ArticleApi.save(article)
+    const persisted = await ArticleApi.save(article, user)
 
     onProgress(0.9, 'Last bit...')
     this.populate([
@@ -131,6 +133,7 @@ export class ArticleStore implements Store {
 
   async delete(
     article: Article,
+    user: User,
     onProgress?: (progress: number, message: string) => any,
   ) {
     onProgress(0, `Deleting ${article.title || 'article with no title'}`)
@@ -141,7 +144,7 @@ export class ArticleStore implements Store {
 
     onProgress(0.7, 'Updating sort orders')
     SortableService.ungapSortOrders(this.articles)
-    await Promise.all(this.articles.map(async (a) => this.save(a)))
+    await Promise.all(this.articles.map(async (a) => this.save(a, user)))
 
     onProgress(1, 'Done!')
   }

@@ -8,12 +8,14 @@ import { Controls } from './Controls/Controls'
 import { useEnv } from '../../services/AppEnvironment'
 import { ArticleApi } from '../../domain/Article/Article.api'
 import { COLOR } from '../../styles/color'
+import { useAuth } from '../../services/auth/Auth'
 
 const AdminSidebar = observer(() => {
   const env = useEnv()
   // TODO nav
   const router: any = null //useRouter()
   const { adminSidebarStore: store } = env
+  const auth = useAuth()
 
   const [saving, setSaving] = useState<boolean>(false)
   const [deleting, setDeleting] = useState<boolean>(false)
@@ -86,6 +88,7 @@ const AdminSidebar = observer(() => {
     env.overlayStore.toggle()
     const persisted = await env.articleStore.save(
       store.article,
+      auth.user,
       (progress, message) => {
         env.overlayStore.setText(message)
         env.overlayStore.setProgress(progress)
@@ -94,7 +97,7 @@ const AdminSidebar = observer(() => {
     setTimeout(() => {
       env.overlayStore.toggle()
       store.formControl.reset()
-/*
+      /*
       router.navigate({
         url: `/admin/articles/${persisted.titleForUrl}`,
         method: 'replace',
@@ -111,10 +114,14 @@ const AdminSidebar = observer(() => {
     if (goodToGo) {
       setDeleting(true)
       env.overlayStore.toggle()
-      await env.articleStore.delete(store.article, (progress, message) => {
-        env.overlayStore.setText(message)
-        env.overlayStore.setProgress(progress)
-      })
+      await env.articleStore.delete(
+        store.article,
+        auth.user,
+        (progress, message) => {
+          env.overlayStore.setText(message)
+          env.overlayStore.setProgress(progress)
+        },
+      )
       await ArticleApi.delete(store.article.id)
       setTimeout(() => env.overlayStore.toggle(), 1000)
       // router.navigate({ url: '/admin/articles' })

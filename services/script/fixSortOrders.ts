@@ -1,7 +1,8 @@
 import { ArticleApi } from '../../domain/Article/Article.api'
 import { SortableService } from '../sortable/Sortable.service'
+import {User} from 'firebase'
 
-export async function fixSortOrders() {
+export async function fixSortOrders(user: User) {
   const articles = await ArticleApi.all('created')
   articles.sort((a1, a2) => a1.created.compareTo(a2.created))
   SortableService.fixSortOrders(articles)
@@ -9,5 +10,5 @@ export async function fixSortOrders() {
     SortableService.fixSortOrders(a.sections)
     a.sections.forEach((s) => SortableService.fixSortOrders(s.contents))
   })
-  return Promise.all(articles.map(async (a) => await ArticleApi.save(a)))
+  return Promise.all(articles.map(async (a) => await ArticleApi.save(a, user)))
 }

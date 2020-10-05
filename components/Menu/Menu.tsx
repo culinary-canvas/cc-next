@@ -7,12 +7,13 @@ import { useEnv } from '../../services/AppEnvironment'
 import { useRouter } from 'next/router'
 import { classnames } from '../../services/importHelpers'
 import { ArticleType } from '../../domain/Article/ArticleType'
-import { authService } from '../../services/auth/Auth.service'
+import { useAuth } from '../../services/auth/Auth'
 
 export const Menu = observer(() => {
   const env = useEnv()
   const [isOpen, setOpen] = useState<boolean>(false)
   const router = useRouter()
+  const auth = useAuth()
 
   return (
     <nav className={classnames('menu', { 'is-open': isOpen })}>
@@ -55,7 +56,7 @@ export const Menu = observer(() => {
             Portraits
           </button>
 
-          {authService.isSignedIn && <AdminMenu />}
+          {auth.isSignedIn && <AdminMenu />}
         </div>
       </div>
 

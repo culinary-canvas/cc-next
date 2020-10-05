@@ -8,10 +8,10 @@ import { Model } from './Model'
 import { OrderBy } from './OrderBy'
 import { SubscriptionHandler } from './SubscriptionHandler'
 import Where from './Where'
-import { authService } from '../auth/Auth.service'
 import { Class } from '../../types/Class'
 import { DbTransformService } from './DbTransform.service'
 import { getCollection } from './decorators/collection.decorator'
+import { User } from 'firebase'
 
 class DbService<T extends Model> {
   /**
@@ -147,13 +147,13 @@ class DbService<T extends Model> {
    * Store model in DB
    *
    * @param model
+   * @param user
    */
-  async save(model: T): Promise<T> {
-    this.beforeSave(model)
+  async save(model: T, user: User): Promise<T> {
+    this.beforeSave(model, user)
     const lastPersistedState = model.id ? await this.getById(model.id) : null
 
     const dbObject = DbTransformService.transformToDb(model)
-    console.log(dbObject)
     const collectionRef = firebase.firestore().collection(this.collection)
     const doc = model.id ? collectionRef.doc(model.id) : collectionRef.doc()
     await doc.set(dbObject)
@@ -194,10 +194,10 @@ class DbService<T extends Model> {
     await batch.commit()
   }
 
-  private beforeSave(model: T) {
+  private beforeSave(model: T, user: User) {
     if (!model.id) {
       model.created = DateTime.create()
-      model.createdById = authService.user.uid
+      model.createdById = user.uid
     }
     model.modified = DateTime.create()
     console.debug('Before save: ', model)

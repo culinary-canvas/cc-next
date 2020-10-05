@@ -2,6 +2,7 @@ import {Article} from './Article'
 import DbService from '../../services/db/Db.service'
 import {OrderBy} from '../../services/db/OrderBy'
 import Where from '../../services/db/Where'
+import {User} from 'firebase'
 
 export class ArticleApi {
   private static readonly db = new DbService(Article)
@@ -21,8 +22,8 @@ export class ArticleApi {
     return ArticleApi.db.get(null, [new OrderBy(orderByField, 'desc')])
   }
 
-  static async save(article: Article): Promise<Article> {
-    return ArticleApi.db.save(article)
+  static async save(article: Article, user: User): Promise<Article> {
+    return ArticleApi.db.save(article, user)
   }
 
   static async delete(id: string) {

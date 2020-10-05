@@ -4,9 +4,11 @@ import { Button } from '../../components/Button/Button'
 import { setTitleForUrl } from '../../services/script/setTitleForUrl'
 import { fixSortOrders } from '../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../services/script/deleteUnusedTags'
+import { useAuth } from '../../services/auth/Auth'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
+  const auth = useAuth()
 
   return (
     <div className="page container">
@@ -14,7 +16,7 @@ const AdminDevArea = observer(() => {
         <Button
           onClick={async () => {
             setRunning('setTitleForUrl')
-            await setTitleForUrl()
+            await setTitleForUrl(auth.user)
             setRunning(null)
           }}
           loading={running === 'setTitleForUrl'}
@@ -25,7 +27,7 @@ const AdminDevArea = observer(() => {
         <Button
           onClick={async () => {
             setRunning('fixSortOrders')
-            await fixSortOrders()
+            await fixSortOrders(auth.user)
             setRunning(null)
           }}
           loading={running === 'fixSortOrders'}
