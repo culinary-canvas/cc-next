@@ -1,0 +1,35 @@
+@import '../../../styles/color';
+
+.control-buttons.container.fit .control-button {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  position: relative;
+
+  .container {
+    width: 70%;
+    height: 70%;
+    background-color: $grey-light;
+    border-radius: 4px;
+  }
+
+  .content {
+    position: absolute;
+  }
+
+  &.fit-ARTICLE .content {
+    border: 2px dashed $grey;
+    width: 50%;
+    height: 50%;
+  }
+  &.fit-SCREEN_WIDTH .content {
+    border: 2px dashed $grey;
+    width: 90%;
+    height: 50%;
+  }
+  &.fit-FULL_SCREEN .content {
+    border: 2px dashed $grey;
+    width: 90%;
+    height: 90%;
+  }
+}

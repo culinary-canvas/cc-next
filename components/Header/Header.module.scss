@@ -1,0 +1,52 @@
+@import '../../styles/layout';
+@import '../../styles/color';
+
+.container.header {
+  position: absolute;
+  display: flex;
+  z-index: 40;
+  justify-content: center;
+  width: 100%;
+  height: $header-height;
+
+  @include media('<=phone') {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    background-color: $grey-light;
+    height: $mobile-header-height;
+  }
+  //  border-bottom: 2px solid $black;
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    @include media('<=phone') {
+      justify-content: space-between;
+    }
+
+    @include media('>phone') {
+      flex-direction: row;
+      padding: 0 3rem;
+    }
+
+    .logo {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+
+      @include media('<=phone') {
+        max-width: 60vw;
+      }
+
+      @include media('>phone') {
+        bottom: -1px;
+        max-height: 3rem;
+        background-color: white;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.file-input {
+  cursor: pointer;
+  margin: 0 0 1rem;
+  object-fit: contain;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    display: none;
+  }
+
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .button {
+    margin-left: 1rem;
+  }
+}

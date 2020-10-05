@@ -1,0 +1,53 @@
+@import 'article/article';
+@import 'article/article.mobile';
+@import 'article/fit';
+@import 'article/horizontalAlign';
+@import 'article/orientation';
+@import 'article/placement';
+@import 'article/section.image';
+@import 'article/content-type';
+@import 'article/section';
+@import 'article/section.mobile';
+@import 'article/section.text';
+@import 'article/verticalAlign';
+@import 'form';
+@import 'util';
+@import 'color';
+@import 'layout';
+@import 'element';
+@import 'font';
+@import 'animation';
+@import 'page';
+
+#app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  min-height: 100vh;
+
+  background: repeating-linear-gradient(
+    -6deg,
+    #{$grey-light},
+    #{$grey-light} 150vh,
+    #{$pink} 50vh,
+    #{$pink} 200vh
+  );
+
+  > * {
+    transition: transform $animation-really-fast ease-in-out,
+      width $animation-really-fast ease-in-out;
+  }
+
+  transition: background-color $animation-slow ease-in-out,
+    transform $animation-really-fast ease-in-out,
+    width $animation-really-fast ease-in-out;
+
+  &.showing-sidebar {
+    @include app-with-sidebar-width();
+    @include app-with-sidebar-transform();
+  }
+}

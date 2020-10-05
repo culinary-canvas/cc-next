@@ -1,0 +1,69 @@
+@import '../font';
+@import '../color';
+@import '../layout';
+@import 'article.variables';
+
+/************************
+ SECTION CONTAINER 
+ ************************/
+@include media('<=phone') {
+  .section.container {
+    grid-auto-rows: minmax(1rem, auto);
+    grid-column-start: 1 !important;
+    grid-template-columns: 100vw !important;
+    width: 100vw;
+
+    &.fit-SCREEN_WIDTH,
+    &.fit-FULL_SCREEN {
+      grid-column-end: 4;
+    }
+
+    .content,
+    .image.container {
+      grid-area: unset !important;
+      grid-row-start: unset !important;
+      overflow: hidden;
+
+      &.text {
+        padding: 1rem !important;
+
+        &.content-type-TITLE {
+          font-size: $font-size-xxl !important;
+        }
+        &.content-type-SUB_HEADING {
+          font-size: $font-size-l !important;
+        }
+        &.content-type-BYLINE {
+          font-size: $font-size-s !important;
+        }
+        &.content-type-HEADING {
+          font-size: $font-size-l !important;
+        }
+        &.content-type-LEAD {
+          font-size: 18px !important;
+        }
+        &.content-type-PARAGRAPH {
+          font-size: 18px !important;
+        }
+      }
+
+      &:not(.background) {
+        .image {
+          height: unset !important;
+          width: unset !important;
+          padding: 1rem 1rem 0 !important;
+        }
+      }
+
+      &.background {
+        position: absolute;
+      }
+    }
+
+    &:first-child {
+      .image {
+        padding: 0 !important;
+      }
+    }
+  }
+}

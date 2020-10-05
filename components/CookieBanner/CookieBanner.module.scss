@@ -1,0 +1,22 @@
+@import '../../styles/color';
+
+.cookie-banner.container {
+  display: flex !important;
+  align-items: center !important;
+  background-color: $black !important;
+  a {
+    color: $white;
+    font-weight: 700;
+  }
+
+  .cookie-banner.accept-button {
+    background-color: transparent !important;
+    border: 2px solid $white !important;
+    color: $white !important;
+  }
+  .cookie-banner.decline-button {
+    background-color: transparent !important;
+    border: 2px solid $pink !important;
+    color: $pink !important;
+  }
+}

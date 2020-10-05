@@ -1,0 +1,54 @@
+@import '../font';
+@import '../layout';
+@import '../color';
+@import 'article.variables';
+
+.article.container {
+  width: 100%;
+}
+
+.content.article {
+  display: grid;
+  align-content: center;
+  grid-template-columns: 1fr minmax(50%, #{$tablet-width}) 1fr;
+  grid-template-rows: 1fr;
+  gap: 2rem;
+
+  &.show-content-background {
+    background: $white;
+  }
+
+  @include media('>phone') {
+    border-radius: $article-border-radius;
+  }
+
+  .textarea{
+    margin-bottom: 0;
+  }
+
+  .footer {
+    @include main-container-width();
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-self: center;
+    grid-column: 2 / span 2;
+    padding: 2rem 1rem 4rem;
+    margin-top: 2rem;
+    border-top: 1px solid black;
+
+    .meta {
+      font-size: $font-size-s;
+      color: $grey-dark;
+    }
+  }
+}
+
+.edit-button {
+  position: absolute;
+  top: 5rem;
+  right: 3rem;
+  z-index: 200;
+  background-color: $white !important;
+}

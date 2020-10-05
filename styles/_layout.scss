@@ -1,0 +1,131 @@
+@import 'animation';
+@import '../node_modules/include-media/dist/include-media';
+
+$header-height: 6rem;
+$mobile-header-height: 4rem;
+
+$content-padding: 2rem;
+
+$phone-width: 688px;
+$tablet-width: 992px;
+$desktop-s-width: 1312px;
+$desktop-l-width: 2048px;
+
+$breakpoints: (
+  phone: $phone-width,
+  tablet: $tablet-width,
+  desktop-s: $desktop-s-width,
+);
+
+$main-container-width-phone: 95vw;
+$main-container-width-tablet: 95vw;
+$main-container-width-desktop-s: $tablet-width;
+$main-container-width-desktop-l: $desktop-s-width;
+
+$main-content-width-phone: calc(
+  #{$main-container-width-phone} - #{$content-padding}
+);
+$main-content-width-tablet: calc(
+  #{$main-container-width-tablet} - #{$content-padding}
+);
+$main-content-width-desktop-s: calc(
+  #{$main-container-width-desktop-s} - #{$content-padding}
+);
+$main-content-width-desktop-l: calc(
+  #{$main-container-width-desktop-l} - #{$content-padding}
+);
+
+$sidebar-width-phone: 100vw;
+$sidebar-width-tablet: 50vw;
+$sidebar-width-desktop-s: 300px;
+$sidebar-width-desktop-l: 400px;
+
+$spacing-xs: 2px;
+$spacing-s: 4px;
+$spacing-m: 8px;
+$spacing-l: 14px;
+$spacing-xl: 24px;
+$spacing-xxl: 48px;
+$spacing-xxxl: 96px;
+
+@mixin main-container-width {
+  @include media('<phone') {
+    width: 100%;
+    max-width: $main-container-width-phone;
+  }
+  @include media('>=phone', '<tablet') {
+    width: 100%;
+    max-width: $main-container-width-tablet;
+  }
+  @include media('>=tablet', '<desktop-s') {
+    width: 100%;
+    max-width: $main-container-width-desktop-s;
+  }
+  @include media('>=desktop-s') {
+    width: 100%;
+    max-width: $main-container-width-desktop-l;
+  }
+}
+
+@mixin main-content-width {
+  @include media('<phone') {
+    width: 95%;
+    max-width: $main-content-width-phone;
+  }
+  @include media('>=phone', '<tablet') {
+    width: 95%;
+    max-width: $main-content-width-tablet;
+  }
+  @include media('>=tablet', '<desktop-s') {
+    width: 95%;
+    max-width: $main-content-width-desktop-s;
+  }
+  @include media('>=desktop-s') {
+    width: 95%;
+    max-width: $main-content-width-desktop-l;
+  }
+}
+
+@mixin sidebar-width {
+  @include media('<phone') {
+    width: $sidebar-width-phone;
+  }
+  @include media('>=phone', '<tablet') {
+    width: $sidebar-width-tablet;
+  }
+  @include media('>=tablet', '<desktop-s') {
+    width: $sidebar-width-desktop-s;
+  }
+  @include media('>=desktop-s') {
+    width: $sidebar-width-desktop-l;
+  }
+}
+
+@mixin app-with-sidebar-width {
+  @include media('<phone') {
+    width: calc(100vw - #{$sidebar-width-phone});
+  }
+  @include media('>=phone', '<tablet') {
+    width: calc(100vw - #{$sidebar-width-tablet});
+  }
+  @include media('>=tablet', '<desktop-s') {
+    width: calc(100vw - #{$sidebar-width-desktop-s});
+  }
+  @include media('>=desktop-s') {
+    width: calc(100vw - #{$sidebar-width-desktop-l});
+  }
+}
+@mixin app-with-sidebar-transform {
+  @include media('<phone') {
+    transform: translateX($sidebar-width-phone);
+  }
+  @include media('>=phone', '<tablet') {
+    transform: translateX($sidebar-width-tablet);
+  }
+  @include media('>=tablet', '<desktop-s') {
+    transform: translateX($sidebar-width-desktop-s);
+  }
+  @include media('>=desktop-s') {
+    transform: translateX($sidebar-width-desktop-l);
+  }
+}

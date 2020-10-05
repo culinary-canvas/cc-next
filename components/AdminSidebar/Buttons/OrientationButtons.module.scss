@@ -1,0 +1,12 @@
+@import '../../../styles/color';
+
+.control-buttons.container {
+  .control-button {
+    &.orientation-HORIZONTAL {
+      flex-direction: row;
+    }
+    &.orientation-VERTICAL {
+      flex-direction: column;
+    }
+  }
+}

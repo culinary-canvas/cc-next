@@ -1,0 +1,12 @@
+.control-buttons.vertical-align {
+  .button:first-child {
+    span {
+      margin-top: -4px;
+    }
+  }
+  .button:last-child {
+    span {
+      margin-bottom: -4px;
+    }
+  }
+}

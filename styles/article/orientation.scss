@@ -1,0 +1,11 @@
+.section.container.orientation-HORIZONTAL:not(.preview) {
+  display: grid;
+  grid-gap: 1rem;
+
+  @include media('<phone') {
+    grid-template-columns: 1fr;
+  }
+  @include media('>=phone') {
+    grid-template-columns: 1fr 1fr;
+  }
+}

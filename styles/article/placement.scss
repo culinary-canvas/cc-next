@@ -1,0 +1,29 @@
+/************************
+ IMAGE PLACEMENT
+ ************************/
+.section.container.placement-BACKGROUND {
+  > .content.image {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+@include media('>phone') {
+  .section.container:first-child {
+    .content:first-child,
+    .placement-BACKGROUND {
+      .content.image-fit-CONTAINER {
+        border-top-right-radius: $article-border-radius;
+        border-top-left-radius: $article-border-radius;
+      }
+    }
+  }
+
+  .section.container:last-child
+    .content-container:last-child
+    .content.image-fit-CONTAINER {
+    border-bottom-right-radius: $article-border-radius;
+    border-bottom-left-radius: $article-border-radius;
+  }
+}

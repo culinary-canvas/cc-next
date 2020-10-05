@@ -1,0 +1,48 @@
+@import '../../styles/font';
+@import '../../styles/color';
+
+.slider-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  > label,
+  > input {
+    font-size: 14px !important;
+  }
+
+  > label {
+    color: $black !important;
+    text-transform: none !important;
+  }
+
+  > input {
+    margin-bottom: 0;
+    border-bottom: none;
+    text-align: center;
+  }
+
+  .slider {
+    flex-grow: 1;
+    height: 10px;
+    margin: 1rem 1rem 0 0.5rem;
+
+    .track {
+      height: 2px;
+      background-color: $grey-light;
+    }
+    .thumb {
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      background-color: $black;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    &.disabled .thumb {
+      background-color: $grey;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+$animation-duration: 700;
+
+@keyframes scale {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0);
+  }
+}
+
+.container.spinner {
+  display: flex;
+  justify-content: space-between;
+
+  .dot {
+    display: block;
+    border-radius: 100%;
+    animation-name: scale;
+    animation-duration: #{$animation-duration}ms;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  .dot:nth-child(2) {
+    animation-delay: #{$animation-duration/2}ms;
+  }
+  .dot:nth-child(3) {
+    animation-delay: #{$animation-duration}ms;
+  }
+}

@@ -1,0 +1,17 @@
+@import '../../styles/color';
+
+.image-with-modal {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+
+  &.no-file {
+    border: 2px dashed $grey;
+    border-radius: 8px;
+    color: $grey;
+    font-weight: 400;
+    padding: 1rem 0;
+    cursor: pointer;
+    height: 100%;
+  }
+}

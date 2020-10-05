@@ -1,0 +1,92 @@
+@import '../../styles/icon';
+@import '../../styles/color';
+@import '../../styles/font';
+@import '../../styles/layout';
+@import '../../styles/animation';
+
+.sidebar-button.container {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  padding: 0.5rem 6px;
+  top: $spacing-l;
+  left: $spacing-s;
+  z-index: 50;
+  margin: 0 !important;
+  background-color: $white;
+  border: 2px solid $black;
+  border-radius: 99px;
+
+  .menu-button {
+    .bar:nth-child(1),
+    .bar:nth-child(3) {
+      width: 16px;
+    }
+
+    .bar:nth-child(2) {
+      width: 20px;
+    }
+  }
+
+  &.open {
+    left: -$icon-size-l/2;
+
+    @include media('<phone') {
+      transform: translateX($sidebar-width-phone);
+    }
+    @include media('>=phone', '<tablet') {
+      transform: translateX($sidebar-width-tablet);
+    }
+    @include media('>=tablet', '<desktop-s') {
+      transform: translateX($sidebar-width-desktop-s);
+    }
+    @include media('>=desktop-s') {
+      transform: translateX($sidebar-width-desktop-l);
+    }
+  }
+}
+
+aside.container.sidebar {
+  position: fixed;
+  display: flex;
+  z-index: 10;
+  flex-direction: column;
+  width: 0;
+  height: 100vh;
+  background-color: $grey-light;
+  border-right: 1px solid $grey;
+  transition: all $animation-really-fast ease-in-out;
+  overflow: auto;
+
+  &.open {
+    @include sidebar-width();
+  }
+
+  .content.sidebar {
+    @include sidebar-width();
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+
+    > *:last-child {
+      margin-bottom: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      border-bottom: 1px solid $grey-light;
+
+      button {
+        background-color: $grey-light;
+
+        &:not(:first-child) {
+          margin-left: $spacing-m;
+        }
+      }
+    }
+  }
+}

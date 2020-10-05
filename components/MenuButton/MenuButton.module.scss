@@ -1,0 +1,58 @@
+@import '../../styles/color';
+@import '../../styles/icon';
+@import '../../styles/animation';
+
+.menu-button {
+  display: block;
+  width: 32px;
+  height: 19px;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+
+  &,
+  * {
+    transition: all $animation-really-fast ease-in-out;
+  }
+
+  &:hover > .bar {
+    transform: scaleX(1.2) translateX(10%);
+  }
+
+  .bar {
+    position: absolute;
+    display: block;
+    height: 3px;
+    background-color: $black;
+  }
+
+  .bar:nth-child(1) {
+    top: 0;
+    width: 24px;
+  }
+
+  .bar:nth-child(2) {
+    top: 8px;
+    width: 32px;
+  }
+
+  .bar:nth-child(3) {
+    top: 16px;
+    width: 24px;
+  }
+
+  &.is-open {
+    .bar:nth-child(1) {
+      transform: rotateZ(45deg) translateY(6px) translateX(6px) scaleX(1.2);
+    }
+
+    .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .bar:nth-child(3) {
+      transform: rotateZ(-45deg) translateY(-6px) translateX(6px)  scaleX(1.2);
+    }
+  }
+}

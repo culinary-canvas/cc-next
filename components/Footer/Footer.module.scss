@@ -1,0 +1,47 @@
+@import '../../styles/animation';
+@import '../../styles/color';
+@import '../../styles/font';
+@import '../../styles/layout';
+
+.container.footer {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  min-height: 200px;
+  padding-top: $spacing-xxl;
+  margin-top: auto;
+  margin-bottom: 0;
+  background-color: $black;
+  color: $white;
+  font-size: $font-size-s;
+  font-weight: 200;
+
+  .content {
+    @include main-content-width();
+    display: flex;
+    justify-content: space-between;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    a {
+      color: $white;
+      font-weight: 400;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+  .social-media-container {
+    display: flex;
+    a {
+      margin-left: 2rem;
+      transition: all $animation-fast ease-in-out;
+      &:hover {
+        filter: $filter_grey_dark;
+      }
+    }
+  }
+}
