@@ -1,25 +1,24 @@
 import React from 'react'
-import { Menu } from '../Menu/Menu'
-import './Header.module.scss'
-import logo from '../../assets/logo.svg'
-import { Button } from '../Button/Button'
+import styles from './Header.module.scss'
 import { useEnv } from '../../services/AppEnvironment'
 import Link from 'next/Link'
+import { Menu } from '../Menu/Menu'
+import Logo from '../../../public/assets/logo.svg'
 
 export const Header = () => {
   const env = useEnv()
   return (
-    <header className="container header">
-      <div className="content">
+    <header className={styles.container}>
+      <div className={styles.content}>
         <Link href="/" passHref>
-          <Button
-            unsetStyle
-            onClick={() => {
-              env.articleStore.setFilter(null)
-            }}
-          >
-            <img src={logo} alt="Logotype" className="logo" />
-          </Button>
+          <a onClick={() => env.articleStore.setTypeFilter(null)}>
+            <img
+              src={Logo}
+              alt="Culinary Canvas"
+              className={styles.logo}
+              title="Go to start"
+            />
+          </a>
         </Link>
 
         <Menu />

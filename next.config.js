@@ -1,9 +1,15 @@
-const withSass = require('@zeit/next-sass')
-const withCss = require('@zeit/next-css')
+const withImages = require('next-images')
+const withStyles = require('@webdeb/next-styles')
 
-module.exports = withSass(
-  withCss({
-    cssModules: true,
+module.exports = withImages(
+  withStyles({
+    sass: true,
+    modules: true,
+    sassLoaderOptions: {
+      sassOptions: {
+        includePaths: ['src/styles'],
+      },
+    },
   }),
 )
 /*

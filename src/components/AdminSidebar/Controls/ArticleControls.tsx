@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import copyPaste from '../../../assets/icons/streamline-icon-copy-paste@140x140.svg'
+import copyPaste from '../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import { observer } from 'mobx-react'
 import { Checkbox } from '../../Checkbox/Checkbox'
 import { Select } from '../../Select/Select'

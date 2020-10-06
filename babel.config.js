@@ -6,6 +6,5 @@ module.exports = {
   ],
   plugins: [
     ['@babel/plugin-proposal-decorators', { legacy: true }],
-    'inline-react-svg',
   ],
 }

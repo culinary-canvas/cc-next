@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import './MenuButton.module.scss'
+import styles from './MenuButton.module.scss'
 import {classnames} from '../../services/importHelpers'
 
 interface Props {
@@ -13,14 +13,18 @@ export function MenuButton(props: Props) {
   const { onClick, className, style, isOpen = false } = props
   return (
     <button
-      className={classnames(['menu-button', { 'is-open': isOpen }, className])}
+      className={classnames([
+        styles.menuButton,
+        { [styles.isOpen]: isOpen },
+        className,
+      ])}
       style={style}
       aria-label="Menu button"
       onClick={() => onClick()}
     >
-      <span className="bar" />
-      <span className="bar" />
-      <span className="bar" />
+      <span className={styles.bar} />
+      <span className={styles.bar} />
+      <span className={styles.bar} />
     </button>
   )
 }

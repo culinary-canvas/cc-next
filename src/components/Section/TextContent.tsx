@@ -36,7 +36,10 @@ export const TextContent = observer((props: Props) => {
     setTextStyle(s)
   }, [content])
 
-  useAutorun(() => setInEdit(env.adminSidebarStore.isContentInEdit(content)))
+  useAutorun(() => {
+    console.log(env)
+    setInEdit(env.adminSidebarStore.isContentInEdit(content))
+  })
 
   useEffect(() => {
     setPlaceholder(TextContentService.placeholder(content.type))

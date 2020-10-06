@@ -1,21 +1,30 @@
 import type { AppProps } from 'next/app'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
-import { AppContext, AppEnvironment } from '../services/AppEnvironment'
+import '../styles/global.scss'
+import {
+  AppContext,
+  AppEnvironment,
+  SerializedAppEnvironment,
+} from '../services/AppEnvironment'
 import { CookieBanner } from '../components/CookieBanner/CookieBanner'
 import { Overlay } from '../components/Overlay/Overlay'
 import { Header } from '../components/Header/Header'
 import { Footer } from '../components/Footer/Footer'
 import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
 import { Auth, AuthContext } from '../services/auth/Auth'
+import { useStaticRendering } from 'mobx-react-lite'
 
 interface Props extends AppProps {
-  env: AppEnvironment
+  env: SerializedAppEnvironment
   auth: Auth
 }
 
 Modal.setAppElement('#__next')
+
+const isServer = typeof window === 'undefined'
+useStaticRendering(isServer)
 
 function App({ Component, pageProps, env, auth }: Props) {
   useEffect(() => {
@@ -23,9 +32,20 @@ function App({ Component, pageProps, env, auth }: Props) {
     // TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
   }, [])
 
+  const [hydratedEnv, setHydratedEnv] = useState<AppEnvironment>()
+  const [hydratedAuth, setHydratedAuth] = useState<Auth>()
+
+  useEffect(() => {
+    setHydratedEnv(new AppEnvironment(env))
+    setHydratedAuth(new Auth(auth))
+  }, [env])
+
+  if (!hydratedEnv || !hydratedAuth) {
+    return null
+  }
   return (
-    <AppContext.Provider value={env}>
-      <AuthContext.Provider value={auth}>
+    <AppContext.Provider value={hydratedEnv}>
+      <AuthContext.Provider value={hydratedAuth}>
         <CookieBanner />
         {env.overlayStore.isVisible && (
           <Overlay
@@ -55,14 +75,21 @@ function App({ Component, pageProps, env, auth }: Props) {
   )
 }
 
+let appEnvironment: AppEnvironment
+
 App.getInitialProps = async (ctx) => {
-  const env = new AppEnvironment()
-  await env.init()
+  if (isServer || !appEnvironment) {
+    const env = new AppEnvironment()
+    await env.init()
 
-  const auth = new Auth()
-  auth.init()
+    const auth = new Auth()
+    auth.init()
 
-  return { env, auth }
+    return {
+      env,
+      auth,
+    }
+  }
 }
 
 export default App

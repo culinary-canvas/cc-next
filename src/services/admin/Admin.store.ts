@@ -1,7 +1,9 @@
 import Store from '../../types/Store'
 import { action, observable } from 'mobx'
 
-export class AdminStore implements Store {
+type Serialized = Pick<AdminStore, 'showUnpublishedOnStartPage'>
+
+export class AdminStore extends Store<Serialized> {
   @observable showUnpublishedOnStartPage = false
 
   @action

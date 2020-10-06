@@ -15,7 +15,7 @@
     background-color: $white;
   }
 
-  .buttons.container {
+  .buttonsContainer {
     max-width: 0;
     opacity: 0;
     transition: all $animation-fast ease-in;
@@ -31,10 +31,10 @@
     }
   }
 
-  &.is-open {
+  &.isOpen {
     max-width: 600px;
 
-    .buttons.container {
+    .buttonsContainer {
       max-width: 100%;
       opacity: 1;
 

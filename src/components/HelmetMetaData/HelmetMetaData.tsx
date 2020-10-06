@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { NavigationService } from '../../services/navigation/Navigation.service'
+import { useRouter } from 'next/router'
 
 interface Props {
   quote: string
@@ -17,9 +17,9 @@ export function HelmetMetaData(props: Props) {
     hashtag = '#culinarycanvas',
   } = props
   //TODO nav
-  const { response }: any = null //useResponse()
-  const currentUrl = 'https://culinary-canvas.com' + response.location.pathname
-  const title = NavigationService.getPageTitle(response)
+  const router = useRouter()
+  const currentUrl = 'https://culinary-canvas.com' + router.asPath
+  const title = 'blaha'
   return (
     <Helmet>
       <title>{title}</title>

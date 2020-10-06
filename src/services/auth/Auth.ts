@@ -1,18 +1,21 @@
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import { createContext, useContext } from 'react'
+import Store from '../../types/Store'
+import {initFirebase} from '../firebase/Firebase.service'
 
-export class Auth {
+type SerializedAuth = Pick<Auth, 'user' | 'initialized'>
+
+export class Auth extends Store<SerializedAuth> {
   user: firebase.User
-  initialized = false
 
   get isSignedIn() {
     return !!this.user
   }
 
   init() {
+    initFirebase()
     firebase.auth().onAuthStateChanged((user) => this.authStateChanged(user))
-    this.initialized = true
   }
 
   async signIn(email: string, password: string) {
@@ -26,11 +29,14 @@ export class Auth {
 
   private authStateChanged(user: firebase.User) {
     this.setUser(user)
-    this.initialized = true
   }
 
   private setUser(user: firebase.User) {
     this.user = user
+  }
+
+  onDestroy(): void {
+    this.user = null
   }
 }
 

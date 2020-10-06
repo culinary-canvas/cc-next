@@ -2,8 +2,8 @@ import React from 'react'
 import './FontStyleButtons.module.scss'
 import { Button } from '../../Button/Button'
 import { COLOR } from '../../../styles/color'
-import italicIcon from '../../../assets/icons/streamline-icon-social-media-facebook-1@140x140.svg'
-import capsIcon from '../../../assets/icons/streamline-icon-caps@140x140.svg'
+import italicIcon from '../../../../public/assets/icons/streamline-icon-social-media-facebook-1@140x140.svg'
+import capsIcon from '../../../../public/assets/icons/streamline-icon-caps@140x140.svg'
 
 interface Props {
   italic: boolean

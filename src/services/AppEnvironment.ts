@@ -1,4 +1,3 @@
-import { action, observable } from 'mobx'
 import { createContext, useContext } from 'react'
 import { ArticleStore } from '../domain/Article/Article.store'
 import { AdminSidebarStore } from '../components/AdminSidebar/AdminSidebar.store'
@@ -6,56 +5,52 @@ import { AdminStore } from './admin/Admin.store'
 import { ImageModalStore } from '../components/ImageModal/ImageModal.store'
 import { TagStore } from '../domain/Tag/Tag.store'
 import { dateTimeService } from '../domain/DateTime/DateTime.service'
-import { firebaseService } from './firebase/Firebase.service'
 import { OverlayStore } from './OverlayStore'
-import { useStaticRendering } from 'mobx-react-lite'
+import { action, observable } from 'mobx'
 
-const isServer = typeof window === 'undefined'
-useStaticRendering(isServer)
-
-let store = null
-
-export default function initializeStore(initialData = { postStore: {} }) {
-  if (isServer) {
-    return {
-      postStore: new PostStore(initialData.postStore),
-      uiStore: new UIStore(),
-    }
-  }
-  if (store === null) {
-    store = {
-      postStore: new PostStore(initialData.postStore),
-      uiStore: new UIStore(),
-    }
-  }
-
-  return store
-}
+export type SerializedAppEnvironment = Pick<
+  AppEnvironment,
+  | 'articleStore'
+  | 'adminSidebarStore'
+  | 'adminStore'
+  | 'imageModalStore'
+  | 'overlayStore'
+  | 'tagStore'
+>
 
 export class AppEnvironment {
   @observable initialized = false
+  public articleStore = new ArticleStore()
+  public adminSidebarStore = new AdminSidebarStore()
+  public adminStore = new AdminStore()
+  public overlayStore = new OverlayStore()
+  public imageModalStore = new ImageModalStore()
+  public tagStore = new TagStore()
 
-  constructor(
-    readonly articleStore = new ArticleStore(),
-    readonly adminSidebarStore = new AdminSidebarStore(),
-    readonly adminStore = new AdminStore(),
-    readonly overlayStore = new OverlayStore(),
-    readonly imageModalStore = new ImageModalStore(),
-    readonly tagStore = new TagStore(),
-  ) {}
+  constructor(serialized?: SerializedAppEnvironment) {
+    if (!!serialized) {
+      this.articleStore = new ArticleStore(serialized.articleStore)
+      this.adminSidebarStore = new AdminSidebarStore(
+        serialized.adminSidebarStore,
+      )
+      this.adminStore = new AdminStore(serialized.adminStore)
+      this.overlayStore = new OverlayStore(serialized.overlayStore)
+      this.imageModalStore = new ImageModalStore(serialized.imageModalStore)
+      this.tagStore = new TagStore(serialized.tagStore)
+    }
+  }
 
   async init() {
     console.debug('Initializing app...')
     await dateTimeService.init()
-    await firebaseService.init()
     // We want this to run in the background
-    await this.tagStore.load()
-
+    // await this.tagStore.load()
     this.initDone()
     console.debug('Initialization done!')
   }
 
-  @action private initDone() {
+  @action
+  initDone() {
     this.initialized = true
   }
 }

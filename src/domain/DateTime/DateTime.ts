@@ -51,9 +51,13 @@ class DateTime implements DateInterface {
   }
 
   @transformToApp()
-  static toApp(obj: firebase.firestore.Timestamp) {
+  static toApp(obj: Partial<firebase.firestore.Timestamp>) {
+    const timestamp = new firebase.firestore.Timestamp(
+      obj.seconds,
+      obj.nanoseconds,
+    )
     if (obj) {
-      return DateTime.createFromFirestoreTimestamp(obj)
+      return DateTime.createFromFirestoreTimestamp(timestamp)
     }
   }
 

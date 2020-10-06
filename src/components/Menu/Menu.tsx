@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import './Menu.module.scss'
+import styles from './Menu.module.scss'
 import { AdminMenu } from './AdminMenu'
 import { MenuButton } from '../MenuButton/MenuButton'
 import { useEnv } from '../../services/AppEnvironment'
@@ -16,41 +16,53 @@ export const Menu = observer(() => {
   const auth = useAuth()
 
   return (
-    <nav className={classnames('menu', { 'is-open': isOpen })}>
-      <div className="buttons container">
-        <div className="buttons">
+    <nav className={classnames(styles.menu, { [styles.isOpen]: isOpen })}>
+      <div className={styles.buttonsContainer}>
+        <div className={styles.buttons}>
           <button
-            className={classnames('a', {
-              active: env.articleStore.filter === ArticleType.DISH,
+            className={classnames(styles.a, 'a', {
+              active: !env.articleStore.typeFilter, // TODO nav: && response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setFilter(ArticleType.DISH)
-              // TODO nav
-              //              router.navigate({ url: '/', method: 'anchor' })
+              //TODO nav: router.navigate({ url: '/', method: 'anchor' })
+              env.articleStore.setTypeFilter(null)
+            }}
+          >
+            All
+          </button>
+
+          <button
+            className={classnames(styles.a, 'a', {
+              active: env.articleStore.typeFilter === ArticleType.DISH,
+              // TODO nav: && response.name === 'start',
+            })}
+            onClick={() => {
+              env.articleStore.setTypeFilter(ArticleType.DISH)
+              // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >
             Dishes
           </button>
           <button
-            className={classnames('a', {
-              active: env.articleStore.filter === ArticleType.HOW_TO,
+            className={classnames(styles.a, 'a', {
+              active: env.articleStore.typeFilter === ArticleType.HOW_TO,
+              // TODO nav: &&                response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setFilter(ArticleType.HOW_TO)
-              // TODO nav
-              //            router.navigate({ url: '/', method: 'anchor' })
+              env.articleStore.setTypeFilter(ArticleType.HOW_TO)
+              // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >
             Recipes
           </button>
           <button
-            className={classnames('a', {
-              active: env.articleStore.filter === ArticleType.PORTRAIT,
+            className={classnames(styles.a, 'a', {
+              active: env.articleStore.typeFilter === ArticleType.PORTRAIT,
+              // TODO nav: &&                router.current().response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setFilter(ArticleType.PORTRAIT)
-              // TODO nav
-              //            router.navigate({ url: '/', method: 'anchor' })
+              env.articleStore.setTypeFilter(ArticleType.PORTRAIT)
+              // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >
             Portraits

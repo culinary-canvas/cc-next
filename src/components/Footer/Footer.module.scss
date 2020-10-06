@@ -2,8 +2,9 @@
 @import '../../styles/color';
 @import '../../styles/font';
 @import '../../styles/layout';
+@import '../../styles/icon';
 
-.container.footer {
+.container {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
@@ -34,11 +35,14 @@
       }
     }
   }
-  .social-media-container {
+  .socialMediaContainer {
     display: flex;
     a {
+      width: $icon-size-m;
       margin-left: 2rem;
       transition: all $animation-fast ease-in-out;
+      filter: $filter_white;
+
       &:hover {
         filter: $filter_grey_dark;
       }

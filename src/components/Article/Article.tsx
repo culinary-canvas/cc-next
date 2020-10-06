@@ -75,7 +75,7 @@ export const Article = observer((props: Props) => {
         {!preview && (
           <footer className={classnames(['footer', { preview }])}>
             <section className="meta">
-              Published {dateTimeService.calendar(article.created)}
+              Published {dateTimeService.calendar(article.created.date)}
             </section>
             <Share article={article} />
           </footer>

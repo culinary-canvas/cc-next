@@ -12,6 +12,8 @@ import { Class } from '../../types/Class'
 import { DbTransformService } from './DbTransform.service'
 import { getCollection } from './decorators/collection.decorator'
 import { User } from 'firebase'
+import { initFirebase } from '../firebase/Firebase.service'
+import { QuerySnapshot } from '@firebase/firestore-types'
 
 class DbService<T extends Model> {
   /**
@@ -22,6 +24,7 @@ class DbService<T extends Model> {
   private readonly collection: string
 
   constructor(private readonly Clazz: Class<T>) {
+    initFirebase()
     const dummy = new Clazz()
     const name = getCollection(dummy)?.name
     if (!name) {
@@ -92,12 +95,15 @@ class DbService<T extends Model> {
    * @param limit
    * @param startAfter
    */
-  async get(
-    conditions?: Where | Where[],
-    orderBy?: OrderBy[],
-    limit?: number,
-    startAfter?: number,
-  ): Promise<T[]> {
+  async get<U extends T[] | QuerySnapshot = T[]>(options: {
+    conditions?: Where | Where[]
+    orderBy?: OrderBy[]
+    limit?: number
+    startAfter?: number
+    transform?: boolean
+  }): Promise<U> {
+    const { conditions, orderBy, limit, startAfter, transform = true } = options
+
     try {
       const collectionRef = firebase.firestore().collection(this.collection)
       const query = this.buildQuery(
@@ -112,8 +118,8 @@ class DbService<T extends Model> {
         startAfter,
       )
 
-      const result = await query.get()
-      return this.onResult(result)
+      const result: QuerySnapshot = await query.get()
+      return (transform ? this.transform(result) : result) as U
     } catch (e) {
       console.warn('Error when executing query ', {
         collection: this.collection,
@@ -205,7 +211,7 @@ class DbService<T extends Model> {
 
   private async afterSave(lastPersistedState: T, persisted: T) {}
 
-  private onResult(result: firebase.firestore.QuerySnapshot) {
+  private transform(result: firebase.firestore.QuerySnapshot) {
     return !result.empty
       ? result.docs.map((doc) =>
           DbTransformService.transformToApp(

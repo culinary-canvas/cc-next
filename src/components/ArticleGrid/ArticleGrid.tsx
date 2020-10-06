@@ -1,37 +1,31 @@
 import React from 'react'
-import { useObserver } from 'mobx-react'
-import { Article as ArticleModel } from '../../domain/Article/Article'
-import './ArticleGrid.module.scss'
-import { PreviewSection } from './PreviewSection'
+import { observer } from 'mobx-react'
+import { Article } from '../../domain/Article/Article'
+import styles from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/Link'
+import { PreviewArticle } from './PreviewArticle'
 
 interface Props {
-  articles: ArticleModel[]
+  articles: Article[]
 }
 
-export const ArticleGrid = (props: Props) => {
+export const ArticleGrid = observer((props: Props) => {
   const { articles } = props
 
-  return useObserver(() => (
-    <div className="content grid">
+  return (
+    <div className={styles.grid}>
       {articles.map((article) => (
-        <Link href={`/article/${article.titleForUrl}`} key={article.id}>
+        <Link href={`/articles/${article.titleForUrl}`} key={article.id}>
           <a
-            className={classnames('article', 'container', {
-              promoted: article.promoted,
+            className={classnames(styles.article, {
+              [styles.promoted]: article.promoted,
             })}
           >
-            <article
-              className={classnames('article', 'content', {
-                promoted: article.promoted,
-              })}
-            >
-              <PreviewSection article={article} />
-            </article>
+            <PreviewArticle article={article} />
           </a>
         </Link>
       ))}
     </div>
-  ))
-}
+  )
+})

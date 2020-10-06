@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 import React from 'react'
-import { AppEnvironment } from '../services/AppEnvironment'
 import Document, {
   DocumentContext,
   Head,
@@ -9,7 +8,7 @@ import Document, {
   NextScript,
 } from 'next/document'
 
-class MyDocument extends Document<{ env: AppEnvironment }> {
+class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx)
     return initialProps

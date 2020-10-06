@@ -4,7 +4,7 @@ import { Button } from '../../Button/Button'
 import { VerticalAlign } from '../../../domain/Text/VerticalAlign'
 import { FONT } from '../../../styles/font'
 import { COLOR } from '../../../styles/color'
-import leftAlignIcon from '../../../assets/icons/streamline-icon-paragraph-left-align-alternate@140x140.svg'
+import leftAlignIcon from '../../../../public/assets/icons/streamline-icon-paragraph-left-align-alternate@140x140.svg'
 
 interface Props {
   selected: VerticalAlign

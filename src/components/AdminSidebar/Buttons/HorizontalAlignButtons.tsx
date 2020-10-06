@@ -1,7 +1,7 @@
 import React from 'react'
-import leftAlignIcon from '../../../assets/icons/streamline-icon-paragraph-left-align-alternate@140x140.svg'
-import centerAlignIcon from '../../../assets/icons/streamline-icon-paragraph-center-align-alternate@140x140.svg'
-import rightAlignIcon from '../../../assets/icons/streamline-icon-paragraph-right-align-alternate@140x140.svg'
+import leftAlignIcon from '../../../../public/assets/icons/streamline-icon-paragraph-left-align-alternate@140x140.svg'
+import centerAlignIcon from '../../../../public/assets/icons/streamline-icon-paragraph-center-align-alternate@140x140.svg'
+import rightAlignIcon from '../../../../public/assets/icons/streamline-icon-paragraph-right-align-alternate@140x140.svg'
 import { Button } from '../../Button/Button'
 import { HorizontalAlign } from '../../../domain/Text/HorizontalAlign'
 

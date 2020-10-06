@@ -1,6 +1,16 @@
-.puff {
-  background-color: white;
-  width: 100%;
+@import 'src/styles/layout';
+
+.container {
+  position: relative;
   display: flex;
-  padding: 4rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: $header-height;
+
+  @include media('<=phone') {
+    padding-top: 5rem;
+  }
 }

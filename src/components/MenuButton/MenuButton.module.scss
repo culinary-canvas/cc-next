@@ -2,7 +2,7 @@
 @import '../../styles/icon';
 @import '../../styles/animation';
 
-.menu-button {
+.menuButton {
   display: block;
   width: 32px;
   height: 19px;
@@ -42,7 +42,7 @@
     width: 24px;
   }
 
-  &.is-open {
+  &.isOpen {
     .bar:nth-child(1) {
       transform: rotateZ(45deg) translateY(6px) translateX(6px) scaleX(1.2);
     }

@@ -1,6 +1,9 @@
 import { action, observable } from 'mobx'
+import Store from '../types/Store'
 
-export class OverlayStore {
+type Serialized = Pick<OverlayStore, 'isVisible' | 'text' | 'progress'>
+
+export class OverlayStore extends Store<Serialized> {
   @observable isVisible = false
   @observable text: string
   @observable progress: number
@@ -29,4 +32,6 @@ export class OverlayStore {
   addProgress(progress: number) {
     this.progress += progress
   }
+
+  onDestroy(): void {}
 }

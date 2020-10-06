@@ -1,11 +1,16 @@
 import { action, computed, observable } from 'mobx'
 import Store from '../../types/Store'
-import {FormControl} from '../../services/formControl/FormControl'
-import {Article} from '../../domain/Article/Article'
-import {Section} from '../../domain/Section/Section'
-import {Content} from '../../domain/Content/Content'
+import { FormControl } from '../../services/formControl/FormControl'
+import { Article } from '../../domain/Article/Article'
+import { Section } from '../../domain/Section/Section'
+import { Content } from '../../domain/Content/Content'
 
-export class AdminSidebarStore implements Store {
+type Serialized = Pick<
+  AdminSidebarStore,
+  '_isOpen' | 'formControl' | 'section' | 'content'
+>
+
+export class AdminSidebarStore extends Store<Serialized> {
   @observable _isOpen = false
   @observable formControl: FormControl<Article>
   @observable section: Section

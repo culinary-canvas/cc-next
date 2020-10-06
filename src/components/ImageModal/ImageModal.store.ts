@@ -1,9 +1,19 @@
 import { action, computed, observable } from 'mobx'
 import Store from '../../types/Store'
-import {ImageCropValues} from '../../domain/Image/ImageCropValues'
-import {ImageFile} from '../../domain/Image/ImageFile'
+import { ImageCropValues } from '../../domain/Image/ImageCropValues'
+import { ImageFile } from '../../domain/Image/ImageFile'
 
-export class ImageModalStore implements Store {
+type Serialized = Pick<
+  ImageModalStore,
+  | 'initialCropValues'
+  | 'inputImage'
+  | 'inputCropValues'
+  | 'newImage'
+  | 'newCropValues'
+  | 'ready'
+>
+
+export class ImageModalStore extends Store<Serialized> {
   @observable initialCropValues = new ImageCropValues(0, 0, 100, 100)
   @observable inputImage: ImageFile
   @observable inputCropValues: ImageCropValues

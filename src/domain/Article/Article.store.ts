@@ -10,17 +10,28 @@ import { SortableService } from '../../services/sortable/Sortable.service'
 import { isNil } from '../../services/importHelpers'
 import { User } from 'firebase'
 
-export class ArticleStore implements Store {
-  @observable articles: Article[] = []
-  @observable filter: ArticleType
+type Serialized = Pick<
+  ArticleStore,
+  | 'articles'
+  | 'typeFilter'
+  | 'tagIdFilter'
+  | 'current'
+  | 'currentWidth'
+  | 'loaded'
+>
+
+export class ArticleStore extends Store<Serialized> {
+  @observable articles: Article[]
+  @observable typeFilter: ArticleType
+  @observable tagIdFilter: string
   @observable current: Article
   @observable currentWidth: number
   @observable loaded = false
 
   async load() {
     const articles = await ArticleApi.all()
-    await this.populate(articles)
-    this.setArticles(articles)
+    //await this.populate(articles)
+    //this.setArticles(articles)
     this.setLoaded()
   }
 
@@ -36,10 +47,13 @@ export class ArticleStore implements Store {
 
   @computed
   get filtered() {
-    if (!this.filter) {
-      return this.articles
+    if (!!this.tagIdFilter) {
+      return this.articles.filter((a) => a.tagIds?.includes(this.tagIdFilter))
     }
-    return this.articles.filter((a) => a.type === this.filter)
+    if (!!this.typeFilter) {
+      return this.articles.filter((a) => a.type === this.typeFilter)
+    }
+    return this.articles
   }
 
   @computed
@@ -91,8 +105,15 @@ export class ArticleStore implements Store {
   }
 
   @action
-  setFilter(type: ArticleType) {
-    this.filter = type
+  setTypeFilter(type: ArticleType) {
+    this.typeFilter = type
+    this.tagIdFilter = null
+  }
+
+  @action
+  setTagIdFilter(tagId: string) {
+    this.tagIdFilter = tagId
+    this.typeFilter = null
   }
 
   async save(
@@ -106,7 +127,7 @@ export class ArticleStore implements Store {
 
     onProgress(0.6, 'Sorting...')
     if (isNil(article.sortOrder)) {
-      article.sortOrder = (await ArticleApi.all('id')).length
+      article.sortOrder = (await ArticleApi.all('id')).size
     }
     onProgress(0.7, 'Sorting...')
     SortableService.fixSortOrders(article.sections)

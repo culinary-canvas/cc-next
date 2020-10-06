@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '../../Button/Button'
-import linkIcon from '../../../assets/icons/streamline-icon-hyperlink@140x140.svg'
-import brokenLinkIcon from '../../../assets/icons/streamline-icon-link-broken@140x140.svg'
+import linkIcon from '../../../../public/assets/icons/streamline-icon-hyperlink@140x140.svg'
+import brokenLinkIcon from '../../../../public/assets/icons/streamline-icon-link-broken@140x140.svg'
 import { observer } from 'mobx-react'
 import { Padding, PaddingValues } from '../../../domain/Format/Padding'
 

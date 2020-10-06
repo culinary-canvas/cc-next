@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { isNil } from 'lodash'
+import { isArray, isNil } from 'lodash'
 import { Class } from '../../types/Class'
 import {
   getTransformToDb,
@@ -14,6 +14,7 @@ import {
 } from './decorators/transformToApp.decorator'
 import { toJS } from 'mobx'
 import { getTransform } from './decorators/transform.decorator'
+import firebase from 'firebase'
 
 export class DbTransformService {
   static transformToDb(transformable: any): any {
@@ -71,13 +72,12 @@ export class DbTransformService {
 
     Object.keys(toJS(transformed)).forEach((key) => {
       if (isField(transformed, key) && !isNil(documentData[key])) {
-        const type = Reflect.getMetadata('design:type', transformed, key)
         const fieldType = getField(transformed, key).type
         const toApp = getTransform(transformed, key)?.toApp
 
         transformed[key] = !!toApp
           ? toApp(documentData[key])
-          : type === Array
+          : isArray(documentData[key])
           ? Array.from(documentData[key]).map((arrayValue) =>
               DbTransformService.transformValueToApp(arrayValue, fieldType),
             )
@@ -124,5 +124,11 @@ export class DbTransformService {
         )
       }
     })
+  }
+
+  static toJson(querySnapshot: firebase.firestore.QuerySnapshot) {
+    return querySnapshot.docs.map((doc) =>
+      JSON.parse(JSON.stringify({ id: doc.id, ...doc.data() })),
+    )
   }
 }

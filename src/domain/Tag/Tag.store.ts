@@ -1,13 +1,15 @@
-import { action, observable } from 'mobx'
+import { action, observable, toJS } from 'mobx'
 import { Tag } from './Tag'
-import { TagApi } from './Tag.api'
+import Store from '../../types/Store'
 
-export class TagStore {
+type Serialized = Pick<TagStore, 'tags'>
+
+export class TagStore extends Store<Serialized> {
   @observable tags: Tag[] = []
 
   async load() {
-    const tags = await TagApi.all()
-    this.set(tags)
+    // const tags = await TagApi.all()
+    //  this.set(tags)
   }
 
   @action
@@ -21,10 +23,15 @@ export class TagStore {
   }
 
   get(ids: string[]) {
-    return this.tags.filter((t) => ids.includes(t.id))
+    return this.tags.filter((t) => toJS(ids).includes(t.id))
   }
 
   exists(name: string) {
     return this.tags.some((t) => t.name === name)
+  }
+
+  @action
+  onDestroy(): void {
+    this.tags = []
   }
 }

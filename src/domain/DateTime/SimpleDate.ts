@@ -42,9 +42,13 @@ class SimpleDate implements DateInterface {
   }
 
   @transformToApp()
-  toApp(obj: firebase.firestore.Timestamp) {
+  static toApp(obj: Partial<firebase.firestore.Timestamp>) {
+    const timestamp = new firebase.firestore.Timestamp(
+      obj.seconds,
+      obj.nanoseconds,
+    )
     if (obj) {
-      return SimpleDate.createFromFirestoreTimestamp(obj)
+      return SimpleDate.createFromFirestoreTimestamp(timestamp)
     }
   }
 

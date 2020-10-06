@@ -4,15 +4,16 @@
 @import '../../styles/layout';
 @import '../../styles/font';
 
-.share.container {
+.container {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  font-size: $font-size-s;
   width: 100%;
+  font-size: $font-size-s;
   gap: 2rem;
 
-  .share-button {
+  button {
+    width: $icon-size-m;
     padding: 0;
     border: none;
     cursor: pointer;
