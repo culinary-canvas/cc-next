@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Index() {
+export default function Advertise() {
   return (
     <main className="container page">
       <article className="content">

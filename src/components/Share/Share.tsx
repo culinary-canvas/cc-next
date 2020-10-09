@@ -11,16 +11,18 @@ import {
   PinterestShareButton,
   TwitterShareButton,
 } from 'react-share'
-import s from './Share.module.scss'
 import { Article } from '../../domain/Article/Article'
 import { useRouter } from 'next/router'
+import s from './Share.module.scss'
+import { classnames } from '../../services/importHelpers'
 
 interface Props {
   article: Article
+  containerClassName?: string
 }
 
 export const Share = (props: Props) => {
-  const { article } = props
+  const { article, containerClassName } = props
   const router = useRouter()
 
   const quote = `${article.title} @ Culinary Canvas`
@@ -42,7 +44,7 @@ export const Share = (props: Props) => {
         hashtag={hashtag}
       />
 */}
-      <section className={s.container}>
+      <section className={classnames(s.container, containerClassName)}>
         <EmailShareButton
           url={window.location.href}
           subject={`"${article.title}" @ Culinary Canvas`}

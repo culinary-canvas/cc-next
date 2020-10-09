@@ -18,10 +18,10 @@
     border: none;
     cursor: pointer;
     transition: all $animation-fast ease-out;
-    filter: $filter_grey;
+    filter: $filter-grey;
 
     &:hover {
-      filter: $filter_black;
+      filter: $filter-black;
     }
   }
 }

@@ -1,13 +1,12 @@
 import { TextFormat } from '../../Text/TextFormat'
-import {COLOR} from '../../../styles/color'
-import {FONT} from '../../../styles/font'
-import {cloneDeep} from '../../../services/importHelpers'
+import { COLOR } from '../../../styles/color'
+import { FONT } from '../../../styles/font'
+import { cloneDeep } from '../../../services/importHelpers'
 
 const format = new TextFormat({
   color: COLOR.BLACK,
-  fontSize: FONT.SIZE.XL,
-  italic: true,
-  fontWeight: 900,
+  fontSize: FONT.SIZE.L,
+  fontFamily: FONT.FAMILY.GARAMOND,
 })
 
 export function subHeadingFormat() {

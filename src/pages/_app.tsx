@@ -6,15 +6,16 @@ import '../styles/global.scss'
 import {
   AppContext,
   AppEnvironment,
+  IS_DEV,
   SerializedAppEnvironment,
 } from '../services/AppEnvironment'
 import { CookieBanner } from '../components/CookieBanner/CookieBanner'
 import { Overlay } from '../components/Overlay/Overlay'
+import { Auth, AuthContext } from '../services/auth/Auth'
+import { useObserver, useStaticRendering } from 'mobx-react-lite'
+import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
 import { Header } from '../components/Header/Header'
 import { Footer } from '../components/Footer/Footer'
-import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
-import { Auth, AuthContext } from '../services/auth/Auth'
-import { useStaticRendering } from 'mobx-react-lite'
 
 interface Props extends AppProps {
   env: SerializedAppEnvironment
@@ -37,42 +38,46 @@ function App({ Component, pageProps, env, auth }: Props) {
 
   useEffect(() => {
     setHydratedEnv(new AppEnvironment(env))
-    setHydratedAuth(new Auth(auth))
+
+    let a = new Auth(auth)
+    a.init()
+    setHydratedAuth(a)
   }, [env])
 
-  if (!hydratedEnv || !hydratedAuth) {
-    return null
-  }
-  return (
-    <AppContext.Provider value={hydratedEnv}>
-      <AuthContext.Provider value={hydratedAuth}>
-        <CookieBanner />
-        {env.overlayStore.isVisible && (
-          <Overlay
-            text={env.overlayStore.text}
-            progress={env.overlayStore.progress}
-          />
-        )}
+  return useObserver(() => {
+    if (!hydratedEnv || !hydratedAuth) {
+      return null
+    }
 
-        {!!auth.isSignedIn && env.adminSidebarStore.shouldRender && (
-          <AdminSidebar />
-        )}
+    return (
+      <AppContext.Provider value={hydratedEnv}>
+        <AuthContext.Provider value={hydratedAuth}>
+          {!IS_DEV && <CookieBanner />}
 
-        <div
-          id="app"
-          className={classnames({
-            'showing-sidebar':
-              env.adminSidebarStore.shouldRender &&
-              env.adminSidebarStore.isOpen,
-          })}
-        >
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-        </div>
-      </AuthContext.Provider>
-    </AppContext.Provider>
-  )
+          {hydratedEnv.overlayStore.isVisible && (
+            <Overlay
+              text={hydratedEnv.overlayStore.text}
+              progress={hydratedEnv.overlayStore.progress}
+            />
+          )}
+          {hydratedAuth.isSignedIn && hydratedEnv.adminStore.sidebar && (
+            <AdminSidebar />
+          )}
+
+          <div
+            id="app"
+            className={classnames({
+              'showing-sidebar': hydratedEnv.adminStore.sidebarOpen,
+            })}
+          >
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </div>
+        </AuthContext.Provider>
+      </AppContext.Provider>
+    )
+  })
 }
 
 let appEnvironment: AppEnvironment

@@ -1,41 +1,40 @@
 import React from 'react'
-import { SortOrderButtons } from '../../components/AdminSidebar/Buttons/SortOrderButtons'
+import { SortOrderButtons } from '../AdminSidebar/Controls/Elements/SortOrderButtons/SortOrderButtons'
 import { Article } from '../../domain/Article/Article'
-import { useEnv } from '../../services/AppEnvironment'
-import { classnames } from '../../services/importHelpers'
 import Link from 'next/Link'
-import StringUtils from '../../services/utils/StringUtils'
 import { dateTimeService } from '../../domain/DateTime/DateTime.service'
+import s from './ArticleListRow.module.scss'
+import { SortOrder } from './SortOrder'
+import StringUtils from '../../services/utils/StringUtils'
 
 interface Props {
   article: Article
   all: Article[]
-  child?: boolean
-  currentSort: { key: keyof Article; asc: boolean }
+  listSortOrder: SortOrder
   onSortChange: () => any
 }
 
 export const ArticleListRow = (props: Props) => {
-  const env = useEnv()
-  const { article, all, child = false, currentSort, onSortChange } = props
+  const { article, all, listSortOrder, onSortChange } = props
 
   return (
-    <tr key={article.id} className={classnames({ child })}>
-      <td className="sort-order">
+    <tr key={article.id}>
+      <td>
         <SortOrderButtons
           target={article}
           list={all}
           onChange={async ([target, other]) => {
+            // TODO
             //await env.articleStore.save(target)
             //await env.articleStore.save(other)
-            env.articleStore.setArticles(all)
+            // env.articleStore.setArticles(all)
             onSortChange()
           }}
-          disabled={currentSort.key !== 'sortOrder'}
+          disabled={listSortOrder.key !== 'sortOrder'}
         />
       </td>
-      <td className="title">
-        <Link href={`admin/articles/${article.titleForUrl}`}>
+      <td className={s.title}>
+        <Link href={`/admin/articles/${article.slug}`}>
           <a>{article.title}</a>
         </Link>
       </td>

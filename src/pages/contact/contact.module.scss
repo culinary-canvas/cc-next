@@ -1,0 +1,36 @@
+@import 'src/styles/layout';
+@import 'src/styles/page';
+
+.container {
+  @include pageContainer();
+}
+.content {
+  @include pageContent();
+
+  img {
+    width: 100%;
+  }
+
+  > section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    @include media('<=phone') {
+      flex-direction: column;
+    }
+
+    .emailContainer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      h4 {
+        padding-right: 2rem;
+      }
+    }
+  }
+}

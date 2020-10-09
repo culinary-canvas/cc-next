@@ -1,6 +1,8 @@
 @import '../../styles/color';
 
-.sign-out-button {
+.signOutButton {
   color: $blue;
-  border-color: $blue;
+  &:hover{
+    border-color: $blue;
+  }
 }

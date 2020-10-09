@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import './Spinner.module.scss'
+import s from './Spinner.module.scss'
 import {ICON, IconSizeType} from '../../styles/icon'
 import {COLOR, ColorType} from '../../styles/color'
 
@@ -17,10 +17,10 @@ export function Spinner(props: Props) {
   const containerWidth = `${size}px`
 
   return (
-    <span className="container spinner" style={{ width: containerWidth }}>
-      <span className="dot" style={{ backgroundColor, width, height }} />
-      <span className="dot" style={{ backgroundColor, width, height }} />
-      <span className="dot" style={{ backgroundColor, width, height }} />
+    <span className={s.container} style={{ width: containerWidth }}>
+      <span className={s.dot} style={{ backgroundColor, width, height }} />
+      <span className={s.dot} style={{ backgroundColor, width, height }} />
+      <span className={s.dot} style={{ backgroundColor, width, height }} />
     </span>
   )
 }

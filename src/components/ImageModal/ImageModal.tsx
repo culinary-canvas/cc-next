@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import './ImageModal.module.scss'
+import s from './ImageModal.module.scss'
 import ReactCrop, { PercentCrop } from 'react-image-crop'
 // import 'react-image-crop/dist/ReactCrop.css'
 import { FileInput } from '../FileInput/FileInput'
@@ -43,13 +43,13 @@ export const ImageModal = observer((props: ImageModalProps) => {
       onRequestClose={() => onCancel && onCancel()}
       style={store.style}
     >
-      <div className="content image-modal">
+      <div className={s.content}>
         {store.ready && (
           <>
             <main>
               {!!store.hasImageContent ? (
                 <ReactCrop
-                  className="image-crop"
+                  className={s.imageCrop}
                   src={store.image.url}
                   crossorigin="anonymous"
                   onImageLoaded={(image) => (imageRef.current = image)}
@@ -76,7 +76,7 @@ export const ImageModal = observer((props: ImageModalProps) => {
                       onChange={async (file) =>
                         store.setNewImage(await ImageService.getImage(file))
                       }
-                      id="file-upload"
+                      id="file-upload-1"
                     >
                       No image selected
                     </FileInput>
@@ -90,7 +90,7 @@ export const ImageModal = observer((props: ImageModalProps) => {
                 onChange={async (file) =>
                   store.setNewImage(await ImageService.getImage(file))
                 }
-                id="file-upload"
+                id="file-upload-2"
                 display
                 open={isOpen && !store.hasImageContent}
               >

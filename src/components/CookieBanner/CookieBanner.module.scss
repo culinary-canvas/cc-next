@@ -1,6 +1,6 @@
 @import '../../styles/color';
 
-.cookie-banner.container {
+.container {
   display: flex !important;
   align-items: center !important;
   background-color: $black !important;
@@ -9,12 +9,12 @@
     font-weight: 700;
   }
 
-  .cookie-banner.accept-button {
+  .accept {
     background-color: transparent !important;
     border: 2px solid $white !important;
     color: $white !important;
   }
-  .cookie-banner.decline-button {
+  .decline {
     background-color: transparent !important;
     border: 2px solid $pink !important;
     color: $pink !important;

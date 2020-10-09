@@ -4,8 +4,8 @@ import {FONT} from '../../../styles/font'
 import {cloneDeep} from '../../../services/importHelpers'
 
 const format = new TextFormat({
-  color: COLOR.GREY,
-  fontSize: FONT.SIZE.S,
+  color: COLOR.BLACK,
+  fontSize: FONT.SIZE.M,
 })
 
 export function bylineFormat() {

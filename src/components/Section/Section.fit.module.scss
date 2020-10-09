@@ -1,0 +1,31 @@
+@import 'src/styles/layout';
+
+.fit-ARTICLE {
+  grid-column-start: 2;
+}
+
+.fit-SCREEN_WIDTH,
+.fit-FULL_SCREEN {
+  grid-column-end: 5;
+  grid-column-start: 1;
+}
+
+.fit-FULL_SCREEN {
+  position: relative;
+
+  &:not(.preview) {
+    height: 100vh;
+    max-height: 100vh;
+  }
+  &.preview {
+    height: 100%;
+    max-height: 100%;
+  }
+}
+
+@include media('<=phone') {
+  &.fit_SCREEN_WIDTH,
+  &.fit_FULL_SCREEN {
+    grid-column-end: 4;
+  }
+}

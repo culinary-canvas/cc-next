@@ -1,0 +1,37 @@
+@import '../../styles/color';
+@import '../../styles/layout';
+@import '../../styles/content';
+
+.content {
+  z-index: 20;
+  overflow: hidden;
+
+  &.inEdit {
+    @include contentInEdit();
+  }
+
+  &.italic {
+    font-style: italic;
+  }
+
+  &.uppercase {
+    text-transform: uppercase;
+  }
+
+  &.emphasize {
+    text-shadow: -2px 2px 0 $black;
+  }
+
+  @at-root textarea#{&} {
+    margin-bottom: 0;
+  }
+}
+
+@include media('<=phone') {
+  .content {
+    grid-area: unset !important;
+    grid-row-start: unset !important;
+    padding: 1rem !important;
+    overflow: hidden;
+  }
+}

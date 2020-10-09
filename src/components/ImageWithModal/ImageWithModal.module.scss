@@ -1,11 +1,11 @@
 @import '../../styles/color';
 
-.image-with-modal {
+.content {
   width: 100%;
   justify-content: center;
   display: flex;
 
-  &.no-file {
+  &.noFile {
     border: 2px dashed $grey;
     border-radius: 8px;
     color: $grey;

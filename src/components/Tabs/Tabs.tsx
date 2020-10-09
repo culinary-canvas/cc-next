@@ -2,8 +2,9 @@ import React from 'react'
 import './Tabs.module.scss'
 import { useObserver } from 'mobx-react'
 import { isString } from 'lodash'
-import {classnames} from '../../services/importHelpers'
+import { classnames } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
+import s from './Tabs.module.scss'
 
 interface TabProperty {
   id: string
@@ -23,7 +24,7 @@ interface Props<T extends TabProperty | string = string> {
 export function Tabs<T extends TabProperty | string = string>(props: Props<T>) {
   const {
     tabs = [],
-    selected,
+    selected = tabs[0],
     onSelect,
     containerClassName,
     children,
@@ -33,14 +34,14 @@ export function Tabs<T extends TabProperty | string = string>(props: Props<T>) {
 
   return useObserver(() => (
     <>
-      <div className={classnames('tabs-container', containerClassName)}>
+      <div className={classnames(s.container, containerClassName)}>
         {tabs.map((tab, i) => {
           const id = getId(tab)
           const label = getLabel(tab)
           return (
             <button
-              className={classnames('button', 'tab', {
-                selected: (!selected && i === 0) || id === selected,
+              className={classnames('button', s.tab, {
+                [s.selected]: id === selected,
               })}
               onClick={() => !!onSelect && onSelect(id)}
               key={id}
@@ -51,7 +52,7 @@ export function Tabs<T extends TabProperty | string = string>(props: Props<T>) {
         })}
         {showAdd && (
           <button
-            className={classnames('button', 'tab', 'add')}
+            className={classnames('button', s.tab, 'add')}
             onClick={() => !!onAdd && onAdd()}
           >
             +

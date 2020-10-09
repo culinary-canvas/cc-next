@@ -1,0 +1,55 @@
+@import 'font';
+@import 'layout';
+@import 'color';
+
+$article-border-radius: 1rem;
+
+@mixin articleContainer {
+  width: 100%;
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+  }
+}
+
+@mixin articleContent {
+  display: grid;
+  align-content: center;
+  grid-template-columns: 1fr minmax(50%, #{$tablet-width}) 1fr;
+  grid-template-rows: 1fr;
+  gap: 2rem;
+
+  @include media('>phone') {
+    border-radius: $article-border-radius;
+  }
+}
+
+@mixin articleFooter {
+  @include main-container-width();
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-column: 2 / span 1;
+  padding: 2rem 1rem 4rem;
+  margin-top: 2rem;
+  border-top: 1px solid black;
+  color: $grey-dark;
+  font-size: $font-size-s;
+  justify-self: center;
+}
+
+@mixin articleEditButton {
+  position: absolute;
+  top: 5rem;
+  right: 3rem;
+  z-index: 200;
+  background-color: $white !important;
+}

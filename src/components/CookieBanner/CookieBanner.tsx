@@ -1,6 +1,6 @@
 import React from 'react'
 import CookieConsent from 'react-cookie-consent'
-import './CookieBanner.module.scss'
+import s from './CookieBanner.module.scss'
 import Link from 'next/Link'
 
 export function CookieBanner() {
@@ -8,9 +8,9 @@ export function CookieBanner() {
     <CookieConsent
       location="bottom"
       enableDeclineButton
-      containerClasses="cookie-banner container"
-      buttonClasses="cookie-banner accept-button"
-      declineButtonClasses="cookie-banner decline-button"
+      containerClasses={s.container}
+      buttonClasses={s.accept}
+      declineButtonClasses={s.decline}
       cookieSecurity={true}
     >
       <p>

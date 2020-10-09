@@ -9,7 +9,7 @@ import { OrderBy } from './OrderBy'
 import { SubscriptionHandler } from './SubscriptionHandler'
 import Where from './Where'
 import { Class } from '../../types/Class'
-import { DbTransformService } from './DbTransform.service'
+import { Transformer } from './Transformer'
 import { getCollection } from './decorators/collection.decorator'
 import { User } from 'firebase'
 import { initFirebase } from '../firebase/Firebase.service'
@@ -17,31 +17,12 @@ import { QuerySnapshot } from '@firebase/firestore-types'
 
 class DbService<T extends Model> {
   /**
-   * Name of collection to store/fetch clazz instances in/from
-   * Set with Db.model(collectionName) on clazz
-   * @private
-   */
-  private readonly collection: string
-
-  constructor(private readonly Clazz: Class<T>) {
-    initFirebase()
-    const dummy = new Clazz()
-    const name = getCollection(dummy)?.name
-    if (!name) {
-      throw new Error(
-        `Required metadata "collectionName" is missing in ${this.Clazz.name}`,
-      )
-    }
-    this.collection = name
-  }
-
-  /**
    * Check if any model exists for where clause
    *
    * @param conditions
    */
-  async exists(conditions: Where[]): Promise<boolean> {
-    const collectionRef = firebase.firestore().collection(this.collection)
+  static async exists(conditions: Where[], collection: string): Promise<boolean> {
+    const collectionRef = firebase.firestore().collection(collection)
     const query = this.buildQuery(collectionRef, conditions, [], 2)
     const result = await query.get()
     return !result.empty
@@ -150,38 +131,6 @@ class DbService<T extends Model> {
   }
 
   /**
-   * Store model in DB
-   *
-   * @param model
-   * @param user
-   */
-  async save(model: T, user: User): Promise<T> {
-    this.beforeSave(model, user)
-    const lastPersistedState = model.id ? await this.getById(model.id) : null
-
-    const dbObject = DbTransformService.transformToDb(model)
-    const collectionRef = firebase.firestore().collection(this.collection)
-    const doc = model.id ? collectionRef.doc(model.id) : collectionRef.doc()
-    await doc.set(dbObject)
-
-    const persisted = await this.getById(doc.id)
-
-    await this.afterSave(lastPersistedState, persisted)
-    return persisted
-  }
-
-  /**
-   * Delete model from DB
-   *
-   * @param id
-   */
-  async delete(id: string): Promise<void> {
-    const collectionRef = firebase.firestore().collection(this.collection)
-    const doc = collectionRef.doc(id)
-    await doc.delete()
-  }
-
-  /**
    * Store multiple models in DB
    * TODO: AddSection all overhead like after save and such
    *
@@ -193,7 +142,7 @@ class DbService<T extends Model> {
 
     models.forEach((model) => {
       const doc = model.id ? collectionRef.doc(model.id) : collectionRef.doc()
-      const dbObject = DbTransformService.transformToDb(model)
+      const dbObject = Transformer.toDb(model)
       batch.set(doc, dbObject)
     })
 
@@ -214,7 +163,7 @@ class DbService<T extends Model> {
   private transform(result: firebase.firestore.QuerySnapshot) {
     return !result.empty
       ? result.docs.map((doc) =>
-          DbTransformService.transformToApp(
+          Transformer.toApp(
             doc.data() as {},
             this.Clazz,
             doc.id,
@@ -234,7 +183,7 @@ class DbService<T extends Model> {
       .docChanges()
       .forEach(async (change: firebase.firestore.DocumentChange) => {
         if (change.type === 'added' || change.type === 'modified') {
-          const model = DbTransformService.transformToApp(
+          const model = Transformer.toApp(
             change.doc.data() as {},
             this.Clazz,
             change.doc.id,
@@ -255,10 +204,10 @@ class DbService<T extends Model> {
   }
 
   private transformToApp(doc: firebase.firestore.DocumentSnapshot): T {
-    return DbTransformService.transformToApp(doc.data(), this.Clazz, doc.id)
+    return Transformer.toApp(doc.data(), this.Clazz, doc.id)
   }
 
-  private buildQuery(
+  private static buildQuery(
     collectionRef: firebase.firestore.CollectionReference,
     conditions: Where[] = [],
     orderBy: OrderBy[] = [],

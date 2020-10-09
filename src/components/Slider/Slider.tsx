@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { v1 as uuid } from 'uuid'
-import './Slider.module.scss'
+import s from './Slider.module.scss'
 import ReactSlider from 'react-slider'
 import {classnames} from '../../services/importHelpers'
 
@@ -48,13 +48,13 @@ export const Slider = observer((props: Props) => {
   }, [max])
 
   return (
-    <div className={classnames('slider-container', containerClassName)}>
+    <div className={classnames(s.container, containerClassName)}>
       {label && <label htmlFor={uid.current}>{label}</label>}
 
       <ReactSlider
-        className="slider"
-        thumbClassName="thumb"
-        trackClassName="track"
+        className={s.slider}
+        thumbClassName={s.thumb}
+        trackClassName={s.track}
         value={value}
         min={min}
         max={max}

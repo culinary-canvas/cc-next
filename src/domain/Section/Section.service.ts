@@ -15,7 +15,8 @@ import { subHeadingFormat } from '../Content/preset/subHeadingFormat'
 import { bylineFormat } from '../Content/preset/bylineFormat'
 import { Content } from '../Content/Content'
 import { v4 as uuid } from 'uuid'
-import {cloneDeep} from '../../services/importHelpers'
+import { cloneDeep } from '../../services/importHelpers'
+import { SortableService } from '../../services/sortable/Sortable.service'
 
 export class SectionService {
   static applyPreset(preset: SectionPreset, section: Section) {
@@ -60,9 +61,9 @@ export class SectionService {
       byline.sortOrder = 3
 
       coverImage.format.padding = new Padding(0, 16)
-      title.format.padding = new Padding(0, 0, 0, 16)
-      subHeading.format.padding = new Padding(0, 0, 0, 16)
-      byline.format.padding = new Padding(0, 0, 16, 16)
+      title.format.padding = new Padding(16, 40, 16, 40)
+      subHeading.format.padding = new Padding(16, 40, 16, 40)
+      byline.format.padding = new Padding(16)
 
       section.format.fit = Fit.FULL_SCREEN
     } else if (preset === SectionPreset.FULL_SCREEN_IMAGE_TITLE_SUB_BYLINE) {
@@ -74,9 +75,9 @@ export class SectionService {
       coverImage.format.background = true
 
       coverImage.format.padding = new Padding(0)
-      title.format.padding = new Padding(0)
-      subHeading.format.padding = new Padding(0)
-      byline.format.padding = new Padding(0, 0, 16)
+      title.format.padding = new Padding(16, 80, 16, 80)
+      subHeading.format.padding = new Padding(16, 80, 16, 80)
+      byline.format.padding = new Padding(16)
 
       section.format.fit = Fit.FULL_SCREEN
     } else if (preset === SectionPreset.INLINE_IMAGE_TITLE_SUB_BYLINE) {
@@ -85,9 +86,10 @@ export class SectionService {
       subHeading.sortOrder = 1
       byline.sortOrder = 2
 
-      title.format.padding.bottom = 0
-      subHeading.format.padding.bottom = 0
-      byline.format.padding.top = 0
+      coverImage.format.padding = new Padding(16)
+      title.format.padding = new Padding(120, 16, 0, 16)
+      subHeading.format.padding = new Padding(40)
+      byline.format.padding = new Padding(32)
 
       section.format.fit = Fit.ARTICLE
     }
@@ -125,5 +127,14 @@ export class SectionService {
       section.name += ' (copy)'
     }
     return section
+  }
+
+  static sort(sections: Section[]) {
+    SortableService.fixSortOrders(sections)
+    return SortableService.getSorted(sections)
+  }
+
+  static getColumnContainingContent(section: Section, content: Content) {
+    return section.columns.find((col) => col.some((c) => c.uid === content.uid))
   }
 }

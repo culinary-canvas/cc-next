@@ -7,7 +7,7 @@ import { Content } from '../Content/Content'
 import { Orientation } from './Orientation'
 import { SectionPreset } from './SectionPreset'
 import { ImageContent } from '../Image/ImageContent'
-import { DbTransformService } from '../../services/db/DbTransform.service'
+import { Transformer } from '../../services/db/Transformer'
 import { TextContent } from '../Text/TextContent'
 import { transform } from '../../services/db/decorators/transform.decorator'
 import { ContentType } from '../Text/ContentType'
@@ -32,7 +32,7 @@ export class Section {
   @transform<Content[]>({
     toApp: (objects) =>
       objects?.map((o) =>
-        DbTransformService.transformToApp<Content>(
+        Transformer.toApp<Content>(
           o,
           !!o.type && o.type === ContentType.IMAGE ? ImageContent : TextContent,
         ),
@@ -40,9 +40,9 @@ export class Section {
     toDb: (objects) => {
       console.log(
         toJS(objects),
-        objects?.map((o) => DbTransformService.transformToDb(o)),
+        objects?.map((o) => Transformer.toDb(o)),
       )
-      return objects?.map((o) => DbTransformService.transformToDb(o))
+      return objects?.map((o) => Transformer.toDb(o))
     },
   })
   @observable

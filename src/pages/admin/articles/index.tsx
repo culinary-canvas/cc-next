@@ -5,6 +5,7 @@ import { initFirebase } from '../../../services/firebase/Firebase.service'
 import { ArticleApi } from '../../../domain/Article/Article.api'
 import { Article } from '../../../domain/Article/Article'
 import { useTransform } from '../../../hooks/useTransform'
+import s from './articleList.module.scss'
 
 interface Props {
   articleData: Partial<Article>[]
@@ -14,7 +15,7 @@ function ArticleListPage({ articleData }: Props) {
   const articles = useTransform(articleData, Article)
 
   return (
-    <main className="container page">
+    <main className={s.container}>
       <ArticleList articles={articles} />
     </main>
   )

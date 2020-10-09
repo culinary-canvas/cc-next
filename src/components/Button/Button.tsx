@@ -3,8 +3,9 @@ import { observer } from 'mobx-react'
 import { Spinner } from '../Spinner/Spinner'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { v4 as uuid } from 'uuid'
-import {classnames} from '../../services/importHelpers'
-import {COLOR, ColorType} from '../../styles/color'
+import { classnames } from '../../services/importHelpers'
+import { COLOR, ColorType } from '../../styles/color'
+import s from './Button.module.scss'
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -57,12 +58,13 @@ export const Button = observer((props: Props) => {
         ...style,
       }}
       className={classnames([
-        'button',
+        s.button,
         className,
-        { 'unset-style': unsetStyle, circle },
-        { disabled },
-        { toggleable },
-        { selected },
+        { [s.unsetStyle]: unsetStyle },
+        { [s.circle]: circle },
+        { [s.disabled]: disabled },
+        { [s.toggleable]: toggleable },
+        { [s.selected]: selected },
       ])}
       data-tip={tooltipText}
       {...restProps}

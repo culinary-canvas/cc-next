@@ -9,6 +9,23 @@
   .title {
     display: flex;
     justify-content: space-between;
+    position: relative;
+
+    h1{
+      display: flex;
+      align-items: center;
+
+      button{
+        margin-left: 1em;
+        font-weight: 900;
+      }
+    }
+  }
+
+  .createButton {
+    position: absolute;
+    right: 0;
+    bottom: 50%;
   }
 
   table {
@@ -54,10 +71,6 @@
 
       tr.child > td:first-child {
         padding-left: 2rem;
-      }
-
-      td.title {
-        font-weight: 700;
       }
     }
   }

@@ -56,7 +56,7 @@ export const PreviewArticle = observer((props: Props) => {
         <Button
           onClick={(e) => {
             e.preventDefault()
-            env.articleStore.setTypeFilter(article.type)
+            // env.articleStore.setTypeFilter(article.type)
           }}
         >
           {StringUtils.toDisplayText(article.type)}
@@ -75,8 +75,7 @@ export const PreviewArticle = observer((props: Props) => {
         <span className={styles.created}>
           {dateTimeService.calendar(article.created)}
         </span>
-
-        <Tags selected={article.tagIds} edit={false} />
+        <Tags selected={article.tagNames} />
       </section>
     </article>
   )

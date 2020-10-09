@@ -3,9 +3,8 @@ import { observer } from 'mobx-react'
 import s from './Footer.module.scss'
 import YearMonth from '../../domain/DateTime/YearMonth'
 import Link from 'next/Link'
-import facebook from '../../../public/assets/icons/streamline-icon-social-media-facebook-1@140x140.svg'
-import instagram from '../../../public/assets/icons/streamline-icon-social-instagram@140x140.svg'
-import pinterest from '../../../public/assets/icons/streamline-icon-social-pinterest@140x140.svg'
+import { SocialMediaLinks } from '../SocialMediaLinks/SocialMediaLinks'
+import { COLOR } from '../../styles/color'
 
 export const Footer = observer(() => {
   return (
@@ -29,34 +28,11 @@ export const Footer = observer(() => {
           </nav>
         </section>
 
-        <section className={s.socialMediaContainer}>
-          <a
-            href="https://www.facebook.com/CulinaryCanvasBlog/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Follow us on Facebook"
-          >
-            <img src={facebook} alt="Facebook" className="icon" />
-          </a>
+        <SocialMediaLinks color={COLOR.WHITE} />
 
-          <a
-            href="https://www.instagram.com/CulinaryCanvas_/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Follow us on Instagram"
-          >
-            <img src={instagram} alt="Facebook" className="icon" />
-          </a>
-          <a
-            href="https://www.pinterest.com/Culinary_Canvas/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Follow us on Pinterest"
-          >
-            <img src={pinterest} alt="Facebook" className="icon" />
-          </a>
+        <section className={s.copyright}>
+          {YearMonth.create().year} © Culinary Canvas
         </section>
-        <section>{YearMonth.create().year} © Culinary Canvas</section>
       </div>
     </footer>
   )

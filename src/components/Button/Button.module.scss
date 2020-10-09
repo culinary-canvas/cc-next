@@ -1,0 +1,6 @@
+@import 'src/styles/color';
+@import 'src/styles/form';
+
+.button {
+  @include button();
+}

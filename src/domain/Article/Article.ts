@@ -11,6 +11,7 @@ import { Content } from '../Content/Content'
 import DateTime from '../DateTime/DateTime'
 import { ImageContent } from '../Image/ImageContent'
 import { Sortable } from '../../types/Sortable'
+import { Tag } from '../Tag/Tag'
 
 @collection('articles')
 export class Article implements Model, Sortable {
@@ -50,9 +51,16 @@ export class Article implements Model, Sortable {
   @field()
   type: ArticleType
 
+  /**
+   * @deprecated
+   */
   @observable
   @field()
   tagIds: string[] = []
+
+  @observable
+  @field()
+  tagNames: string[] = []
 
   @observable
   @field()
@@ -66,13 +74,16 @@ export class Article implements Model, Sortable {
   @field()
   published = false
 
+  /**
+   * @deprecated
+   */
   @observable
   @field()
   titleForUrl: string
 
   @observable
-  @transient()
-  parent: Article
+  @field()
+  slug: string
 
   @computed get sortedSections(): Section[] {
     return [...this.sections].sort((s1, s2) => s1.sortOrder - s2.sortOrder)

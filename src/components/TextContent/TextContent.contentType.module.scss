@@ -1,0 +1,30 @@
+@import '../../styles/layout';
+@import '../../styles/font';
+
+.content-type-TITLE {
+  line-height: 1.2;
+}
+
+@include media('<=phone') {
+  .content-type-TITLE {
+    font-size: $font-size-xl !important;
+  }
+  .content-type-SUB_HEADING {
+    font-size: $font-size-l !important;
+  }
+  .content-type-EXTRACT {
+    font-size: $font-size-l !important;
+  }
+  .content-type-BYLINE {
+    font-size: $font-size-s !important;
+  }
+  .content-type-HEADING {
+    font-size: $font-size-l !important;
+  }
+  .content-type-LEAD {
+    font-size: 18px !important;
+  }
+  .content-type-PARAGRAPH {
+    font-size: 18px !important;
+  }
+}

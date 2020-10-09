@@ -2,13 +2,15 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import { createContext, useContext } from 'react'
 import Store from '../../types/Store'
-import {initFirebase} from '../firebase/Firebase.service'
+import { initFirebase } from '../firebase/Firebase.service'
+import {action, computed, observable} from 'mobx'
 
-type SerializedAuth = Pick<Auth, 'user' | 'initialized'>
+type SerializedAuth = Pick<Auth, 'user'>
 
 export class Auth extends Store<SerializedAuth> {
-  user: firebase.User
+  @observable user: firebase.User
 
+  @computed
   get isSignedIn() {
     return !!this.user
   }
@@ -28,9 +30,11 @@ export class Auth extends Store<SerializedAuth> {
   }
 
   private authStateChanged(user: firebase.User) {
+    console.log('changed!', user)
     this.setUser(user)
   }
 
+  @action
   private setUser(user: firebase.User) {
     this.user = user
   }

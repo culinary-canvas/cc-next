@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useAuth } from '../../services/auth/Auth'
 import { useRouter } from 'next/router'
 import { SignIn } from '../../components/SignIn/SingIn'
+import { useAutorun } from '../../hooks/useAutorun'
 
 function AdminHome() {
   const auth = useAuth()
   const router = useRouter()
 
-  useEffect(() => {
+  useAutorun(() => {
     if (auth.isSignedIn) {
       router.replace(`/admin/articles`)
     }

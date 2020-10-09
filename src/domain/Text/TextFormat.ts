@@ -31,7 +31,7 @@ export class TextFormat implements Format {
 
   @field()
   @observable
-  fontSize: FontSize = FONT.SIZE.M
+  fontSize: FontSize = FONT.SIZE.L
 
   @field()
   @observable

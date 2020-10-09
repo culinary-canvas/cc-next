@@ -1,0 +1,30 @@
+@import 'src/styles/font';
+@import 'src/styles/color';
+
+.tag {
+  height: auto;
+  padding: 0.1rem 0.3rem;
+  margin: 0.25rem 0;
+  border-color: $grey-light !important;
+  color: $grey !important;
+  font-size: $font-size-s;
+
+  &:not(:first-child) {
+    margin-left: 0.25rem;
+  }
+
+  &:not(:last-child) {
+    margin-right: 0.25rem;
+  }
+
+  &:not(.selected) {
+    opacity: 0.4;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.selected {
+    color: $black;
+  }
+}

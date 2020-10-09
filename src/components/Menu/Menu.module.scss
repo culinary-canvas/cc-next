@@ -7,7 +7,7 @@
   justify-content: flex-end;
   align-items: center;
   max-width: 48px;
-  padding: 0.5rem 48px 0.5rem 0;
+  padding: 0.5rem;
   transition: all $animation-fast ease-in;
 
   @include media('>phone') {
@@ -15,14 +15,14 @@
     background-color: $white;
   }
 
-  .buttonsContainer {
+  .optionsContainer {
     max-width: 0;
     opacity: 0;
     transition: all $animation-fast ease-in;
     overflow: hidden;
   }
 
-  .buttons {
+  .options {
     display: flex;
     flex-wrap: nowrap;
 
@@ -34,7 +34,7 @@
   &.isOpen {
     max-width: 600px;
 
-    .buttonsContainer {
+    .optionsContainer {
       max-width: 100%;
       opacity: 1;
 
@@ -49,17 +49,9 @@
     }
   }
 
-  &:not(.is-open) .buttons {
+  &:not(.isOpen) .options {
     @include media('<=phone') {
       opacity: 0;
-    }
-  }
-
-  .menu-button {
-    position: absolute;
-    right: 8px;
-    @include media('<=phone') {
-      right: 1.5rem;
     }
   }
 

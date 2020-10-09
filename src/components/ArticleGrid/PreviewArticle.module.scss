@@ -18,8 +18,13 @@
       transform $animation-medium ease-in;
   }
 
-  section:not(.image) {
-    padding: 0.5rem 2rem;
+  > section:not(.image) {
+    @include media('>phone') {
+      padding: 0.5rem 2rem;
+    }
+    @include media('<=phone') {
+      padding: 0.2rem 1rem;
+    }
   }
 
   section.image img {
@@ -59,7 +64,7 @@
   section.meta {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
 
     @include media('<=phone') {
       flex-direction: column-reverse;
@@ -70,7 +75,6 @@
     }
 
     .created {
-      margin-bottom: 0.5rem;
       color: $grey;
       font-size: $font-size-s;
 

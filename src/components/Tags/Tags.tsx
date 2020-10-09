@@ -1,24 +1,22 @@
-import React, { useState } from 'react'
-import styles from './Tags.module.scss'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../Button/Button'
-import { useAutorun } from '../../hooks/useAutorun'
-import { Tag } from '../../domain/Tag/Tag'
-import { COLOR } from '../../styles/color'
-import { useEnv } from '../../services/AppEnvironment'
-import { useRouter } from 'next/router'
-import { classnames } from '../../services/importHelpers'
+import { Tag as _Tag } from '../../domain/Tag/Tag'
 import StringUtils from '../../services/utils/StringUtils'
 import { TagApi } from '../../domain/Tag/Tag.api'
 import { useAuth } from '../../services/auth/Auth'
+import { Tag } from './Tag'
+import { classnames } from '../../services/importHelpers'
+import styles from './Tags.module.scss'
 
 interface Props {
   selected: string[]
-  onRemove?: (tag: Tag) => any
-  onAdd?: (tag: Tag) => any
+  onRemove?: (tag: string) => any
+  onAdd?: (tag: string) => any
   id?: string
   edit?: boolean
-  selectedBackgroundColor?: string
+  containerClassName?: string
+  backgroundColor?: string
 }
 
 export const Tags = observer((props: Props) => {
@@ -27,53 +25,53 @@ export const Tags = observer((props: Props) => {
     selected,
     onRemove,
     onAdd,
-    edit = true,
-    selectedBackgroundColor = COLOR.GREY_LIGHT,
+    edit = false,
+    containerClassName,
+    backgroundColor,
   } = props
-  const env = useEnv()
   const auth = useAuth()
 
   const [showInput, setShowInput] = useState<boolean>(false)
   const [newTag, setNewTag] = useState<string>('')
   const [saving, setSaving] = useState<boolean>(false)
-  const [tags, setTags] = useState<Tag[]>([])
-  const router = useRouter()
+  const [tags, setTags] = useState<string[]>([])
+  const [all, setAll] = useState<string[]>([])
 
-  useAutorun(() => {
+  useEffect(() => console.log('effect', selected), [])
+
+  useEffect(() => {
     if (edit) {
-      setTags(env.tagStore.tags)
-    } else {
-      setTags(env.tagStore.get(selected))
+      TagApi.all().then((all) => setAll(all.map((t) => t.name)))
     }
-  }, [edit, env.tagStore, selected])
+  }, [edit])
+
+  useEffect(() => {
+    const distinct = new Set<string>([...selected, ...all])
+    setTags(Array.from(distinct).sort((t1, t2) => t1.localeCompare(t2)))
+  }, [all, selected])
 
   return (
-    <div id={id} className={styles.tagsContainer}>
+    <section
+      id={id}
+      className={classnames(styles.tagsContainer, containerClassName)}
+    >
       <div className={styles.tags}>
         {tags.map((tag) => {
-          const isSelected = selected.includes(tag.id)
+          const isSelected = selected.includes(tag)
           return (
-            <Button
-              key={tag.id}
-              onClick={(e) => {
-                e.preventDefault()
-                if (edit) {
-                  isSelected ? onRemove(tag) : onAdd(tag)
-                } else {
-                  env.articleStore.setTagIdFilter(tag.id)
-                  // TODO nav
-                  // router.navigate({ url: '/', method: 'anchor' })
-                }
-              }}
-              className={classnames({ [styles.selected]: isSelected })}
-              color={isSelected ? COLOR.BLACK : COLOR.GREY_DARK}
-              style={{
-                color: isSelected ? COLOR.BLACK : COLOR.GREY_DARK,
-                backgroundColor: isSelected && selectedBackgroundColor,
-              }}
-            >
-              {tag.name}
-            </Button>
+            <Tag
+              key={tag}
+              tag={tag}
+              selected={isSelected}
+              backgroundColor={backgroundColor}
+              onClick={
+                edit
+                  ? () => {
+                      isSelected ? onRemove(tag) : onAdd(tag)
+                    }
+                  : undefined
+              }
+            />
           )
         })}
         {edit && !showInput && (
@@ -89,7 +87,6 @@ export const Tags = observer((props: Props) => {
         <>
           <input
             type="text"
-            className="add-tag"
             value={newTag}
             onChange={(e) =>
               setNewTag(StringUtils.toDisplayText(e.target.value))
@@ -112,17 +109,17 @@ export const Tags = observer((props: Props) => {
           </Button>
         </>
       )}
-    </div>
+    </section>
   )
 
   async function add(user) {
     setSaving(true)
-    if (!env.tagStore.exists(newTag)) {
-      const tagToAdd = new Tag()
+
+    if (!tags.includes(newTag)) {
+      const tagToAdd = new _Tag()
       tagToAdd.name = newTag
-      const persisted = await TagApi.save(tagToAdd, user)
-      env.tagStore.add([persisted])
-      onAdd(persisted)
+      await TagApi.save(tagToAdd, auth.user)
+      onAdd(newTag)
     }
     setShowInput(false)
     setNewTag('')

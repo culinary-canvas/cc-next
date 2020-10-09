@@ -1,0 +1,16 @@
+@import 'src/styles/page';
+
+.container {
+  @include pageContainer();
+}
+.content {
+  @include pageContent();
+
+  img {
+    width: 100%;
+  }
+
+  > section{
+    padding-top: 2rem;
+  }
+}

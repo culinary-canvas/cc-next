@@ -1,5 +1,5 @@
 import React from 'react'
-import './Tooltip.module.scss'
+import s from './Tooltip.module.scss'
 import ReactTooltip from 'react-tooltip'
 
 interface Props {
@@ -13,7 +13,7 @@ export function Tooltip(props: Props) {
       effect="solid"
       place="top"
       backgroundColor={'rgba(0,0,0,0.5)'}
-      className="tooltip"
+      className={s.tooltip}
     />
   )
 }

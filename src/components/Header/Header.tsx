@@ -1,17 +1,22 @@
 import React from 'react'
 import styles from './Header.module.scss'
-import { useEnv } from '../../services/AppEnvironment'
 import Link from 'next/Link'
 import { Menu } from '../Menu/Menu'
 import Logo from '../../../public/assets/logo.svg'
+import { useRouter } from 'next/router'
 
 export const Header = () => {
-  const env = useEnv()
+  const router = useRouter()
+
   return (
     <header className={styles.container}>
       <div className={styles.content}>
         <Link href="/" passHref>
-          <a onClick={() => env.articleStore.setTypeFilter(null)}>
+          <a
+            onClick={() => {
+              router.push('/')
+            }}
+          >
             <img
               src={Logo}
               alt="Culinary Canvas"

@@ -1,6 +1,4 @@
 import { createContext, useContext } from 'react'
-import { ArticleStore } from '../domain/Article/Article.store'
-import { AdminSidebarStore } from '../components/AdminSidebar/AdminSidebar.store'
 import { AdminStore } from './admin/Admin.store'
 import { ImageModalStore } from '../components/ImageModal/ImageModal.store'
 import { TagStore } from '../domain/Tag/Tag.store'
@@ -10,33 +8,22 @@ import { action, observable } from 'mobx'
 
 export type SerializedAppEnvironment = Pick<
   AppEnvironment,
-  | 'articleStore'
-  | 'adminSidebarStore'
-  | 'adminStore'
-  | 'imageModalStore'
-  | 'overlayStore'
-  | 'tagStore'
+  'adminStore' | 'imageModalStore' | 'overlayStore'
 >
+
+export const IS_DEV = process.env.NODE_ENV === 'development'
 
 export class AppEnvironment {
   @observable initialized = false
-  public articleStore = new ArticleStore()
-  public adminSidebarStore = new AdminSidebarStore()
   public adminStore = new AdminStore()
   public overlayStore = new OverlayStore()
   public imageModalStore = new ImageModalStore()
-  public tagStore = new TagStore()
 
   constructor(serialized?: SerializedAppEnvironment) {
     if (!!serialized) {
-      this.articleStore = new ArticleStore(serialized.articleStore)
-      this.adminSidebarStore = new AdminSidebarStore(
-        serialized.adminSidebarStore,
-      )
       this.adminStore = new AdminStore(serialized.adminStore)
       this.overlayStore = new OverlayStore(serialized.overlayStore)
       this.imageModalStore = new ImageModalStore(serialized.imageModalStore)
-      this.tagStore = new TagStore(serialized.tagStore)
     }
   }
 

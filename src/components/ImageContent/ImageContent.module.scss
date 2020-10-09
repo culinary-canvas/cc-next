@@ -1,0 +1,51 @@
+@import '../../styles/color';
+@import '../../styles/layout';
+@import '../../styles/content';
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  &.inEdit {
+    @include contentInEdit();
+  }
+
+  .content {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.noFile {
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
+@include media('<=phone') {
+  .container {
+    grid-area: unset !important;
+    grid-row-start: unset !important;
+    overflow: hidden;
+
+    &.first {
+      .content {
+        padding: 0 !important;
+      }
+    }
+
+    &:not(.background, .first) {
+      .content {
+        width: unset !important;
+        height: unset !important;
+        padding: 1rem 1rem 0 !important;
+      }
+    }
+
+    &.background {
+      position: absolute;
+    }
+  }
+}

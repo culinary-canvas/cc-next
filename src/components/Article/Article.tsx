@@ -1,31 +1,22 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import { Share } from '../Share/Share'
 import { Button } from '../Button/Button'
 import { useRouter } from 'next/router'
-import { classnames } from '../../services/importHelpers'
 import { Article as ArticleModel } from '../../domain/Article/Article'
 import { dateTimeService } from '../../domain/DateTime/DateTime.service'
 import { Section } from '../Section/Section'
-import {useAuth} from '../../services/auth/Auth'
+import { useAuth } from '../../services/auth/Auth'
+import s from './Article.module.scss'
+import { toJS } from 'mobx'
+import { Tags } from '../Tags/Tags'
+import {COLOR} from '../../styles/color'
 
 interface Props {
   article: ArticleModel
-  preview?: boolean
-  containerClassName?: string
-  inheritedClassName?: string
-  style?: CSSProperties
 }
 
-export const Article = observer((props: Props) => {
-  const {
-    article,
-    preview = false,
-    containerClassName = '',
-    inheritedClassName = '',
-    style,
-  } = props
-
+export const Article = observer(({ article }: Props) => {
   const router = useRouter()
   const auth = useAuth()
 
@@ -33,53 +24,29 @@ export const Article = observer((props: Props) => {
     <>
       {auth.isSignedIn && (
         <Button
-          className="edit-button"
-          onClick={
-            () =>
-              // TODO nav
-              null
-            /*router.navigate({
-              url: `/admin/articles/${article.titleForUrl}`,
-            })*/
-          }
+          className={s.editButton}
+          onClick={() => router.push(`/admin/articles/${article.slug}`)}
         >
           Edit
         </Button>
       )}
-      <article
-        className={classnames([
-          'content',
-          'article',
-          containerClassName,
-          inheritedClassName,
-          { preview },
-        ])}
-        style={{ ...style }}
-      >
-        {article.sortedSections.map(
-          (section, i) =>
-            (!preview ||
-              (article.promoted && i <= 1) ||
-              (!article.promoted && i === 0)) && (
-              <Section
-                first={i === 0}
-                key={section.uid}
-                section={section}
-                inheritedClassName={classnames([
-                  inheritedClassName,
-                  { preview },
-                ])}
-              />
-            ),
-        )}
-        {!preview && (
-          <footer className={classnames(['footer', { preview }])}>
-            <section className="meta">
-              Published {dateTimeService.calendar(article.created.date)}
-            </section>
-            <Share article={article} />
-          </footer>
-        )}
+      <article className={s.content}>
+        {article.sortedSections.map((section, i) => (
+          <Section first={i === 0} key={section.uid} section={section} />
+        ))}
+        <footer className={s.footer}>
+          <section className={s.published}>
+            Published {dateTimeService.calendar(article.created.date)}
+          </section>
+
+          <Tags
+            selected={article.tagNames}
+            containerClassName={s.tags}
+            backgroundColor={COLOR.WHITE}
+          />
+
+          <Share article={article} containerClassName={s.share}/>
+        </footer>
       </article>
     </>
   )

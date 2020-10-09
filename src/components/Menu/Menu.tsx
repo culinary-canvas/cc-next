@@ -17,15 +17,15 @@ export const Menu = observer(() => {
 
   return (
     <nav className={classnames(styles.menu, { [styles.isOpen]: isOpen })}>
-      <div className={styles.buttonsContainer}>
-        <div className={styles.buttons}>
+      <div className={styles.optionsContainer}>
+        <div className={styles.options}>
           <button
             className={classnames(styles.a, 'a', {
-              active: !env.articleStore.typeFilter, // TODO nav: && response.name === 'start',
+              // TODO active: !env.articleStore.typeFilter, // TODO nav: && response.name === 'start',
             })}
             onClick={() => {
               //TODO nav: router.navigate({ url: '/', method: 'anchor' })
-              env.articleStore.setTypeFilter(null)
+              // env.articleStore.setTypeFilter(null)
             }}
           >
             All
@@ -33,11 +33,11 @@ export const Menu = observer(() => {
 
           <button
             className={classnames(styles.a, 'a', {
-              active: env.articleStore.typeFilter === ArticleType.DISH,
+              // active: env.articleStore.typeFilter === ArticleType.DISH,
               // TODO nav: && response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setTypeFilter(ArticleType.DISH)
+              // env.articleStore.setTypeFilter(ArticleType.DISH)
               // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >
@@ -45,11 +45,11 @@ export const Menu = observer(() => {
           </button>
           <button
             className={classnames(styles.a, 'a', {
-              active: env.articleStore.typeFilter === ArticleType.HOW_TO,
+              // active: env.articleStore.typeFilter === ArticleType.HOW_TO,
               // TODO nav: &&                response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setTypeFilter(ArticleType.HOW_TO)
+              // env.articleStore.setTypeFilter(ArticleType.HOW_TO)
               // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >
@@ -57,11 +57,11 @@ export const Menu = observer(() => {
           </button>
           <button
             className={classnames(styles.a, 'a', {
-              active: env.articleStore.typeFilter === ArticleType.PORTRAIT,
+              // active: env.articleStore.typeFilter === ArticleType.PORTRAIT,
               // TODO nav: &&                router.current().response.name === 'start',
             })}
             onClick={() => {
-              env.articleStore.setTypeFilter(ArticleType.PORTRAIT)
+              // env.articleStore.setTypeFilter(ArticleType.PORTRAIT)
               // TODO nav: router.navigate({ url: '/', method: 'anchor' })
             }}
           >

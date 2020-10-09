@@ -1,19 +1,24 @@
 @import '../../styles/layout';
 @import '../../styles/color';
 
-.admin-menu {
+.adminMenu {
   display: flex;
 
   .a {
-    color: $blue;
+    color: $blue !important;
+
     @include media('<=phone') {
-      &:not(.show-on-mobile) {
+      &:not(.showOnMobile) {
         display: none;
       }
     }
+
+    &:hover {
+      border-color: $blue;
+    }
   }
 
-  .admin-menu-option {
+  .option {
     height: 2.2rem;
   }
 

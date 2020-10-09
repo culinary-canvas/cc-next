@@ -1,7 +1,7 @@
 @import '../../styles/color';
 @import '../../styles/font';
 
-.content.image-modal {
+.content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -21,7 +21,7 @@
     align-items: center;
     flex-grow: 1;
 
-    .image-crop {
+    .imageCrop {
       width: fit-content;
       margin: 1rem;
 
@@ -31,7 +31,7 @@
       }
     }
 
-    .file-drop {
+    .fileDrop {
       width: 100%;
       max-width: 70vw;
     }
@@ -46,7 +46,7 @@
       margin-left: 1rem;
     }
 
-    .file-input {
+    .fileInput {
       margin-left: 0;
       margin-right: auto;
     }

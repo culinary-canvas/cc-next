@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef } from 'react'
-import './FileInput.module.scss'
+import s from './FileInput.module.scss'
 import classnames from 'classnames'
 
 interface Props {
@@ -34,9 +34,8 @@ export const FileInput = (props: Props) => {
   return (
     <label
       className={classnames([
-        'file-input',
+        s.fileInput,
         className,
-        { 'use-built-in': display },
       ])}
       htmlFor={id}
     >

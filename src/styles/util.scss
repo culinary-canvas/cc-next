@@ -1,4 +1,5 @@
 @import 'font';
+@import 'form';
 
 .full-width {
   width: 100%;
@@ -21,4 +22,8 @@
 
 .no-scroll {
   overflow: hidden;
+}
+
+.button-group {
+  @include button-group();
 }

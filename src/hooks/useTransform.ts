@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { DbTransformService } from '../services/db/DbTransform.service'
+import { Transformer } from '../services/db/Transformer'
 import { Class } from '../types/Class'
 
 export function useTransform<T = any>(
@@ -7,6 +7,6 @@ export function useTransform<T = any>(
   Clazz: Class<T>,
 ): T[] {
   return useMemo<T[]>(() => {
-    return dbObjects.map((o) => DbTransformService.transformToApp(o, Clazz))
+    return dbObjects.map((o) => Transformer.toApp(o, Clazz))
   }, [dbObjects])
 }

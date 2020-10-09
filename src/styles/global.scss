@@ -1,23 +1,27 @@
-@import 'article/article';
-@import 'article/article.mobile';
-@import 'article/fit';
-@import 'article/horizontalAlign';
-@import 'article/orientation';
-@import 'article/placement';
-@import 'article/section.image';
-@import 'article/content-type';
-@import 'article/section';
-@import 'article/section.mobile';
-@import 'article/section.text';
-@import 'article/verticalAlign';
 @import 'form';
 @import 'util';
 @import 'color';
 @import 'layout';
-@import 'element';
 @import 'font';
 @import 'animation';
 @import 'page';
+
+html,
+body,
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: $black;
+  font-family: filson-pro, sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //  background-color: #f2eedd;
+  //  background-image: linear-gradient(to bottom, #7de2fc 0%, #ffecd2 100%);
+}
 
 #app {
   position: relative;
@@ -50,4 +54,87 @@
     @include app-with-sidebar-width();
     @include app-with-sidebar-transform();
   }
+}
+
+ul {
+  list-style: none;
+  margin-block-start: 0;
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+  margin-block-end: 0;
+  margin-inline-end: 0;
+}
+
+a {
+  color: $black;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+figure {
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}
+
+p {
+  white-space: pre-wrap;
+}
+
+button,
+input,
+select,
+textarea {
+  @include form-element-base();
+}
+
+button,
+input,
+select {
+  @include form-element-height();
+}
+
+input,
+select,
+textarea {
+  margin: 0 0 1rem;
+}
+
+input,
+select {
+  border: 0;
+  border-bottom: 2px solid $black;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  opacity: 0.4;
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  overflow-y: hidden;
+  resize: none;
+  &::placeholder {
+    color: transparentize($black, 0.8);
+  }
+}
+
+input::placeholder {
+  color: $grey;
+  font-weight: 300;
+}
+
+.button {
+  @include button();
+}
+
+.a {
+  @include a();
 }

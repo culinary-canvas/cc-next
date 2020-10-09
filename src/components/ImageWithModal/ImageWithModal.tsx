@@ -1,6 +1,6 @@
 import React, { CSSProperties, forwardRef, useState } from 'react'
 import { ImageModal } from '../ImageModal/ImageModal'
-import './ImageWithModal.module.scss'
+import s from './ImageWithModal.module.scss'
 import { useObserver } from 'mobx-react'
 import { ImageSet } from '../../domain/Image/ImageSet'
 import { useEnv } from '../../services/AppEnvironment'
@@ -50,7 +50,7 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
             style={{
               ...style,
             }}
-            className={classnames(['image-with-modal', 'no-file', className])}
+            className={classnames([s.content, s.noFile, className])}
           >
             No image selected
           </div>
@@ -71,7 +71,7 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
             style={{
               ...style,
             }}
-            className={classnames(['image-with-modal', className])}
+            className={classnames([s.content, className])}
           />
         )}
 

@@ -9,7 +9,9 @@ import { Content } from './Content'
 import { ImageContent } from '../Image/ImageContent'
 import { TextContent } from '../Text/TextContent'
 import { subHeadingFormat } from './preset/subHeadingFormat'
-import {cloneDeep} from '../../services/importHelpers'
+import { cloneDeep } from '../../services/importHelpers'
+import { SortableService } from '../../services/sortable/Sortable.service'
+import {Section} from '../Section/Section'
 
 export class ContentService {
   static create<T extends Content>(type = ContentType.PARAGRAPH): T {
@@ -62,5 +64,10 @@ export class ContentService {
     }
 
     return content as T
+  }
+
+  static sort(contents: Content[]) {
+    SortableService.fixSortOrders(contents)
+    return SortableService.getSorted(contents)
   }
 }
