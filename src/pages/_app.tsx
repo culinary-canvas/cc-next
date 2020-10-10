@@ -82,7 +82,7 @@ function App({ Component, pageProps, env, auth }: Props) {
 
 let appEnvironment: AppEnvironment
 
-App.getInitialProps = async (ctx) => {
+App.getInitialProps = async () => {
   if (isServer || !appEnvironment) {
     const env = new AppEnvironment()
     await env.init()

@@ -46,10 +46,6 @@ class DateTimeService {
   init() {
     const initTimer = new InitTimer(this)
     if (!DateTimeService.initialized) {
-      dayjs.updateLocale('en', {
-        weekStart: 1,
-        yearStart: 4,
-      })
       dayjs.locale('sv-se')
       DateTimeService.initialized = true
     }

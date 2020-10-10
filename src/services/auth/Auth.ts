@@ -30,7 +30,6 @@ export class Auth extends Store<SerializedAuth> {
   }
 
   private authStateChanged(user: firebase.User) {
-    console.log('changed!', user)
     this.setUser(user)
   }
 

@@ -34,7 +34,7 @@ export const ArticleListRow = (props: Props) => {
         />
       </td>
       <td className={s.title}>
-        <Link href={`/admin/articles/${article.slug}`}>
+        <Link href="/admin/articles/[slug]" as={`/admin/articles/${article.slug}`}>
           <a>{article.title}</a>
         </Link>
       </td>

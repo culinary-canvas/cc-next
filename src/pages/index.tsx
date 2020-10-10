@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useEnv } from '../services/AppEnvironment'
 import { ArticleGrid } from '../components/ArticleGrid/ArticleGrid'
 import styles from './start.module.scss'
@@ -18,6 +18,8 @@ function Start({ articlesData }: Props) {
   const articles = useTransform(articlesData, Article)
 
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
+
+  useEffect(() => console.log(process.env.NEXT_PUBLIC_ENVIRONMENT), [])
 
   useAutorun(() => {
     if (env.adminStore.showUnpublishedOnStartPage) {

@@ -5,13 +5,11 @@ import { ArticleType } from './ArticleType'
 import { ContentType } from '../Text/ContentType'
 import { field } from '../../services/db/decorators/field.decorator'
 import { collection } from '../../services/db/decorators/collection.decorator'
-import { transient } from '../../services/db/decorators/transient.decorator'
 import { TextContent } from '../Text/TextContent'
 import { Content } from '../Content/Content'
 import DateTime from '../DateTime/DateTime'
 import { ImageContent } from '../Image/ImageContent'
 import { Sortable } from '../../types/Sortable'
-import { Tag } from '../Tag/Tag'
 
 @collection('articles')
 export class Article implements Model, Sortable {

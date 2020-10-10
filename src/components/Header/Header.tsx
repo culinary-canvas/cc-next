@@ -25,7 +25,6 @@ export const Header = () => {
             />
           </a>
         </Link>
-
         <Menu />
       </div>
     </header>

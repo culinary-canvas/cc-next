@@ -1,7 +1,6 @@
 import { createContext, useContext } from 'react'
 import { AdminStore } from './admin/Admin.store'
 import { ImageModalStore } from '../components/ImageModal/ImageModal.store'
-import { TagStore } from '../domain/Tag/Tag.store'
 import { dateTimeService } from '../domain/DateTime/DateTime.service'
 import { OverlayStore } from './OverlayStore'
 import { action, observable } from 'mobx'

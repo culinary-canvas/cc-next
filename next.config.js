@@ -10,6 +10,7 @@ module.exports = withImages(
         includePaths: ['src/styles'],
       },
     },
+    miniCssExtractOptions: { ignoreOrder: true },
   }),
 )
 /*
