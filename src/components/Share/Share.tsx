@@ -28,7 +28,7 @@ export const Share = (props: Props) => {
   const quote = `${article.title} @ Culinary Canvas`
   const image = article.imageContent.set.s.url
   const hashtag = 'culinarycanvas'
-  const url = `https://culinary-canvas.com${router.asPath}`
+  const url = `https://cc-next.vercel.app${router.asPath}`
   const description = !!article.subHeading
     ? `${article.title} — ${article.subHeading} @ Culinary Canvas`
     : `${article.title} @ Culinary Canvas`
