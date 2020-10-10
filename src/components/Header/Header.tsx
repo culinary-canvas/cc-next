@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './Header.module.scss'
-import Link from 'next/Link'
+import Link from 'next/link'
 import { Menu } from '../Menu/Menu'
 import Logo from '../../../public/assets/logo.svg'
 import { useRouter } from 'next/router'

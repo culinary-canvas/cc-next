@@ -1,7 +1,7 @@
 import React from 'react'
 import CookieConsent from 'react-cookie-consent'
 import s from './CookieBanner.module.scss'
-import Link from 'next/Link'
+import Link from 'next/link'
 
 export function CookieBanner() {
   return (

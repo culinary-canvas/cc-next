@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import s from './Footer.module.scss'
 import YearMonth from '../../domain/DateTime/YearMonth'
-import Link from 'next/Link'
+import Link from 'next/link'
 import { SocialMediaLinks } from '../SocialMediaLinks/SocialMediaLinks'
 import { COLOR } from '../../styles/color'
 

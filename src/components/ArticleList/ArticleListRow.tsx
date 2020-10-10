@@ -1,7 +1,7 @@
 import React from 'react'
 import { SortOrderButtons } from '../AdminSidebar/Controls/Elements/SortOrderButtons/SortOrderButtons'
 import { Article } from '../../domain/Article/Article'
-import Link from 'next/Link'
+import Link from 'next/link'
 import { dateTimeService } from '../../domain/DateTime/DateTime.service'
 import s from './ArticleListRow.module.scss'
 import { SortOrder } from './SortOrder'
