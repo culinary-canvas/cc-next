@@ -37,11 +37,6 @@ const ArticlePage = observer(({ articleData }: Props) => {
             (c) => c.type === ContentType.SUB_HEADING,
           ) as TextContent)?.value
         }
-        quote={
-          (article.titleSection.sortedContents.find(
-            (c) => c.type === ContentType.EXTRACT,
-          ) as TextContent)?.value
-        }
       />
       <main className={s.container}>
         <Article article={article} />

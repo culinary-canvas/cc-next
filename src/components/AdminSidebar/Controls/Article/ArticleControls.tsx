@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import copyPasteIcon from '../../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import editIcon from '../../../../../public/assets/icons/streamline-icon-pencil-write-3-alternate@140x140.svg'
 import { observer } from 'mobx-react'
 import { Checkbox } from '../../../Checkbox/Checkbox'
 import { Select } from '../../../Select/Select'
-import { useAutorun } from '../../../../hooks/useAutorun'
 import { runInAction, toJS } from 'mobx'
 import { Tags } from '../../../Tags/Tags'
 import { Button } from '../../../Button/Button'
@@ -17,16 +16,28 @@ import s from './ArticleControls.module.scss'
 import { ArticleApi } from '../../../../domain/Article/Article.api'
 import { Transformer } from '../../../../services/db/Transformer'
 import { useAdmin } from '../../../../services/admin/Admin.store'
+import { useReaction } from '../../../../hooks/useReaction'
 
 export const ArticleControls = observer(() => {
   const admin = useAdmin()
   const [otherArticles, setOtherArticles] = useState<Article[]>([])
-  const [article, setArticle] = useState<Article>()
   const [editingSlug, editSlug] = useState<boolean>(false)
+  const { article } = admin
 
-  useAutorun(() => setArticle(admin.article))
+  const [title, setTitle] = useState<string>(article.title)
 
-  useAutorun(() => {
+  useEffect(() => {
+    if (article.title !== title) {
+      runInAction(() => (article.titleContent.value = title))
+    }
+  }, [title])
+
+  useReaction(
+    () => article.title,
+    (t) => setTitle(t),
+  )
+
+  useEffect(() => {
     if (!!article) {
       ArticleApi.all().then((all) => {
         const other = all.filter((a) => a.id !== article.id && !a.parentId)
@@ -47,10 +58,8 @@ export const ArticleControls = observer(() => {
         type="text"
         id="title"
         placeholder="Article title (required)"
-        value={article.title}
-        onChange={(event) =>
-          runInAction(() => (article.titleContent.value = event.target.value))
-        }
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
       />
 
       <label htmlFor="url">URL</label>

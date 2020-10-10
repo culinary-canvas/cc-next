@@ -37,7 +37,7 @@ export const ImageContent = observer((props: Props) => {
       height,
       width,
     })
-  }, [content, section])
+  }, [content, section, content.format])
 
   return (
     <figure

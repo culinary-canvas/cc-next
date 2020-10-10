@@ -148,7 +148,7 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
               overlay.setProgress(1)
 
               overlay.setText('Done!')
-              setTimeout(() => overlay.toggle(), 500)
+              setTimeout(() => overlay.setVisible(false), 500)
               onChange(newSet)
             }
           }}

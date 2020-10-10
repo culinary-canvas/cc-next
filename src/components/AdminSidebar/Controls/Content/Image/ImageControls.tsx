@@ -9,6 +9,8 @@ import { ImageContent } from '../../../../../domain/Image/ImageContent'
 import { Fit } from '../../../../../domain/Section/Fit'
 import { Section } from '../../../../../domain/Section/Section'
 import { Slider } from '../../../../Slider/Slider'
+import { runInAction } from 'mobx'
+import { useReaction } from '../../../../../hooks/useReaction'
 
 interface Props {
   content: ImageContent
@@ -17,6 +19,18 @@ interface Props {
 
 export const ImageControls = observer((props: Props) => {
   const { content, section } = props
+  const [alt, setAlt] = useState<string>(content.set.alt)
+
+  useEffect(() => {
+    if (content.alt !== alt) {
+      runInAction(() => (content.set.alt = alt))
+    }
+  }, [alt])
+
+  useReaction(
+    () => content.set.alt,
+    (t) => setAlt(t),
+  )
 
   const [useFixedSize, setUseFixedSize] = useState<boolean>(
     !!content?.format.size,
@@ -58,8 +72,8 @@ export const ImageControls = observer((props: Props) => {
       <input
         id="alt"
         type="text"
-        value={content.set.alt}
-        onChange={(v) => (content.set.alt = v.target.value)}
+        value={alt}
+        onChange={(v) => setAlt(v.target.value)}
         placeholder="Describe the image..."
       />
 

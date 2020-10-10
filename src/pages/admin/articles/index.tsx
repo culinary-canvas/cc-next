@@ -6,6 +6,8 @@ import { ArticleApi } from '../../../domain/Article/Article.api'
 import { Article } from '../../../domain/Article/Article'
 import { useTransform } from '../../../hooks/useTransform'
 import s from './articleList.module.scss'
+import {useAuth} from '../../../services/auth/Auth'
+import {useAuthGuard} from '../../../hooks/useAuthGuard'
 
 interface Props {
   articleData: Partial<Article>[]
@@ -13,7 +15,11 @@ interface Props {
 
 function ArticleListPage({ articleData }: Props) {
   const articles = useTransform(articleData, Article)
+  const allowed = useAuthGuard()
 
+  if (!allowed) {
+    return null
+  }
   return (
     <main className={s.container}>
       <ArticleList articles={articles} />

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Content } from '../../../../domain/Content/Content'
 import { Select } from '../../../Select/Select'
 import { ContentType } from '../../../../domain/Text/ContentType'
 import StringUtils from '../../../../services/utils/StringUtils'
@@ -17,22 +16,12 @@ import { SectionService } from '../../../../domain/Section/Section.service'
 import { observer } from 'mobx-react'
 import s from './ContentControls.module.scss'
 import { classnames } from '../../../../services/importHelpers'
-import { Section } from '../../../../domain/Section/Section'
-import { Article } from '../../../../domain/Article/Article'
-import { useAutorun } from '../../../../hooks/useAutorun'
 import { useAdmin } from '../../../../services/admin/Admin.store'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()
-  const [content, setContent] = useState<Content>()
-  const [section, setSection] = useState<Section>()
-  const [article, setArticle] = useState<Article>()
   const [deleting, setDeleting] = useState<boolean>(false)
-
-  useAutorun(() => setContent(admin.content))
-  useAutorun(() => setSection(admin.section))
-  useAutorun(() => setArticle(admin.article))
-
+  const { content, section, article } = admin
   if (!content || !section || !article) {
     return null
   }

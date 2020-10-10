@@ -5,9 +5,12 @@ import { useFormControl } from '../../../../hooks/useFormControl'
 import { ArticleForm } from '../../../../components/ArticleForm/ArticleForm'
 import { ArticleService } from '../../../../domain/Article/Article.service'
 import { useAdmin } from '../../../../services/admin/Admin.store'
+import { useAuth } from '../../../../services/auth/Auth'
+import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
+  const allowed = useAuthGuard()
 
   const formControl = useFormControl(ArticleService.create(), [
     { field: 'title', required: true },
@@ -22,6 +25,10 @@ export default function ArticleEdit({ articleData }) {
       admin.setContent(formControl.mutable.titleSection.sortedContents[0])
     }
   }, [formControl])
+
+  if (!allowed) {
+    return null
+  }
 
   if (!formControl) {
     return null

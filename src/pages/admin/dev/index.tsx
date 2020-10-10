@@ -3,14 +3,20 @@ import { observer } from 'mobx-react'
 import { Button } from '../../../components/Button/Button'
 import { fixSortOrders } from '../../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
-import { useAuth } from '../../../services/auth/Auth'
-import {setArticleSlug} from '../../../services/script/setArticleSlug'
-import {changeArticleTagIdsToTagNames} from '../../../services/script/changeArticleTagIdsToTagNames'
+import { setArticleSlug } from '../../../services/script/setArticleSlug'
+import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 import s from './dev.module.scss'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
+import { useAuth } from '../../../services/auth/Auth'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
   const auth = useAuth()
+  const allowed = useAuthGuard()
+
+  if (!allowed) {
+    return null
+  }
 
   return (
     <div className={s.container}>

@@ -9,19 +9,13 @@ import { SectionService } from '../../../../domain/Section/Section.service'
 import { ArticleService } from '../../../../domain/Article/Article.service'
 import { COLOR } from '../../../../styles/color'
 import s from './SectionControls.module.scss'
-import { Section } from '../../../../domain/Section/Section'
-import { useAutorun } from '../../../../hooks/useAutorun'
-import { Article } from '../../../../domain/Article/Article'
 import { useAdmin } from '../../../../services/admin/Admin.store'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
   const [deleting, setDeleting] = useState<boolean>(false)
-  const [section, setSection] = useState<Section>()
-  const [article, setArticle] = useState<Article>()
 
-  useAutorun(() => setSection(admin.section))
-  useAutorun(() => setArticle(admin.article))
+  const { section, article } = admin
 
   if (!article || !section) {
     return null

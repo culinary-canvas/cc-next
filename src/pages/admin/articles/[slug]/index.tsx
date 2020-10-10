@@ -9,6 +9,7 @@ import { ArticleForm } from '../../../../components/ArticleForm/ArticleForm'
 import { ArticleApi } from '../../../../domain/Article/Article.api'
 import { useAdmin } from '../../../../services/admin/Admin.store'
 import { useUnmount } from '../../../../hooks/useUnmount'
+import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 interface Props {
   articleData: PlainObject<Article>
@@ -17,11 +18,11 @@ interface Props {
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
   const article = useTransform([articleData], Article)[0]
+  const allowed = useAuthGuard()
 
   const formControl = useFormControl(article, [
     { field: 'title', required: true },
   ])
-
   useEffect(() => {
     if (!!formControl) {
       admin.setSidebar(true)
@@ -33,6 +34,10 @@ export default function ArticleEdit({ articleData }) {
   }, [formControl])
 
   useUnmount(() => admin.reset())
+
+  if (!allowed) {
+    return null
+  }
 
   return (
     <>

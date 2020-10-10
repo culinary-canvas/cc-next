@@ -1,7 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import TextareaAutosize from 'react-textarea-autosize'
-import { useAutorun } from '../../hooks/useAutorun'
 import { TextContent as TextContentModel } from '../../domain/Text/TextContent'
 import { TextContentService } from '../../domain/Text/TextContent.service'
 import { classnames } from '../../services/importHelpers'
@@ -11,6 +10,7 @@ import horizontalAlignStyles from './TextContent.horizontalAlign.module.scss'
 import verticalAlignStyles from './TextContent.verticalAlign.module.scss'
 import contentTypeStyles from './TextContent.contentType.module.scss'
 import { useAdmin } from '../../services/admin/Admin.store'
+import {useAutorun} from '../../hooks/useAutorun'
 
 interface Props {
   content: TextContentModel
@@ -27,17 +27,18 @@ export const TextContent = observer((props: Props) => {
 
   useAutorun(() => {
     const { format } = content
+
     setFormatStyle({
       color: format.color,
       fontWeight: format.fontWeight,
       fontSize: `${format.fontSize}px`,
-      fontFamily: format.fontFamily,
+      fontFamily: content.format.fontFamily,
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
     })
-  })
+  }, [content.format])
 
   useEffect(() => {
     setPlaceholder(TextContentService.placeholder(content.type))

@@ -8,6 +8,7 @@ import { ColorPicker } from '../../../../ColorPicker/ColorPicker'
 import { PaddingInput } from '../../Elements/PaddingInput/PaddingInput'
 import { FONT } from '../../../../../styles/font'
 import { TextContent } from '../../../../../domain/Text/TextContent'
+import { runInAction } from 'mobx'
 
 interface Props {
   content: TextContent
@@ -76,7 +77,7 @@ export const TextControls = observer((props: Props) => {
       <ColorPicker
         id="color"
         value={content.format.color}
-        onSelect={(color) => (content.format.color = color)}
+        onSelect={(color) => runInAction(() => (content.format.color = color))}
       />
 
       <label htmlFor="text-padding">Padding</label>

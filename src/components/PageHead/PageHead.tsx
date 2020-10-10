@@ -7,7 +7,7 @@ interface Props {
   image?: string
   imageAlt?: string
   description?: string
-  title: string
+  title?: string
   noIndex?: boolean
   noFollow?: boolean
 }
@@ -20,7 +20,7 @@ export function PageHead(props: Props) {
       'most creative culinary and beverage professionals. Their ingenuity\n' +
       'inspires us to look at food and drink through a uniquely creative\n' +
       'lens.',
-    title,
+    title = 'Culinary Canvas',
     noIndex = false,
     noFollow = false,
   } = props
@@ -30,7 +30,8 @@ export function PageHead(props: Props) {
     `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`,
   ).current
 
-  const fullTitle = `${title} | Culinary Canvas`
+  const fullTitle =
+    title !== 'Culinary Canvas' ? `${title} | Culinary Canvas` : title
 
   const robots = []
   if (noIndex || process.env.NEXT_PUBLIC_SITE_URL !== 'production') {
@@ -40,7 +41,7 @@ export function PageHead(props: Props) {
     robots.push('nofollow')
   }
   const robotsValue = !!robots.length && robots.join(', ')
-  console.log('robots', robotsValue)
+
   return (
     <Head>
       <title>{fullTitle}</title>

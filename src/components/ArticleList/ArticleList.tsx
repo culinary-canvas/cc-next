@@ -38,7 +38,7 @@ export const ArticleList = observer(({ articles }: Props) => {
         <h1>
           Articles{' '}
           <Button onClick={() => router.push('/admin/articles/create')}>
-            +
+            + New
           </Button>
         </h1>
       </div>
