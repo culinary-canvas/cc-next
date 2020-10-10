@@ -20,7 +20,6 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <link rel="icon" href="/favicon.ico" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="theme-color" content="#000000" />
           <meta name="Culinary Canvas" content="The Culinary Canvas features" />
           <link rel="manifest" href="/manifest.json" />
@@ -42,10 +41,7 @@ class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <link rel="stylesheet" href="https://use.typekit.net/bzr7lju.css" />
-
           <link rel="apple-touch-icon" href="/apple-touch-icon" />
-
-          <title>Culinary Canvas</title>
         </Head>
         <Main />
         <NextScript />
