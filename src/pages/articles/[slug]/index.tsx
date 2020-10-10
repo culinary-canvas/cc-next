@@ -31,7 +31,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
   const [title, setTitle] = useState<string>()
   const hashtag = useRef<string>('#culinarycanvas').current
   const currentUrl = useRef<string>(
-    'https://culinary-canvas.com' + router.asPath,
+    'https://cc-next.vercel.app' + router.asPath,
   ).current
 
   useEffect(() => {
