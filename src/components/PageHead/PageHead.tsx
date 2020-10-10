@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import YearMonth from '../../domain/DateTime/YearMonth'
+import { IS_PROD } from '../../pages/_app'
 
 interface Props {
   image?: string
@@ -34,10 +35,10 @@ export function PageHead(props: Props) {
     title !== 'Culinary Canvas' ? `${title} | Culinary Canvas` : title
 
   const robots = []
-  if (noIndex || process.env.NEXT_PUBLIC_SITE_URL !== 'production') {
+  if (noIndex || !IS_PROD) {
     robots.push('noindex')
   }
-  if (noFollow || process.env.NEXT_PUBLIC_SITE_URL !== 'production') {
+  if (noFollow || !IS_PROD) {
     robots.push('nofollow')
   }
   const robotsValue = !!robots.length && robots.join(', ')

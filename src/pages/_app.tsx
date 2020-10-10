@@ -22,8 +22,8 @@ TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
 
 Modal.setAppElement('#__next')
 
-const isServer = typeof window === 'undefined'
-const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
+export const isServer = typeof window === 'undefined'
+export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' || process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging' // TODO: Remove staging for when we launch!
 
 interface Props extends AppProps {}
 
@@ -51,9 +51,7 @@ function App({ Component, pageProps }: Props) {
       <AuthContext.Provider value={auth}>
         <AdminContext.Provider value={admin}>
           <OverlayContext.Provider value={overlay}>
-            {process.env.NEXT_PUBLIC_ENVIRONMENT !== 'development' && (
-              <CookieBanner />
-            )}
+            {IS_PROD && <CookieBanner />}
 
             {overlay.isVisible && (
               <Overlay text={overlay.text} progress={overlay.progress} />
