@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useEnv } from '../services/AppEnvironment'
 import { ArticleGrid } from '../components/ArticleGrid/ArticleGrid'
 import styles from './start.module.scss'
 import { Article } from '../domain/Article/Article'
@@ -8,21 +7,21 @@ import { ArticleApi } from '../domain/Article/Article.api'
 import { classnames } from '../services/importHelpers'
 import { useTransform } from '../hooks/useTransform'
 import { useAutorun } from '../hooks/useAutorun'
+import { useAdmin } from '../services/admin/Admin.store'
+import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
 
 interface Props {
   articlesData: Partial<Article>[]
 }
 
 function Start({ articlesData }: Props) {
-  const env = useEnv()
+  const admin = useAdmin()
   const articles = useTransform(articlesData, Article)
 
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
 
-  useEffect(() => console.log(process.env.NEXT_PUBLIC_ENVIRONMENT), [])
-
   useAutorun(() => {
-    if (env.adminStore.showUnpublishedOnStartPage) {
+    if (admin.showUnpublishedOnStartPage) {
       setFilteredArticles(articles)
     } else {
       setFilteredArticles(articles.filter((a) => a.published))
@@ -30,9 +29,12 @@ function Start({ articlesData }: Props) {
   })
 
   return (
-    <main className={classnames(styles.container)}>
-      <ArticleGrid articles={filteredArticles} />
-    </main>
+    <>
+      {admin.sidebar && <AdminSidebar />}
+      <main className={classnames(styles.container)}>
+        <ArticleGrid articles={filteredArticles} />
+      </main>
+    </>
   )
 }
 

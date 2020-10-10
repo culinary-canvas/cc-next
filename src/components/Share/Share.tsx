@@ -28,7 +28,7 @@ export const Share = (props: Props) => {
   const quote = `${article.title} @ Culinary Canvas`
   const image = article.imageContent.set.s.url
   const hashtag = 'culinarycanvas'
-  const url = `https://cc-next.vercel.app${router.asPath}`
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`
   const description = !!article.subHeading
     ? `${article.title} — ${article.subHeading} @ Culinary Canvas`
     : `${article.title} @ Culinary Canvas`
@@ -46,7 +46,7 @@ export const Share = (props: Props) => {
 */}
       <section className={classnames(s.container, containerClassName)}>
         <EmailShareButton
-          url={window.location.href}
+          url={url}
           subject={`"${article.title}" @ Culinary Canvas`}
           body={`I found this article at Culinary Canvas: ${article.title} \nFollow this link to read it:`}
         >

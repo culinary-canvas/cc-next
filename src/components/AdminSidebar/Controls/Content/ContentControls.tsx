@@ -14,24 +14,24 @@ import { ImageControls } from './Image/ImageControls'
 import { Button } from '../../../Button/Button'
 import { COLOR } from '../../../../styles/color'
 import { SectionService } from '../../../../domain/Section/Section.service'
-import { useEnv } from '../../../../services/AppEnvironment'
 import { observer } from 'mobx-react'
 import s from './ContentControls.module.scss'
 import { classnames } from '../../../../services/importHelpers'
 import { Section } from '../../../../domain/Section/Section'
 import { Article } from '../../../../domain/Article/Article'
 import { useAutorun } from '../../../../hooks/useAutorun'
+import { useAdmin } from '../../../../services/admin/Admin.store'
 
 export const ContentControls = observer(() => {
-  const env = useEnv()
+  const admin = useAdmin()
   const [content, setContent] = useState<Content>()
   const [section, setSection] = useState<Section>()
   const [article, setArticle] = useState<Article>()
   const [deleting, setDeleting] = useState<boolean>(false)
 
-  useAutorun(() => setContent(env.adminStore.content))
-  useAutorun(() => setSection(env.adminStore.section))
-  useAutorun(() => setArticle(env.adminStore.article))
+  useAutorun(() => setContent(admin.content))
+  useAutorun(() => setSection(admin.section))
+  useAutorun(() => setArticle(admin.article))
 
   if (!content || !section || !article) {
     return null
@@ -54,7 +54,7 @@ export const ContentControls = observer(() => {
             type,
           )
           section.contents.splice(contentIndex, 1, appliedContent)
-          env.adminStore.setContent(appliedContent)
+          admin.setContent(appliedContent)
         }}
       />
 

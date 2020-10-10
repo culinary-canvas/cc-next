@@ -9,10 +9,10 @@ import { ArticleService } from '../../../domain/Article/Article.service'
 import { TextContent } from '../../../domain/Text/TextContent'
 import { ContentControls } from './Content/ContentControls'
 import { Article } from '../../../domain/Article/Article'
-import { useEnv } from '../../../services/AppEnvironment'
+import { useAdmin } from '../../../services/admin/Admin.store'
 
 export const Controls = observer(() => {
-  const env = useEnv()
+  const admin = useAdmin()
 
   return (
     <>
@@ -21,49 +21,45 @@ export const Controls = observer(() => {
       </Tabs>
 
       <Tabs
-        tabs={env.adminStore.article.sortedSections.map((s) => ({
+        tabs={admin.article.sortedSections.map((s) => ({
           id: s.uid,
           label: s.displayName,
         }))}
         containerClassName={s.controlsTabsContainer}
-        selected={env.adminStore.section?.uid}
+        selected={admin.section?.uid}
         onSelect={(uid) =>
-          env.adminStore.setSection(
-            env.adminStore.article.sections.find((s) => s.uid === uid),
-          )
+          admin.setSection(admin.article.sections.find((s) => s.uid === uid))
         }
         showAdd
         onAdd={() => {
           const newSection = new Section()
-          ArticleService.addSection(newSection, env.adminStore.article)
-          env.adminStore.setSection(newSection)
+          ArticleService.addSection(newSection, admin.article)
+          admin.setSection(newSection)
         }}
       >
-        {!!env.adminStore.section && <SectionControls />}
+        {!!admin.section && <SectionControls />}
       </Tabs>
 
-      {!!env.adminStore.section && (
+      {!!admin.section && (
         <Tabs
-          tabs={env.adminStore.section.sortedContents.map((c) => ({
+          tabs={admin.section.sortedContents.map((c) => ({
             id: c.uid,
             label: c.displayName,
           }))}
           containerClassName={s.controlsTabsContainer}
-          selected={env.adminStore.content?.uid}
+          selected={admin.content?.uid}
           onSelect={(uid) =>
-            env.adminStore.setContent(
-              env.adminStore.section.contents.find((c) => c.uid === uid),
-            )
+            admin.setContent(admin.section.contents.find((c) => c.uid === uid))
           }
           showAdd
           onAdd={() => {
             const newContent = new TextContent()
-            newContent.sortOrder = env.adminStore.section.contents.length
-            env.adminStore.section.contents.push(newContent)
-            env.adminStore.setContent(newContent)
+            newContent.sortOrder = admin.section.contents.length
+            admin.section.contents.push(newContent)
+            admin.setContent(newContent)
           }}
         >
-          {!!env.adminStore.content && <ContentControls />}
+          {!!admin.content && <ContentControls />}
         </Tabs>
       )}
     </>

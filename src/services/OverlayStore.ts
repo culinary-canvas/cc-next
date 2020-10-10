@@ -1,37 +1,50 @@
-import { action, observable } from 'mobx'
-import Store from '../types/Store'
+import { createContext, useCallback, useContext, useState } from 'react'
 
-type Serialized = Pick<OverlayStore, 'isVisible' | 'text' | 'progress'>
+export interface Overlay {
+  readonly isVisible: boolean
+  readonly setVisible: (v: boolean) => void
+  readonly text: string
+  readonly setText: (v: string) => void
+  readonly progress: number
+  readonly setProgress: (v: number) => void
+  readonly addProgress: (v: number) => void
+  readonly toggle: () => void
+}
 
-export class OverlayStore extends Store<Serialized> {
-  @observable isVisible = false
-  @observable text: string
-  @observable progress: number
+export function useOverlayState(): Overlay {
+  const [isVisible, setVisible] = useState<boolean>(false)
+  const [text, setText] = useState<string>()
+  const [progress, setProgress] = useState<number>()
 
-  @action
-  toggle() {
-    this.isVisible = !this.isVisible
-    if (this.isVisible) {
+  const toggle = useCallback(() => {
+    setVisible(!isVisible)
+    if (isVisible) {
       document.querySelector('body').classList.add('no-scroll')
     } else {
       document.querySelector('body').classList.remove('no-scroll')
     }
-  }
+  }, [isVisible])
 
-  @action
-  setText(text: string) {
-    this.text = text
-  }
+  const addProgress = useCallback((v: number) => setProgress(progress + v), [progress])
 
-  @action
-  setProgress(progress: number) {
-    this.progress = progress
+  return {
+    isVisible,
+    setVisible,
+    text,
+    setText,
+    progress,
+    setProgress,
+    addProgress,
+    toggle,
   }
+}
 
-  @action
-  addProgress(progress: number) {
-    this.progress += progress
+export const OverlayContext = createContext<Overlay>(null)
+
+export function useOverlay(): Overlay {
+  const context = useContext(OverlayContext)
+  if (context === undefined) {
+    throw new Error('An error occurred when initializing Overlay context')
   }
-
-  onDestroy(): void {}
+  return context
 }

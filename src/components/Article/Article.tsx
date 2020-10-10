@@ -8,9 +8,8 @@ import { dateTimeService } from '../../domain/DateTime/DateTime.service'
 import { Section } from '../Section/Section'
 import { useAuth } from '../../services/auth/Auth'
 import s from './Article.module.scss'
-import { toJS } from 'mobx'
 import { Tags } from '../Tags/Tags'
-import {COLOR} from '../../styles/color'
+import { COLOR } from '../../styles/color'
 
 interface Props {
   article: ArticleModel
@@ -45,7 +44,7 @@ export const Article = observer(({ article }: Props) => {
             backgroundColor={COLOR.WHITE}
           />
 
-          <Share article={article} containerClassName={s.share}/>
+          <Share article={article} containerClassName={s.share} />
         </footer>
       </article>
     </>

@@ -5,11 +5,10 @@ import { PaddingInput } from '../../Elements/PaddingInput/PaddingInput'
 import { Checkbox } from '../../../../Checkbox/Checkbox'
 import { HorizontalAlignButtons } from '../../Elements/HorizontalAlignButtons/HorizontalAlignButtons'
 import { VerticalAlignButtons } from '../../Elements/VerticalAlignButtons/VerticalAlignButtons'
-import { useEnv } from '../../../../../services/AppEnvironment'
 import { ImageContent } from '../../../../../domain/Image/ImageContent'
 import { Fit } from '../../../../../domain/Section/Fit'
 import { Section } from '../../../../../domain/Section/Section'
-import {Slider} from '../../../../Slider/Slider'
+import { Slider } from '../../../../Slider/Slider'
 
 interface Props {
   content: ImageContent
@@ -18,7 +17,6 @@ interface Props {
 
 export const ImageControls = observer((props: Props) => {
   const { content, section } = props
-  const env = useEnv()
 
   const [useFixedSize, setUseFixedSize] = useState<boolean>(
     !!content?.format.size,

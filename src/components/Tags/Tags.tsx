@@ -37,8 +37,6 @@ export const Tags = observer((props: Props) => {
   const [tags, setTags] = useState<string[]>([])
   const [all, setAll] = useState<string[]>([])
 
-  useEffect(() => console.log('effect', selected), [])
-
   useEffect(() => {
     if (edit) {
       TagApi.all().then((all) => setAll(all.map((t) => t.name)))

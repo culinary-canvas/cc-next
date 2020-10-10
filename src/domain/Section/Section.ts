@@ -37,13 +37,7 @@ export class Section {
           !!o.type && o.type === ContentType.IMAGE ? ImageContent : TextContent,
         ),
       ),
-    toDb: (objects) => {
-      console.log(
-        toJS(objects),
-        objects?.map((o) => Transformer.toDb(o)),
-      )
-      return objects?.map((o) => Transformer.toDb(o))
-    },
+    toDb: (objects) => objects?.map((o) => Transformer.toDb(o)),
   })
   @observable
   contents: Content[] = []

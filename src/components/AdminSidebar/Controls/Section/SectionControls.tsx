@@ -5,7 +5,6 @@ import { Button } from '../../../Button/Button'
 import { SectionPresetButtons } from '../Elements/SectionPresetButtons/SectionPresetButtons'
 import { SortOrderButtons } from '../Elements/SortOrderButtons/SortOrderButtons'
 import { runInAction } from 'mobx'
-import { useEnv } from '../../../../services/AppEnvironment'
 import { SectionService } from '../../../../domain/Section/Section.service'
 import { ArticleService } from '../../../../domain/Article/Article.service'
 import { COLOR } from '../../../../styles/color'
@@ -13,15 +12,16 @@ import s from './SectionControls.module.scss'
 import { Section } from '../../../../domain/Section/Section'
 import { useAutorun } from '../../../../hooks/useAutorun'
 import { Article } from '../../../../domain/Article/Article'
+import { useAdmin } from '../../../../services/admin/Admin.store'
 
 export const SectionControls = observer(() => {
-  const env = useEnv()
+  const admin = useAdmin()
   const [deleting, setDeleting] = useState<boolean>(false)
   const [section, setSection] = useState<Section>()
   const [article, setArticle] = useState<Article>()
 
-  useAutorun(() => setSection(env.adminStore.section))
-  useAutorun(() => setArticle(env.adminStore.article))
+  useAutorun(() => setSection(admin.section))
+  useAutorun(() => setArticle(admin.article))
 
   if (!article || !section) {
     return null
@@ -71,7 +71,7 @@ export const SectionControls = observer(() => {
           onClick={() => {
             const duplicate = SectionService.duplicate(section)
             ArticleService.addSection(duplicate, article)
-            env.adminStore.setSection(duplicate)
+            admin.setSection(duplicate)
           }}
           disabled={section.uid === article.titleSection.uid}
         >

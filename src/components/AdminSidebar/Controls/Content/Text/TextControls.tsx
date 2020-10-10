@@ -6,10 +6,8 @@ import { FontStyleButtons } from '../../Elements/FontStyleButtons/FontStyleButto
 import { VerticalAlignButtons } from '../../Elements/VerticalAlignButtons/VerticalAlignButtons'
 import { ColorPicker } from '../../../../ColorPicker/ColorPicker'
 import { PaddingInput } from '../../Elements/PaddingInput/PaddingInput'
-import { useEnv } from '../../../../../services/AppEnvironment'
 import { FONT } from '../../../../../styles/font'
-import { Content } from '../../../../../domain/Content/Content'
-import {TextContent} from '../../../../../domain/Text/TextContent'
+import { TextContent } from '../../../../../domain/Text/TextContent'
 
 interface Props {
   content: TextContent
@@ -17,7 +15,6 @@ interface Props {
 
 export const TextControls = observer((props: Props) => {
   const { content } = props
-  const env = useEnv()
 
   return (
     <>

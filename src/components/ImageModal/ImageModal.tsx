@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import s from './ImageModal.module.scss'
 import ReactCrop, { PercentCrop } from 'react-image-crop'
-// import 'react-image-crop/dist/ReactCrop.css'
+import 'react-image-crop/dist/ReactCrop.css'
 import { FileInput } from '../FileInput/FileInput'
 import { observer } from 'mobx-react'
 import Modal from 'react-modal'
@@ -9,10 +9,10 @@ import { Button } from '../Button/Button'
 import { FileDrop } from 'react-file-drop'
 import { ImageFile } from '../../domain/Image/ImageFile'
 import { ImageCropValues } from '../../domain/Image/ImageCropValues'
-import { useEnv } from '../../services/AppEnvironment'
 import { ImageService } from '../../services/image/Image.service'
 import { cloneDeep } from '../../services/importHelpers'
 import { COLOR } from '../../styles/color'
+import { useImageModal } from './ImageModal.store'
 
 export interface ImageModalProps {
   isOpen: boolean
@@ -23,8 +23,7 @@ export interface ImageModalProps {
 }
 
 export const ImageModal = observer((props: ImageModalProps) => {
-  const env = useEnv()
-  const { imageModalStore: store } = env
+  const store = useImageModal()
   const { isOpen, image, onOk, onCancel, cropValues } = props
 
   const imageRef = useRef<HTMLImageElement>()

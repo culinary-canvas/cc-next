@@ -1,99 +1,82 @@
 import type { AppProps } from 'next/app'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
-import {
-  AppContext,
-  AppEnvironment,
-  IS_DEV,
-  SerializedAppEnvironment,
-} from '../services/AppEnvironment'
 import { CookieBanner } from '../components/CookieBanner/CookieBanner'
 import { Overlay } from '../components/Overlay/Overlay'
-import { Auth, AuthContext } from '../services/auth/Auth'
-import { useObserver, useStaticRendering } from 'mobx-react-lite'
+import { AuthContext, useAuthState } from '../services/auth/Auth'
 import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
 import { Header } from '../components/Header/Header'
 import { Footer } from '../components/Footer/Footer'
+import { AdminContext, useAdminState } from '../services/admin/Admin.store'
+import { OverlayContext, useOverlayState } from '../services/OverlayStore'
+import { dateTimeService } from '../domain/DateTime/DateTime.service'
+import {
+  ImageModalContext,
+  useImageModalState,
+} from '../components/ImageModal/ImageModal.store'
 
-interface Props extends AppProps {
-  env: SerializedAppEnvironment
-  auth: Auth
-}
+interface Props extends AppProps {}
 
 Modal.setAppElement('#__next')
 
 const isServer = typeof window === 'undefined'
-useStaticRendering(isServer)
 
-function App({ Component, pageProps, env, auth }: Props) {
+function App({ Component, pageProps }: Props) {
   useEffect(() => {
     // TODO
     // TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
+    if (!isServer) {
+      dateTimeService.init()
+    }
   }, [])
 
-  const [hydratedEnv, setHydratedEnv] = useState<AppEnvironment>()
-  const [hydratedAuth, setHydratedAuth] = useState<Auth>()
+  const admin = useAdminState()
+  const overlay = useOverlayState()
+  const imageModalValues = useImageModalState()
+  const auth = useAuthState()
 
   useEffect(() => {
-    setHydratedEnv(new AppEnvironment(env))
+    auth.init()
+  }, [])
 
-    let a = new Auth(auth)
-    a.init()
-    setHydratedAuth(a)
-  }, [env])
+  return (
+    <ImageModalContext.Provider value={imageModalValues}>
+      <AuthContext.Provider value={auth}>
+        <AdminContext.Provider value={admin}>
+          <OverlayContext.Provider value={overlay}>
+            {process.env.NEXT_PUBLIC_ENVIRONMENT !== 'development' && (
+              <CookieBanner />
+            )}
 
-  return useObserver(() => {
-    if (!hydratedEnv || !hydratedAuth) {
-      return null
-    }
+            {overlay.isVisible && (
+              <Overlay text={overlay.text} progress={overlay.progress} />
+            )}
+            {auth.isSignedIn && admin.sidebar && <AdminSidebar />}
 
-    return (
-      <AppContext.Provider value={hydratedEnv}>
-        <AuthContext.Provider value={hydratedAuth}>
-          {!IS_DEV && <CookieBanner />}
-
-          {hydratedEnv.overlayStore.isVisible && (
-            <Overlay
-              text={hydratedEnv.overlayStore.text}
-              progress={hydratedEnv.overlayStore.progress}
-            />
-          )}
-          {hydratedAuth.isSignedIn && hydratedEnv.adminStore.sidebar && (
-            <AdminSidebar />
-          )}
-
-          <div
-            id="app"
-            className={classnames({
-              'showing-sidebar': hydratedEnv.adminStore.sidebarOpen,
-            })}
-          >
-            <Header />
-            <Component {...pageProps} />
-            <Footer />
-          </div>
-        </AuthContext.Provider>
-      </AppContext.Provider>
-    )
-  })
+            <div
+              id="app"
+              className={classnames({
+                'showing-sidebar': admin.sidebarOpen,
+              })}
+            >
+              <Header />
+              <Component {...pageProps} />
+              <Footer />
+            </div>
+          </OverlayContext.Provider>
+        </AdminContext.Provider>
+      </AuthContext.Provider>
+    </ImageModalContext.Provider>
+  )
 }
 
-let appEnvironment: AppEnvironment
-
 App.getInitialProps = async () => {
-  if (isServer || !appEnvironment) {
-    const env = new AppEnvironment()
-    await env.init()
+  if (isServer) {
+    dateTimeService.init()
 
-    const auth = new Auth()
-    auth.init()
-
-    return {
-      env,
-      auth,
-    }
+    return {}
   }
 }
 

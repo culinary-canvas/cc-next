@@ -4,26 +4,28 @@ import classnames from 'classnames'
 import { MenuButton } from '../MenuButton/MenuButton'
 import { Button } from '../Button/Button'
 import { Controls } from './Controls/Controls'
-import { useEnv } from '../../services/AppEnvironment'
 import { ArticleApi } from '../../domain/Article/Article.api'
 import { COLOR } from '../../styles/color'
 import { useAuth } from '../../services/auth/Auth'
 import s from './AdminSidebar.module.scss'
 import { useRouter } from 'next/router'
+import { useAdmin } from '../../services/admin/Admin.store'
+import { useOverlay } from '../../services/OverlayStore'
 
 interface Props {}
 
 const AdminSidebar = observer((props: Props) => {
-  const env = useEnv()
   const auth = useAuth()
   const router = useRouter()
+  const admin = useAdmin()
+  const overlay = useOverlay()
 
   const [saving, setSaving] = useState<boolean>(false)
   const [deleting, setDeleting] = useState<boolean>(false)
 
   const onProgress = (progress, message) => {
-    message && env.overlayStore.setText(message)
-    env.overlayStore.setProgress(progress)
+    message && overlay.setText(message)
+    overlay.setProgress(progress)
   }
 
   return (
@@ -31,11 +33,13 @@ const AdminSidebar = observer((props: Props) => {
       <div
         className={classnames([
           s.sidebarButton,
-          { [s.open]: env.adminStore.sidebarOpen },
+          { [s.open]: admin.sidebarOpen },
         ])}
       >
         <MenuButton
-          onClick={() => env.adminStore.toggleSidebar()}
+          onClick={() => {
+            admin.setSidebarOpen(!admin.sidebarOpen)
+          }}
           className={s.menuButton}
         />
       </div>
@@ -44,7 +48,7 @@ const AdminSidebar = observer((props: Props) => {
         className={classnames([
           s.container,
           s.sidebar,
-          { [s.open]: env.adminStore.sidebarOpen },
+          { [s.open]: admin.sidebarOpen },
         ])}
       >
         <article className={s.content}>
@@ -53,7 +57,7 @@ const AdminSidebar = observer((props: Props) => {
               color={COLOR.GREY_DARK}
               onClick={() => {
                 let goodToGo = true
-                if (env.adminStore.formControl.isDirty) {
+                if (admin.formControl.isDirty) {
                   goodToGo = window.confirm(
                     'You have unsaved changes. Are you sure you want to leave this page?',
                   )
@@ -68,8 +72,7 @@ const AdminSidebar = observer((props: Props) => {
 
             <Button
               disabled={
-                env.adminStore.formControl.isClean ||
-                env.adminStore.formControl.isInvalid
+                admin.formControl.isClean || admin.formControl.isInvalid
               }
               loading={saving}
               loadingText="Saving"
@@ -78,7 +81,7 @@ const AdminSidebar = observer((props: Props) => {
               Save
             </Button>
 
-            {!!env.adminStore.formControl.mutable.id && (
+            {!!admin.article?.id && (
               <Button
                 loading={deleting}
                 color={COLOR.RED}
@@ -98,19 +101,15 @@ const AdminSidebar = observer((props: Props) => {
 
   async function onSave() {
     setSaving(true)
-    env.overlayStore.toggle()
-    const id = await ArticleApi.save(
-      env.adminStore.article,
-      auth.user,
-      onProgress,
-    )
+    overlay.toggle()
+    const id = await ArticleApi.save(admin.article, auth.user, onProgress)
 
     setTimeout(async () => {
       const { slug } = await ArticleApi.byId(id)
-      env.adminStore.formControl.reset()
+      admin.formControl.reset()
       await router.replace(`/admin/articles/${slug}`)
       router.reload()
-      env.overlayStore.toggle()
+      overlay.toggle()
     }, 1000)
 
     setSaving(false)
@@ -122,9 +121,9 @@ const AdminSidebar = observer((props: Props) => {
     )
     if (goodToGo) {
       setDeleting(true)
-      env.overlayStore.toggle()
-      await ArticleApi.delete(env.adminStore.article, auth.user, onProgress)
-      setTimeout(() => env.overlayStore.toggle(), 1000)
+      overlay.toggle()
+      await ArticleApi.delete(admin.article, auth.user, onProgress)
+      setTimeout(() => overlay.toggle(), 1000)
       router.replace('/admin/articles')
     }
   }

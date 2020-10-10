@@ -78,7 +78,7 @@ export class ArticleService {
         return newSum
       }, 0)
 
-    const progressPerImage = 0.6 / newImagesCount
+    const progressPerImage = 0.5 / newImagesCount
 
     let accProgress = initialProgress
 
@@ -104,7 +104,7 @@ export class ArticleService {
             image.url = await StorageService.storeFileFromLocalUrl(
               image.url,
               image.fileName,
-              `articles/${article.id}`,
+              `articles/${article.slug}`,
               (uploadProgress) => {
                 const newProgress =
                   accProgress + uploadProgress * progressPerImage

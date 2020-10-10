@@ -1,70 +1,74 @@
-import Store from '../../types/Store'
-import { action, computed, observable } from 'mobx'
 import { Article } from '../../domain/Article/Article'
 import { Section } from '../../domain/Section/Section'
 import { Content } from '../../domain/Content/Content'
 import { FormControl } from '../formControl/FormControl'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react'
 
-type Serialized = Pick<AdminStore, 'showUnpublishedOnStartPage' | 'sidebar'>
+export interface Admin {
+  readonly showUnpublishedOnStartPage: boolean
+  readonly setShowUnpublishedOnStartPage: (v: boolean) => void
+  readonly sidebar: boolean
+  readonly setSidebar: (v: boolean) => void
+  readonly sidebarOpen: boolean
+  readonly setSidebarOpen: (v: boolean) => void
+  readonly formControl: FormControl<Article>
+  readonly setFormControl: (v: FormControl<Article>) => void
+  readonly section: Section
+  readonly setSection: (v: Section) => void
+  readonly content: Content
+  readonly setContent: (v: Content) => void
+  readonly article: Article
+  readonly reset: () => void
+}
 
-export class AdminStore extends Store<Serialized> {
-  @observable showUnpublishedOnStartPage = false
-  @observable sidebar = false
-  @observable sidebarOpen = false
-  @observable formControl: FormControl<Article>
-  @observable section: Section
-  @observable content: Content
+export function useAdminState(): Admin {
+  const [showUnpublishedOnStartPage, setShowUnpublishedOnStartPage] = useState<
+    boolean
+  >(false)
+  const [sidebar, setSidebar] = useState<boolean>(false)
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  const [formControl, setFormControl] = useState<FormControl<Article>>()
+  const [section, setSection] = useState<Section>()
+  const [content, setContent] = useState<Content>()
+  const article = useMemo(() => formControl?.mutable, [formControl])
 
-  @computed
-  get article() {
-    return this.formControl?.mutable
+  const reset = useCallback(() => {
+    setSidebar(false)
+    setSidebarOpen(false)
+    setSection(null)
+    setContent(null)
+    setFormControl(null)
+  }, [])
+
+  return {
+    showUnpublishedOnStartPage,
+    setShowUnpublishedOnStartPage,
+    sidebar,
+    setSidebar,
+    sidebarOpen,
+    setSidebarOpen,
+    formControl,
+    setFormControl,
+    section,
+    setSection,
+    content,
+    setContent,
+    article,
+    reset,
   }
+}
+export const AdminContext = createContext<Admin>(null)
 
-  @action
-  toggleShowUnpublishedOnStartPage() {
-    console.log('toggling')
-    this.showUnpublishedOnStartPage = !this.showUnpublishedOnStartPage
+export function useAdmin(): Admin {
+  const context = useContext(AdminContext)
+  if (context === undefined) {
+    throw new Error('An error occurred when initializing Admin context')
   }
-
-  @action
-  renderSidebar() {
-    this.sidebar = true
-  }
-
-  @action
-  removeSidebar() {
-    this.sidebar = false
-  }
-
-  @action
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen
-  }
-
-  @action
-  openSidebar() {
-    this.sidebarOpen = true
-  }
-
-  @action
-  closeSidebar() {
-    this.sidebarOpen = false
-  }
-
-  @action
-  setFormControl(formControl: FormControl<Article>) {
-    this.formControl = formControl
-  }
-
-  @action
-  setSection(section: Section) {
-    this.section = section
-  }
-
-  @action
-  setContent(content: Content) {
-    this.content = content
-  }
-
-  onDestroy(): void {}
+  return context
 }

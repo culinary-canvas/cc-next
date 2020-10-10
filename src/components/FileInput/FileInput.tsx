@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import s from './FileInput.module.scss'
 import classnames from 'classnames'
 
@@ -25,20 +25,14 @@ export const FileInput = (props: Props) => {
 
   const inputRef = useRef<HTMLInputElement>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (open) {
       inputRef.current.click()
     }
   }, [open])
 
   return (
-    <label
-      className={classnames([
-        s.fileInput,
-        className,
-      ])}
-      htmlFor={id}
-    >
+    <label className={classnames([s.fileInput, className])} htmlFor={id}>
       <input
         type="file"
         id={id}

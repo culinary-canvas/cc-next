@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { Checkbox } from '../../../Checkbox/Checkbox'
 import { Select } from '../../../Select/Select'
 import { useAutorun } from '../../../../hooks/useAutorun'
-import {runInAction, toJS} from 'mobx'
+import { runInAction, toJS } from 'mobx'
 import { Tags } from '../../../Tags/Tags'
 import { Button } from '../../../Button/Button'
 import { Tooltip } from '../../../Tooltip/Tooltip'
@@ -16,15 +16,15 @@ import { ArticleType } from '../../../../domain/Article/ArticleType'
 import s from './ArticleControls.module.scss'
 import { ArticleApi } from '../../../../domain/Article/Article.api'
 import { Transformer } from '../../../../services/db/Transformer'
-import { useEnv } from '../../../../services/AppEnvironment'
+import { useAdmin } from '../../../../services/admin/Admin.store'
 
 export const ArticleControls = observer(() => {
-  const env = useEnv()
+  const admin = useAdmin()
   const [otherArticles, setOtherArticles] = useState<Article[]>([])
   const [article, setArticle] = useState<Article>()
   const [editingSlug, editSlug] = useState<boolean>(false)
 
-  useAutorun(() => setArticle(env.adminStore.article))
+  useAutorun(() => setArticle(admin.article))
 
   useAutorun(() => {
     if (!!article) {

@@ -3,18 +3,19 @@ import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
 import { PlainObject } from '../../../../types/PlainObject'
 import { Article } from '../../../../domain/Article/Article'
-import { useEnv } from '../../../../services/AppEnvironment'
 import { useTransform } from '../../../../hooks/useTransform'
 import { useFormControl } from '../../../../hooks/useFormControl'
 import { ArticleForm } from '../../../../components/ArticleForm/ArticleForm'
 import { ArticleApi } from '../../../../domain/Article/Article.api'
+import { useAdmin } from '../../../../services/admin/Admin.store'
+import { useUnmount } from '../../../../hooks/useUnmount'
 
 interface Props {
   articleData: PlainObject<Article>
 }
 
 export default function ArticleEdit({ articleData }) {
-  const env = useEnv()
+  const admin = useAdmin()
   const article = useTransform([articleData], Article)[0]
 
   const formControl = useFormControl(article, [
@@ -23,19 +24,15 @@ export default function ArticleEdit({ articleData }) {
 
   useEffect(() => {
     if (!!formControl) {
-      env.adminStore.renderSidebar()
-      env.adminStore.openSidebar()
-      env.adminStore.setFormControl(formControl)
-      env.adminStore.setSection(formControl.mutable.titleSection)
-      env.adminStore.setContent(
-        formControl.mutable.titleSection.sortedContents[0],
-      )
+      admin.setSidebar(true)
+      admin.setSidebarOpen(true)
+      admin.setFormControl(formControl)
+      admin.setSection(formControl.mutable.titleSection)
+      admin.setContent(formControl.mutable.titleSection.sortedContents[0])
     }
   }, [formControl])
 
-  if (!formControl) {
-    return null
-  }
+  useUnmount(() => admin.reset())
 
   return (
     <>
@@ -51,6 +48,7 @@ export const getServerSideProps: GetServerSideProps<
   { slug: string }
 > = async ({ params }) => {
   const articleData = await ArticleApi.bySlug(params.slug)
+
   return {
     props: {
       articleData,

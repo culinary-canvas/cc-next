@@ -40,7 +40,12 @@ export class ArticleApi {
     onProgress: (progress: number, message?: string) => any = this.logProgress,
   ) {
     onProgress(0, '')
-    await ArticleService.uploadNewImages(article, onProgress)
+    if (!article.slug) {
+      article.slug = ArticleService.createSlug(article)
+    }
+
+    onProgress(0.1, 'Sorting...')
+    await ArticleService.uploadNewImages(article, onProgress, 0.1)
 
     onProgress(0.6, 'Sorting...')
     if (isNil(article.sortOrder)) {
@@ -56,10 +61,6 @@ export class ArticleApi {
     )
 
     onProgress(0.8)
-    if (!article.slug) {
-      article.slug = ArticleService.createSlug(article)
-    }
-
     const id = await Api.save(article, user)
 
     onProgress(1, 'Done!')

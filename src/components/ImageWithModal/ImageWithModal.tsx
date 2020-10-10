@@ -3,10 +3,10 @@ import { ImageModal } from '../ImageModal/ImageModal'
 import s from './ImageWithModal.module.scss'
 import { useObserver } from 'mobx-react'
 import { ImageSet } from '../../domain/Image/ImageSet'
-import { useEnv } from '../../services/AppEnvironment'
 import { classnames } from '../../services/importHelpers'
 import { ImageService } from '../../services/image/Image.service'
 import { BREAKPOINT } from '../../styles/layout'
+import { useOverlay } from '../../services/OverlayStore'
 
 interface Props {
   set: ImageSet
@@ -20,7 +20,6 @@ interface Props {
 
 export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
   (props, ref) => {
-    const env = useEnv()
     const {
       set,
       onChange,
@@ -30,7 +29,7 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
       enableModal = true,
       onFocus,
     } = props
-
+    const overlay = useOverlay()
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
 
     return useObserver(() => (
@@ -86,9 +85,9 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
             setModalOpen(false)
 
             if (!!newImage || !!newCropValues) {
-              env.overlayStore.setText('Crunching image sizes...')
-              env.overlayStore.setProgress(0)
-              env.overlayStore.toggle()
+              overlay.setText('Crunching image sizes...')
+              overlay.setProgress(0)
+              overlay.toggle()
 
               const progressPerImage = !!newImage ? 1 / 6 : 1 / 5
 
@@ -96,60 +95,60 @@ export const ImageWithModal = forwardRef<HTMLImageElement, Props>(
               newSet.alt = set.alt
 
               if (!!newImage) {
-                env.overlayStore.setText(
-                  'Setting original image size to max 3000px...',
-                )
+                overlay.setText('Setting original image size to max 3000px...')
                 newSet.original = await ImageService.resize(original)
-                env.overlayStore.addProgress(progressPerImage)
+                overlay.addProgress(progressPerImage)
               } else {
                 newSet.original = set.original
               }
 
               newSet.cropValues = cropValues
 
-              env.overlayStore.setText('Generating cropped image...')
+              overlay.setText('Generating cropped image...')
               const cropped = await ImageService.crop(original, cropValues)
               newSet.cropped = await ImageService.resize(cropped)
-              env.overlayStore.addProgress(progressPerImage)
+              overlay.addProgress(progressPerImage)
 
-              env.overlayStore.setText('Generating image for phones...')
+              const quality = 0.7
+
+              overlay.setText('Generating image for phones...')
               newSet.s = await ImageService.resize(
                 cropped,
                 's_',
-                0.6,
+                quality,
                 BREAKPOINT.PHONE,
               )
-              env.overlayStore.addProgress(progressPerImage)
+              overlay.addProgress(progressPerImage)
 
-              env.overlayStore.setText('Generating image for tablets...')
+              overlay.setText('Generating image for tablets...')
               newSet.m = await ImageService.resize(
                 cropped,
                 'm_',
-                0.6,
+                quality,
                 BREAKPOINT.TABLET,
               )
-              env.overlayStore.addProgress(progressPerImage)
+              overlay.addProgress(progressPerImage)
 
-              env.overlayStore.setText('Generating image for small desktops...')
+              overlay.setText('Generating image for small desktops...')
               newSet.l = await ImageService.resize(
                 cropped,
                 'l_',
-                0.6,
+                quality,
                 BREAKPOINT.DESKTOP_S,
               )
-              env.overlayStore.addProgress(progressPerImage)
+              overlay.addProgress(progressPerImage)
 
-              env.overlayStore.setText('Generating image for large desktops...')
+              overlay.setText('Generating image for large desktops...')
               newSet.xl = await ImageService.resize(
                 cropped,
                 'xl_',
-                0.6,
+                quality,
                 BREAKPOINT.DESKTOP_L,
               )
-              env.overlayStore.setProgress(1)
+              overlay.setProgress(1)
 
-              env.overlayStore.setText('Done!')
-              setTimeout(() => env.overlayStore.toggle(), 500)
+              overlay.setText('Done!')
+              setTimeout(() => overlay.toggle(), 500)
               onChange(newSet)
             }
           }}

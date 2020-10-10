@@ -10,7 +10,7 @@ import styles from './TextContent.module.scss'
 import horizontalAlignStyles from './TextContent.horizontalAlign.module.scss'
 import verticalAlignStyles from './TextContent.verticalAlign.module.scss'
 import contentTypeStyles from './TextContent.contentType.module.scss'
-import { useEnv } from '../../services/AppEnvironment'
+import { useAdmin } from '../../services/admin/Admin.store'
 
 interface Props {
   content: TextContentModel
@@ -20,7 +20,7 @@ interface Props {
 
 export const TextContent = observer((props: Props) => {
   const { content, edit = false, style } = props
-  const env = useEnv()
+  const admin = useAdmin()
   const textareaRef = useRef<HTMLTextAreaElement>()
   const [placeholder, setPlaceholder] = useState<string>()
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
@@ -55,7 +55,7 @@ export const TextContent = observer((props: Props) => {
           verticalAlignStyles[`vertical-align-${content.format.verticalAlign}`],
           contentTypeStyles[`content-type-${content.type}`],
           {
-            [styles.inEdit]: env.adminStore.content.uid === content.uid,
+            [styles.inEdit]: admin.content.uid === content.uid,
             [styles.emphasize]: content.format.emphasize,
             [styles.uppercase]: content.format.uppercase,
             [styles.italic]: content.format.italic,
@@ -63,7 +63,7 @@ export const TextContent = observer((props: Props) => {
         ])}
         value={content.value}
         style={{ ...formatStyle, ...style } as any}
-        onFocus={() => env.adminStore.setContent(content)}
+        onFocus={() => admin.setContent(content)}
         onChange={(v) => (content.value = v.target.value)}
         placeholder={placeholder}
       />

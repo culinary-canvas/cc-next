@@ -3,7 +3,6 @@ import { observer } from 'mobx-react'
 import { Tags } from '../Tags/Tags'
 import styles from './PreviewArticle.module.scss'
 import { Button } from '../Button/Button'
-import { AppEnvironment, useEnv } from '../../services/AppEnvironment'
 import { Article } from '../../domain/Article/Article'
 import { ContentType } from '../../domain/Text/ContentType'
 import { classnames } from '../../services/importHelpers'
@@ -18,7 +17,6 @@ interface Props {
 
 export const PreviewArticle = observer((props: Props) => {
   const { article } = props
-  const env: AppEnvironment = useEnv()
 
   const [imageContent, setImageContent] = useState<_ImageContent>()
   const [subHeadingContent, setSubHeadingContent] = useState<_TextContent>()

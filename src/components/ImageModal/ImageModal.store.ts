@@ -1,27 +1,45 @@
-import { action, computed, observable } from 'mobx'
-import Store from '../../types/Store'
 import { ImageCropValues } from '../../domain/Image/ImageCropValues'
 import { ImageFile } from '../../domain/Image/ImageFile'
+import {
+  createContext,
+  CSSProperties,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
-type Serialized = Pick<
-  ImageModalStore,
-  | 'initialCropValues'
-  | 'inputImage'
-  | 'inputCropValues'
-  | 'newImage'
-  | 'newCropValues'
-  | 'ready'
->
+export interface ImageModalState {
+  readonly init: (image: ImageFile, cropValues: ImageCropValues) => void
 
-export class ImageModalStore extends Store<Serialized> {
-  @observable initialCropValues = new ImageCropValues(0, 0, 100, 100)
-  @observable inputImage: ImageFile
-  @observable inputCropValues: ImageCropValues
-  @observable newImage: ImageFile
-  @observable newCropValues: ImageCropValues
-  @observable ready = false
+  readonly inputImage: ImageFile
+  readonly setInputImage: (v: ImageFile) => void
+  readonly newImage: ImageFile
+  readonly setNewImage: (image: ImageFile) => void
+  readonly newCropValues: ImageCropValues
+  readonly setNewCropValues: (cropValues: ImageCropValues) => void
 
-  style = {
+  readonly cropValues: ImageCropValues
+  readonly inputCropValues: ImageCropValues
+  readonly ready: boolean
+  readonly hasImageContent: boolean
+  readonly cropValuesHasChanged: boolean
+  readonly image: ImageFile
+  readonly style: { overlay: CSSProperties; content: CSSProperties }
+
+  readonly onDestroy: () => void
+}
+
+export function useImageModalState(): ImageModalState {
+  const [inputImage, setInputImage] = useState<ImageFile>()
+  const [inputCropValues, setInputCropValues] = useState<ImageCropValues>()
+  const [ready, setReady] = useState<boolean>(false)
+  const [newImage, setNewImage] = useState<ImageFile>()
+  const [newCropValues, setNewCropValues] = useState<ImageCropValues>()
+  const initialCropValues = useRef(new ImageCropValues(0, 0, 100, 100)).current
+
+  const style = useRef({
     overlay: {
       zIndex: 1000,
       backgroundColor: 'rgba(0,0,0,0.2)',
@@ -32,52 +50,35 @@ export class ImageModalStore extends Store<Serialized> {
       border: 'none',
       padding: '1rem',
     },
-  }
+  }).current
 
-  @computed
-  get hasImageContent() {
-    return !!this.image?.fileName
-  }
+  const init = useCallback((image: ImageFile, cropValues: ImageCropValues) => {
+    setInputImage(image)
+    setInputCropValues(cropValues)
+    setReady(true)
+  }, [])
 
-  @computed
-  get image() {
-    return this.newImage || this.inputImage
-  }
+  const image = useMemo<ImageFile>(() => newImage || inputImage, [
+    newImage,
+    inputImage,
+  ])
+  const hasImageContent = useMemo<boolean>(() => !!image?.fileName, [image])
+  const cropValues = useMemo<ImageCropValues>(
+    () => newCropValues || inputCropValues || initialCropValues,
+    [newCropValues, inputCropValues, initialCropValues],
+  )
 
-  @computed
-  get cropValues() {
-    return this.newCropValues || this.inputCropValues || this.initialCropValues
-  }
-
-  @action
-  init(image: ImageFile, cropValues: ImageCropValues) {
-    this.inputImage = image
-    this.inputCropValues = cropValues
-    this.ready = true
-  }
-
-  @action
-  setNewCropValues(cropValues: ImageCropValues) {
-    this.newCropValues = cropValues as ImageCropValues
-  }
-
-  @action
-  setNewImage(image: ImageFile) {
-    this.newImage = image
-  }
-
-  @computed
-  get cropValuesHasChanged() {
-    if (!this.newCropValues) {
+  const cropValuesHasChanged = useMemo<boolean>(() => {
+    if (!newCropValues) {
       return false
     }
-    if (!this.inputCropValues) {
+    if (!inputCropValues) {
       return true
     }
-    return this.cropValuesEquals(this.newCropValues, this.inputCropValues)
-  }
+    return cropValuesEquals(newCropValues, inputCropValues)
+  }, [newCropValues, inputCropValues])
 
-  private cropValuesEquals(v1: ImageCropValues, v2: ImageCropValues) {
+  function cropValuesEquals(v1: ImageCropValues, v2: ImageCropValues) {
     return (
       v1.x !== v2.x ||
       v1.y !== v2.y ||
@@ -86,12 +87,41 @@ export class ImageModalStore extends Store<Serialized> {
     )
   }
 
-  @action
-  onDestroy() {
-    this.ready = false
-    this.inputImage = null
-    this.inputCropValues = null
-    this.newImage = null
-    this.newCropValues = null
+  const onDestroy = useCallback(() => {
+    setReady(false)
+    setInputImage(null)
+    setInputCropValues(null)
+    setNewImage(null)
+    setNewCropValues(null)
+  }, [])
+
+  return {
+    cropValues,
+    hasImageContent,
+    image,
+    init,
+    inputCropValues,
+    inputImage,
+    newCropValues,
+    newImage,
+    ready,
+    setInputImage,
+    setNewCropValues,
+    setNewImage,
+    style,
+    cropValuesHasChanged,
+    onDestroy,
   }
+}
+
+export const ImageModalContext = createContext<ImageModalState>(null)
+
+export function useImageModal(): ImageModalState {
+  const context = useContext(ImageModalContext)
+  if (context === undefined) {
+    throw new Error(
+      'An error occurred when initializing ImageModalStore context',
+    )
+  }
+  return context
 }

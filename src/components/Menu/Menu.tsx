@@ -3,14 +3,11 @@ import { observer } from 'mobx-react'
 import styles from './Menu.module.scss'
 import { AdminMenu } from './AdminMenu'
 import { MenuButton } from '../MenuButton/MenuButton'
-import { useEnv } from '../../services/AppEnvironment'
 import { useRouter } from 'next/router'
 import { classnames } from '../../services/importHelpers'
-import { ArticleType } from '../../domain/Article/ArticleType'
 import { useAuth } from '../../services/auth/Auth'
 
 export const Menu = observer(() => {
-  const env = useEnv()
   const [isOpen, setOpen] = useState<boolean>(false)
   const router = useRouter()
   const auth = useAuth()

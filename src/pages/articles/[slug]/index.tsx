@@ -18,6 +18,15 @@ interface Props {
 
 const ArticlePage = observer(({ articleData }: Props) => {
   const router = useRouter()
+
+  if (router.isFallback) {
+    return <main>Loading...</main>
+  }
+
+  console.log('.....................................................')
+  console.log('articleData', articleData)
+  console.log('/....................................................')
+
   const article = useTransform([articleData], _Article)[0]
   const [quote, setQuote] = useState<string>()
   const [image, setImage] = useState<string>()
@@ -35,7 +44,6 @@ const ArticlePage = observer(({ articleData }: Props) => {
   ).current
 
   useEffect(() => {
-    console.log('setting custom values')
     setQuote('This is the quote')
     setImage(article.imageContent.url)
     setDescription(
@@ -46,14 +54,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
     setTitle(article.title)
     // title.replace('"', '&quot;')
   }, [article])
-
-  if (router.isFallback) {
-    return <div>Loading...</div>
-  }
-
-  if (!article) {
-    return null
-  }
+  console.log('process.browser', process.browser)
 
   return (
     <>
@@ -87,6 +88,7 @@ interface StaticProps {
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   const articles = await ArticleApi.all()
+  console.log('S L U G S :', articles.map((a) => a.slug).join(' | '))
 
   return {
     paths: articles.map((article) => ({
@@ -103,7 +105,6 @@ export const getStaticProps: GetStaticProps<
   StaticProps
 > = async ({ params }) => {
   const articleData = await ArticleApi.bySlug(params.slug)
-
   return {
     props: {
       articleData,

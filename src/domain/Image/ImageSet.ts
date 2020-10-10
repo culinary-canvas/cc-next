@@ -2,7 +2,6 @@ import { ImageFile } from './ImageFile'
 import { field } from '../../services/db/decorators/field.decorator'
 import { computed, observable } from 'mobx'
 import { ImageCropValues } from './ImageCropValues'
-import {BREAKPOINT} from '../../styles/layout'
 
 export class ImageSet {
   @observable
@@ -39,7 +38,8 @@ export class ImageSet {
 
   @computed
   get image() {
-    const screenWidth = window.innerWidth
+    /*
+    const screenWidth = !!window || window.innerWidth
     if (screenWidth <= BREAKPOINT.PHONE && !!this.s) {
       return this.s
     } else if (screenWidth <= BREAKPOINT.TABLET && !!this.m) {
@@ -53,5 +53,7 @@ export class ImageSet {
     } else {
       return this.original
     }
+    */
+    return this.cropped
   }
 }

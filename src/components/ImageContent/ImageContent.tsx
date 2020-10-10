@@ -3,13 +3,13 @@ import { observer } from 'mobx-react'
 import { ImageWithModal } from '../ImageWithModal/ImageWithModal'
 import { useAutorun } from '../../hooks/useAutorun'
 import { Section } from '../../domain/Section/Section'
-import { useEnv } from '../../services/AppEnvironment'
 import { FormatService } from '../../domain/Format/Format.service'
 import { classnames } from '../../services/importHelpers'
 import { ImageContent as _ImageContent } from '../../domain/Image/ImageContent'
 import styles from './ImageContent.module.scss'
 import horizontalAlignStyles from './ImageContent.horizontalAlign.module.scss'
 import verticalAlignStyles from './ImageContent.verticalAlign.module.scss'
+import { useAdmin } from '../../services/admin/Admin.store'
 
 interface Props {
   content: _ImageContent
@@ -21,7 +21,7 @@ interface Props {
 
 export const ImageContent = observer((props: Props) => {
   const { content, section, edit = false, first = false, style } = props
-  const env = useEnv()
+  const admin = useAdmin()
   const imageRef = useRef<HTMLImageElement>()
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
 
@@ -48,7 +48,7 @@ export const ImageContent = observer((props: Props) => {
         ],
         verticalAlignStyles[`vertical-align-${content.format.verticalAlign}`],
         {
-          [styles.inEdit]: edit && env.adminStore.content.uid === content.uid,
+          [styles.inEdit]: edit && admin.content.uid === content.uid,
           [styles.background]: content.format.background,
           [styles.first]: first,
         },
@@ -57,7 +57,6 @@ export const ImageContent = observer((props: Props) => {
         ...style,
       }}
     >
-
       {edit ? (
         <ImageWithModal
           ref={imageRef}
@@ -66,14 +65,18 @@ export const ImageContent = observer((props: Props) => {
             ...formatStyle,
           }}
           className={classnames([styles.content])}
-          onFocus={() => env.adminStore.setContent(content)}
-          enableModal={env.adminStore.content.uid === content.uid}
+          onFocus={() => admin.setContent(content)}
+          enableModal={admin.content.uid === content.uid}
           onChange={(set) => (content.set = set)}
         />
       ) : (
         <img
           ref={imageRef}
           src={content.set.image.url}
+          srcSet={`${content.set.m.url} 688w,
+                  ${content.set.l.url}: 992w,
+                  ${content.set.xl.url}: 1312w,
+                  ${content.set.cropped.url}: 2048w`}
           alt={content.set.alt}
           style={{
             ...formatStyle,

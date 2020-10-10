@@ -5,12 +5,12 @@ import { ImageContent } from '../ImageContent/ImageContent'
 import { useAutorun } from '../../hooks/useAutorun'
 import { TextContent as _TextContent } from '../../domain/Text/TextContent'
 import { ImageContent as _ImageContent } from '../../domain/Image/ImageContent'
-import { useEnv } from '../../services/AppEnvironment'
 import { FormatService } from '../../domain/Format/Format.service'
 import { classnames } from '../../services/importHelpers'
 import { TextContent } from '../TextContent/TextContent'
 import styles from './Section.module.scss'
 import fitStyles from './Section.fit.module.scss'
+import { useAdmin } from '../../services/admin/Admin.store'
 
 interface Props {
   section: _Section
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export const Section = observer((props: Props) => {
-  const env = useEnv()
+  const admin = useAdmin()
   const { section, edit = false, first = false } = props
 
   const [style, setStyle] = useState<CSSProperties>()
@@ -36,13 +36,13 @@ export const Section = observer((props: Props) => {
       <section
         role={!!edit ? 'button' : first ? 'header' : 'section'}
         tabIndex={0}
-        onClick={() => edit && env.adminStore.setSection(section)}
-        onKeyUp={() => edit && env.adminStore.setSection(section)}
+        onClick={() => edit && admin.setSection(section)}
+        onKeyUp={() => edit && admin.setSection(section)}
         className={classnames([
           styles.container,
           fitStyles[`fit-${section.format.fit}`],
           {
-            [styles.inEdit]: edit && env.adminStore.section.uid == section.uid,
+            [styles.inEdit]: edit && admin.section.uid == section.uid,
           },
         ])}
         style={{ ...style }}

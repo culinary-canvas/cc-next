@@ -22,7 +22,11 @@ export const ArticleGrid = observer((props: Props) => {
   return (
     <div className={styles.grid}>
       {sorted.map((article) => (
-        <Link href="/articles/[slug]" as={`/articles/${article.slug}`} key={article.id}>
+        <Link
+          href="/articles/[slug]"
+          as={`/articles/${article.slug}`}
+          key={article.id}
+        >
           <a
             className={classnames(styles.article, {
               [styles.promoted]: article.promoted,
