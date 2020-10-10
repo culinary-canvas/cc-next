@@ -13,8 +13,6 @@ export const Menu = observer(() => {
   const router = useRouter()
   const auth = useAuth()
 
-  console.log(router)
-
   return (
     <nav className={classnames(styles.menu, { [styles.isOpen]: isOpen })}>
       <div className={styles.optionsContainer}>

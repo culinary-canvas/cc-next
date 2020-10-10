@@ -8,7 +8,7 @@ import { ArticleType } from '../../domain/Article/ArticleType'
 
 export const Header = () => {
   const router = useRouter()
-  console.log(router)
+
   return (
     <header className={styles.container}>
       <div className={styles.content}>

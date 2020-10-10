@@ -32,8 +32,6 @@ function ArticlesPerType({ articlesData, type }: Props) {
     setArticles(Transformer.allToApp(articlesData, Article))
   }, [articlesData, type])
 
-  console.log(type, articles, articlesData)
-
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
 
   useEffect(() => {
