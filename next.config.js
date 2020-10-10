@@ -14,10 +14,6 @@ module.exports = withImages(
   }),
 )
 
-module.exports = {
-    target: "serverless",
-};
-
 /*
  * Uncomment to get webpack config in startup log
  */
