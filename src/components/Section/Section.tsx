@@ -9,8 +9,8 @@ import { useEnv } from '../../services/AppEnvironment'
 import { FormatService } from '../../domain/Format/Format.service'
 import { classnames } from '../../services/importHelpers'
 import { TextContent } from '../TextContent/TextContent'
-import styles from './section.module.scss'
-import fitStyles from './section.fit.module.scss'
+import styles from './Section.module.scss'
+import fitStyles from './Section.fit.module.scss'
 
 interface Props {
   section: _Section
