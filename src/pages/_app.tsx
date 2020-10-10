@@ -16,17 +16,22 @@ import {
   ImageModalContext,
   useImageModalState,
 } from '../components/ImageModal/ImageModal.store'
+import TagManager from 'react-gtm-module'
 
-interface Props extends AppProps {}
+TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
 
 Modal.setAppElement('#__next')
 
 const isServer = typeof window === 'undefined'
+const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
+
+interface Props extends AppProps {}
 
 function App({ Component, pageProps }: Props) {
   useEffect(() => {
-    // TODO
-    // TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
+    if (IS_PROD) {
+      TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
+    }
     if (!isServer) {
       dateTimeService.init()
     }
