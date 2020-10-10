@@ -23,8 +23,13 @@
     justify-content: space-between;
 
     .copyright {
-      display: flex;
-      align-items: center;
+      @include media('<=phone') {
+        display: none;
+      }
+      @include media('>phone') {
+        display: flex;
+        align-items: center;
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import s from './cookies.module.scss'
 import { PageHead } from '../../components/PageHead/PageHead'
+import {GetStaticProps} from 'next'
 
 export default function Cookies() {
   return (
@@ -145,4 +146,8 @@ export default function Cookies() {
       </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
 }

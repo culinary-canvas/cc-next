@@ -3,6 +3,7 @@ import s from './about.module.scss'
 import { COLOR } from '../../styles/color'
 import { SocialMediaLinks } from '../../components/SocialMediaLinks/SocialMediaLinks'
 import { PageHead } from '../../components/PageHead/PageHead'
+import { GetStaticProps } from 'next'
 
 export default function About() {
   return (
@@ -44,4 +45,8 @@ export default function About() {
       </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
 }

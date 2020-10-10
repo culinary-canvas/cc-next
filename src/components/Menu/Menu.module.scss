@@ -1,6 +1,7 @@
 @import '../../styles/layout';
 @import '../../styles/animation';
 @import '../../styles/color';
+@import '../../styles/font';
 
 .menu {
   display: flex;
@@ -9,10 +10,23 @@
   max-width: 48px;
   padding: 0.5rem;
   transition: all $animation-fast ease-in;
-
+  * {
+    font-family: $font-family-forma;
+    font-size: 18px;
+  }
   @include media('>phone') {
     position: relative;
     background-color: $white;
+  }
+
+  .active {
+    color: $grey !important;
+    opacity: 0.6 !important;
+    font-weight: 400;
+
+    &:hover {
+      border: none;
+    }
   }
 
   .optionsContainer {

@@ -3,6 +3,7 @@ import { SocialMediaLinks } from '../../components/SocialMediaLinks/SocialMediaL
 import s from './contact.module.scss'
 import { COLOR } from '../../styles/color'
 import { PageHead } from '../../components/PageHead/PageHead'
+import {GetStaticProps} from 'next'
 
 export default function Contact() {
   return (
@@ -34,4 +35,8 @@ export default function Contact() {
       </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
 }

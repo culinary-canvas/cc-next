@@ -41,7 +41,7 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const [articlesData] = await Promise.all([ArticleApi.all()])
+  const articlesData = await ArticleApi.all()
 
   return {
     props: {

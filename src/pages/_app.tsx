@@ -18,12 +18,11 @@ import {
 } from '../components/ImageModal/ImageModal.store'
 import TagManager from 'react-gtm-module'
 
-TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
-
-Modal.setAppElement('#__next')
-
 export const isServer = typeof window === 'undefined'
-export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' || process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging' // TODO: Remove staging for when we launch!
+export const IS_PROD =
+  process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ||
+  process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging' // TODO: Remove staging for when we launch!
+Modal.setAppElement('#__next')
 
 interface Props extends AppProps {}
 

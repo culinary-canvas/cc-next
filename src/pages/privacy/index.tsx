@@ -1,6 +1,7 @@
 import React from 'react'
 import s from './privacy.module.scss'
 import { PageHead } from '../../components/PageHead/PageHead'
+import { GetStaticProps } from 'next'
 
 export default function Privacy() {
   return (
@@ -462,4 +463,8 @@ export default function Privacy() {
       </main>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
 }

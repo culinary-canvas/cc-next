@@ -9,6 +9,7 @@ import { SortableService } from '../../services/sortable/Sortable.service'
 import { isNil } from '../../services/importHelpers'
 import { SectionService } from '../Section/Section.service'
 import { ContentService } from '../Content/Content.service'
+import {ArticleType} from './ArticleType'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
@@ -27,6 +28,19 @@ export class ArticleApi {
 
     if (!!snapshot.size) {
       return Transformer.toJson(snapshot.docs[0])
+    }
+  }
+
+  static async byType(type: ArticleType) {
+    const { firestore } = initFirebase()
+
+    const snapshot = await firestore()
+      .collection(this.COLLECTION)
+      .where('type', '==', type)
+      .get()
+
+    if (!!snapshot.size) {
+      return Transformer.listToJson(snapshot.docs)
     }
   }
 
