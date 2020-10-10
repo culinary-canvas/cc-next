@@ -7,7 +7,9 @@
     "build": "next build",
     "build:staging": "env-cmd -f .env.staging next build",
     "start": "next start",
-    "start:staging": "env-cmd -f .env.staging next start"
+    "start:staging": "env-cmd -f .env.staging next start",
+    "postbuild": "next-on-netlify",
+    "postbuild:staging": "next-on-netlify"
   },
   "dependencies": {
     "@webdeb/next-styles": "^1.1.0",
@@ -24,6 +26,7 @@
     "mobx-utils": "^5.6.1",
     "next": "v9.5.3",
     "next-images": "^1.6.0",
+    "next-on-netlify": "^2.5.1",
     "next-plugin-custom-babel-config": "^1.0.4",
     "react": "16.13.1",
     "react-cookie-consent": "^5.1.3",

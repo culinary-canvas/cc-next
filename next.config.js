@@ -13,6 +13,11 @@ module.exports = withImages(
     miniCssExtractOptions: { ignoreOrder: true },
   }),
 )
+
+module.exports = {
+    target: "serverless",
+};
+
 /*
  * Uncomment to get webpack config in startup log
  */
