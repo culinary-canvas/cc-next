@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { Article } from '../../domain/Article/Article'
 import styles from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
-import Link from 'next/Link'
+import Link from 'next/link'
 import { PreviewArticle } from './PreviewArticle'
 
 interface Props {
