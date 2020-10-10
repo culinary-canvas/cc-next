@@ -9,6 +9,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleApi } from '../../domain/Article/Article.api'
 import { ArticleType } from '../../domain/Article/ArticleType'
 import { Transformer } from '../../services/db/Transformer'
+import { useRouter } from 'next/router'
 
 interface Props {
   articlesData: Partial<Article>[]
@@ -16,6 +17,12 @@ interface Props {
 }
 
 function ArticlesPerType({ articlesData, type }: Props) {
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <main>Loading...</main>
+  }
+
   const admin = useAdmin()
   const [articles, setArticles] = useState<Article[]>(
     Transformer.allToApp(articlesData, Article),

@@ -24,7 +24,6 @@ const ArticlePage = observer(({ articleData }: Props) => {
   }
 
   const article = useTransform([articleData], _Article)[0]
-  console.log('process.browser', process.browser)
 
   return (
     <>
