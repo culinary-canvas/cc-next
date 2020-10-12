@@ -1,0 +1,23 @@
+@import '../../../../../../../styles/color';
+@import '../../../../../../../styles/controlButtons';
+@import '../../../../../../../styles/form';
+@import '../../../../../../../styles/icon';
+
+.container {
+  @include control-buttons-container();
+}
+
+.button {
+  @include control-button();
+
+  &.orientation-HORIZONTAL {
+    flex-direction: row;
+  }
+  &.orientation-VERTICAL {
+    flex-direction: column;
+  }
+
+  img {
+    width: $icon-size-xs;
+  }
+}

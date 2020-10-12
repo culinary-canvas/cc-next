@@ -18,7 +18,7 @@
 @mixin button-group {
   > button,
   > .button {
-    margin: 0 !important;
+    margin: 0;
 
     &:first-child {
       border-top-right-radius: unset !important;
@@ -27,11 +27,13 @@
 
     &:not(:first-child):not(:last-child) {
       border-radius: unset !important;
+      margin-left: -1px;
     }
 
     &:last-child {
       border-bottom-left-radius: unset !important;
       border-top-left-radius: unset !important;
+      margin-left: -1px;
     }
   }
 

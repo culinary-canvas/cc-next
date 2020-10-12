@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './privacy.module.scss'
-import { PageHead } from '../../components/PageHead/PageHead'
+import { PageHead } from '../../head/PageHead'
 import { GetStaticProps } from 'next'
 
 export default function Privacy() {

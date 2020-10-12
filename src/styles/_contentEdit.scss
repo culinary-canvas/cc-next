@@ -1,0 +1,8 @@
+@import 'color';
+
+@mixin contentInEdit {
+  .inEdit {
+    border: 4px dashed $blue-light;
+    outline: 0;
+  }
+}

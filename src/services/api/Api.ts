@@ -3,7 +3,7 @@ import { User } from 'firebase'
 import { Transformer } from '../db/Transformer'
 import { initFirebase } from '../firebase/Firebase.service'
 import { Model } from '../db/Model'
-import type { PlainObject } from '../../types/PlainObject'
+import type { PlainObject } from '../types/PlainObject'
 import { ModelService } from '../db/Model.service'
 import { getCollection } from '../db/decorators/collection.decorator'
 

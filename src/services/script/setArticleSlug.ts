@@ -1,11 +1,11 @@
-import { ArticleApi } from '../../domain/Article/Article.api'
-import { ArticleService } from '../../domain/Article/Article.service'
+import { ArticleApi } from '../../article/Article.api'
+import { ArticleService } from '../../article/Article.service'
 import { Transformer } from '../db/Transformer'
-import { Article } from '../../domain/Article/Article'
+import { ArticleModel } from '../../article/Article.model'
 
 export async function setArticleSlug(user) {
   const articles = (await ArticleApi.all()).map((a) =>
-    Transformer.toApp(a, Article),
+    Transformer.toApp(a, ArticleModel),
   )
   return Promise.all(
     articles.map(async (a) => {

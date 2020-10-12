@@ -1,4 +1,4 @@
-import DateTime from '../../domain/DateTime/DateTime'
+import DateTime from '../dateTime/DateTime'
 
 export interface Model {
   id: string

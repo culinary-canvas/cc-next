@@ -1,8 +1,8 @@
 import React from 'react'
-import { SocialMediaLinks } from '../../components/SocialMediaLinks/SocialMediaLinks'
+import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import s from './contact.module.scss'
 import { COLOR } from '../../styles/color'
-import { PageHead } from '../../components/PageHead/PageHead'
+import { PageHead } from '../../head/PageHead'
 import {GetStaticProps} from 'next'
 
 export default function Contact() {

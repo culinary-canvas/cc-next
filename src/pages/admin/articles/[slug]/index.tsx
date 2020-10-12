@@ -1,23 +1,23 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
-import { PlainObject } from '../../../../types/PlainObject'
-import { Article } from '../../../../domain/Article/Article'
+import { PlainObject } from '../../../../services/types/PlainObject'
+import { ArticleModel } from '../../../../article/Article.model'
 import { useTransform } from '../../../../hooks/useTransform'
-import { useFormControl } from '../../../../hooks/useFormControl'
-import { ArticleForm } from '../../../../components/ArticleForm/ArticleForm'
-import { ArticleApi } from '../../../../domain/Article/Article.api'
-import { useAdmin } from '../../../../services/admin/Admin.store'
+import { useFormControl } from '../../../../form/formControl/useFormControl'
+import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
+import { ArticleApi } from '../../../../article/Article.api'
+import { useAdmin } from '../../../../admin/Admin'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 interface Props {
-  articleData: PlainObject<Article>
+  articleData: PlainObject<ArticleModel>
 }
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
-  const article = useTransform([articleData], Article)[0]
+  const article = useTransform([articleData], ArticleModel)[0]
   const allowed = useAuthGuard()
 
   const formControl = useFormControl(article, [

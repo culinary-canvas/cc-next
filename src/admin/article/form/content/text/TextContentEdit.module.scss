@@ -1,0 +1,14 @@
+@import '../../../../../styles/color';
+@import '../../../../../styles/layout';
+@import '../../../../../styles/content';
+@import '../../../../../styles/textContent';
+@import '../../../../../styles/contentType';
+@import '../../../../../styles/contentEdit';
+@import '../../../../../styles/horizontalAlign';
+@import '../../../../../styles/verticalAlign';
+
+@include textContent();
+@include contentInEdit();
+@include contentType();
+@include textHorizontalAlign();
+@include verticalAlign();

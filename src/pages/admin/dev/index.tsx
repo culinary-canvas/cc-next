@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { Button } from '../../../components/Button/Button'
+import { Button } from '../../../form/button/Button'
 import { fixSortOrders } from '../../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
 import { setArticleSlug } from '../../../services/script/setArticleSlug'

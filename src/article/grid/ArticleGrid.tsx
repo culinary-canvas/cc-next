@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
+import { ArticleModel } from '../Article.model'
+import styles from './ArticleGrid.module.scss'
+import { classnames } from '../../services/importHelpers'
+import Link from 'next/link'
+import { ArticlePreview } from './articlePreview/ArticlePreview'
+
+interface Props {
+  articles: ArticleModel[]
+}
+
+export const ArticleGrid = observer((props: Props) => {
+  const { articles } = props
+
+  const [sorted, setSorted] = useState<ArticleModel[]>(articles)
+
+  useEffect(() => {
+    setSorted(articles.slice().sort((a1, a2) => a2.sortOrder - a1.sortOrder))
+  }, [articles])
+
+  return (
+    <div className={styles.grid}>
+      {sorted.map((article) => (
+        <Link
+          href="/articles/[slug]"
+          as={`/articles/${article.slug}`}
+          key={article.id}
+        >
+          <a
+            className={classnames(styles.article, {
+              [styles.promoted]: article.promoted,
+            })}
+          >
+            <ArticlePreview article={article} />
+          </a>
+        </Link>
+      ))}
+    </div>
+  )
+})

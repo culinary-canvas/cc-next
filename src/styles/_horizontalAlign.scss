@@ -1,0 +1,23 @@
+@mixin imageHorizontalAlign {
+  .horizontal-align-LEFT {
+    justify-content: flex-start;
+  }
+  .horizontal-align-CENTER {
+    justify-content: center;
+  }
+  .horizontal-align-RIGHT {
+    justify-content: flex-end;
+  }
+}
+
+@mixin textHorizontalAlign {
+  .horizontal-align-LEFT {
+    text-align: left;
+  }
+  .horizontal-align-CENTER {
+    text-align: center;
+  }
+  .horizontal-align-RIGHT {
+    text-align: right;
+  }
+}

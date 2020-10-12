@@ -1,6 +1,6 @@
 import { Model } from './Model'
 import { User } from 'firebase'
-import DateTime from '../../domain/DateTime/DateTime'
+import DateTime from '../dateTime/DateTime'
 
 export class ModelService {
   static beforeSave<T extends Model>(model: T, user: User) {

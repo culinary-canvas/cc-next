@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { isArray, isNil } from 'lodash'
-import { Class } from '../../types/Class'
+import { Class } from '../types/Class'
 import {
   getTransformToDb,
   hasTransformToDb,

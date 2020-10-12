@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Class } from '../../../types/Class'
+import { Class } from '../../types/Class'
 
 export function transformToApp(): MethodDecorator {
   return function (target, key) {

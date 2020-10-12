@@ -1,0 +1,8 @@
+@import '../../../../../../styles/color';
+@import '../../../../../../styles/controls';
+
+.controls {
+  @include controls();
+  margin-left: -4px;
+  border-left: 4px solid $yellow;
+}

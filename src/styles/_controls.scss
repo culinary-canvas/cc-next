@@ -1,0 +1,43 @@
+@import 'icon';
+@import 'layout';
+@import 'color';
+@import 'font';
+
+@mixin controls {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  width: calc(100% - 2rem);
+  padding: 1rem;
+  margin: 0 0.5rem 0.5rem 0;
+  background-color: $white;
+  border-radius: 0 8px 8px 8px;
+
+  label {
+    padding-bottom: 0;
+    color: $grey;
+    text-transform: uppercase;
+    font-size: $font-size-s;
+    font-weight: 700;
+  }
+
+  select {
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+    margin: 1rem 0;
+    border: 1px solid $grey-light;
+    font-family: $font-family-filson;
+    font-weight: 400;
+  }
+}
+
+@mixin align-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  > * {
+    padding-right: 0.5rem;
+  }
+}

@@ -1,19 +1,19 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { Article } from '../../../components/Article/Article'
+import { ArticleModel } from '../../../article/Article.model'
 import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleApi } from '../../../domain/Article/Article.api'
-import { Article as _Article } from '../../../domain/Article/Article'
+import { ArticleApi } from '../../../article/Article.api'
 import { useTransform } from '../../../hooks/useTransform'
-import { PlainObject } from '../../../types/PlainObject'
+import { PlainObject } from '../../../services/types/PlainObject'
 import s from './articlePage.module.scss'
-import { ContentType } from '../../../domain/Text/ContentType'
-import { TextContent } from '../../../domain/Text/TextContent'
-import { PageHead } from '../../../components/PageHead/PageHead'
+import { ContentType } from '../../../article/content/ContentType'
+import { TextContentModel } from '../../../article/content/text/TextContent.model'
+import { PageHead } from '../../../head/PageHead'
+import { Article } from '../../../article/Article'
 
 interface Props {
-  articleData: PlainObject<_Article>
+  articleData: PlainObject<ArticleModel>
 }
 
 const ArticlePage = observer(({ articleData }: Props) => {
@@ -23,7 +23,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
     return <main>Loading...</main>
   }
 
-  const article = useTransform([articleData], _Article)[0]
+  const article = useTransform([articleData], ArticleModel)[0]
 
   return (
     <>
@@ -34,7 +34,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
         description={
           (article.titleSection.sortedContents.find(
             (c) => c.type === ContentType.SUB_HEADING,
-          ) as TextContent)?.value
+          ) as TextContentModel)?.value
         }
       />
       <main className={s.container}>

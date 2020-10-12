@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Transformer } from '../services/db/Transformer'
-import { Class } from '../types/Class'
+import { Class } from '../services/types/Class'
 
 export function useTransform<T = any>(
   dbObjects: Partial<T>[],

@@ -1,0 +1,31 @@
+@import '../../styles/font';
+@import '../../styles/layout';
+@import '../../styles/color';
+
+.grid {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-rows: minmax(10%, max-content);
+  @include main-content-width();
+
+  @include media('<=phone') {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @include media('>phone') {
+    grid-template-columns: minmax(40%, auto) minmax(40%, auto);
+    gap: 5rem;
+  }
+
+  .article {
+    &.promoted {
+      @include media('>phone') {
+        grid-column-end: span 2;
+      }
+    }
+
+    &:not(.promoted) {
+      grid-column-end: span 1;
+    }
+  }
+}

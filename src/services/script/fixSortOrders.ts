@@ -1,11 +1,11 @@
-import { ArticleApi } from '../../domain/Article/Article.api'
+import { ArticleApi } from '../../article/Article.api'
 import { SortableService } from '../sortable/Sortable.service'
 import { User } from 'firebase'
 import { Transformer } from '../db/Transformer'
-import { Article } from '../../domain/Article/Article'
+import { ArticleModel } from '../../article/Article.model'
 
 export async function fixSortOrders(user: User) {
-  const articles = Transformer.allToApp(await ArticleApi.all(), Article)
+  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
   articles.sort((a1, a2) => a1.created.compareTo(a2.created))
   SortableService.fixSortOrders(articles)
   articles.forEach((a) => {

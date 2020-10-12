@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { ArticleGrid } from '../components/ArticleGrid/ArticleGrid'
+import { ArticleGrid } from '../article/grid/ArticleGrid'
 import styles from './start.module.scss'
-import { Article } from '../domain/Article/Article'
+import { ArticleModel } from '../article/Article.model'
 import { GetStaticProps } from 'next'
-import { ArticleApi } from '../domain/Article/Article.api'
+import { ArticleApi } from '../article/Article.api'
 import { classnames } from '../services/importHelpers'
 import { useTransform } from '../hooks/useTransform'
-import { useAdmin } from '../services/admin/Admin.store'
-import { PageHead } from '../components/PageHead/PageHead'
+import { useAdmin } from '../admin/Admin'
+import { PageHead } from '../head/PageHead'
 
 interface Props {
-  articlesData: Partial<Article>[]
+  articlesData: Partial<ArticleModel>[]
 }
 
 function Start({ articlesData }: Props) {
   const admin = useAdmin()
-  const articles = useTransform(articlesData, Article)
+  const articles = useTransform(articlesData, ArticleModel)
 
-  const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
+  const [filteredArticles, setFilteredArticles] = useState<ArticleModel[]>([])
 
   useEffect(() => {
     if (admin.showUnpublishedOnStartPage) {

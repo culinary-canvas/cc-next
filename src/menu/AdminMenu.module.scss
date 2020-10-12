@@ -1,0 +1,28 @@
+@import '../styles/layout';
+@import '../styles/color';
+
+.adminMenu {
+  display: flex;
+
+  .a {
+    color: $blue !important;
+
+    @include media('<=phone') {
+      &:not(.showOnMobile) {
+        display: none;
+      }
+    }
+
+    &:hover {
+      border-color: $blue;
+    }
+  }
+
+  .option {
+    height: 2.2rem;
+  }
+
+  > button {
+    margin: 0 0 0 auto;
+  }
+}

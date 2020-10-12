@@ -3,19 +3,19 @@ import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
-import { CookieBanner } from '../components/CookieBanner/CookieBanner'
-import { Overlay } from '../components/Overlay/Overlay'
+import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
+import { Overlay } from '../shared/overlay/Overlay'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
-import AdminSidebar from '../components/AdminSidebar/AdminSidebar'
-import { Header } from '../components/Header/Header'
-import { Footer } from '../components/Footer/Footer'
-import { AdminContext, useAdminState } from '../services/admin/Admin.store'
-import { OverlayContext, useOverlayState } from '../services/OverlayStore'
-import { dateTimeService } from '../domain/DateTime/DateTime.service'
+import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar'
+import { Header } from '../header/Header'
+import { Footer } from '../footer/Footer'
+import { AdminContext, useAdminState } from '../admin/Admin'
+import { OverlayContext, useOverlayState } from '../shared/overlay/OverlayStore'
+import { dateTimeService } from '../services/dateTime/DateTime.service'
 import {
   ImageModalContext,
   useImageModalState,
-} from '../components/ImageModal/ImageModal.store'
+} from '../form/imageModal/ImageModal.store'
 import TagManager from 'react-gtm-module'
 
 export const isServer = typeof window === 'undefined'
@@ -55,7 +55,7 @@ function App({ Component, pageProps }: Props) {
             {overlay.isVisible && (
               <Overlay text={overlay.text} progress={overlay.progress} />
             )}
-            {auth.isSignedIn && admin.sidebar && <AdminSidebar />}
+            {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
 
             <div
               id="app"

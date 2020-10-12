@@ -1,12 +1,12 @@
-import { ArticleApi } from '../../domain/Article/Article.api'
+import { ArticleApi } from '../../article/Article.api'
 import { Transformer } from '../db/Transformer'
-import { Article } from '../../domain/Article/Article'
-import { Tag } from '../../domain/Tag/Tag'
-import { TagApi } from '../../domain/Tag/Tag.api'
+import { ArticleModel } from '../../article/Article.model'
+import { TagModel } from '../../tag/Tag.model'
+import { TagApi } from '../../tag/Tag.api'
 
 export async function changeArticleTagIdsToTagNames(user) {
-  const articles = Transformer.allToApp(await ArticleApi.all(), Article)
-  const tags = Transformer.allToApp(await TagApi.all(), Tag)
+  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
+  const tags = Transformer.allToApp(await TagApi.all(), TagModel)
 
   articles.forEach(
     (a) =>

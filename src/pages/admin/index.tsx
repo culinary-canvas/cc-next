@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '../../services/auth/Auth'
 import { useRouter } from 'next/router'
-import { SignIn } from '../../components/SignIn/SingIn'
+import { SignIn } from '../../admin/signIn/SingIn'
 import s from './signIn.module.scss'
 
 function AdminHome() {

@@ -1,0 +1,13 @@
+@import '../../../../../styles/icon';
+@import '../../../../../styles/layout';
+@import '../../../../../styles/color';
+@import '../../../../../styles/font';
+
+.controlsTabsContainer {
+  padding: 0 0.75rem;
+
+  button {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}

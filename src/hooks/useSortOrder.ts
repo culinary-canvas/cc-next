@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import { SortOrder } from '../components/ArticleList/SortOrder'
+import { SortOrder } from '../admin/article/list/SortOrder'
 
 export function useSortOrder<T = any>(
   initial: SortOrder<T>,

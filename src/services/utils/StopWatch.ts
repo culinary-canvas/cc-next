@@ -1,5 +1,5 @@
-import Duration from '../../domain/Duration/Duration'
-import DurationType from '../../domain/Duration/DurationType'
+import Duration from '../duration/Duration'
+import DurationType from '../duration/DurationType'
 
 class StopWatch {
   private _stop: Date = null

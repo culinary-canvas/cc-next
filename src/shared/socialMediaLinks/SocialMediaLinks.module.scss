@@ -1,0 +1,46 @@
+@import '../../styles/icon';
+@import '../../styles/animation';
+@import '../../styles/color';
+@import '../../styles/layout';
+
+.socialMediaContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    transition: all $animation-fast ease-in-out;
+
+    @include media('<=phone') {
+      &:not(:first-child) {
+        margin-left: 0.5rem;
+      }
+
+      &:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+    }
+    @include media('>phone') {
+      &:not(:first-child) {
+        margin-left: 0.5rem;
+      }
+
+      &:not(:last-child) {
+        margin-right: 2rem;
+      }
+    }
+
+    .white {
+      @include filter-white-mixin();
+    }
+
+    .black {
+      @include filter-grey-dark-mixin();
+    }
+
+    &:hover {
+      filter: $filter-grey;
+    }
+  }
+}
