@@ -27,8 +27,8 @@ export function AlignToPreviousButtons(props: Props) {
           className={classnames(s[`orientation-${orientation}`], s.button)}
           disabled={disabled}
         >
-          <img src={leftAlignIcon} alt="Logotype" />
-          <img src={pictureIcon} alt="Logotype" />
+          <img src={leftAlignIcon} alt="How this content should align to previous content" />
+          <img src={pictureIcon} alt="How this content should align to previous content" />
         </Button>
       ))}
     </div>

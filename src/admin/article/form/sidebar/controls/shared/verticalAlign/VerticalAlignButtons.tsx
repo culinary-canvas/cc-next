@@ -23,7 +23,7 @@ export function VerticalAlignButtons(props: Props) {
       >
         <img
           src={leftAlignIcon}
-          alt="Logotype"
+          alt="Top align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />
       </Button>
@@ -36,7 +36,7 @@ export function VerticalAlignButtons(props: Props) {
       >
         <img
           src={leftAlignIcon}
-          alt="Logotype"
+          alt="Center align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />
       </Button>
@@ -49,7 +49,7 @@ export function VerticalAlignButtons(props: Props) {
       >
         <img
           src={leftAlignIcon}
-          alt="bottom"
+          alt="Bottom align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />
       </Button>

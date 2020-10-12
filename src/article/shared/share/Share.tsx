@@ -50,15 +50,15 @@ export const Share = (props: Props) => {
           subject={`"${article.title}" @ Culinary Canvas`}
           body={`I found this article at Culinary Canvas: ${article.title} \nFollow this link to read it:`}
         >
-          <img src={envelope} alt="Logotype" className="icon" />
+          <img src={envelope} alt="Share via email" className="icon" />
         </EmailShareButton>
 
         <FacebookShareButton url={url} quote={quote} hashtag={`#${hashtag}`}>
-          <img src={facebook} alt="Logotype" className="icon" />
+          <img src={facebook} alt="Share on Facebook" className="icon" />
         </FacebookShareButton>
 
         <TwitterShareButton url={url} title={title} hashtags={[hashtag]}>
-          <img src={twitter} alt="Logotype" className="icon" />
+          <img src={twitter} alt="Share on Twitter" className="icon" />
         </TwitterShareButton>
 
         <LinkedinShareButton
@@ -67,11 +67,11 @@ export const Share = (props: Props) => {
           summary={description}
           source="https://culinary-canvas.com"
         >
-          <img src={linkedIn} alt="Logotype" className="icon" />
+          <img src={linkedIn} alt="Share on LinkedIn" className="icon" />
         </LinkedinShareButton>
 
         <PinterestShareButton url={url} media={image} description={description}>
-          <img src={pinterest} alt="Logotype" className="icon" />
+          <img src={pinterest} alt="Share on Pinterest" className="icon" />
         </PinterestShareButton>
       </section>
     </>

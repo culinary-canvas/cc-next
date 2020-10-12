@@ -16,9 +16,9 @@ export const PaddingLinkedButton = observer((props: Props) => {
   return (
     <Button unsetStyle onClick={() => padding.toggleLinked(property)}>
       {padding.linked.includes(property) ? (
-        <img src={linkIcon} alt="Logotype" />
+        <img src={linkIcon} alt="Linked — changes to this property will apply to all other linked properties" />
       ) : (
-        <img src={brokenLinkIcon} alt="Logotype" />
+        <img src={brokenLinkIcon} alt="Not linked — individual setting is possible" />
       )}
     </Button>
   )

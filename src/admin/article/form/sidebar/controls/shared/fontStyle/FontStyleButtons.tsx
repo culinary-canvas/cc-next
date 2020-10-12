@@ -24,7 +24,7 @@ export function FontStyleButtons(props: Props) {
         selected={italic}
         className={s.button}
       >
-        <img src={italicIcon} alt="Logotype" />
+        <img src={italicIcon} alt="Italic" />
       </Button>
 
       <Button
@@ -33,7 +33,7 @@ export function FontStyleButtons(props: Props) {
         selected={uppercase}
         className={s.button}
       >
-        <img src={capsIcon} alt="Logotype" />
+        <img src={capsIcon} alt="Uppercase" />
       </Button>
 
       <Button

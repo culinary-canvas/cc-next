@@ -4,6 +4,7 @@ import { Button } from '../../../../../../../form/button/Button'
 import { SectionPreset } from '../../../../../../../article/section/SectionPreset'
 import { classnames } from '../../../../../../../services/importHelpers'
 import s from './SectionPresetButtons.module.scss'
+import StringUtils from '../../../../../../../services/utils/StringUtils'
 
 interface Props {
   selected: SectionPreset
@@ -28,7 +29,7 @@ export function SectionPresetButtons(props: Props) {
         >
           <img
             src={pictureIcon}
-            alt="Logotype"
+            alt={`Section preset: ${StringUtils.toDisplayText(preset)}`}
             style={{ width: getImageSize(preset) }}
             className={classnames(s.image, s[`section-preset-${preset}`])}
           />

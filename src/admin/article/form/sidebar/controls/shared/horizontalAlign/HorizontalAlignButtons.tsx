@@ -22,7 +22,7 @@ export function HorizontalAlignButtons(props: Props) {
         selected={selected === HorizontalAlign.LEFT}
         className={s.button}
       >
-        <img src={leftAlignIcon} alt="Logotype" />
+        <img src={leftAlignIcon} alt="Left align" />
       </Button>
 
       <Button
@@ -31,7 +31,7 @@ export function HorizontalAlignButtons(props: Props) {
         selected={selected === HorizontalAlign.CENTER}
         className={s.button}
       >
-        <img src={centerAlignIcon} alt="Logotype" />
+        <img src={centerAlignIcon} alt="Center align" />
       </Button>
 
       <Button
@@ -40,7 +40,7 @@ export function HorizontalAlignButtons(props: Props) {
         selected={selected === HorizontalAlign.RIGHT}
         className={s.button}
       >
-        <img src={rightAlignIcon} alt="Logotype" />
+        <img src={rightAlignIcon} alt="Right align" />
       </Button>
     </div>
   )
