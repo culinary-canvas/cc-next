@@ -43,16 +43,20 @@
   }
 
   &.isOpen {
-    .bar:nth-child(1) {
-      transform: rotateZ(45deg) translateY(6px) translateX(6px) scaleX(1.2);
+    .bar {
+      height: 2px;
     }
 
-    .bar:nth-child(2) {
+    .bar:nth-child(1) {
       opacity: 0;
     }
 
+    .bar:nth-child(2) {
+      transform: translateX(8px) scaleX(0.5) translateX(-50%);
+    }
+
     .bar:nth-child(3) {
-      transform: rotateZ(-45deg) translateY(-6px) translateX(6px)  scaleX(1.2);
+      opacity: 0;
     }
   }
 }

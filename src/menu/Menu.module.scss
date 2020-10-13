@@ -10,18 +10,20 @@
   max-width: 48px;
   padding: 0.5rem;
   transition: all $animation-fast ease-in;
+
   * {
     font-family: $font-family-forma;
     font-size: 18px;
   }
+
   @include media('>phone') {
     position: relative;
     background-color: $white;
   }
 
   .active {
-    color: $grey !important;
     opacity: 0.6 !important;
+    color: $grey !important;
     font-weight: 400;
 
     &:hover {
@@ -46,11 +48,12 @@
   }
 
   &.isOpen {
-    max-width: 600px;
+    max-width: 700px;
 
     .optionsContainer {
       max-width: 100%;
       opacity: 1;
+      padding-right: 0.2rem;
 
       @include media('<=phone') {
         position: absolute;
