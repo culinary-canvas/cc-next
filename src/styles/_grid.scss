@@ -13,6 +13,7 @@
 
     @include media('<=phone') {
       padding-top: 5rem;
+      width: 100%;
     }
   }
 }

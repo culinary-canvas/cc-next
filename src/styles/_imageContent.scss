@@ -26,10 +26,11 @@
       grid-area: unset !important;
       grid-row-start: unset !important;
       overflow: hidden;
-
+      justify-content: center;
       &.first {
         .content {
           padding: 0 !important;
+          width: 100% !important;
         }
       }
 

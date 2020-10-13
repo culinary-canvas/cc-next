@@ -17,6 +17,10 @@ $article-border-radius: 1rem;
     margin-inline-start: 0;
     margin-inline-end: 0;
   }
+
+  @include media('<=phone') {
+    padding-top: $mobile-header-height;
+  }
 }
 
 @mixin articleContent {
@@ -35,6 +39,7 @@ $article-border-radius: 1rem;
   @include main-container-width();
   position: relative;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   grid-column: 2 / span 1;
