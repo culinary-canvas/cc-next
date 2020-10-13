@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Tags } from '../../../tag/Tags/Tags'
-import styles from './ArticlePreview.module.scss'
+import s from './ArticlePreview.module.scss'
 import { Button } from '../../../form/button/Button'
 import { ArticleModel } from '../../Article.model'
 import { ContentType } from '../../content/ContentType'
@@ -20,6 +20,7 @@ export const ArticlePreview = observer((props: Props) => {
 
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     const image = article.sortedSections[0].sortedContents.find(
@@ -36,21 +37,25 @@ export const ArticlePreview = observer((props: Props) => {
 
   return (
     <article
-      className={classnames(styles.article, {
-        [styles.promoted]: article.promoted,
+      className={classnames(s.article, {
+        [s.promoted]: article.promoted,
       })}
     >
-      <section className={styles.image}>
+      <section className={s.image}>
         {!!imageContent && (
           <img
             src={imageContent.url}
             alt={imageContent.alt}
-            className={styles[`content-type-${imageContent.type}`]}
+            className={classnames(s[`content-type-${imageContent.type}`], {
+              [s.hide]: !imageLoaded,
+            })}
+            onLoad={() => setImageLoaded(true)}
           />
         )}
+        {!imageLoaded && <figure className={s.imageSkeleton} />}
       </section>
 
-      <section className={styles.articleType}>
+      <section className={s.articleType}>
         <Button
           onClick={(e) => {
             e.preventDefault()
@@ -61,16 +66,16 @@ export const ArticlePreview = observer((props: Props) => {
         </Button>
       </section>
 
-      <section className={styles.title}>
+      <section className={s.title}>
         <h2>{article.title}</h2>
       </section>
 
-      <section className={styles.subHeading}>
+      <section className={s.subHeading}>
         {!!subHeadingContent && <h3> {subHeadingContent.value} </h3>}
       </section>
 
-      <section className={styles.meta}>
-        <span className={styles.created}>
+      <section className={s.meta}>
+        <span className={s.created}>
           {dateTimeService.calendar(article.created)}
         </span>
         <Tags selected={article.tagNames} />

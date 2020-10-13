@@ -1,9 +1,9 @@
 import React from 'react'
 import s from './about.module.scss'
 import { COLOR } from '../../styles/color'
-import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
-import { PageHead } from '../../head/PageHead'
 import { GetStaticProps } from 'next'
+import {PageHead} from '../../head/PageHead'
+import {SocialMediaLinks} from '../../shared/socialMediaLinks/SocialMediaLinks'
 
 export default function About() {
   return (
