@@ -6,6 +6,7 @@ import { FormatService } from '../../shared/format/Format.service'
 import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from './ImageContent.model'
 import s from './ImageContent.module.scss'
+import {ImageService} from './Image.service'
 
 interface Props {
   content: ImageContentModel
@@ -49,10 +50,7 @@ export const ImageContent = observer((props: Props) => {
     >
       <img
         src={content.set.image.url}
-        srcSet={`${content.set.m.url} 688w,
-                  ${content.set.l.url}: 992w,
-                  ${content.set.xl.url}: 1312w,
-                  ${content.set.cropped.url}: 2048w`}
+        srcSet={ImageService.srcSet(content)}
         alt={content.set.alt}
         style={{
           ...formatStyle,

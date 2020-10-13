@@ -2,8 +2,16 @@ import { ImageCropValues } from './ImageCropValues'
 import { ImageFile } from './ImageFile'
 import Compressor from 'compressorjs'
 import { FileService } from '../../../services/file/FileService'
+import { ImageContentModel } from './ImageContent.model'
 
 export class ImageService {
+  static srcSet(content: ImageContentModel) {
+    return `${content.set.s.url} 688w,
+                  ${content.set.m.url}: 992w,
+                  ${content.set.l.url}: 1312w,
+                  ${content.set.xl.url}: 2048w`
+  }
+
   static async getImageElement(url: string) {
     const imageEl = new Image()
     imageEl.crossOrigin = 'anonymous'

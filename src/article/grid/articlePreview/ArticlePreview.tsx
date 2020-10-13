@@ -10,6 +10,7 @@ import { ImageContentModel } from '../../content/image/ImageContent.model'
 import { TextContentModel } from '../../content/text/TextContent.model'
 import StringUtils from '../../../services/utils/StringUtils'
 import { dateTimeService } from '../../../services/dateTime/DateTime.service'
+import { ImageService } from '../../content/image/Image.service'
 
 interface Props {
   article: ArticleModel
@@ -44,11 +45,11 @@ export const ArticlePreview = observer((props: Props) => {
       <section className={s.image}>
         {!!imageContent && (
           <img
-            src={imageContent.url}
             alt={imageContent.alt}
             className={classnames(s[`content-type-${imageContent.type}`], {
               [s.hide]: !imageLoaded,
             })}
+            srcSet={ImageService.srcSet(imageContent)}
             onLoad={() => setImageLoaded(true)}
           />
         )}
