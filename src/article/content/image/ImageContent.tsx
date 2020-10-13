@@ -1,4 +1,10 @@
-import React, { CSSProperties, useState } from 'react'
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../section/Section.model'
@@ -6,7 +12,7 @@ import { FormatService } from '../../shared/format/Format.service'
 import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from './ImageContent.model'
 import s from './ImageContent.module.scss'
-import {ImageService} from './Image.service'
+import { ImageService } from './Image.service'
 
 interface Props {
   content: ImageContentModel
@@ -17,7 +23,9 @@ interface Props {
 
 export const ImageContent = observer((props: Props) => {
   const { content, section, first = false, style } = props
+  const ref = useRef<HTMLElement>()
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
+  const [loadImage, setLoadImage] = useState<boolean>(false)
 
   useAutorun(() => {
     const { format } = content
@@ -33,8 +41,24 @@ export const ImageContent = observer((props: Props) => {
     })
   }, [content, section, content.format])
 
+  const shouldLoadImage = useCallback(() => {
+    if (
+      !loadImage &&
+      scrollY + window.innerHeight * 1.5 > ref.current.offsetTop
+    ) {
+      setLoadImage(true)
+    }
+  }, [loadImage])
+
+  useEffect(() => {
+    shouldLoadImage()
+    window.addEventListener('scroll', shouldLoadImage)
+    return () => window.removeEventListener('scroll', shouldLoadImage)
+  })
+
   return (
     <figure
+      ref={ref}
       className={classnames([
         s.container,
         s[`horizontal-align-${content.format.horizontalAlign}`],
@@ -48,15 +72,17 @@ export const ImageContent = observer((props: Props) => {
         ...style,
       }}
     >
-      <img
-        src={content.set.image.url}
-        srcSet={ImageService.srcSet(content)}
-        alt={content.set.alt}
-        style={{
-          ...formatStyle,
-        }}
-        className={classnames([s.content])}
-      />
+      {loadImage && (
+        <img
+          src={content.set.image.url}
+          srcSet={ImageService.srcSet(content)}
+          alt={content.set.alt}
+          style={{
+            ...formatStyle,
+          }}
+          className={classnames([s.content])}
+        />
+      )}
     </figure>
   )
 })

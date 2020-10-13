@@ -28,7 +28,7 @@ function Start({ articlesData }: Props) {
     if (
       !endReached &&
       !loading &&
-      scrollY + window.innerHeight > endRef.current.offsetTop * 0.5
+      scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop
     ) {
       setLoading(true)
 
