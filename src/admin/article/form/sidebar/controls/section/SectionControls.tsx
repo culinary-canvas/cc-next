@@ -82,7 +82,7 @@ export const SectionControls = observer(() => {
             setDeleting(false)
           }}
           disabled={section.uid === article.titleSection.uid}
-          tooltipText={
+          title={
             section.uid === article.titleSection.uid
               ? "Title section can't be deleted"
               : null

@@ -4,10 +4,8 @@ import s from './AdminMenu.module.scss'
 import { SignOut } from '../admin/signOut/SignOut'
 import { classnames } from '../services/importHelpers'
 import { useRouter } from 'next/router'
-import { useAdmin } from '../admin/Admin'
 
 export const AdminMenu = observer(() => {
-  const admin = useAdmin()
   const router = useRouter()
 
   return (
@@ -20,12 +18,10 @@ export const AdminMenu = observer(() => {
       </button>
       <button
         className={classnames('a', s.a, s.showOnMobile)}
-        onClick={() =>
-          admin.setShowUnpublishedOnStartPage(!admin.showUnpublishedOnStartPage)
-        }
-        title="Toggle showing unpublished articles on start page"
+        onClick={() => router.push('/admin/articles/grid-preview')}
+        title="Preview start page including unpublished articles"
       >
-        {admin.showUnpublishedOnStartPage ? 'Hide unpubs' : 'Show unpubs'}
+        Preview start page
       </button>
       <SignOut />
     </span>

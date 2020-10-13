@@ -3,20 +3,20 @@ import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
-import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
-import { Overlay } from '../shared/overlay/Overlay'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
-import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar'
-import { Header } from '../header/Header'
-import { Footer } from '../footer/Footer'
+import TagManager from 'react-gtm-module'
+import { dateTimeService } from '../services/dateTime/DateTime.service'
 import { AdminContext, useAdminState } from '../admin/Admin'
 import { OverlayContext, useOverlayState } from '../shared/overlay/OverlayStore'
-import { dateTimeService } from '../services/dateTime/DateTime.service'
 import {
   ImageModalContext,
   useImageModalState,
 } from '../form/imageModal/ImageModal.store'
-import TagManager from 'react-gtm-module'
+import { Overlay } from '../shared/overlay/Overlay'
+import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
+import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar'
+import { Header } from '../header/Header'
+import { Footer } from '../footer/Footer'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD =

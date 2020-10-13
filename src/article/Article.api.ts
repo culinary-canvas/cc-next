@@ -9,7 +9,7 @@ import { SortableService } from '../services/sortable/Sortable.service'
 import { isNil } from '../services/importHelpers'
 import { SectionService } from './section/Section.service'
 import { ContentService } from './content/Content.service'
-import {ArticleType} from './ArticleType'
+import { ArticleType } from './ArticleType'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
@@ -46,6 +46,26 @@ export class ArticleApi {
 
   static async all(): Promise<Partial<ArticleModel>[]> {
     return Api.all(this.COLLECTION)
+  }
+
+  static async publishedPagedBySortOrder(
+    limit: number,
+    startAfterSortOrder?: number,
+  ): Promise<Partial<ArticleModel>[]> {
+    const { firestore } = initFirebase()
+
+    let query = firestore()
+      .collection(this.COLLECTION)
+      .where('published', '==', true)
+      .orderBy('sortOrder', 'desc')
+    if (startAfterSortOrder) {
+      query = query.startAfter(startAfterSortOrder)
+    }
+    const snapshot = await query.limit(limit).get()
+
+    if (!!snapshot.size) {
+      return Transformer.listToJson(snapshot.docs)
+    }
   }
 
   static async save(

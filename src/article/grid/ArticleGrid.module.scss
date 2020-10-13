@@ -4,7 +4,7 @@
 
 .grid {
   display: grid;
-  grid-auto-flow: dense;
+  grid-auto-flow: row;
   grid-template-rows: minmax(10%, max-content);
   @include main-content-width();
 

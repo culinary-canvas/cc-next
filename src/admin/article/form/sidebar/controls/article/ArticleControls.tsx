@@ -7,7 +7,6 @@ import { Select } from '../../../../../../form/select/Select'
 import { runInAction, toJS } from 'mobx'
 import { Tags } from '../../../../../../tag/Tags/Tags'
 import { Button } from '../../../../../../form/button/Button'
-import { Tooltip } from '../../../../../../shared/tooltip/Tooltip'
 import { ArticleModel } from '../../../../../../article/Article.model'
 import StringUtils from '../../../../../../services/utils/StringUtils'
 import { copyTextToClipboard } from '../../../../../../services/utils/Utils'
@@ -63,14 +62,10 @@ export const ArticleControls = observer(() => {
       />
 
       <label htmlFor="url">URL</label>
-      <span
-        className={s.urlContainer}
-        data-tip="URL can be shared for unpublished article"
-        data-for="url-tooltip"
-      >
-        <Tooltip id="url-tooltip" />
+      <span className={s.urlContainer}>
         <input
           disabled={!editingSlug}
+          title="URL can be shared for unpublished article"
           type="text"
           id="url"
           placeholder="Article page URL"

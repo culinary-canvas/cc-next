@@ -20,7 +20,7 @@ interface Props
   selected?: boolean
   unsetStyle?: boolean
   className?: string
-  tooltipText?: string
+  title?: string
 }
 
 export const Button = observer((props: Props) => {
@@ -29,7 +29,6 @@ export const Button = observer((props: Props) => {
     color = COLOR.BLACK,
     toggleable = false,
     selected,
-    tooltipText,
     loading = false,
     loadingText,
     disabled = false,
@@ -38,16 +37,9 @@ export const Button = observer((props: Props) => {
     className,
     unsetStyle = false,
     circle = false,
+    title,
     ...restProps
   } = props
-
-  const [tooltipId, setTooltipId] = useState<string>()
-
-  useEffect(() => {
-    if (!!tooltipText) {
-      setTooltipId(uuid())
-    }
-  }, [tooltipText])
 
   return (
     <button
@@ -66,7 +58,7 @@ export const Button = observer((props: Props) => {
         { [s.toggleable]: toggleable },
         { [s.selected]: selected },
       ])}
-      data-tip={tooltipText}
+      title={title}
       {...restProps}
     >
       {loading ? (
@@ -77,7 +69,6 @@ export const Button = observer((props: Props) => {
       ) : (
         children
       )}
-      <Tooltip id={tooltipId} />
     </button>
   )
 })

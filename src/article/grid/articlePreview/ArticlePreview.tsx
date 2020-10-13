@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Tags } from '../../../tag/Tags/Tags'
 import s from './ArticlePreview.module.scss'
@@ -18,10 +18,23 @@ interface Props {
 
 export const ArticlePreview = observer((props: Props) => {
   const { article } = props
-
+  const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
+  const [loadImage, setLoadImage] = useState<boolean>(false)
   const [imageLoaded, setImageLoaded] = useState<boolean>(false)
+
+  const shouldLoadImage = useCallback(() => {
+    if (!loadImage && scrollY + window.innerHeight > ref.current.offsetTop) {
+      setLoadImage(true)
+    }
+  }, [loadImage])
+
+  useEffect(() => {
+    shouldLoadImage()
+    window.addEventListener('scroll', shouldLoadImage)
+    return () => window.removeEventListener('scroll', shouldLoadImage)
+  })
 
   useEffect(() => {
     const image = article.sortedSections[0].sortedContents.find(
@@ -42,8 +55,8 @@ export const ArticlePreview = observer((props: Props) => {
         [s.promoted]: article.promoted,
       })}
     >
-      <section className={s.image}>
-        {!!imageContent && (
+      <section className={s.image} ref={ref}>
+        {!!imageContent && loadImage && (
           <img
             alt={imageContent.alt}
             className={classnames(s[`content-type-${imageContent.type}`], {

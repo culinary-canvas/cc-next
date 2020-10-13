@@ -94,7 +94,7 @@ export const ContentControls = observer(() => {
           section.uid === article.titleSection.uid &&
           content.type === ContentType.TITLE
         }
-        tooltipText={
+        title={
           section.uid === article.titleSection.uid &&
           content.type === ContentType.TITLE
             ? "Title section can't be deleted"
