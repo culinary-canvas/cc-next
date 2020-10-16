@@ -12,7 +12,7 @@ case $ans in
     1 )  level=major ;;
     2 )  level=minor ;;
     3 )  level=patch ;;
-    "")  echo "${magenta}default - Patch"; level=PATCH ;;
+    "")  echo "${magenta}default - Patch"; level=patch ;;
     * )  level=$ans; echo "${red}${bold}Bad input ${normal}$level"; exit ;;
 esac
 
