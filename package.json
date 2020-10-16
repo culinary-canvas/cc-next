@@ -5,9 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:staging": "env-cmd -f .env.staging next build",
+    "build:staging": "env-cmd -f .env.staging.local next build",
     "start": "next start",
-    "start:staging": "env-cmd -f .env.staging next start"
+    "start:staging": "env-cmd -f .env.staging.local next start",
+    "prerelease-patch": "git checkout stage && git merge develop --no-ff --no-edit && standard-version --release-as patch --prerelease beta && git push --follow-tags origin stage",
+    "prerelease-minor": "standard-version --release-as minor --prerelease beta && git push --follow-tags origin stage",
+    "prerelease-major": "standard-version --release-as major --prerelease beta && git push --follow-tags origin stage",
+    "release-patch": "standard-version --release-as patch && git push --follow-tags origin main",
+    "release-minor": "standard-version --release-as minor && git push --follow-tags origin main",
+    "release-major": "standard-version --release-as major && git push --follow-tags origin main"
   },
   "dependencies": {
     "@webdeb/next-styles": "^1.1.0",
@@ -62,7 +68,8 @@
     "eslint-plugin-react-hooks": "^4.0.8",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^2.0.5",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "standard-version": "^9.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"
