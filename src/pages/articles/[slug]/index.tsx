@@ -28,7 +28,9 @@ const ArticlePage = observer(({ articleData }: Props) => {
   return (
     <>
       <PageHead
-        image={article.imageContent.set.s.url}
+        image={article.imageContent.set.l.url}
+        imageWidth={article.imageContent.set.l.width}
+        imageHeight={article.imageContent.set.l.height}
         imageAlt={article.imageContent.alt}
         title={article.title}
         description={

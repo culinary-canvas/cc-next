@@ -17,10 +17,7 @@ function Start({ articlesData }: Props) {
 
   return (
     <>
-      <PageHead
-        image={articles[0].imageContent.set.s.url}
-        imageAlt={articles[0].imageContent.alt}
-      />
+      <PageHead noIndex noFollow />
       <main className={classnames(s.container)}>
         <ArticleGrid articles={articles} />
       </main>

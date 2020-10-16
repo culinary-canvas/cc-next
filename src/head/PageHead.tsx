@@ -6,6 +6,8 @@ import { IS_PROD } from '../pages/_app'
 
 interface Props {
   image?: string
+  imageWidth?: number
+  imageHeight?: number
   imageAlt?: string
   description?: string
   title?: string
