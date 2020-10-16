@@ -17,12 +17,15 @@ import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
 import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar'
 import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
+import { useStaticRendering } from 'mobx-react'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD =
   process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ||
   process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging' // TODO: Remove staging for when we launch!
+
 Modal.setAppElement('#__next')
+useStaticRendering(isServer)
 
 interface Props extends AppProps {}
 
