@@ -18,7 +18,7 @@ function Start({ articlesData }: Props) {
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.url}
+        image={articles[0].imageContent.set.s.url}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
