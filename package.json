@@ -8,12 +8,8 @@
     "build:staging": "env-cmd -f .env.staging.local next build",
     "start": "next start",
     "start:staging": "env-cmd -f .env.staging.local next start",
-    "prerelease-patch": "git checkout stage && git merge develop --no-ff --no-edit && standard-version --release-as patch --prerelease beta && git push --follow-tags origin stage",
-    "prerelease-minor": "standard-version --release-as minor --prerelease beta && git push --follow-tags origin stage",
-    "prerelease-major": "standard-version --release-as major --prerelease beta && git push --follow-tags origin stage",
-    "release-patch": "standard-version --release-as patch && git push --follow-tags origin main",
-    "release-minor": "standard-version --release-as minor && git push --follow-tags origin main",
-    "release-major": "standard-version --release-as major && git push --follow-tags origin main"
+    "release-stage": "git checkout stage && git merge develop --no-ff --no-edit && standard-version --release-as ${LEVEL:-patch} --prerelease beta && git push --follow-tags origin stage",
+    "release": "git checkout main && git merge stage --no-ff --no-edit && standard-version --release-as ${LEVEL:-patch} && git push --follow-tags origin main"
   },
   "dependencies": {
     "@webdeb/next-styles": "^1.1.0",
