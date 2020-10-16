@@ -30,7 +30,7 @@ echo "--------------------------"
 echo "Create ${level} release..."
 echo "--------------------------"
 echo "${gray}"
-echo "running: npx standard-version --release-as $level --prerelease beta"
+echo "npx standard-version --release-as $level --prerelease beta"
 npx standard-version --release-as $level --prerelease beta
 
 echo "${darkblue}"

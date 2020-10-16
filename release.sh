@@ -12,8 +12,8 @@ case $ans in
     1 )  level=major ;;
     2 )  level=minor ;;
     3 )  level=patch ;;
-    "")  echo "${magenta}default - Patch"; level=PATCH ;;
-    * )  echo "${red}${bold}Bad input"; exit ;;
+    "")  echo "${magenta}default - Patch"; level=patch ;;
+    * )  level=$ans; echo "${red}${bold}Bad input ${normal}$level"; exit ;;
 esac
 
 echo "${darkblue}"
@@ -30,7 +30,8 @@ echo "--------------------------"
 echo "Create ${level} release..."
 echo "--------------------------"
 echo "${gray}"
-./node_modules/standard-version/bin/cli.js --release-as $level
+echo "npx standard-version --release-as $level"
+npx standard-version --release-as $level
 
 echo "${darkblue}"
 echo "-------------------------"
