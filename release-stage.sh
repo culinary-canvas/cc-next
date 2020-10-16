@@ -9,9 +9,9 @@ echo "${magenta}3) Patch (default)${normal}"
 
 read ans
 case $ans in
-    1 )  level=MAJOR ;;
-    2 )  level=MINOR ;;
-    3 )  level=PATCH ;;
+    1 )  level=major ;;
+    2 )  level=minor ;;
+    3 )  level=patch ;;
     "")  echo "${magenta}default - Patch"; level=PATCH ;;
     * )  echo "${red}${bold}Bad input"; exit ;;
 esac
