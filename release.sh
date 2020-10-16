@@ -30,7 +30,7 @@ echo "--------------------------"
 echo "Create ${level} release..."
 echo "--------------------------"
 echo "${gray}"
-./node_modules/standard-version/bin/cli.js --release-as ${level}
+./node_modules/standard-version/bin/cli.js --release-as $level
 
 echo "${darkblue}"
 echo "-------------------------"
