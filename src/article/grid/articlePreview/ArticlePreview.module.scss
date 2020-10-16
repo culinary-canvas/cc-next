@@ -4,9 +4,20 @@
 
 .article {
   padding-bottom: 1rem;
+  box-shadow: 0 0 40px 2px transparentize($black, 0.85);
   background-color: $white;
   border-radius: 12px;
   overflow: hidden;
+
+  &:hover {
+    box-shadow: 0 0 40px 5px transparentize($black, 0.7);
+  }
+
+  &,
+  * {
+    transition: box-shadow $animation-slow ease-in-out,
+      transform $animation-slow ease-in-out;
+  }
 
   .hide {
     display: none;
@@ -16,9 +27,9 @@
     position: relative;
     width: 100%;
     height: 70vh;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
     background-color: transparentize($black, 0.9);
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
     overflow: hidden;
 
     &::before {
@@ -45,16 +56,6 @@
         left: 100%;
       }
     }
-  }
-
-  &:hover {
-    box-shadow: 0 5px 10px 5px transparentize($black, 0.8);
-  }
-
-  &,
-  * {
-    transition: box-shadow $animation-medium linear,
-      transform $animation-medium ease-in;
   }
 
   > section:not(.image) {
@@ -121,5 +122,16 @@
         font-size: $font-size-xs;
       }
     }
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
   }
 }
