@@ -1,6 +1,6 @@
 {
   "name": "cc-next",
-  "version": "0.2.5",
+  "version": null,
   "private": true,
   "scripts": {
     "dev": "next dev",
