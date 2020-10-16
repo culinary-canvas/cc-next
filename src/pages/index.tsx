@@ -9,12 +9,13 @@ import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { Transformer } from '../services/db/Transformer'
 import { Spinner } from '../shared/spinner/Spinner'
 import { COLOR } from '../styles/color'
+import {isServer} from './_app'
 
 interface Props {
   articlesData: Partial<ArticleModel>[]
 }
 
-const PAGE_SIZE = 2
+const PAGE_SIZE = 3
 
 function Start({ articlesData }: Props) {
   const endRef = useRef<HTMLDivElement>()
@@ -24,32 +25,35 @@ function Start({ articlesData }: Props) {
     Transformer.allToApp(articlesData, ArticleModel),
   )
 
-  const onScroll = useCallback(async () => {
+  // Trigger load when initial load fits the screen (only triggered on scroll now)
+
+  const onScroll = useCallback(() => {
     if (
       !endReached &&
       !loading &&
       scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop
     ) {
-      setLoading(true)
-
-      const articlesToAddData = await ArticleApi.publishedPagedBySortOrder(
-        PAGE_SIZE,
-        articles[articles.length - 1].sortOrder,
-      )
-
-      if (!!articlesToAddData.length) {
-        const transformed = Transformer.allToApp(
-          articlesToAddData,
-          ArticleModel,
-        )
-        if (transformed[transformed.length - 1].sortOrder === 0) {
-          setEndReached(true)
-        }
-        setArticles([...articles, ...transformed])
-        setLoading(false)
-      }
+      load()
     }
   }, [loading, endReached])
+
+  const load = useCallback(async () => {
+    setLoading(true)
+
+    const articlesToAddData = await ArticleApi.publishedPagedBySortOrder(
+      PAGE_SIZE,
+      articles[articles.length - 1].sortOrder,
+    )
+
+    if (!!articlesToAddData.length) {
+      const transformed = Transformer.allToApp(articlesToAddData, ArticleModel)
+      if (transformed[transformed.length - 1].sortOrder === 0) {
+        setEndReached(true)
+      }
+      setArticles([...articles, ...transformed])
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -59,7 +63,7 @@ function Start({ articlesData }: Props) {
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.url}
+        image={articles[0].imageContent.set.s.url}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
