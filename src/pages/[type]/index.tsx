@@ -45,7 +45,9 @@ function ArticlesPerType({ articlesData, type }: Props) {
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.set.s.url}
+        image={articles[0].imageContent.set.l.url}
+        imageWidth={articles[0].imageContent.set.l.width}
+        imageHeight={articles[0].imageContent.set.l.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
