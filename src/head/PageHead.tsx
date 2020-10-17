@@ -18,6 +18,8 @@ interface Props {
 export function PageHead(props: Props) {
   const {
     image = 'https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f',
+    imageWidth,
+    imageHeight,
     imageAlt = '@Yves Le Lay by Johan Ståhlberg',
     description = "At Culinary Canvas, we celebrate the craftsmanship of the world's\n" +
       'most creative culinary and beverage professionals. Their ingenuity\n' +
@@ -65,6 +67,20 @@ export function PageHead(props: Props) {
       <meta property="og:image" key="og:image" content={image} />
       <meta property="og:image:type" key="og:image:type" content="image/*" />
       <meta property="og:image:alt" key="og:image:alt" content={imageAlt} />
+      {!!imageWidth && (
+        <meta
+          property="og:image:width"
+          key="og:image:width"
+          content={String(imageWidth)}
+        />
+      )}
+      {!!imageWidth && (
+        <meta
+          property="og:image:height"
+          key="og:image:height"
+          content={String(imageHeight)}
+        />
+      )}
       <meta property="og:url" key="og:url" content={url} />
       <meta
         property="og:site_name"
