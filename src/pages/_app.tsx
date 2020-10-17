@@ -20,9 +20,7 @@ import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
 
 export const isServer = typeof window === 'undefined'
-export const IS_PROD =
-  process.env.NEXT_PUBLIC_ENVIRONMENT === 'production' ||
-  process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging' // TODO: Remove staging for when we launch!
+export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
 
 Modal.setAppElement('#__next')
 useStaticRendering(isServer)
