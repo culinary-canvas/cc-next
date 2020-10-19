@@ -75,7 +75,7 @@ function App({ Component, pageProps }: Props) {
   )
 }
 
-App.getInitialProps = async () => {
+App.getStaticProps = async () => {
   if (isServer) {
     dateTimeService.init()
 
