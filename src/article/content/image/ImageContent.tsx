@@ -74,7 +74,6 @@ export const ImageContent = observer((props: Props) => {
     >
       {loadImage && (
         <img
-          src={content.set.image.url}
           srcSet={ImageService.srcSet(content)}
           alt={content.set.alt}
           style={{

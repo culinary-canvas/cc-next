@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
+import s from './articlesPerType.module.scss'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { ArticleType } from '../../article/ArticleType'
 import { ArticleModel } from '../../article/Article.model'
-import { useAdmin } from '../../admin/Admin'
+import { Transformer } from '../../services/db/Transformer'
 import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
-import s from './articlesPerType.module.scss'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
-import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleApi } from '../../article/Article.api'
-import { ArticleType } from '../../article/ArticleType'
-import { Transformer } from '../../services/db/Transformer'
+import StringUtils from '../../services/utils/StringUtils'
 import { useRouter } from 'next/router'
 
 interface Props {
   articlesData: Partial<ArticleModel>[]
   type: ArticleType
 }
+
+const PAGE_SIZE = 4
 
 function ArticlesPerType({ articlesData, type }: Props) {
   const router = useRouter()
@@ -23,24 +25,13 @@ function ArticlesPerType({ articlesData, type }: Props) {
     return <main>Loading...</main>
   }
 
-  const admin = useAdmin()
   const [articles, setArticles] = useState<ArticleModel[]>(
     Transformer.allToApp(articlesData, ArticleModel),
   )
 
   useEffect(() => {
     setArticles(Transformer.allToApp(articlesData, ArticleModel))
-  }, [articlesData, type])
-
-  const [filteredArticles, setFilteredArticles] = useState<ArticleModel[]>([])
-
-  useEffect(() => {
-    if (admin.showUnpublishedOnStartPage) {
-      setFilteredArticles(articles)
-    } else {
-      setFilteredArticles(articles.filter((a) => a.published))
-    }
-  }, [admin.showUnpublishedOnStartPage, articles])
+  }, [articlesData])
 
   return (
     <>
@@ -51,7 +42,17 @@ function ArticlesPerType({ articlesData, type }: Props) {
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
-        <ArticleGrid articles={filteredArticles} />
+        <ArticleGrid
+          initialArticles={articles}
+          load={async (lastLoaded) => {
+            const data = await ArticleApi.publishedByTypePagedBySortOrderDesc(
+              type,
+              PAGE_SIZE,
+              lastLoaded.sortOrder,
+            )
+            return !!data ? Transformer.allToApp(data, ArticleModel) : null
+          }}
+        />
       </main>
     </>
   )
@@ -63,10 +64,11 @@ interface StaticProps {
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
+  console.log(Object.values(ArticleType))
   return {
     paths: Object.values(ArticleType).map((type) => ({
       params: {
-        type,
+        type: StringUtils.toLowerKebabCase(type),
       },
     })),
     fallback: true,
@@ -77,11 +79,18 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const articlesData = await ArticleApi.byType(params.type)
+  const type = Object.values(ArticleType).find(
+    (t) => StringUtils.toLowerKebabCase(t) === params.type,
+  )
+
+  const articlesData = await ArticleApi.publishedByTypePagedBySortOrderDesc(
+    type,
+    PAGE_SIZE,
+  )
   return {
     props: {
       articlesData,
-      type: params.type,
+      type,
     },
     revalidate: 1,
   }

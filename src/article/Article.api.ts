@@ -48,7 +48,7 @@ export class ArticleApi {
     return Api.all(this.COLLECTION)
   }
 
-  static async publishedPagedBySortOrder(
+  static async publishedPagedBySortOrderDesc(
     limit: number,
     startAfterSortOrder?: number,
   ): Promise<Partial<ArticleModel>[]> {
@@ -58,7 +58,48 @@ export class ArticleApi {
       .collection(this.COLLECTION)
       .where('published', '==', true)
       .orderBy('sortOrder', 'desc')
-    if (startAfterSortOrder) {
+    if (!isNil(startAfterSortOrder)) {
+      query = query.startAfter(startAfterSortOrder)
+    }
+    const snapshot = await query.limit(limit).get()
+
+    if (!!snapshot.size) {
+      return Transformer.listToJson(snapshot.docs)
+    }
+  }
+
+  static async allPagedBySortOrderDesc(
+    limit: number,
+    startAfterSortOrder?: number,
+  ): Promise<Partial<ArticleModel>[]> {
+    const { firestore } = initFirebase()
+
+    let query = firestore()
+      .collection(this.COLLECTION)
+      .orderBy('sortOrder', 'desc')
+    if (!isNil(startAfterSortOrder)) {
+      query = query.startAfter(startAfterSortOrder)
+    }
+    const snapshot = await query.limit(limit).get()
+
+    if (!!snapshot.size) {
+      return Transformer.listToJson(snapshot.docs)
+    }
+  }
+
+  static async publishedByTypePagedBySortOrderDesc(
+    type: ArticleType,
+    limit: number,
+    startAfterSortOrder?: number,
+  ): Promise<Partial<ArticleModel>[]> {
+    const { firestore } = initFirebase()
+
+    let query = firestore()
+      .collection(this.COLLECTION)
+      .where('published', '==', true)
+      .where('type', '==', type)
+      .orderBy('sortOrder', 'desc')
+    if (!isNil(startAfterSortOrder)) {
       query = query.startAfter(startAfterSortOrder)
     }
     const snapshot = await query.limit(limit).get()
