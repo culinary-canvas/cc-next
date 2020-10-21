@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { classnames } from '../services/importHelpers'
 import { useAuth } from '../services/auth/Auth'
 import { ArticleType } from '../article/ArticleType'
+import StringUtils from '../services/utils/StringUtils'
 
 export const Menu = observer(() => {
   const [isOpen, setOpen] = useState<boolean>(false)
@@ -32,10 +33,13 @@ export const Menu = observer(() => {
               [styles.active]: router.query.type === ArticleType.DISH,
             })}
             onClick={() => {
-              router.push(`/${ArticleType.DISH}`)
+              router.push(`/${StringUtils.toLowerKebabCase(ArticleType.DISH)}`)
               setOpen(false)
             }}
-            disabled={router.query.type === ArticleType.DISH}
+            disabled={
+              router.query.type ===
+              StringUtils.toLowerKebabCase(ArticleType.DISH)
+            }
           >
             Dishes
           </button>
@@ -44,10 +48,15 @@ export const Menu = observer(() => {
               [styles.active]: router.query.type === ArticleType.HOW_TO,
             })}
             onClick={() => {
-              router.push(`/${ArticleType.HOW_TO}`)
+              router.push(
+                `/${StringUtils.toLowerKebabCase(ArticleType.HOW_TO)}`,
+              )
               setOpen(false)
             }}
-            disabled={router.query.type === ArticleType.HOW_TO}
+            disabled={
+              router.query.type ===
+              StringUtils.toLowerKebabCase(ArticleType.HOW_TO)
+            }
           >
             Recipes
           </button>
@@ -56,10 +65,15 @@ export const Menu = observer(() => {
               [styles.active]: router.query.type === ArticleType.PORTRAIT,
             })}
             onClick={() => {
-              router.push(`/${ArticleType.PORTRAIT}`)
+              router.push(
+                `/${StringUtils.toLowerKebabCase(ArticleType.PORTRAIT)}`,
+              )
               setOpen(false)
             }}
-            disabled={router.query.type === ArticleType.PORTRAIT}
+            disabled={
+              router.query.type ===
+              StringUtils.toLowerKebabCase(ArticleType.PORTRAIT)
+            }
           >
             Portraits
           </button>

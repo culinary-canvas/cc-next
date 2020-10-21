@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import s from './start.module.scss'
 import { GetStaticProps } from 'next'
 import { classnames } from '../services/importHelpers'
@@ -7,57 +7,17 @@ import { PageHead } from '../head/PageHead'
 import { ArticleApi } from '../article/Article.api'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { Transformer } from '../services/db/Transformer'
-import { Spinner } from '../shared/spinner/Spinner'
-import { COLOR } from '../styles/color'
 
 interface Props {
   articlesData: Partial<ArticleModel>[]
 }
 
-const PAGE_SIZE = 3
+const PAGE_SIZE = 4
 
 function Start({ articlesData }: Props) {
-  const endRef = useRef<HTMLDivElement>()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [endReached, setEndReached] = useState<boolean>(false)
-  const [articles, setArticles] = useState<ArticleModel[]>(
+  const articles = useRef<ArticleModel[]>(
     Transformer.allToApp(articlesData, ArticleModel),
-  )
-
-  // Trigger load when initial load fits the screen (only triggered on scroll now)
-
-  const onScroll = useCallback(() => {
-    if (
-      !endReached &&
-      !loading &&
-      scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop
-    ) {
-      load()
-    }
-  }, [loading, endReached])
-
-  const load = useCallback(async () => {
-    setLoading(true)
-
-    const articlesToAddData = await ArticleApi.publishedPagedBySortOrder(
-      PAGE_SIZE,
-      articles[articles.length - 1].sortOrder,
-    )
-
-    if (!!articlesToAddData.length) {
-      const transformed = Transformer.allToApp(articlesToAddData, ArticleModel)
-      if (transformed[transformed.length - 1].sortOrder === 0) {
-        setEndReached(true)
-      }
-      setArticles([...articles, ...transformed])
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  })
+  ).current
 
   return (
     <>
@@ -68,21 +28,25 @@ function Start({ articlesData }: Props) {
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
-        <ArticleGrid articles={articles} />
-        <div
-          id="end"
-          ref={endRef}
-          className={classnames(s.end, { [s.loading]: loading })}
-        >
-          {loading && <Spinner size={64} color={COLOR.GREY} />}
-        </div>
+        <ArticleGrid
+          initialArticles={articles}
+          load={async (lastLoaded) => {
+            console.log('loading!', lastLoaded.sortOrder, lastLoaded.title)
+            const data = await ArticleApi.publishedPagedBySortOrderDesc(
+              PAGE_SIZE,
+              lastLoaded.sortOrder,
+            )
+            console.log(data)
+            return !!data ? Transformer.allToApp(data, ArticleModel) : null
+          }}
+        />
       </main>
     </>
   )
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const articlesData = await ArticleApi.publishedPagedBySortOrder(PAGE_SIZE)
+  const articlesData = await ArticleApi.publishedPagedBySortOrderDesc(PAGE_SIZE)
 
   return {
     props: {

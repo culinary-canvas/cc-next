@@ -5,6 +5,7 @@ import { Menu } from '../menu/Menu'
 import Logo from '../../public/assets/logo.svg'
 import { useRouter } from 'next/router'
 import { ArticleType } from '../article/ArticleType'
+import StringUtils from '../services/utils/StringUtils'
 
 export const Header = () => {
   const router = useRouter()
@@ -41,11 +42,11 @@ export const Header = () => {
       return false
     }
     switch (router.query.type as ArticleType) {
-      case ArticleType.DISH:
+      case StringUtils.toLowerKebabCase(ArticleType.DISH):
         return 'Dishes'
-      case ArticleType.PORTRAIT:
+      case StringUtils.toLowerKebabCase(ArticleType.PORTRAIT):
         return 'Portraits'
-      case ArticleType.HOW_TO:
+      case StringUtils.toLowerKebabCase(ArticleType.HOW_TO):
         return 'Recipes'
     }
   }
