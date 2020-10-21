@@ -11,6 +11,7 @@ import { TextContentModel } from '../../content/text/TextContent.model'
 import StringUtils from '../../../services/utils/StringUtils'
 import { dateTimeService } from '../../../services/dateTime/DateTime.service'
 import { ImageService } from '../../content/image/Image.service'
+import { useRouter } from 'next/router'
 
 interface Props {
   article: ArticleModel
@@ -18,6 +19,7 @@ interface Props {
 
 export const ArticlePreview = observer((props: Props) => {
   const { article } = props
+  const router = useRouter()
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
@@ -73,7 +75,7 @@ export const ArticlePreview = observer((props: Props) => {
         <Button
           onClick={(e) => {
             e.preventDefault()
-            // env.articleStore.setTypeFilter(article.type)
+            router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
           }}
         >
           {StringUtils.toDisplayText(article.type)}
