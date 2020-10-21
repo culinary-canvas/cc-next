@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './articlesPerType.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleType } from '../../article/ArticleType'
@@ -9,6 +9,7 @@ import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
 import StringUtils from '../../services/utils/StringUtils'
+import { useRouter } from 'next/router'
 
 interface Props {
   articlesData: Partial<ArticleModel>[]
@@ -18,6 +19,12 @@ interface Props {
 const PAGE_SIZE = 4
 
 function ArticlesPerType({ articlesData, type }: Props) {
+  const router = useRouter()
+
+  if (router.isFallback) {
+    return <main>Loading...</main>
+  }
+
   const [articles, setArticles] = useState<ArticleModel[]>(
     Transformer.allToApp(articlesData, ArticleModel),
   )
@@ -57,6 +64,7 @@ interface StaticProps {
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
+  console.log(Object.values(ArticleType))
   return {
     paths: Object.values(ArticleType).map((type) => ({
       params: {

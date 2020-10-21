@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:staging": "env-cmd -f .env.staging.local next build",
+    "build:stage": "env-cmd -f .env.staging.local next build",
     "start": "next start",
-    "start:staging": "env-cmd -f .env.staging.local next start",
-    "release-stage": "./release-stage.sh",
-    "release": "./release.sh"
+    "start:stage": "env-cmd -f .env.staging.local next start",
+    "release": "./release.sh",
+    "release:stage": "./release-stage.sh"
   },
   "dependencies": {
     "@webdeb/next-styles": "^1.1.0",
