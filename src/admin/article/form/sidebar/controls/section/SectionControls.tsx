@@ -1,21 +1,32 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { FitButtons } from '../shared/fit/FitButtons'
 import { Button } from '../../../../../../form/button/Button'
 import { SectionPresetButtons } from '../shared/sectionPreset/SectionPresetButtons'
-import { SortOrderButtons } from '../shared/sortOrder/SortOrderButtons'
 import { runInAction } from 'mobx'
 import { SectionService } from '../../../../../../article/section/Section.service'
 import { ArticleService } from '../../../../../../article/Article.service'
 import { COLOR } from '../../../../../../styles/color'
 import s from './SectionControls.module.scss'
 import { useAdmin } from '../../../../../Admin'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
+import { GridControl } from '../shared/gridControl/GridControl'
+import { Size } from '../../../../../../article/shared/format/Size'
+import { useAutorun } from '../../../../../../hooks/useAutorun'
+import { SectionModel } from '../../../../../../article/section/Section.model'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
-  const [deleting, setDeleting] = useState<boolean>(false)
+  const { article } = admin
 
-  const { section, article } = admin
+  const [deleting, setDeleting] = useState<boolean>(false)
+  const [sections, setSections] = useState<SectionModel[]>([])
+  const [section, setSection] = useState<SectionModel>()
+
+  useAutorun(() => {
+    setSections(article?.sections)
+    setSection(admin.section)
+  }, [article, admin.section])
 
   if (!article || !section) {
     return null
@@ -35,31 +46,65 @@ export const SectionControls = observer(() => {
           }
         />
 
-        <label htmlFor="section-sort-order">Sort order</label>
-        <SortOrderButtons
-          id="section-sort-order"
-          target={section}
-          list={article.sections}
-          forbidden={[0]}
+        <label htmlFor="preset">Preset</label>
+        <SectionPresetButtons
+          id="preset"
+          section={section}
+          onSelected={(v) => SectionService.applyPreset(v, section)}
         />
 
-        <label htmlFor="fit">Content boundary</label>
-        <FitButtons
-          id="fit"
-          selected={section.format.fit}
-          onSelected={(v) => (section.format.fit = v)}
+        <label htmlFor="article-grid-placement">Grid placement</label>
+        <GridControl
+          id="article-grid-placement"
+          parts={sections}
+          columnDefinitions={['1fr', `3fr`, `3fr`, `3fr`, `3fr`, '1fr']}
+          currentPart={section}
+          outlierColumns={[1, 6]}
+          onDelete={(parts) =>
+            runInAction(() => {
+              const uidsToDelete = parts.map((p) => p.uid)
+              article.sections = article.sections.filter(
+                (s) => !uidsToDelete.includes(s.uid),
+              )
+            })
+          }
         />
 
-        {section.sortOrder === 0 && (
-          <>
-            <label htmlFor="title-preset">Preset</label>
-            <SectionPresetButtons
-              id="title-preset"
-              selected={section.preset}
-              onSelected={(v) => SectionService.applyPreset(v, section)}
-            />
-          </>
-        )}
+        <label htmlFor="section-height">Height</label>
+        <div id="section-height" className={s.buttonGroup}>
+          <Button
+            onClick={() =>
+              runInAction(() => (section.format.height = Size.FIT_CONTENT))
+            }
+            selected={section.format.height === Size.FIT_CONTENT}
+          >
+            Fit content
+          </Button>
+          <Button
+            onClick={() =>
+              runInAction(() => (section.format.height = Size.FULL_SCREEN))
+            }
+            selected={section.format.height === Size.FULL_SCREEN}
+          >
+            Full screen
+          </Button>
+        </div>
+
+        <label htmlFor="section-background-color">Background color</label>
+        <ColorPicker
+          id="section-background-color"
+          value={section.format.backgroundColor}
+          onSelect={(c) =>
+            runInAction(() => (section.format.backgroundColor = c))
+          }
+          includeTransparent
+        />
+
+        <Checkbox
+          checked={section.format.shadow}
+          onChange={(v) => runInAction(() => (section.format.shadow = v))}
+          label="Shadow"
+        />
 
         <Button
           onClick={() => {

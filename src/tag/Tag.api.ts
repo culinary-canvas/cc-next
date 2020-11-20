@@ -1,7 +1,7 @@
 import { User } from 'firebase'
 import { initFirebase } from '../services/firebase/Firebase.service'
 import { Api } from '../services/api/Api'
-import { PlainObject } from '../services/types/PlainObject'
+import { PlainObject } from '../types/PlainObject'
 import { Transformer } from '../services/db/Transformer'
 import { TagModel } from './Tag.model'
 

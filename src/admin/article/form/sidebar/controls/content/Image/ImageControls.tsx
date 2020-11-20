@@ -6,11 +6,11 @@ import { Checkbox } from '../../../../../../../form/checkbox/Checkbox'
 import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
 import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignButtons'
 import { ImageContentModel } from '../../../../../../../article/content/image/ImageContent.model'
-import { Fit } from '../../../../../../../article/shared/Fit'
 import { SectionModel } from '../../../../../../../article/section/Section.model'
-import { Slider } from '../../../../../../../form/slider/Slider'
 import { runInAction } from 'mobx'
 import { useReaction } from '../../../../../../../hooks/useReaction'
+import s from './ImageControls.module.scss'
+import { FixedSizeControls } from '../../shared/fixedSize/FixedSizeControls'
 
 interface Props {
   content: ImageContentModel
@@ -32,42 +32,19 @@ export const ImageControls = observer((props: Props) => {
     (t) => setAlt(t),
   )
 
-  const [useFixedSize, setUseFixedSize] = useState<boolean>(
-    !!content?.format.size,
-  )
-
-  useEffect(() => {
-    if (!!content?.uid) {
-      setUseFixedSize(!!content.format.size)
-    }
-  }, [content.uid])
-
   return (
     <>
-      {section.format.fit === Fit.ARTICLE && (
-        <div className="text-align-buttons margin-top-1">
-          <HorizontalAlignButtons
-            selected={content.format.horizontalAlign}
-            onSelected={(v) => (content.format.horizontalAlign = v)}
-          />
-
-          <VerticalAlignButtons
-            selected={content.format.verticalAlign}
-            onSelected={(v) => (content.format.verticalAlign = v)}
-          />
-        </div>
-      )}
-
-      <Checkbox
-        label="Background"
-        checked={content.format.background}
-        onChange={(v) => (content.format.background = v)}
+      <HorizontalAlignButtons
+        selected={content.format.horizontalAlign}
+        onSelected={(v) => (content.format.horizontalAlign = v)}
       />
 
-      <ImageEdit
-        set={content.set}
-        onChange={(set) => (content.set = set)}
+      <VerticalAlignButtons
+        selected={content.format.verticalAlign}
+        onSelected={(v) => (content.format.verticalAlign = v)}
       />
+
+      <ImageEdit set={content.set} onChange={(set) => (content.set = set)} />
 
       <input
         id="alt"
@@ -77,31 +54,15 @@ export const ImageControls = observer((props: Props) => {
         placeholder="Describe the image..."
       />
 
-      {section.format.fit === Fit.ARTICLE && (
-        <span className="fixed-size-container">
-          <Checkbox
-            containerClassName="fixed-size-checkbox"
-            checked={useFixedSize}
-            onChange={(v) => {
-              setUseFixedSize(v)
-              if (v) {
-                content.format.size = 100
-              } else {
-                content.format.size = null
-              }
-            }}
-            label="Fixed size"
-          />
-          <Slider
-            containerClassName="fixed-size-slider"
-            value={content.format.size}
-            min={1}
-            max={100}
-            onChange={(v) => (content.format.size = v)}
-            disabled={!useFixedSize}
-          />
-        </span>
-      )}
+      <Checkbox
+        label="Circle"
+        checked={content.format.circle}
+        onChange={(v) => (content.format.circle = v)}
+      />
+
+      <FixedSizeControls content={content} />
+
+      <label className={s.label}>Padding</label>
       <PaddingControls
         padding={content.format.padding}
         onChange={(p) => (content.format.padding = p)}

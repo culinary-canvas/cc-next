@@ -21,7 +21,6 @@ const ArticleFormSidebar = observer((props: Props) => {
   const overlay = useOverlay()
 
   const [saving, setSaving] = useState<boolean>(false)
-  const [deleting, setDeleting] = useState<boolean>(false)
 
   const onProgress = (progress, message) => {
     message && overlay.setText(message)
@@ -54,7 +53,6 @@ const ArticleFormSidebar = observer((props: Props) => {
         <article className={s.content}>
           <section className={s.buttons}>
             <Button
-              color={COLOR.GREY_DARK}
               onClick={() => {
                 let goodToGo = true
                 if (admin.formControl.isDirty) {
@@ -67,7 +65,7 @@ const ArticleFormSidebar = observer((props: Props) => {
                 }
               }}
             >
-              Back
+              {admin.formControl.isDirty ? 'Cancel' : 'Back'}
             </Button>
 
             <Button
@@ -80,17 +78,6 @@ const ArticleFormSidebar = observer((props: Props) => {
             >
               Save
             </Button>
-
-            {!!admin.article?.id && (
-              <Button
-                loading={deleting}
-                color={COLOR.RED}
-                loadingText="Deleting"
-                onClick={onDelete}
-              >
-                Delete...
-              </Button>
-            )}
           </section>
 
           <Controls />
@@ -113,19 +100,6 @@ const ArticleFormSidebar = observer((props: Props) => {
     }, 1000)
 
     setSaving(false)
-  }
-
-  async function onDelete() {
-    const goodToGo = window.confirm(
-      'Are you really, really sure want to delete this article?',
-    )
-    if (goodToGo) {
-      setDeleting(true)
-      overlay.toggle()
-      await ArticleApi.delete(admin.article, auth.user, onProgress)
-      setTimeout(() => overlay.toggle(), 1000)
-      router.replace('/admin/articles')
-    }
   }
 })
 

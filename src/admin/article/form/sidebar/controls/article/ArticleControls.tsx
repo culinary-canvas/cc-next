@@ -16,14 +16,23 @@ import { ArticleApi } from '../../../../../../article/Article.api'
 import { Transformer } from '../../../../../../services/db/Transformer'
 import { useAdmin } from '../../../../../Admin'
 import { useReaction } from '../../../../../../hooks/useReaction'
+import { COLOR } from '../../../../../../styles/color'
+import { useOverlay } from '../../../../../../shared/overlay/OverlayStore'
+import { useAuth } from '../../../../../../services/auth/Auth'
+import { useRouter } from 'next/router'
 
 export const ArticleControls = observer(() => {
+  const auth = useAuth()
+  const router = useRouter()
   const admin = useAdmin()
-  const [otherArticles, setOtherArticles] = useState<ArticleModel[]>([])
-  const [editingSlug, editSlug] = useState<boolean>(false)
+  const overlay = useOverlay()
   const { article } = admin
 
+  const [otherArticles, setOtherArticles] = useState<ArticleModel[]>([])
+  const [editingSlug, editSlug] = useState<boolean>(false)
+
   const [title, setTitle] = useState<string>(article.title)
+  const [deleting, setDeleting] = useState<boolean>(false)
 
   useEffect(() => {
     if (article.title !== title) {
@@ -142,6 +151,33 @@ export const ArticleControls = observer(() => {
           (article.tagNames = article.tagNames.filter((id) => id !== tag))
         }
       />
+      {!!admin.article?.id && (
+        <Button
+          loading={deleting}
+          color={COLOR.RED}
+          loadingText="Deleting"
+          onClick={onDelete}
+        >
+          Delete article...
+        </Button>
+      )}
     </section>
   )
+  async function onDelete() {
+    const goodToGo = window.confirm(
+      'Are you really, really sure want to delete this article?',
+    )
+    if (goodToGo) {
+      setDeleting(true)
+      overlay.toggle()
+      await ArticleApi.delete(admin.article, auth.user, onProgress)
+      setTimeout(() => overlay.toggle(), 1000)
+      router.replace('/admin/articles')
+    }
+  }
+
+  const onProgress = (progress, message) => {
+    message && overlay.setText(message)
+    overlay.setProgress(progress)
+  }
 })

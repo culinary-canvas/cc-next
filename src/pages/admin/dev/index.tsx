@@ -8,6 +8,8 @@ import { changeArticleTagIdsToTagNames } from '../../../services/script/changeAr
 import s from './dev.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useAuth } from '../../../services/auth/Auth'
+import {changeSectionPresetNames} from '../../../services/script/changeSectionPresetNames'
+import {transformToGridPositions} from '../../../services/script/transformToGridPositions'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -21,17 +23,6 @@ const AdminDevArea = observer(() => {
   return (
     <div className={s.container}>
       <div className={s.content}>
-        <Button
-          onClick={async () => {
-            setRunning('setArticleSlug')
-            await setArticleSlug(auth.user)
-            setRunning(null)
-          }}
-          loading={running === 'setArticleSlug'}
-        >
-          Set articles' slug
-        </Button>
-
         <Button
           onClick={async () => {
             setRunning('fixSortOrders')
@@ -56,13 +47,24 @@ const AdminDevArea = observer(() => {
 
         <Button
           onClick={async () => {
-            setRunning('changeArticleTagIdsToTagNames')
-            await changeArticleTagIdsToTagNames(auth.user)
+            setRunning('changeSectionPresetNames')
+            await changeSectionPresetNames(auth.user)
             setRunning(null)
           }}
-          loading={running === 'changeArticleTagIdsToTagNames'}
+          loading={running === 'changeSectionPresetNames'}
         >
-          Set articles' tag names
+          Update articles' section presets to new names
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('transformToGridPositions')
+            await transformToGridPositions(auth.user)
+            setRunning(null)
+          }}
+          loading={running === 'transformToGridPositions'}
+        >
+          transformToGridPositions
         </Button>
       </div>
     </div>

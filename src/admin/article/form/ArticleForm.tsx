@@ -11,25 +11,27 @@ interface Props {}
 
 export const ArticleForm = observer((props: Props) => {
   const admin = useAdmin()
-  if (!admin.article) {
+  const { article } = admin
+
+  if (!article) {
     return null
   }
 
   return (
     <>
-      <article className={classnames(s.content, `type-${admin.article?.type}`)}>
-        {admin.article?.sortedSections.map((section, i) => (
+      <article className={classnames(s.content, `type-${article?.type}`)}>
+        {article.sections.map((section, i) => (
           <SectionEdit
-            first={i === 0}
-            key={section.sortOrder}
+            key={section.uid}
             section={section}
+            first={section.format.gridPosition.startRow === 1}
           />
         ))}
       </article>
 
       <AddSection
         onSelect={(section) => {
-          ArticleService.addSection(section, admin.article)
+          ArticleService.addSection(section, article)
           admin.setSection(section)
         }}
       />

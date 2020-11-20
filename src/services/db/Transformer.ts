@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { isArray, isNil } from 'lodash'
-import { Class } from '../types/Class'
+import { Class } from '../../types/Class'
 import {
   getTransformToDb,
   hasTransformToDb,
@@ -13,7 +13,7 @@ import {
   hasTransformToApp,
 } from './decorators/transformToApp.decorator'
 import { toJS } from 'mobx'
-import { getTransform } from './decorators/transform.decorator'
+import { getTransform, hasTransform } from './decorators/transform.decorator'
 import firebase from 'firebase'
 
 export class Transformer {
@@ -40,21 +40,29 @@ export class Transformer {
     const transformed = {}
 
     Object.keys(transformable).forEach((key) => {
-      if (
-        transformable[key] !== undefined &&
-        isField(transformable, key) &&
-        !isNil(transformable[key])
-      ) {
-        const hasType = !!getField(transformable, key).type
-        const toDb = getTransform(transformed, key)?.toDb
+      try {
+        if (
+          (transformable[key] !== undefined && isField(transformable, key)) ||
+          (hasTransform(transformable, key) && !isNil(transformable[key]))
+        ) {
+          const hasType = !!getField(transformable, key).type
+          const toDb =
+            hasTransform(transformable, key) &&
+            getTransform(transformable, key)?.toDb
 
-        transformed[key] = !!toDb
-          ? toDb(transformable[key])
-          : isArray(transformable[key])
-          ? Array.from(transformable[key]).map((arrayValue) =>
-              Transformer.transformValueToDb(arrayValue, hasType),
-            )
-          : Transformer.transformValueToDb(transformable[key], hasType)
+          transformed[key] = !!toDb
+            ? toDb(transformable[key])
+            : isArray(transformable[key])
+            ? Array.from(transformable[key]).map((arrayValue) =>
+                Transformer.transformValueToDb(arrayValue, hasType),
+              )
+            : Transformer.transformValueToDb(transformable[key], hasType)
+        }
+      } catch (e) {
+        console.error(
+          `Error when transforming field ${key} in ${transformable.constructor.name}`,
+        )
+        throw e
       }
     })
 
@@ -103,7 +111,7 @@ export class Transformer {
       return Transformer.toDb(fieldValue)
     }
 
-    if (typeof fieldValue === 'object') {
+    if (!isNil(fieldValue) && typeof fieldValue === 'object') {
       const returnValue = {}
       Object.keys(fieldValue)
         .filter((key) => fieldValue[key] !== undefined)

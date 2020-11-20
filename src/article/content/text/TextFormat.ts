@@ -4,14 +4,19 @@ import { HorizontalAlign } from '../../shared/HorizontalAlign'
 import { VerticalAlign } from '../../shared/VerticalAlign'
 import { Padding } from '../../shared/Padding'
 import { Format } from '../../shared/format/Format'
-import {FONT, FontFamily, FontSize, FontWeight} from '../../../styles/font'
-import {COLOR, ColorType} from '../../../styles/color'
-import {SPACING} from '../../../styles/layout'
+import { FONT, FontFamily, FontSize, FontWeight } from '../../../styles/font'
+import { COLOR, ColorType } from '../../../styles/color'
+import { SPACING } from '../../../styles/layout'
+import { GridPosition } from '../../grid/GridPosition'
 
-export class TextFormat implements Format {
+export class TextFormat extends Format {
   constructor(initial?: Partial<TextFormat>) {
-    initial && Object.keys(initial).forEach((key) => (this[key] = initial[key]))
+    super(initial)
   }
+
+  @field(GridPosition)
+  @observable
+  gridPosition: GridPosition
 
   @field()
   @observable
@@ -53,6 +58,9 @@ export class TextFormat implements Format {
   @observable
   padding = new Padding(SPACING.L)
 
+  /**
+   * @deprecated
+   */
   @field()
   @observable
   gridColumnWidth = 1

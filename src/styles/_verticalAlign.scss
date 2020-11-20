@@ -1,11 +1,14 @@
 @mixin verticalAlign {
   .vertical-align-TOP {
+    align-items: flex-start;
     align-self: flex-start;
   }
   .vertical-align-CENTER {
+    align-items: center;
     align-self: center;
   }
   .vertical-align-BOTTOM {
+    align-items: flex-end;
     align-self: flex-end;
   }
 }

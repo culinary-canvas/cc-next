@@ -1,4 +1,4 @@
-import { Class } from '../types/Class'
+import { Class } from '../../types/Class'
 import Month from './Month'
 import Year from './Year'
 

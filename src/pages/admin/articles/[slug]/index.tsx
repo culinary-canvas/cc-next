@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
-import { PlainObject } from '../../../../services/types/PlainObject'
+import { PlainObject } from '../../../../types/PlainObject'
 import { ArticleModel } from '../../../../article/Article.model'
 import { useTransform } from '../../../../hooks/useTransform'
 import { useFormControl } from '../../../../form/formControl/useFormControl'
@@ -29,7 +29,7 @@ export default function ArticleEdit({ articleData }) {
       admin.setSidebarOpen(true)
       admin.setFormControl(formControl)
       admin.setSection(formControl.mutable.titleSection)
-      admin.setContent(formControl.mutable.titleSection.sortedContents[0])
+      admin.setContent(formControl.mutable.titleSection.contents[0])
     }
   }, [formControl])
 

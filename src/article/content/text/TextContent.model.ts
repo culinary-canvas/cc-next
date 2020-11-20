@@ -1,13 +1,18 @@
 import { field } from '../../../services/db/decorators/field.decorator'
 import { observable } from 'mobx'
 import { TextFormat } from './TextFormat'
-import { Content } from '../Content'
+import { ContentModel } from '../ContentModel'
 import { ContentType } from '../ContentType'
+import {loremIpsum} from 'lorem-ipsum'
 
-export class TextContentModel extends Content {
+export class TextContentModel extends ContentModel<TextFormat> {
   @field()
   @observable
   value: string
+
+  @field()
+  @observable
+  placeholder: string
 
   @field(TextFormat)
   @observable
@@ -17,5 +22,6 @@ export class TextContentModel extends Content {
     super()
     this.format = new TextFormat()
     this.type = ContentType.PARAGRAPH
+    this.placeholder = loremIpsum({ units: 'paragraph', count: 1 })
   }
 }

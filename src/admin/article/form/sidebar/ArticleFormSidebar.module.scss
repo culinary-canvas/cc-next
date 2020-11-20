@@ -48,15 +48,14 @@
 
 .container {
   position: fixed;
-  display: flex;
   z-index: 10;
-  flex-direction: column;
   width: 0;
   height: 100vh;
-  background-color: $grey-light;
+  background-color: $grey-lighter;
   border-right: 1px solid $grey;
-  transition: all $animation-really-fast ease-in-out;
-  overflow: auto;
+  transition: all $animation-slow ease-in-out;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   &.open {
     @include sidebar-width();
@@ -68,20 +67,26 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 100%;
+    width: 100%;
 
+    > *:nth-child(2) {
+      padding-top: 4rem;
+    }
     > *:last-child {
       margin-bottom: 2rem;
     }
 
     .buttons {
+      position: fixed;
       display: flex;
       justify-content: center;
-      width: 100%;
-      border-bottom: 1px solid $grey-light;
+      @include sidebar-width();
+      z-index: 300;
+      background-color: $grey-lighter;
+      border-bottom: 1px solid $grey-lighter;
 
       button {
-        background-color: $grey-light;
+        background-color: $grey-lighter;
 
         &:not(:first-child) {
           margin-left: $spacing-m;

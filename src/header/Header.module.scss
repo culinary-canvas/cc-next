@@ -1,6 +1,8 @@
 @import '../styles/layout';
 @import '../styles/color';
 @import '../styles/font';
+@import '../styles/shadow';
+
 
 .container {
   position: absolute;
@@ -14,7 +16,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     height: $mobile-header-height;
-    background-color: $grey-light;
+    background-color: $grey-lighter;
   }
   //  border-bottom: 2px solid $black;
 }
@@ -44,7 +46,7 @@
   display: flex;
   align-items: center;
   padding: 1rem;
-  box-shadow: 0 0 20px 2px transparentize($black, 0.9);
+  box-shadow: $softCenteredShadow;
 
   @include media('<=phone') {
     max-width: 60vw;

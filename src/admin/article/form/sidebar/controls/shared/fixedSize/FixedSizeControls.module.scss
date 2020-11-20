@@ -1,0 +1,33 @@
+@import '../../../../../../../styles/controlButtons';
+@import '../../../../../../../styles/form';
+@import '../../../../../../../styles/font';
+
+.container {
+  @include control-buttons-container();
+  flex-direction: row;
+  position: relative;
+
+  > :first-child {
+    flex: 1;
+  }
+
+  > :last-child {
+    width: auto;
+    margin: 2px !important;
+    display: flex;
+    align-items: flex-end;
+    bottom: 30px;
+    position: relative;
+  }
+
+  label {
+    min-width: 4rem;
+  }
+  input[type='number'] {
+    width: 3.5rem !important;
+  }
+
+  img {
+    width: $icon-size-xs;
+  }
+}

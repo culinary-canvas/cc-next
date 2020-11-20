@@ -8,23 +8,26 @@ import { useAutorun } from '../../../../../hooks/useAutorun'
 import { FormatService } from '../../../../../article/shared/format/Format.service'
 import { classnames } from '../../../../../services/importHelpers'
 import { ImageEdit } from '../../../../../form/imageEdit/ImageEdit'
+import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
 
 interface Props {
   content: ImageContentModel
   section: SectionModel
   first: boolean
-  style?: CSSProperties
 }
 
 export const ImageContentEdit = observer((props: Props) => {
-  const { content, section, first = false, style } = props
+  const { content, section, first = false } = props
   const admin = useAdmin()
+
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
+  const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
     const { format } = content
     const height = FormatService.imageHeight(section, content)
     const width = FormatService.imageWidth(content)
+
     setFormatStyle({
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
@@ -35,6 +38,13 @@ export const ImageContentEdit = observer((props: Props) => {
     })
   }, [content, section, content.format])
 
+  useAutorun(() => {
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
+    setGridStyle(gridCss)
+  }, [content, section, content.format])
+
   return (
     <figure
       className={classnames([
@@ -43,12 +53,11 @@ export const ImageContentEdit = observer((props: Props) => {
         s[`vertical-align-${content.format.verticalAlign}`],
         {
           [s.inEdit]: admin.content.uid === content.uid,
-          [s.background]: content.format.background,
           [s.first]: first,
         },
       ])}
       style={{
-        ...style,
+        ...gridStyle,
       }}
     >
       <ImageEdit
@@ -56,7 +65,10 @@ export const ImageContentEdit = observer((props: Props) => {
         style={{
           ...formatStyle,
         }}
-        className={classnames([s.content])}
+        className={classnames([
+          s.content,
+          { [s.circle]: content.format.circle },
+        ])}
         onFocus={() => admin.setContent(content)}
         enableModal={admin.content.uid === content.uid}
         onChange={(set) => (content.set = set)}

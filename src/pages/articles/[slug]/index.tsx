@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleApi } from '../../../article/Article.api'
 import { useTransform } from '../../../hooks/useTransform'
-import { PlainObject } from '../../../services/types/PlainObject'
+import { PlainObject } from '../../../types/PlainObject'
 import s from './articlePage.module.scss'
 import { ContentType } from '../../../article/content/ContentType'
 import { TextContentModel } from '../../../article/content/text/TextContent.model'
@@ -34,7 +34,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
         imageAlt={article.imageContent.alt}
         title={article.title}
         description={
-          (article.titleSection.sortedContents.find(
+          (article.titleSection.contents.find(
             (c) => c.type === ContentType.SUB_HEADING,
           ) as TextContentModel)?.value
         }

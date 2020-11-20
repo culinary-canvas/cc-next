@@ -2,8 +2,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import s from './PaddingControls.module.scss'
 import { Slider } from '../../../../../../../form/slider/Slider'
-import { PaddingLinkedButton } from './PaddingLinkedButton'
-import {Padding} from '../../../../../../../article/shared/Padding'
+import { Padding } from '../../../../../../../article/shared/Padding'
+import { LinkedButton } from '../linkedButton/LinkedButton'
 
 interface Props {
   padding: Padding
@@ -28,8 +28,12 @@ export const PaddingControls = observer((props: Props) => {
         max={max}
         step={4}
       >
-        <PaddingLinkedButton property="top" padding={padding} />
+        <LinkedButton
+          linked={padding.topLinked}
+          onClick={() => padding.toggleLinked('top')}
+        />
       </Slider>
+
       <Slider
         label="Bottom"
         value={padding.bottom || 0}
@@ -41,21 +45,12 @@ export const PaddingControls = observer((props: Props) => {
         max={max}
         step={4}
       >
-        <PaddingLinkedButton property="bottom" padding={padding} />
+        <LinkedButton
+          linked={padding.bottomLinked}
+          onClick={() => padding.toggleLinked('bottom')}
+        />
       </Slider>
-      <Slider
-        label="Right"
-        value={padding.right || 0}
-        onChange={(v) => {
-          padding.setValue('right', v)
-          onChange(padding)
-        }}
-        min={0}
-        max={max}
-        step={4}
-      >
-        <PaddingLinkedButton property="right" padding={padding} />
-      </Slider>
+
       <Slider
         label="Left"
         value={padding.left || 0}
@@ -67,7 +62,27 @@ export const PaddingControls = observer((props: Props) => {
         max={max}
         step={4}
       >
-        <PaddingLinkedButton property="left" padding={padding} />
+        <LinkedButton
+          linked={padding.leftLinked}
+          onClick={() => padding.toggleLinked('left')}
+        />
+      </Slider>
+
+      <Slider
+        label="Right"
+        value={padding.right || 0}
+        onChange={(v) => {
+          padding.setValue('right', v)
+          onChange(padding)
+        }}
+        min={0}
+        max={max}
+        step={4}
+      >
+        <LinkedButton
+          linked={padding.rightLinked}
+          onClick={() => padding.toggleLinked('right')}
+        />
       </Slider>
     </div>
   )

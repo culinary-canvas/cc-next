@@ -13,6 +13,7 @@ import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from './ImageContent.model'
 import s from './ImageContent.module.scss'
 import { ImageService } from './Image.service'
+import { GridPositionService } from '../../grid/GridPosition.service'
 
 interface Props {
   content: ImageContentModel
@@ -26,6 +27,7 @@ export const ImageContent = observer((props: Props) => {
   const ref = useRef<HTMLElement>()
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
   const [loadImage, setLoadImage] = useState<boolean>(false)
+  const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
     const { format } = content
@@ -39,6 +41,13 @@ export const ImageContent = observer((props: Props) => {
       height,
       width,
     })
+  }, [content, section, content.format])
+
+  useAutorun(() => {
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
+    setGridStyle(gridCss)
   }, [content, section, content.format])
 
   const shouldLoadImage = useCallback(() => {
@@ -64,12 +73,12 @@ export const ImageContent = observer((props: Props) => {
         s[`horizontal-align-${content.format.horizontalAlign}`],
         s[`vertical-align-${content.format.verticalAlign}`],
         {
-          [s.background]: content.format.background,
           [s.first]: first,
         },
       ])}
       style={{
         ...style,
+        ...gridStyle
       }}
     >
       {loadImage && (
@@ -79,7 +88,9 @@ export const ImageContent = observer((props: Props) => {
           style={{
             ...formatStyle,
           }}
-          className={classnames([s.content])}
+          className={classnames(s.content, {
+            [s.circle]: content.format.circle,
+          })}
         />
       )}
     </figure>

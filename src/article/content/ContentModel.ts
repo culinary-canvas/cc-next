@@ -6,8 +6,10 @@ import { v4 as uuid } from 'uuid'
 import { Orientation } from '../shared/Orientation'
 import { ContentType } from './ContentType'
 import StringUtils from '../../services/utils/StringUtils'
+import { ArticlePart } from '../ArticlePart'
 
-export abstract class Content<T extends Format = any> {
+export abstract class ContentModel<T extends Format = Format>
+  implements ArticlePart {
   @transient()
   readonly uid: string
 
@@ -15,10 +17,9 @@ export abstract class Content<T extends Format = any> {
   @observable
   name: string
 
-  @field()
-  @observable
-  sortOrder: number
-
+  /**
+   * @deprecated
+   */
   @field()
   @observable
   alignToPrevious: Orientation
@@ -27,11 +28,17 @@ export abstract class Content<T extends Format = any> {
   @observable
   type: ContentType
 
+  /**
+   * @deprecated
+   */
+  @field()
+  @observable
+  sortOrder: number
+
   abstract format: T
 
   protected constructor() {
     this.uid = uuid()
-    this.alignToPrevious = Orientation.VERTICAL
   }
 
   @computed

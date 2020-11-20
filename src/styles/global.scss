@@ -34,8 +34,8 @@ body {
   min-height: 100vh;
   background: repeating-linear-gradient(
       -6deg,
-      #{$grey-light} 0,
-      #{$grey-light} 1500px,
+      #{$grey-lighter} 0,
+      #{$grey-lighter} 1500px,
       #{$pink} 500px,
       #{$pink} 2000px
     )

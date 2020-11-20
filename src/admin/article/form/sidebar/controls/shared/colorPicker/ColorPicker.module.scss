@@ -42,6 +42,15 @@
         opacity: 1;
       }
 
+      &.transparent:before {
+        content: '';
+        position: absolute;
+        display: block;
+        background-color: $red;
+        width: 2px;
+        height: calc(1.8rem - 6px);
+        transform: rotateZ(45deg) translateX(0.3rem) translateY(-0.45rem);
+      }
 
       button {
         width: 100%;
@@ -51,6 +60,7 @@
         box-shadow: none;
         border: none;
         outline: none;
+        cursor: pointer;
       }
     }
   }
