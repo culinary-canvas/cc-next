@@ -65,7 +65,9 @@ export class SectionModel implements ArticlePart {
   get displayName(): string {
     return (
       this.name ||
-      `Section (${this.format.gridPosition.startRow}:${this.format.gridPosition.startColumn})`
+      `Section (${this.format.gridPosition?.startRow || '?'}:${
+        this.format.gridPosition?.startColumn || '?'
+      })`
     )
   }
 }

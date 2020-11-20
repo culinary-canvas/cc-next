@@ -9,8 +9,9 @@ import { SectionModel } from '../../article/section/Section.model'
 import { ContentModel } from '../../article/content/ContentModel'
 import { GridPositionService } from '../../article/grid/GridPosition.service'
 import { ImageContentModel } from '../../article/content/image/ImageContent.model'
+import { toJS } from 'mobx'
 
-function setSectionGridPositions(s: SectionModel) {
+function setSectionGridPosition(s: SectionModel) {
   s.format.gridPosition = new GridPosition(
     s.format.fit === Fit.FULL_SCREEN || s.format.fit === Fit.SCREEN_WIDTH
       ? 1
@@ -90,7 +91,10 @@ function setContentLayers(contents: ContentModel[]) {
     contents.some((c) => c instanceof ImageContentModel && c.format.background)
   ) {
     contents.forEach((c) =>
-      GridPositionService.resetLayersInPosition(contents, c.format.gridPosition),
+      GridPositionService.autoSetLayersInPosition(
+        contents,
+        c.format.gridPosition,
+      ),
     )
 
     contents
@@ -103,15 +107,24 @@ function setContentLayers(contents: ContentModel[]) {
 export async function transformToGridPositions(user: User) {
   const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
   articles.forEach((a) => {
+    console.group(a.title)
     a.sections.forEach((s) => {
-      setSectionGridPositions(s)
+      console.log(`Transforming section ${s.displayName}...`, toJS(s))
+      setSectionGridPosition(s)
       setSectionHeight(s)
+      console.log(`Done`, toJS(s))
 
       for (let i = 0; i < s.contents.length; i++) {
+        const c = s.contents[i]
+        console.log(`Transforming content ${c.displayName}...`, toJS(c))
         setContentGridPosition(s, i)
-        setContentLayers(s.contents)
+        console.log(`Section ${s.displayName} done`, toJS(c))
       }
+      console.log(`Setting content layers...`, toJS(s))
+      setContentLayers(s.contents)
+      console.log(`Done!`, toJS(s))
     })
+    console.groupEnd()
   })
   return Promise.all(articles.map(async (a) => await ArticleApi.save(a, user)))
 }

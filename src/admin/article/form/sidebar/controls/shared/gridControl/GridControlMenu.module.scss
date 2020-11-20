@@ -7,10 +7,15 @@
   position: absolute;
   top: -14px;
   display: flex;
+  justify-content: space-evenly;
   z-index: 100;
   width: 100%;
-  padding: 0 0.2rem;
+  padding: 0.2rem 0.2rem;
   border-radius: 6px;
+
+  &:hover {
+    background-color: transparentize($white, 0.2);
+  }
 
   .section {
     display: flex;

@@ -16,7 +16,6 @@ import { classnames } from '../../../../../../services/importHelpers'
 import { useAdmin } from '../../../../../Admin'
 import { GridControl } from '../shared/gridControl/GridControl'
 import { runInAction } from 'mobx'
-import { ContentModel } from '../../../../../../article/content/ContentModel'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()

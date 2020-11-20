@@ -37,7 +37,6 @@ export const GridControlMenu = observer(
       onEditPosition,
     } = props
 
-    const [hovering, setHovering] = useState<string>()
     const [modalVisible, showModal] = useState<boolean>(false)
     const [isRowDownDisabled, disableRowDown] = useState<boolean>(false)
     const [isRowUpDisabled, disableRowUp] = useState<boolean>(false)
@@ -68,23 +67,20 @@ export const GridControlMenu = observer(
         <div className={classnames(s.menu)} style={{ gridRow: row }}>
           <section className={s.section}>
             <GridControlMenuButton
-              hovered={hovering}
-              onHover={(id) => setHovering(id)}
-              onBlur={() => setHovering(null)}
-              onClick={() =>
-                !gridMap.isRow(row + 1)
+              label="Add row"
+              onClick={() => {
+                const afterRow = !!part ? part.format.gridPosition.endRow : row
+                !gridMap.isRow(afterRow + 1)
                   ? gridMap.append()
-                  : GridPositionService.addRow(row, gridMap.parts)
-              }
+                  : GridPositionService.addRow(afterRow, gridMap.parts)
+              }}
             >
               +
             </GridControlMenuButton>
 
             <GridControlMenuButton
+              label="Delete row"
               disabled={isDeleteRowDisabled}
-              hovered={hovering}
-              onHover={(id) => setHovering(id)}
-              onBlur={() => setHovering(null)}
               onClick={() => {
                 if (!gridMap.isRow(row)) {
                   gridMap.removeAppended()
@@ -99,10 +95,8 @@ export const GridControlMenu = observer(
             </GridControlMenuButton>
 
             <GridControlMenuButton
+              label="Move row up"
               disabled={isRowUpDisabled}
-              hovered={hovering}
-              onHover={(id) => setHovering(id)}
-              onBlur={() => setHovering(null)}
               onClick={() => {
                 GridPositionService.moveUp(row, gridMap.parts)
                 onRowUpClick()
@@ -112,10 +106,8 @@ export const GridControlMenu = observer(
             </GridControlMenuButton>
 
             <GridControlMenuButton
+              label="Move row down"
               disabled={isRowDownDisabled}
-              hovered={hovering}
-              onHover={(id) => setHovering(id)}
-              onBlur={() => setHovering(null)}
               onClick={() => {
                 GridPositionService.moveDown(row, gridMap.parts)
                 onRowDownClick()
@@ -128,30 +120,24 @@ export const GridControlMenu = observer(
           {!!part && (
             <section className={s.section}>
               <GridControlMenuButton
+                label="Edit placement"
                 disabled={false}
-                hovered={hovering}
-                onHover={(id) => setHovering(id)}
-                onBlur={() => setHovering(null)}
                 onClick={() => onEditPosition()}
               >
                 <img src={EditPosition} />
               </GridControlMenuButton>
 
               <GridControlMenuButton
+                label="Bring forward"
                 disabled={isLayerUpDisabled}
-                hovered={hovering}
-                onHover={(id) => setHovering(id)}
-                onBlur={() => setHovering(null)}
                 onClick={() => GridPositionService.layerUp(part, gridMap.parts)}
               >
                 <img src={LayerUp} />
               </GridControlMenuButton>
 
               <GridControlMenuButton
+                label="Bring backward"
                 disabled={isLayerDownDisabled}
-                hovered={hovering}
-                onHover={(id) => setHovering(id)}
-                onBlur={() => setHovering(null)}
                 onClick={() =>
                   GridPositionService.layerDown(part, gridMap.parts)
                 }

@@ -58,8 +58,8 @@ export function useAdminState(): Admin {
   const setArticlePart = useCallback(
     (part: ArticlePart) => {
       if (!!article) {
-        const section = article.sections.find((s) => part.uid === s.uid)
-        if (section) {
+        if (part instanceof SectionModel) {
+          const section = article.sections.find((s) => part.uid === s.uid)
           setSection(section)
         } else {
           const content = article.contents.find((c) => part.uid === c.uid)

@@ -6,7 +6,7 @@
   .container {
     display: grid;
     justify-content: center;
-    grid-auto-rows: minmax(1rem, auto);
+    grid-template-rows: repeat(auto-fill, 1fr);
     grid-template-columns: repeat(4, 1fr);
     overflow: hidden;
 
@@ -17,6 +17,9 @@
 
     &.height-FULL_SCREEN {
       height: 100vh;
+      >*{
+        max-height: 100vh;
+      }
     }
 
     &.inEdit {

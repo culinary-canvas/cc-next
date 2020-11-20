@@ -121,6 +121,7 @@ export class GridPositionService {
   @action
   static addRow(afterRow: number, parts: ArticlePart[]) {
     const rows = this.numberOfRows(parts)
+
     for (let i = rows + 1; i > afterRow; i--) {
       const rowParts = this.partsStartingOnRow(parts, i)
       rowParts.forEach((p) => this._moveDown(p))
@@ -149,7 +150,7 @@ export class GridPositionService {
     }
   }
 
-  static resetLayersInPosition(
+  static autoSetLayersInPosition(
     parts: ArticlePart[],
     gridPosition: GridPosition,
   ) {

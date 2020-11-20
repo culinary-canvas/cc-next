@@ -9,6 +9,7 @@ import { GridControlMenu } from './GridControlMenu'
 import { observer } from 'mobx-react'
 import { GridSelect } from './GridSelect'
 import { GridLayout } from './GridLayout'
+import { toJS } from 'mobx'
 
 interface Props<T extends ArticlePart> {
   parts: T[]

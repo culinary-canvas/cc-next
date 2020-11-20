@@ -134,7 +134,7 @@ export class GridManager {
     )
     this.part.format.gridPosition = this.gridPosition
     Array.of(this.part, ...overlappingBefore).forEach((p) =>
-      GridPositionService.resetLayersInPosition(
+      GridPositionService.autoSetLayersInPosition(
         this.parts,
         p.format.gridPosition,
       ),
