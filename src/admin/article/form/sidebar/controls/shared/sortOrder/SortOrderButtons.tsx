@@ -3,8 +3,8 @@ import { observer } from 'mobx-react'
 import { Button } from '../../../../../../../form/button/Button'
 import { runInAction } from 'mobx'
 import s from './SortOrderButtons.module.scss'
-import '../../../../../../../services/types/Sortable'
-import {Sortable} from '../../../../../../../services/types/Sortable'
+import '../../../../../../../types/Sortable'
+import {Sortable} from '../../../../../../../types/Sortable'
 
 interface Props<T extends Sortable> {
   target: T

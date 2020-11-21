@@ -32,14 +32,9 @@ body {
   align-items: center;
   height: 100%;
   min-height: 100vh;
-  background: repeating-linear-gradient(
-      -6deg,
-      #{$grey-light} 0,
-      #{$grey-light} 1500px,
-      #{$pink} 500px,
-      #{$pink} 2000px
-    )
-    top;
+  background-image: url("/assets/ccbg.png");
+  background-size: 100% auto;
+  background-repeat: repeat-y;
 
   > * {
     transition: transform $animation-really-fast ease-in-out,

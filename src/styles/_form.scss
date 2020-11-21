@@ -82,7 +82,7 @@
   &:disabled,
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.1 !important;
+    opacity: 0.3;
   }
 
   &:not(:disabled):not(.disabled) {
@@ -125,7 +125,7 @@
   &:disabled,
   &.disabled {
     cursor: not-allowed;
-    opacity: 0.1 !important;
+    opacity: 0.3;
   }
 
   &:not(:disabled):not(.disabled) {

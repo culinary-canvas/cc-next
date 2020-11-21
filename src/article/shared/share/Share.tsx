@@ -36,14 +36,6 @@ export const Share = (props: Props) => {
 
   return (
     <>
-      {/*
-      <HelmetMetaData
-        quote={quote}
-        image={image}
-        description={description}
-        hashtag={hashtag}
-      />
-*/}
       <section className={classnames(s.container, containerClassName)}>
         <EmailShareButton
           url={url}

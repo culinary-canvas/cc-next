@@ -1,0 +1,36 @@
+@import '../../../../../../../styles/color';
+@import '../../../../../../../styles/font';
+@import '../../../../../../../styles/article';
+@import '../../../../../../../styles/shadow';
+@import '../../../../../../../styles/controlButtons';
+
+@mixin gridCell() {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: unset;
+  min-height: 2.2rem;
+  border-radius: 4px !important;
+  transition: all 150ms ease-in-out;
+
+  &.fullScreenHeight {
+    min-height: 6.6rem;
+  }
+
+  &.hover {
+    box-shadow: $centeredShadow;
+    &:not(.inFocus){
+      border-color: $grey !important;
+    }
+  }
+
+  .name {
+    position: absolute;
+    z-index: 2;
+    padding: 1px 4px;
+    background-color: $white;
+    font-size: 8px;
+    overflow: visible;
+  }
+}

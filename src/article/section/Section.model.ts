@@ -1,18 +1,16 @@
-import { computed, observable, toJS } from 'mobx'
+import { computed, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { transient } from '../../services/db/decorators/transient.decorator'
 import { v1 as uuid } from 'uuid'
 import { SectionFormat } from './SectionFormat'
-import { Content } from '../content/Content'
+import { ContentModel } from '../content/ContentModel'
 import { Orientation } from '../shared/Orientation'
 import { SectionPreset } from './SectionPreset'
-import { ImageContentModel } from '../content/image/ImageContent.model'
-import { Transformer } from '../../services/db/Transformer'
-import { TextContentModel } from '../content/text/TextContent.model'
 import { transform } from '../../services/db/decorators/transform.decorator'
-import { ContentType } from '../content/ContentType'
+import { ArticlePart } from '../ArticlePart'
+import { SectionService } from './Section.service'
 
-export class SectionModel {
+export class SectionModel implements ArticlePart {
   @transient()
   uid = uuid()
 
@@ -28,35 +26,28 @@ export class SectionModel {
   @observable
   preset: SectionPreset
 
-  @field(TextContentModel)
-  @transform<Content[]>({
-    toApp: (objects) =>
-      objects?.map((o) =>
-        Transformer.toApp<Content>(
-          o,
-          !!o.type && o.type === ContentType.IMAGE ? ImageContentModel : TextContentModel,
-        ),
-      ),
-    toDb: (objects) => objects?.map((o) => Transformer.toDb(o)),
+  @field()
+  @transform<ContentModel[]>({
+    toApp: SectionService.contentsToApp,
+    toDb: SectionService.contentsToDb,
   })
   @observable
-  contents: Content[] = []
+  contents: ContentModel[] = []
 
+  /**
+   * @deprecated
+   */
   @field()
   @observable
   sortOrder: number
 
+  /**
+   * @deprecated
+   */
   @computed
-  get sortedContents() {
-    return this.contents
-      ? [...this.contents].sort((s1, s2) => s1.sortOrder - s2.sortOrder)
-      : []
-  }
-
-  @computed
-  get columns(): Content[][] {
+  get columns(): ContentModel[][] {
     return (
-      this.sortedContents?.reduce<Content[][]>((columns, content, i) => {
+      this.contents?.reduce<ContentModel[][]>((columns, content, i) => {
         if (i === 0) {
           return [[content]]
         }
@@ -71,15 +62,12 @@ export class SectionModel {
   }
 
   @computed
-  get rowsLength(): number {
-    return this.columns.reduce<number>(
-      (max, col) => (col.length > max ? col.length : max),
-      0,
-    )
-  }
-
-  @computed
   get displayName(): string {
-    return this.name || `Section (${this.sortOrder})`
+    return (
+      this.name ||
+      `Section (${this.format.gridPosition?.startRow || '?'}:${
+        this.format.gridPosition?.startColumn || '?'
+      })`
+    )
   }
 }

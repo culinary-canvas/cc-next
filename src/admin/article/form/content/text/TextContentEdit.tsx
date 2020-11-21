@@ -4,26 +4,34 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
 import { useAdmin } from '../../../../Admin'
 import { useAutorun } from '../../../../../hooks/useAutorun'
-import { TextContentService } from '../../../../../article/content/text/TextContent.service'
 import { classnames } from '../../../../../services/importHelpers'
 import s from './TextContentEdit.module.scss'
+import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
 
 interface Props {
   content: TextContentModel
-  style?: CSSProperties
 }
 
 export const TextContentEdit = observer((props: Props) => {
-  const { content, style } = props
+  const { content } = props
   const admin = useAdmin()
   const textareaRef = useRef<HTMLTextAreaElement>()
-  const [placeholder, setPlaceholder] = useState<string>()
-  const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
+
+  const [style, setStyle] = useState<CSSProperties>({})
+
+  useEffect(() => {
+    if (!!textareaRef.current && admin.content.uid === content.uid) {
+      textareaRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [admin.content, content, textareaRef])
 
   useAutorun(() => {
     const { format } = content
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
 
-    setFormatStyle({
+    setStyle({
       color: format.color,
       fontWeight: format.fontWeight,
       fontSize: `${format.fontSize}px`,
@@ -32,12 +40,9 @@ export const TextContentEdit = observer((props: Props) => {
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
+      ...gridCss,
     })
   }, [content.format])
-
-  useEffect(() => {
-    setPlaceholder(TextContentService.placeholder(content.type))
-  }, [content.type])
 
   return (
     <TextareaAutosize
@@ -55,10 +60,10 @@ export const TextContentEdit = observer((props: Props) => {
         },
       ])}
       value={content.value}
-      style={{ ...formatStyle, ...style } as any}
+      style={{ ...style } as any}
       onFocus={() => admin.setContent(content)}
       onChange={(v) => (content.value = v.target.value)}
-      placeholder={placeholder}
+      placeholder={content.placeholder}
     />
   )
 })

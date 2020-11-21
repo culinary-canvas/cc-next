@@ -39,17 +39,17 @@ export const ArticlePreview = observer((props: Props) => {
   })
 
   useEffect(() => {
-    const image = article.sortedSections[0].sortedContents.find(
+    const image = article.sections[0].contents.find(
       (c) => c.type === ContentType.IMAGE,
     ) as ImageContentModel
 
-    const subHeading = article.sortedSections[0].sortedContents.find(
+    const subHeading = article.sections[0].contents.find(
       (c) => c.type === ContentType.SUB_HEADING,
     ) as TextContentModel
 
     setImageContent(image)
     setSubHeadingContent(subHeading)
-  }, [article.sortedContents, article.sortedSections])
+  }, [article.contents, article.sections])
 
   return (
     <article

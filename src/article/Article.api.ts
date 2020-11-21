@@ -3,7 +3,7 @@ import { User } from 'firebase'
 import { initFirebase } from '../services/firebase/Firebase.service'
 import { Transformer } from '../services/db/Transformer'
 import { Api } from '../services/api/Api'
-import type { PlainObject } from '../services/types/PlainObject'
+import type { PlainObject } from '../types/PlainObject'
 import { ArticleService } from './Article.service'
 import { SortableService } from '../services/sortable/Sortable.service'
 import { isNil } from '../services/importHelpers'
@@ -127,15 +127,7 @@ export class ArticleApi {
       article.sortOrder = (await ArticleApi.all()).length
     }
 
-    onProgress(0.7, 'Sorting...')
-    article.sections = SectionService.sort(article.sections)
-
-    onProgress(0.75)
-    article.sections.forEach(
-      (section) => (section.contents = ContentService.sort(section.contents)),
-    )
-
-    onProgress(0.8)
+    onProgress(0.95)
     const id = await Api.save(article, user)
 
     onProgress(1, 'Done!')

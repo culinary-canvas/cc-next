@@ -4,13 +4,16 @@
 
 .article {
   padding-bottom: 1rem;
-  box-shadow: 0 0 40px 2px transparentize($black, 0.85);
   background-color: $white;
   border-radius: 12px;
   overflow: hidden;
 
   &:hover {
-    box-shadow: 0 0 40px 5px transparentize($black, 0.7);
+    box-shadow: 0 0 50px 2px transparentize($black, 0.90);
+
+    .created {
+      opacity: 1 !important;
+    }
   }
 
   &,
@@ -19,7 +22,7 @@
       transform $animation-slow ease-in-out;
   }
 
-  .hide {
+  .newRow {
     display: none;
   }
 
@@ -117,6 +120,8 @@
     .created {
       color: $grey;
       font-size: $font-size-s;
+      opacity: 0;
+      transition: all $animation-medium ease-out;
 
       @include media('<=phone') {
         font-size: $font-size-xs;

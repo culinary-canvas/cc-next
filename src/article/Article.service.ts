@@ -7,6 +7,8 @@ import { SectionPreset } from './section/SectionPreset'
 import StringUtils from '../services/utils/StringUtils'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { StorageService } from '../services/storage/Storage.service'
+import { GridPositionService } from './grid/GridPosition.service'
+import { GridPosition } from './grid/GridPosition'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = [
@@ -24,36 +26,37 @@ export class ArticleService {
     article.type = type
 
     const section = new SectionModel()
-    section.sortOrder = 0
-    SectionService.applyPreset(
-      SectionPreset.HALF_SCREEN_IMAGE_TITLE_SUB_BYLINE,
-      section,
-    )
+    SectionService.applyPreset(SectionPreset.HALF_SCREEN_TITLE, section)
     article.sections = [section]
     return article
   }
 
   @action
   static addSection(section: SectionModel, article: ArticleModel) {
-    section.sortOrder = article.sections.length
+    if (!section.format.gridPosition) {
+      const row = GridPositionService.numberOfRows(article.sections) + 1
+      section.format.gridPosition = new GridPosition(2, 6, row, row + 1)
+    } else {
+      GridPositionService.addRow(
+        section.format.gridPosition.startRow,
+        article.sections,
+      )
+      section.format.gridPosition.startRow += 1
+      section.format.gridPosition.endRow += 1
+    }
     article.sections.push(section)
   }
 
-  static moveSection(section: SectionModel, newSortOrder: number, article: ArticleModel) {
-    article.sections.find(
-      (s) => s.uid !== section.uid && s.sortOrder === newSortOrder,
-    ).sortOrder = section.sortOrder
-    section.sortOrder = newSortOrder
-  }
-
   static removeSection(section: SectionModel, article: ArticleModel) {
-    article.sections = article.sections
-      .sort((s1, s2) => s1.sortOrder - s2.sortOrder)
-      .filter((s) => s.uid !== section.uid)
-      .map((s, i) => {
-        s.sortOrder = i
-        return s
-      })
+    const row = section.format.gridPosition.startRow
+    if (
+      GridPositionService.partsStartingOnRow(article.sections, row).length ===
+        1 &&
+      GridPositionService.numberOfRows(article.sections) > 1
+    ) {
+      GridPositionService.deleteRow(row, article.sections)
+    }
+    article.sections = article.sections.filter((s) => s.uid !== section.uid)
   }
 
   static createSlug(article: ArticleModel) {

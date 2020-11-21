@@ -1,4 +1,4 @@
-import {Sortable} from '../types/Sortable'
+import {Sortable} from '../../types/Sortable'
 import {isNil} from '../importHelpers'
 
 export class SortableService {

@@ -6,10 +6,10 @@ import { ContentType } from './content/ContentType'
 import { field } from '../services/db/decorators/field.decorator'
 import { collection } from '../services/db/decorators/collection.decorator'
 import { TextContentModel } from './content/text/TextContent.model'
-import { Content } from './content/Content'
+import { ContentModel } from './content/ContentModel'
 import DateTime from '../services/dateTime/DateTime'
 import { ImageContentModel } from './content/image/ImageContent.model'
-import { Sortable } from '../services/types/Sortable'
+import { Sortable } from '../types/Sortable'
 
 @collection('articles')
 export class ArticleModel implements Model, Sortable {
@@ -83,16 +83,8 @@ export class ArticleModel implements Model, Sortable {
   @field()
   slug: string
 
-  @computed get sortedSections(): SectionModel[] {
-    return [...this.sections].sort((s1, s2) => s1.sortOrder - s2.sortOrder)
-  }
-
-  @computed get contents(): Content[] {
+  @computed get contents(): ContentModel[] {
     return this.sections.flatMap((s) => s.contents)
-  }
-
-  @computed get sortedContents(): Content[] {
-    return this.sortedSections.flatMap((s) => s.sortedContents)
   }
 
   @computed get titleSection(): SectionModel {
@@ -110,13 +102,13 @@ export class ArticleModel implements Model, Sortable {
   }
 
   @computed get subHeading(): string {
-    return (this.titleSection.sortedContents.find(
+    return (this.titleSection.contents.find(
       (c) => c.type === ContentType.SUB_HEADING,
     ) as TextContentModel)?.value
   }
 
   @computed get imageContent(): ImageContentModel {
-    return this.sortedContents.find(
+    return this.contents.find(
       (c) => c instanceof ImageContentModel,
     ) as ImageContentModel
   }

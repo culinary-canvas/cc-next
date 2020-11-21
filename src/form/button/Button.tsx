@@ -41,7 +41,7 @@ export const Button = observer((props: Props) => {
 
   return (
     <button
-      onClick={(e) => !disabled && onClick(e)}
+      onClick={(e) => !disabled && !!onClick && onClick(e)}
       style={{
         borderColor: color,
         color,
@@ -58,6 +58,7 @@ export const Button = observer((props: Props) => {
       ])}
       title={title}
       {...restProps}
+      disabled={disabled}
     >
       {loading ? (
         <>

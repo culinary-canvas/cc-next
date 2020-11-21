@@ -22,7 +22,7 @@ export default function ArticleEdit({ articleData }) {
       admin.setSidebarOpen(true)
       admin.setFormControl(formControl)
       admin.setSection(formControl.mutable.titleSection)
-      admin.setContent(formControl.mutable.titleSection.sortedContents[0])
+      admin.setContent(formControl.mutable.titleSection.contents[0])
     }
   }, [formControl])
 

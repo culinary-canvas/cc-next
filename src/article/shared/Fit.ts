@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 export enum Fit {
   ARTICLE = 'ARTICLE',
   SCREEN_WIDTH = 'SCREEN_WIDTH',

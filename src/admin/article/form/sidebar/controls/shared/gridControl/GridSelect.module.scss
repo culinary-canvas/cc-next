@@ -1,0 +1,19 @@
+@import '../../../../../../../styles/color';
+@import '../../../../../../../styles/font';
+@import '../../../../../../../styles/article';
+@import '../../../../../../../styles/shadow';
+@import '../../../../../../../styles/controlButtons';
+@import 'gridCell';
+@import 'grid';
+
+.button {
+  @include gridCell();
+  border-color: $grey;
+  border-style: solid;
+  border-width: 2px;
+  z-index: 50;
+
+  &:hover {
+    background-color: transparentize($blue, 0.7);
+  }
+}

@@ -3,10 +3,10 @@ import { field } from '../../../services/db/decorators/field.decorator'
 import { ImageSet } from './ImageSet'
 import { transient } from '../../../services/db/decorators/transient.decorator'
 import { ImageFormat } from './ImageFormat'
-import { Content } from '../Content'
+import { ContentModel } from '../ContentModel'
 import { ContentType } from '../ContentType'
 
-export class ImageContentModel extends Content {
+export class ImageContentModel extends ContentModel<ImageFormat> {
   @field(ImageSet)
   @observable
   set: ImageSet

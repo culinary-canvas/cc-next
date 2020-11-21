@@ -1,12 +1,13 @@
 @import 'color';
 @import 'layout';
+@import 'shadow';
 
 @mixin sectionContainer {
   .container {
     display: grid;
     justify-content: center;
-    grid-auto-columns: 1fr;
-    grid-auto-rows: minmax(1rem, auto);
+    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     overflow: hidden;
 
     &,
@@ -14,12 +15,24 @@
       outline: none;
     }
 
+    &.height-FULL_SCREEN {
+      height: 100vh;
+      >*{
+        max-height: 100vh;
+      }
+    }
+
     &.inEdit {
       border: 4px solid $yellow;
     }
 
+    &.shadow {
+      box-shadow: $softCenteredShadow;
+    }
+
     @include media('<=phone') {
       grid-auto-rows: minmax(1rem, auto);
+      grid-column-end: 2 !important;
       grid-column-start: 1 !important;
       grid-template-columns: 100vw !important;
       width: 100vw;

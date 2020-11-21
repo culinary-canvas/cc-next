@@ -5,6 +5,7 @@ import { classnames } from '../../../services/importHelpers'
 import { ContentType } from '../ContentType'
 import s from './TextContent.module.scss'
 import { useAutorun } from '../../../hooks/useAutorun'
+import { GridPositionService } from '../../grid/GridPosition.service'
 
 interface Props {
   content: TextContentModel
@@ -18,6 +19,9 @@ export const TextContent = observer((props: Props) => {
 
   useAutorun(() => {
     const { format } = content
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
 
     setFormatStyle({
       color: format.color,
@@ -28,6 +32,7 @@ export const TextContent = observer((props: Props) => {
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
+      ...gridCss,
     })
   }, [content.format])
 

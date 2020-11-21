@@ -1,14 +1,15 @@
 import { ArticleModel } from '../article/Article.model'
 import { SectionModel } from '../article/section/Section.model'
-import { Content } from '../article/content/Content'
+import { ContentModel } from '../article/content/ContentModel'
 import { FormControl } from '../form/formControl/FormControl'
 import {
   createContext,
   useCallback,
   useContext,
-  useMemo,
+  useEffect,
   useState,
 } from 'react'
+import { ArticlePart } from '../article/ArticlePart'
 
 export interface Admin {
   readonly showUnpublishedOnStartPage: boolean
@@ -21,8 +22,9 @@ export interface Admin {
   readonly setFormControl: (v: FormControl<ArticleModel>) => void
   readonly section: SectionModel
   readonly setSection: (v: SectionModel) => void
-  readonly content: Content
-  readonly setContent: (v: Content) => void
+  readonly content: ContentModel
+  readonly setContent: (v: ContentModel) => void
+  readonly setArticlePart: (v: ArticlePart) => void
   readonly article: ArticleModel
   readonly reset: () => void
 }
@@ -35,8 +37,38 @@ export function useAdminState(): Admin {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [formControl, setFormControl] = useState<FormControl<ArticleModel>>()
   const [section, setSection] = useState<SectionModel>()
-  const [content, setContent] = useState<Content>()
-  const article = useMemo(() => formControl?.mutable, [formControl])
+  const [content, _setContent] = useState<ContentModel>()
+  const [article, setArticle] = useState<ArticleModel>()
+
+  useEffect(() => setArticle(formControl?.mutable), [formControl])
+
+  const setContent = useCallback(
+    (content: ContentModel) => {
+      _setContent(content)
+      if (!!article) {
+        const section = article.sections.find((s) =>
+          s.contents.some((c) => c.uid === content.uid),
+        )
+        setSection(section)
+      }
+    },
+    [article, _setContent, setSection],
+  )
+
+  const setArticlePart = useCallback(
+    (part: ArticlePart) => {
+      if (!!article) {
+        if (part instanceof SectionModel) {
+          const section = article.sections.find((s) => part.uid === s.uid)
+          setSection(section)
+        } else {
+          const content = article.contents.find((c) => part.uid === c.uid)
+          setContent(content)
+        }
+      }
+    },
+    [article, setSection, setContent],
+  )
 
   const reset = useCallback(() => {
     setSidebar(false)
@@ -59,6 +91,7 @@ export function useAdminState(): Admin {
     setSection,
     content,
     setContent,
+    setArticlePart,
     article,
     reset,
   }
