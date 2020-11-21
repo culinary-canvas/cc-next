@@ -2,6 +2,7 @@
 @import '../styles/animation';
 @import '../styles/color';
 @import '../styles/font';
+@import '../styles/shadow';
 
 .menu {
   display: flex;
@@ -10,6 +11,7 @@
   max-width: 48px;
   padding: 0.5rem;
   transition: all $animation-fast ease-in;
+  box-shadow: $softCenteredShadow;
 
   * {
     font-family: $font-family-forma;

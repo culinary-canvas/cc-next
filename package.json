@@ -12,7 +12,6 @@
     "release:stage": "./release-stage.sh"
   },
   "dependencies": {
-    "@webdeb/next-styles": "^1.1.0",
     "classnames": "^2.2.6",
     "compressorjs": "^1.0.6",
     "dayjs": "^1.8.29",

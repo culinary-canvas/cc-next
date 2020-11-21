@@ -59,6 +59,7 @@
   }
 }
 .navMeta {
+  box-shadow: $softCenteredShadow;
   @include media('<=phone') {
     display: none;
   }
