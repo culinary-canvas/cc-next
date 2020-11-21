@@ -9,6 +9,8 @@ import { ArticleService } from '../../../../../article/Article.service'
 import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
 import { ContentControls } from './content/ContentControls'
 import { useAdmin } from '../../../../Admin'
+import { ContentService } from '../../../../../article/content/Content.service'
+import { SectionService } from '../../../../../article/section/Section.service'
 
 export const Controls = observer(() => {
   const admin = useAdmin()
@@ -56,7 +58,7 @@ export const Controls = observer(() => {
           showAdd
           onAdd={() => {
             const newContent = new TextContentModel()
-            admin.section.contents.push(newContent)
+            ContentService.addContent(newContent, admin.section)
             admin.setContent(newContent)
           }}
         >

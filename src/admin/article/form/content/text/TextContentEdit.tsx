@@ -1,4 +1,4 @@
-import React, { CSSProperties, useRef, useState } from 'react'
+import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import TextareaAutosize from 'react-textarea-autosize'
 import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
@@ -18,6 +18,12 @@ export const TextContentEdit = observer((props: Props) => {
   const textareaRef = useRef<HTMLTextAreaElement>()
 
   const [style, setStyle] = useState<CSSProperties>({})
+
+  useEffect(() => {
+    if (!!textareaRef.current && admin.content.uid === content.uid) {
+      textareaRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [admin.content, content, textareaRef])
 
   useAutorun(() => {
     const { format } = content

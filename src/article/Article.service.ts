@@ -8,6 +8,7 @@ import StringUtils from '../services/utils/StringUtils'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { StorageService } from '../services/storage/Storage.service'
 import { GridPositionService } from './grid/GridPosition.service'
+import { GridPosition } from './grid/GridPosition'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = [
@@ -32,22 +33,25 @@ export class ArticleService {
 
   @action
   static addSection(section: SectionModel, article: ArticleModel) {
-    const afterRow =
-      section.format.gridPosition?.startRow ||
-      GridPositionService.numberOfRows(article.sections)
-
-    GridPositionService.addRow(afterRow, article.sections)
-
-    section.format.gridPosition.startRow += 1
-    section.format.gridPosition.endRow += 1
+    if (!section.format.gridPosition) {
+      const row = GridPositionService.numberOfRows(article.sections) + 1
+      section.format.gridPosition = new GridPosition(2, 6, row, row + 1)
+    } else {
+      GridPositionService.addRow(
+        section.format.gridPosition.startRow,
+        article.sections,
+      )
+      section.format.gridPosition.startRow += 1
+      section.format.gridPosition.endRow += 1
+    }
     article.sections.push(section)
   }
 
   static removeSection(section: SectionModel, article: ArticleModel) {
     const row = section.format.gridPosition.startRow
     if (
-      GridPositionService.partsStartingOnRow(article.sections, row).length === 1
-      &&
+      GridPositionService.partsStartingOnRow(article.sections, row).length ===
+        1 &&
       GridPositionService.numberOfRows(article.sections) > 1
     ) {
       GridPositionService.deleteRow(row, article.sections)

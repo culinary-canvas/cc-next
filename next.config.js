@@ -1,18 +1,10 @@
 const withImages = require('next-images')
-const withStyles = require('@webdeb/next-styles')
 
-module.exports = withImages(
-  withStyles({
-    sass: true,
-    modules: true,
-    sassLoaderOptions: {
-      sassOptions: {
-        includePaths: ['src/styles'],
-      },
-    },
-    miniCssExtractOptions: { ignoreOrder: true },
-  }),
-)
+module.exports = withImages({
+  sassOptions: {
+    includePaths: ['src/styles'],
+  },
+})
 
 /*
  * Uncomment to get webpack config in startup log

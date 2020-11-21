@@ -3,7 +3,7 @@ import { observable } from 'mobx'
 import { TextFormat } from './TextFormat'
 import { ContentModel } from '../ContentModel'
 import { ContentType } from '../ContentType'
-import {loremIpsum} from 'lorem-ipsum'
+import { loremIpsum } from 'lorem-ipsum'
 
 export class TextContentModel extends ContentModel<TextFormat> {
   @field()
@@ -16,11 +16,10 @@ export class TextContentModel extends ContentModel<TextFormat> {
 
   @field(TextFormat)
   @observable
-  format: TextFormat
+  format = new TextFormat()
 
   constructor() {
     super()
-    this.format = new TextFormat()
     this.type = ContentType.PARAGRAPH
     this.placeholder = loremIpsum({ units: 'paragraph', count: 1 })
   }

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react'
+import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import { SectionModel } from '../../../../article/section/Section.model'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../../hooks/useAutorun'
@@ -21,6 +21,13 @@ export const SectionEdit = observer((props: Props) => {
   const { section, first } = props
 
   const [style, setStyle] = useState<CSSProperties>()
+  const ref = useRef<HTMLElement>()
+
+  useEffect(() => {
+    if (!!ref.current && admin.section.uid === section.uid) {
+      ref.current.scrollIntoView({behavior: 'smooth'})
+    }
+  }, [admin.section, section, ref])
 
   useAutorun(() => {
     const css: CSSProperties = {}
@@ -36,6 +43,7 @@ export const SectionEdit = observer((props: Props) => {
   return (
     <>
       <section
+        ref={ref}
         role="button"
         tabIndex={0}
         onClick={() => admin.setSection(section)}
