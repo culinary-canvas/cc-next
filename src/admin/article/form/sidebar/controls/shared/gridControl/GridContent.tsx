@@ -63,7 +63,7 @@ export const GridContent = observer(
           onMouseDown={() => !!onMouseDown && onMouseDown()}
           onMouseUp={() => !!onMouseUp && onMouseUp()}
         >
-          {!!part && <span className={s.name}>{part.format.layer}</span>}
+          {!!part && <span className={s.name}>{part.displayName}</span>}
         </button>
       </>
     )
