@@ -9,15 +9,20 @@
     width: 100%;
     height: 100%;
 
+    &.fit-COVER .content {
+      object-fit: cover;
+    }
+
+    &.fit-CONTAIN .content {
+      object-fit: contain;
+    }
+
     .content {
       width: 100%;
       height: 100%;
-      object-fit: cover;
 
       &.circle {
-        width: 100%;
-        height: auto;
-        border-radius: 100%;
+        clip-path: circle();
       }
     }
   }
@@ -41,7 +46,7 @@
         }
       }
 
-      &:not(.first) {
+      &:not(.first, .circle) {
         .content {
           width: unset !important;
           height: unset !important;

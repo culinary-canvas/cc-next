@@ -36,11 +36,22 @@ export function useAdminState(): Admin {
   const [sidebar, setSidebar] = useState<boolean>(false)
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [formControl, setFormControl] = useState<FormControl<ArticleModel>>()
-  const [section, setSection] = useState<SectionModel>()
+  const [section, _setSection] = useState<SectionModel>()
   const [content, _setContent] = useState<ContentModel>()
   const [article, setArticle] = useState<ArticleModel>()
 
   useEffect(() => setArticle(formControl?.mutable), [formControl])
+
+  const setSection = useCallback(
+    (s: SectionModel) => {
+      const previousUid = section?.uid
+      _setSection(s)
+      if (!!previousUid && s.uid !== previousUid) {
+        _setContent(s?.contents[0])
+      }
+    },
+    [section],
+  )
 
   const setContent = useCallback(
     (content: ContentModel) => {
@@ -49,10 +60,10 @@ export function useAdminState(): Admin {
         const section = article.sections.find((s) =>
           s.contents.some((c) => c.uid === content.uid),
         )
-        setSection(section)
+        _setSection(section)
       }
     },
-    [article, _setContent, setSection],
+    [article, _setContent, _setSection],
   )
 
   const setArticlePart = useCallback(

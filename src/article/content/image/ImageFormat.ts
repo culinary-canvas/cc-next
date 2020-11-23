@@ -5,7 +5,8 @@ import { HorizontalAlign } from '../../shared/HorizontalAlign'
 import { VerticalAlign } from '../../shared/VerticalAlign'
 import { SPACING } from '../../../styles/layout'
 import { GridPosition } from '../../grid/GridPosition'
-import {Format} from '../../shared/format/Format'
+import { Format } from '../../shared/format/Format'
+import { ImageFit } from './ImageFit'
 
 export class ImageFormat extends Format {
   constructor(initial?: Partial<ImageFormat>) {
@@ -15,13 +16,6 @@ export class ImageFormat extends Format {
   @observable
   gridPosition: GridPosition
 
-  /**
-   * @deprecated
-   * */
-  @field()
-  @observable
-  size: number
-
   @field()
   @observable
   fixedWidth: number
@@ -29,6 +23,10 @@ export class ImageFormat extends Format {
   @field()
   @observable
   fixedHeight: number
+
+  @field()
+  @observable
+  fit = ImageFit.COVER
 
   @field()
   @observable

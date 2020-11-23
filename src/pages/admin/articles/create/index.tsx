@@ -5,7 +5,6 @@ import { useFormControl } from '../../../../form/formControl/useFormControl'
 import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
 import { ArticleService } from '../../../../article/Article.service'
 import { useAdmin } from '../../../../admin/Admin'
-import { useAuth } from '../../../../services/auth/Auth'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 export default function ArticleEdit({ articleData }) {

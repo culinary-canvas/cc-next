@@ -4,9 +4,7 @@ import { ArticleControls } from './article/ArticleControls'
 import { SectionControls } from './section/SectionControls'
 import s from './Controls.module.scss'
 import { Tabs } from '../../../../../shared/tabs/Tabs'
-import { SectionModel } from '../../../../../article/section/Section.model'
 import { ArticleService } from '../../../../../article/Article.service'
-import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
 import { ContentControls } from './content/ContentControls'
 import { useAdmin } from '../../../../Admin'
 import { ContentService } from '../../../../../article/content/Content.service'
@@ -36,7 +34,7 @@ export const Controls = observer(() => {
         }
         showAdd
         onAdd={() => {
-          const newSection = new SectionModel()
+          const newSection = SectionService.create()
           ArticleService.addSection(newSection, admin.article)
           admin.setSection(newSection)
         }}
@@ -57,8 +55,8 @@ export const Controls = observer(() => {
           }
           showAdd
           onAdd={() => {
-            const newContent = new TextContentModel()
-            ContentService.addContent(newContent, admin.section)
+            const newContent = ContentService.create()
+            SectionService.addContent(newContent, admin.section)
             admin.setContent(newContent)
           }}
         >

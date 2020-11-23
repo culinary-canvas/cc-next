@@ -25,7 +25,7 @@ export class ArticleService {
     const article = new ArticleModel()
     article.type = type
 
-    const section = new SectionModel()
+    const section = SectionService.create()
     SectionService.applyPreset(SectionPreset.HALF_SCREEN_TITLE, section)
     article.sections = [section]
     return article

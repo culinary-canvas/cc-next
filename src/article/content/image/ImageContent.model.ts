@@ -28,11 +28,16 @@ export class ImageContentModel extends ContentModel<ImageFormat> {
 
   @computed
   get url() {
-    return this.set.image.url
+    return this.set.image?.url
   }
 
   @computed
   get alt() {
     return this.set.alt
+  }
+
+  @computed
+  get hasImage(){
+    return !!this.url
   }
 }

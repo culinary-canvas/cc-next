@@ -20,7 +20,8 @@ export const ImageContentEdit = observer((props: Props) => {
   const { content, section, first = false } = props
   const admin = useAdmin()
 
-  const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
+  const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
+  const [imageFormatStyle, setImageFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
@@ -28,11 +29,14 @@ export const ImageContentEdit = observer((props: Props) => {
     const height = FormatService.imageHeight(section, content)
     const width = FormatService.imageWidth(content)
 
-    setFormatStyle({
+    setFigureFormatStyle({
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
+    })
+
+    setImageFormatStyle({
       height,
       width,
     })
@@ -51,6 +55,7 @@ export const ImageContentEdit = observer((props: Props) => {
         s.container,
         s[`horizontal-align-${content.format.horizontalAlign}`],
         s[`vertical-align-${content.format.verticalAlign}`],
+        s[`fit-${content.format.fit}`],
         {
           [s.inEdit]: admin.content.uid === content.uid,
           [s.first]: first,
@@ -58,12 +63,13 @@ export const ImageContentEdit = observer((props: Props) => {
       ])}
       style={{
         ...gridStyle,
+        ...figureFormatStyle,
       }}
     >
       <ImageEdit
         set={content.set}
         style={{
-          ...formatStyle,
+          ...imageFormatStyle,
         }}
         className={classnames([
           s.content,

@@ -11,9 +11,9 @@ import { useAdmin } from '../../../../../Admin'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
 import { GridControl } from '../shared/gridControl/GridControl'
-import { Size } from '../../../../../../article/shared/format/Size'
 import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { SectionModel } from '../../../../../../article/section/Section.model'
+import { HeightButtons } from '../shared/height/HeightButtons'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
@@ -70,25 +70,10 @@ export const SectionControls = observer(() => {
           }
         />
 
-        <label htmlFor="section-height">Height</label>
-        <div id="section-height" className={s.buttonGroup}>
-          <Button
-            onClick={() =>
-              runInAction(() => (section.format.height = Size.FIT_CONTENT))
-            }
-            selected={section.format.height === Size.FIT_CONTENT}
-          >
-            Fit content
-          </Button>
-          <Button
-            onClick={() =>
-              runInAction(() => (section.format.height = Size.FULL_SCREEN))
-            }
-            selected={section.format.height === Size.FULL_SCREEN}
-          >
-            Full screen
-          </Button>
-        </div>
+        <HeightButtons
+          selected={section.format.height}
+          onSelected={(h) => runInAction(() => (section.format.height = h))}
+        />
 
         <label htmlFor="section-background-color">Background color</label>
         <ColorPicker
