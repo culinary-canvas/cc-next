@@ -1,5 +1,5 @@
 import { GridPosition } from './GridPosition'
-import { action } from 'mobx'
+import { action, toJS } from 'mobx'
 import { CSSProperties } from 'react'
 import { ArticlePart } from '../ArticlePart'
 import { inRange } from 'lodash'
@@ -142,11 +142,23 @@ export class GridPositionService {
     return parts.filter((p) => p.format.gridPosition.startRow === row)
   }
 
+  static partsEndingOnRow(parts: ArticlePart[], row: number) {
+    return parts.filter((p) => p.format.gridPosition.endRow === row)
+  }
+
   static deleteRow(row: number, parts: ArticlePart[]) {
-    const rows = this.numberOfRows(parts)
-    for (let i = row + 1; i <= rows; i++) {
-      const partsToMoveUp = this.partsStartingOnRow(parts, i)
-      partsToMoveUp.forEach((p) => this._moveUp(p))
+    const rows = this.numberOfRows(parts) + 1
+    for (let i = row; i <= rows; i++) {
+      const partsToShrink = this.partsEndingOnRow(parts, i)
+      console.log('parts to shrink', i, toJS(partsToShrink))
+      partsToShrink.forEach(
+        (p) =>
+          (p.format.gridPosition.endRow = p.format.gridPosition.endRow - 1),
+      )
+      if (i > row) {
+        const partsToMoveUp = this.partsStartingOnRow(parts, i)
+        partsToMoveUp.forEach((p) => this._moveUp(p))
+      }
     }
   }
 

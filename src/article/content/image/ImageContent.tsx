@@ -25,23 +25,29 @@ interface Props {
 export const ImageContent = observer((props: Props) => {
   const { content, section, first = false, style } = props
   const ref = useRef<HTMLElement>()
-  const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
+  const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
+  const [imageFormatStyle, setImageFormatStyle] = useState<CSSProperties>({})
   const [loadImage, setLoadImage] = useState<boolean>(false)
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
-    const { format } = content
     const height = FormatService.imageHeight(section, content)
     const width = FormatService.imageWidth(content)
-    setFormatStyle({
+    setImageFormatStyle({
+      height,
+      width,
+    })
+  }, [content, section])
+
+  useAutorun(() => {
+    const { format } = content
+    setFigureFormatStyle({
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
-      height,
-      width,
     })
-  }, [content, section, content.format])
+  }, [content, content.format])
 
   useAutorun(() => {
     const gridCss = GridPositionService.gridPositionAsCss(
@@ -72,13 +78,15 @@ export const ImageContent = observer((props: Props) => {
         s.container,
         s[`horizontal-align-${content.format.horizontalAlign}`],
         s[`vertical-align-${content.format.verticalAlign}`],
+        s[`fit-${content.format.fit}`],
         {
           [s.first]: first,
         },
       ])}
       style={{
         ...style,
-        ...gridStyle
+        ...gridStyle,
+        ...figureFormatStyle,
       }}
     >
       {loadImage && (
@@ -86,7 +94,7 @@ export const ImageContent = observer((props: Props) => {
           srcSet={ImageService.srcSet(content)}
           alt={content.set.alt}
           style={{
-            ...formatStyle,
+            ...imageFormatStyle,
           }}
           className={classnames(s.content, {
             [s.circle]: content.format.circle,

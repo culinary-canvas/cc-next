@@ -8,6 +8,7 @@
 .button {
   @include gridCell();
   border-width: 2px;
+  cursor: pointer;
 
   &.outlier {
     border-style: dashed;

@@ -1,22 +1,19 @@
 import { ContentType } from './ContentType'
-import { extractFormat } from './preset/extractFormat'
-import { headingFormat } from './preset/headingFormat'
-import { leadFormat } from './preset/leadFormat'
-import { titleFormat } from './preset/titleFormat'
-import { bylineFormat } from './preset/bylineFormat'
-import { paragraphFormat } from './preset/paragraphFormat'
 import { ContentModel } from './ContentModel'
 import { ImageContentModel } from './image/ImageContent.model'
 import { TextContentModel } from './text/TextContent.model'
-import { subHeadingFormat } from './preset/subHeadingFormat'
 import { cloneDeep } from '../../services/importHelpers'
 import { SortableService } from '../../services/sortable/Sortable.service'
 import { loremIpsum } from 'lorem-ipsum'
 import StringUtils from '../../services/utils/StringUtils'
-import { action, toJS } from 'mobx'
+import { action } from 'mobx'
 import { SectionModel } from '../section/Section.model'
 import { GridPositionService } from '../grid/GridPosition.service'
 import { GridPosition } from '../grid/GridPosition'
+import { HorizontalAlign } from '../shared/HorizontalAlign'
+import { FONT } from '../../styles/font'
+import { COLOR } from '../../styles/color'
+import { TextFormat } from './text/TextFormat'
 
 export class ContentService {
   static create<T extends ContentModel>(type = ContentType.PARAGRAPH): T {
@@ -43,10 +40,10 @@ export class ContentService {
       content = cloneDeep(source)
     }
 
-    content.sortOrder = source.sortOrder
+    content.format.gridPosition = source.format.gridPosition
     content.type = type
 
-    this.setFormatForType(content)
+    this.applyFormatForType(content)
 
     if (content instanceof TextContentModel) {
       this.setPlaceholder(content)
@@ -55,30 +52,48 @@ export class ContentService {
     return content as T
   }
 
-  private static setFormatForType(content: ContentModel) {
+  @action
+  private static applyFormatForType(content: ContentModel) {
+    if (content instanceof TextContentModel) {
+      this.applyTextFormatForType(content)
+    }
+  }
+
+  private static applyTextFormatForType(content: TextContentModel) {
+    content.format = new TextFormat({
+      gridPosition: content.format.gridPosition,
+    })
+
     switch (content.type) {
       case ContentType.EXTRACT:
-        content.format = extractFormat()
+        content.format.horizontalAlign = HorizontalAlign.CENTER
+        content.format.fontFamily = FONT.FAMILY.ELOQUENT
+        content.format.fontSize = FONT.SIZE.XL
         break
       case ContentType.HEADING:
-        content.format = headingFormat()
+        content.format.fontSize = FONT.SIZE.L
+        content.format.fontWeight = 900
         break
       case ContentType.SUB_HEADING:
-        content.format = subHeadingFormat()
+        content.format.color = COLOR.BLACK
+        content.format.fontSize = FONT.SIZE.L
+        content.format.fontFamily = FONT.FAMILY.GARAMOND
         break
       case ContentType.LEAD:
-        content.format = leadFormat()
+        content.format.fontWeight = 700
         break
       case ContentType.TITLE:
-        content.format = titleFormat()
+        content.format.fontFamily = FONT.FAMILY.FILSON
+        content.format.fontWeight = 900
+        content.format.fontSize = FONT.SIZE.XXXXL
         break
       case ContentType.BYLINE:
-        content.format = bylineFormat()
-        break
-      case ContentType.IMAGE:
+        content.format.color = COLOR.BLACK
+        content.format.fontSize = FONT.SIZE.M
         break
       default:
-        content.format = paragraphFormat()
+        content.format.fontFamily = FONT.FAMILY.GARAMOND
+        content.format.fontSize = FONT.SIZE.M
     }
   }
 
@@ -103,22 +118,5 @@ export class ContentService {
   static sort(contents: ContentModel[]) {
     SortableService.fixSortOrders(contents)
     return SortableService.getSorted(contents)
-  }
-
-  @action
-  static addContent(content: ContentModel, section: SectionModel) {
-    console.log(toJS(content))
-    if (!content.format.gridPosition) {
-      const row = GridPositionService.numberOfRows(section.contents) + 1
-      content.format.gridPosition = new GridPosition(1, 5, row, row + 1)
-    } else {
-      GridPositionService.addRow(
-        content.format.gridPosition.startRow,
-        section.contents,
-      )
-      content.format.gridPosition.startRow += 1
-      content.format.gridPosition.endRow += 1
-    }
-    section.contents.push(content)
   }
 }

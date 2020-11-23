@@ -3,7 +3,9 @@ import s from './VerticalAlignButtons.module.scss'
 import { Button } from '../../../../../../../form/button/Button'
 import { VerticalAlign } from '../../../../../../../article/shared/VerticalAlign'
 import { COLOR } from '../../../../../../../styles/color'
-import leftAlignIcon from '../../../../../../../../public/assets/icons/streamline-icon-paragraph-left-align-alternate@140x140.svg'
+import UpIcon from '../../../../../../../../public/assets/icons/streamline-icon-move-up-1@140x140.svg'
+import DownIcon from '../../../../../../../../public/assets/icons/streamline-icon-move-down-1@140x140.svg'
+import CenterIcon from '../../../../../../../../public/assets/icons/streamline-icon-shrink-vertical-1@140x140.svg'
 
 interface Props {
   selected: VerticalAlign
@@ -22,7 +24,7 @@ export function VerticalAlignButtons(props: Props) {
         className={s.button}
       >
         <img
-          src={leftAlignIcon}
+          src={UpIcon}
           alt="Top align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />
@@ -35,7 +37,7 @@ export function VerticalAlignButtons(props: Props) {
         className={s.button}
       >
         <img
-          src={leftAlignIcon}
+          src={CenterIcon}
           alt="Center align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />
@@ -48,7 +50,7 @@ export function VerticalAlignButtons(props: Props) {
         className={s.button}
       >
         <img
-          src={leftAlignIcon}
+          src={DownIcon}
           alt="Bottom align"
           style={{ fill: VerticalAlign.TOP ? COLOR.WHITE : COLOR.BLACK }}
         />

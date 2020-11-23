@@ -19,7 +19,7 @@ export const FixedSizeControls = observer((props: Props) => {
   const [linked, setLinked] = useState<boolean>(true)
 
   useAutorun(() => {
-    if (!!content?.uid) {
+    if (!!content?.uid && content.hasImage) {
       setUseFixedSize(!!content.format.fixedWidth)
     }
   }, [content.uid])
@@ -69,8 +69,8 @@ export const FixedSizeControls = observer((props: Props) => {
         />
         <Slider
           value={content.format.fixedWidth}
-          min={1}
-          max={content.set.cropped.width}
+          min={0}
+          max={content.set.cropped?.width || 0}
           onChange={(v) => {
             const widthPercent = v / content.set.cropped.width
             content.format.fixedWidth = v
@@ -85,8 +85,8 @@ export const FixedSizeControls = observer((props: Props) => {
         />
         <Slider
           value={content.format.fixedHeight}
-          min={1}
-          max={content.set.cropped.height}
+          min={0}
+          max={content.set.cropped?.height || 0}
           onChange={(v) => {
             const heightPercent = v / content.set.cropped.height
             content.format.fixedHeight = v
