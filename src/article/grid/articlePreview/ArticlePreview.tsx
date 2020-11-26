@@ -15,10 +15,11 @@ import { useRouter } from 'next/router'
 
 interface Props {
   article: ArticleModel
+  first: boolean
 }
 
 export const ArticlePreview = observer((props: Props) => {
-  const { article } = props
+  const { article, first } = props
   const router = useRouter()
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
@@ -54,7 +55,7 @@ export const ArticlePreview = observer((props: Props) => {
   return (
     <article
       className={classnames(s.article, {
-        [s.promoted]: article.promoted,
+        [s.promoted]: article.promoted || first,
       })}
     >
       <section className={s.image} ref={ref}>

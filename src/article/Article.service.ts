@@ -39,7 +39,11 @@ export class ArticleService {
     article.sections.push(section)
   }
 
-  static moveSection(section: SectionModel, newSortOrder: number, article: ArticleModel) {
+  static moveSection(
+    section: SectionModel,
+    newSortOrder: number,
+    article: ArticleModel,
+  ) {
     article.sections.find(
       (s) => s.uid !== section.uid && s.sortOrder === newSortOrder,
     ).sortOrder = section.sortOrder
@@ -117,5 +121,26 @@ export class ArticleService {
         )
       }),
     )
+  }
+
+  @action
+  static changeSortOrderUp(target: ArticleModel, all: ArticleModel[]) {
+    const other = all
+      .filter((a) => a.sortOrder > target.sortOrder)
+      .reduce((found, a) => (a.sortOrder < found.sortOrder ? a : found))
+    target.sortOrder++
+    other.sortOrder--
+    return [target, other]
+  }
+
+  @action
+  static changeSortOrderDown(target: ArticleModel, all: ArticleModel[]) {
+    const other = all
+      .filter((a) => a.sortOrder < target.sortOrder)
+      .reduce((found, a) => (a.sortOrder > found.sortOrder ? a : found))
+    console.log(target.sortOrder, other.sortOrder)
+    target.sortOrder--
+    other.sortOrder++
+    return [target, other]
   }
 }
