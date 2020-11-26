@@ -31,7 +31,7 @@ const AdminDevArea = observer(() => {
           }}
           loading={running === 'fixSortOrders'}
         >
-          Fix sort orders of Articles and their sections and contents
+          Fix sort orders of Articles
         </Button>
 
         <Button

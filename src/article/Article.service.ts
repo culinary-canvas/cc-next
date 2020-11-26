@@ -121,4 +121,25 @@ export class ArticleService {
       }),
     )
   }
+
+  @action
+  static changeSortOrderUp(target: ArticleModel, all: ArticleModel[]) {
+    const other = all
+      .filter((a) => a.sortOrder > target.sortOrder)
+      .reduce((found, a) => (a.sortOrder < found.sortOrder ? a : found))
+    target.sortOrder++
+    other.sortOrder--
+    return [target, other]
+  }
+
+  @action
+  static changeSortOrderDown(target: ArticleModel, all: ArticleModel[]) {
+    const other = all
+      .filter((a) => a.sortOrder < target.sortOrder)
+      .reduce((found, a) => (a.sortOrder > found.sortOrder ? a : found))
+    console.log(target.sortOrder, other.sortOrder)
+    target.sortOrder--
+    other.sortOrder++
+    return [target, other]
+  }
 }
