@@ -1,37 +1,67 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ArticleModel } from '../../../article/Article.model'
 import Link from 'next/link'
 import { dateTimeService } from '../../../services/dateTime/DateTime.service'
 import s from './ArticleListRow.module.scss'
 import { SortOrder } from './SortOrder'
 import StringUtils from '../../../services/utils/StringUtils'
-import { SortOrderButtons } from '../form/sidebar/controls/shared/sortOrder/SortOrderButtons'
+import { ArticleService } from '../../../article/Article.service'
+import { Button } from '../../../form/button/Button'
+import { ArticleApi } from '../../../article/Article.api'
+import { useAuth } from '../../../services/auth/Auth'
 
 interface Props {
   article: ArticleModel
   all: ArticleModel[]
   listSortOrder: SortOrder
-  onSortChange: () => any
 }
 
 export const ArticleListRow = (props: Props) => {
-  const { article, all, listSortOrder, onSortChange } = props
+  const { article, all, listSortOrder } = props
+  const auth = useAuth()
+  const [isSaving, saving] = useState<boolean>(false)
 
   return (
     <tr key={article.id}>
       <td>
-        <SortOrderButtons
-          target={article}
-          list={all}
-          onChange={async ([target, other]) => {
-            // TODO
-            //await env.articleStore.save(target)
-            //await env.articleStore.save(other)
-            // env.articleStore.setArticles(all)
-            onSortChange()
-          }}
-          disabled={listSortOrder.key !== 'sortOrder'}
-        />
+        <section className={s.sortOrderContainer}>
+          <Button
+            disabled={
+              isSaving ||
+              listSortOrder.key !== 'sortOrder' ||
+              article.sortOrder - 1 < 0
+            }
+            onClick={async () => {
+              saving(true)
+              const toSave = ArticleService.changeSortOrderDown(article, all)
+              await Promise.all(
+                toSave.map(async (a) => await ArticleApi.save(a, auth.user)),
+              )
+              saving(false)
+            }}
+          >
+            -
+          </Button>
+
+          <Button
+            disabled={
+              isSaving ||
+              listSortOrder.key !== 'sortOrder' ||
+              article.sortOrder + 2 > all.length
+            }
+            onClick={async () => {
+              saving(true)
+              const toSave = ArticleService.changeSortOrderUp(article, all)
+              await Promise.all(
+                toSave.map(async (a) => await ArticleApi.save(a, auth.user)),
+              )
+              saving(false)
+            }}
+          >
+            +
+          </Button>
+          {article.sortOrder}
+        </section>
       </td>
       <td className={s.title}>
         <Link

@@ -7,6 +7,7 @@ import s from './ArticleList.module.scss'
 import { SortOrderIcon } from '../../../shared/sortOrderIcon/SortOrderIcon'
 import { useSortOrder } from '../../../hooks/useSortOrder'
 import { Button } from '../../../form/button/Button'
+import { useAutorun } from '../../../hooks/useAutorun'
 
 interface Props {
   articles: ArticleModel[]
@@ -21,15 +22,13 @@ export const ArticleList = observer(({ articles }: Props) => {
     order: 'desc',
   })
 
-  const getSorted = useCallback(() => {
-    return articles.slice().sort((a1, a2) => {
-      const smaller = a1[sortOrder.key] < a2[sortOrder.key]
-      return sortOrder.order === 'asc' ? (smaller ? -1 : 1) : smaller ? 1 : -1
-    })
-  }, [sortOrder, articles])
-
-  useEffect(() => {
-    setSorted(getSorted())
+  useAutorun(() => {
+    setSorted(
+      articles.slice().sort((a1, a2) => {
+        const smaller = a1[sortOrder.key] < a2[sortOrder.key]
+        return sortOrder.order === 'asc' ? (smaller ? -1 : 1) : smaller ? 1 : -1
+      }),
+    )
   }, [sortOrder, articles])
 
   return (
@@ -46,7 +45,7 @@ export const ArticleList = observer(({ articles }: Props) => {
         <thead>
           <tr>
             <th role="button" onClick={() => setSortOrder('sortOrder')}>
-              <span>Sort order</span>
+              <span>#</span>
               <SortOrderIcon
                 order={sortOrder.order}
                 visible={sortOrder.key === 'sortOrder'}
@@ -101,7 +100,6 @@ export const ArticleList = observer(({ articles }: Props) => {
                 article={article}
                 all={articles}
                 listSortOrder={sortOrder}
-                onSortChange={() => setSorted(getSorted())}
               />
             </React.Fragment>
           ))}

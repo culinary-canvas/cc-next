@@ -61,7 +61,7 @@ export const ArticleGrid = observer((props: Props) => {
 
   return (
     <div className={styles.grid}>
-      {articles.map((article) => (
+      {articles.map((article, i) => (
         <Link
           href="/articles/[slug]"
           as={`/articles/${article.slug}`}
@@ -69,10 +69,10 @@ export const ArticleGrid = observer((props: Props) => {
         >
           <a
             className={classnames(styles.article, {
-              [styles.promoted]: article.promoted,
+              [styles.promoted]: article.promoted || i === 0,
             })}
           >
-            <ArticlePreview article={article} />
+            <ArticlePreview article={article} first={i === 0}/>
           </a>
         </Link>
       ))}
