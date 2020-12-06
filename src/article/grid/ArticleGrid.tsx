@@ -11,12 +11,12 @@ import { COLOR } from '../../styles/color'
 import { Transformer } from '../../services/db/Transformer'
 
 interface Props {
-  initialArticles: ArticleModel[]
+  initialArticles?: ArticleModel[]
   load: (lastLoaded: ArticleModel) => Promise<ArticleModel[] | null>
 }
 
 export const ArticleGrid = observer((props: Props) => {
-  const { initialArticles, load: loadFn } = props
+  const { initialArticles = [], load: loadFn } = props
 
   const endRef = useRef<HTMLDivElement>()
   const [loading, setLoading] = useState<boolean>(false)

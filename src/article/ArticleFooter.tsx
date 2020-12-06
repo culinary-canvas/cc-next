@@ -18,7 +18,6 @@ export const ArticleFooter = observer(({ article }: Props) => {
         containerClassName={s.tags}
         backgroundColor={COLOR.WHITE}
       />
-
       <Share article={article} containerClassName={s.share} />
     </footer>
   )
