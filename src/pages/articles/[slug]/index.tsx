@@ -19,11 +19,11 @@ interface Props {
 const ArticlePage = observer(({ articleData }: Props) => {
   const router = useRouter()
 
+  const article = useTransform([articleData], ArticleModel)[0]
+
   if (router.isFallback) {
     return <main>Loading...</main>
   }
-
-  const article = useTransform([articleData], ArticleModel)[0]
 
   return (
     <>

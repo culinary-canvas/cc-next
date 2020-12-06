@@ -27,7 +27,7 @@ export class SectionFormat extends Format {
 
   @field()
   @observable
-  backgroundColor: ColorType
+  backgroundColor: ColorType | string
 
   @field()
   @observable

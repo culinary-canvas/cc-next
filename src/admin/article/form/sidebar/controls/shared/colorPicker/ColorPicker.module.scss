@@ -1,67 +1,39 @@
+@import '../../../../../../../styles/shadow';
 @import '../../../../../../../styles/animation';
 @import '../../../../../../../styles/layout';
 @import '../../../../../../../styles/color';
 
-.colorPicker {
+.container {
+  position: relative;
   display: flex;
-  align-items: center;
-  margin: 0.5rem 0;
 
-  &,
-  * {
-    transition: all $animation-super-fast ease-in;
+  .button {
+    box-shadow: $superSoftDownShadow;
+    color: $black !important;
+    width: 100%;
   }
 
-  ul {
-    display: flex;
-    flex-wrap: wrap;
 
-    li {
-      width: 1.2rem;
-      height: 1.2rem;
-      margin-right: $spacing-l;
-      margin-bottom: $spacing-l;
-      box-sizing: content-box;
-      border: 1px solid $grey;
-      border-radius: 4px;
-      cursor: pointer;
+  .colorPicker {
+    // width: 100% !important;
+    position: absolute !important;
+    top: 100%;
+    border-radius: 8px;
+    z-index: 100;
+    box-shadow: $softDownShadow !important;
+    background-color: $white;
 
-      &:not(.picked) {
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
-        opacity: 0.5;
-      }
-
-      &.picked {
-        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
-        border: 1px solid $black;
-        opacity: 1;
-      }
-
-      &:hover {
-        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.05);
-        opacity: 1;
-      }
-
-      &.transparent:before {
-        content: '';
-        position: absolute;
-        display: block;
-        background-color: $red;
-        width: 2px;
-        height: calc(1.8rem - 6px);
-        transform: rotateZ(45deg) translateX(0.3rem) translateY(-0.45rem);
-      }
-
-      button {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-        box-shadow: none;
-        border: none;
-        outline: none;
-        cursor: pointer;
-      }
+  .closeButton{
+    position: absolute;
+    z-index: 1;
+    right:6px;
+    border-radius: 100%;
+    width: 1rem;
+    height: 1rem;
+  }
+    .alphaContainer {
+      margin: 0 1rem 1rem;
+      width: calc(100% - 2rem) !important;
     }
   }
 }

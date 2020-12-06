@@ -4,7 +4,6 @@
 
 .article {
   padding-bottom: 1rem;
-  background-color: $white;
   border-radius: 12px;
   overflow: hidden;
 
@@ -118,8 +117,8 @@
     }
 
     .created {
-      color: $grey;
       font-size: $font-size-s;
+      font-weight: 200;
       opacity: 0;
       transition: all $animation-medium ease-out;
 

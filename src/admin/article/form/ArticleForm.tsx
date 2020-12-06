@@ -1,11 +1,10 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { ArticleService } from '../../../article/Article.service'
 import { classnames } from '../../../services/importHelpers'
 import { SectionEdit } from './section/SectionEdit'
-import { AddSection } from './addSection/AddSection'
 import s from './ArticleForm.module.scss'
 import { useAdmin } from '../../Admin'
+import { ArticleFooter } from '../../../article/ArticleFooter'
 
 interface Props {}
 
@@ -19,7 +18,10 @@ export const ArticleForm = observer((props: Props) => {
 
   return (
     <>
-      <article className={classnames(s.content, `type-${article?.type}`)}>
+      <article
+        className={classnames(s.content, `type-${article?.type}`)}
+        style={{ backgroundColor: article.format.backgroundColor }}
+      >
         {article.sections.map((section, i) => (
           <SectionEdit
             key={section.uid}
@@ -27,14 +29,8 @@ export const ArticleForm = observer((props: Props) => {
             first={section.format.gridPosition.startRow === 1}
           />
         ))}
+        <ArticleFooter article={article} />
       </article>
-
-      <AddSection
-        onSelect={(section) => {
-          ArticleService.addSection(section, article)
-          admin.setSection(section)
-        }}
-      />
     </>
   )
 })

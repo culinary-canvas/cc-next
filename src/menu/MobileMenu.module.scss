@@ -1,0 +1,38 @@
+@import '../styles/layout';
+@import '../styles/animation';
+@import '../styles/color';
+@import '../styles/font';
+@import '../styles/shadow';
+
+.menu {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.25rem;
+  box-shadow: $softCenteredShadow;
+  background-color: $white;
+  transition: all $animation-fast ease-in;
+  overflow: hidden;
+
+  .option{
+    margin: 1rem 0 !important;
+  }
+
+  .activeMarker {
+    position: absolute;
+    background-color: $pink-light;
+  }
+
+  .menuButton {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    margin-right: 0;
+    margin-left: auto;
+  }
+}

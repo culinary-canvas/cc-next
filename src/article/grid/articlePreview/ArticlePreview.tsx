@@ -57,6 +57,7 @@ export const ArticlePreview = observer((props: Props) => {
       className={classnames(s.article, {
         [s.promoted]: article.promoted || first,
       })}
+      style={{ backgroundColor: article.format.backgroundColor }}
     >
       <section className={s.image} ref={ref}>
         {!!imageContent && loadImage && (
@@ -92,9 +93,6 @@ export const ArticlePreview = observer((props: Props) => {
       </section>
 
       <section className={s.meta}>
-        <span className={s.created}>
-          {dateTimeService.calendar(article.created)}
-        </span>
         <Tags selected={article.tagNames} />
       </section>
     </article>

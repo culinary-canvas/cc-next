@@ -20,6 +20,7 @@ import { COLOR } from '../../../../../../styles/color'
 import { useOverlay } from '../../../../../../shared/overlay/OverlayStore'
 import { useAuth } from '../../../../../../services/auth/Auth'
 import { useRouter } from 'next/router'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 
 export const ArticleControls = observer(() => {
   const auth = useAuth()
@@ -140,6 +141,16 @@ export const ArticleControls = observer(() => {
         onChange={(v) => (article.parentId = v)}
         displayFormatter={(v) => otherArticles.find((a) => a.id === v).title}
         showEmptyOption
+      />
+
+      <label htmlFor="article-background-color">Background color</label>
+      <ColorPicker
+        id="article-background-color"
+        value={article.format.backgroundColor}
+        onSelect={(c) =>
+          runInAction(() => (article.format.backgroundColor = c))
+        }
+        additionalColors={article.colors}
       />
 
       <label htmlFor="tags">Tags</label>

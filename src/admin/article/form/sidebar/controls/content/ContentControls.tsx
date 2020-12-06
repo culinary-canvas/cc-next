@@ -63,11 +63,11 @@ export const ContentControls = observer(() => {
       />
 
       {content instanceof TextContentModel && (
-        <TextControls content={content} />
+        <TextControls />
       )}
 
       {content instanceof ImageContentModel && (
-        <ImageControls content={content} section={section} />
+        <ImageControls />
       )}
 
       <Button

@@ -1,0 +1,34 @@
+@import '../styles/layout';
+@import '../styles/animation';
+@import '../styles/color';
+@import '../styles/font';
+@import '../styles/shadow';
+
+.menu {
+  position: absolute;
+  top: 1.5rem;
+  right: 3rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 0.5rem;
+  height: 48px;
+  box-shadow: $softCenteredShadow;
+  background-color: $white;
+  transition: all $animation-fast ease-in;
+  overflow: hidden;
+  flex-wrap: nowrap;
+
+  .activeMarker {
+    position: absolute;
+    bottom: 14px;
+    background-color: $pink-light;
+  }
+
+  .menuButton {
+    margin-left: auto;
+    margin-right: 0;
+    position: absolute;
+    right: 0.5rem;
+  }
+}

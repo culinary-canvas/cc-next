@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import classnames from 'classnames'
-import { MenuButton } from '../../../../menu/MenuButton/MenuButton'
+import { MenuButton } from '../../../../menu/MenuButton'
 import { Button } from '../../../../form/button/Button'
 import { Controls } from './controls/Controls'
 import { ArticleApi } from '../../../../article/Article.api'

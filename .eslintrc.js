@@ -6,8 +6,7 @@ module.exports = {
     'prettier',
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-    'standard',
+    'react-hooks',
     'plugin:jsx-a11y/recommended',
   ],
   parserOptions: {
@@ -36,6 +35,8 @@ module.exports = {
     it: false,
   },
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'padded-blocks': 0,
     'no-unused-vars': 0,
     'no-undef': 0,

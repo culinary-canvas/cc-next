@@ -31,12 +31,10 @@ function Start({ articlesData }: Props) {
         <ArticleGrid
           initialArticles={articles}
           load={async (lastLoaded) => {
-            console.log('loading!', lastLoaded.sortOrder, lastLoaded.title)
             const data = await ArticleApi.publishedPagedBySortOrderDesc(
               PAGE_SIZE,
               lastLoaded.sortOrder,
             )
-            console.log(data)
             return !!data ? Transformer.allToApp(data, ArticleModel) : null
           }}
         />
