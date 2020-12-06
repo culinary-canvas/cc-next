@@ -25,6 +25,7 @@ export const TextContent = observer((props: Props) => {
 
     setFormatStyle({
       color: format.color,
+      backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
       fontSize: `${format.fontSize}px`,
       fontFamily: content.format.fontFamily,
