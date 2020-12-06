@@ -10,6 +10,8 @@ import { ContentModel } from './content/ContentModel'
 import DateTime from '../services/dateTime/DateTime'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { Sortable } from '../types/Sortable'
+import { isSystemColor } from '../styles/color'
+import { ArticleFormat } from './ArticleFormat'
 
 @collection('articles')
 export class ArticleModel implements Model, Sortable {
@@ -83,6 +85,10 @@ export class ArticleModel implements Model, Sortable {
   @field()
   slug: string
 
+  @observable
+  @field()
+  format = new ArticleFormat()
+
   @computed get contents(): ContentModel[] {
     return this.sections.flatMap((s) => s.contents)
   }
@@ -111,5 +117,25 @@ export class ArticleModel implements Model, Sortable {
     return this.contents.find(
       (c) => c instanceof ImageContentModel,
     ) as ImageContentModel
+  }
+
+  @computed get colors(): string[] {
+    const customColors = new Set<string>()
+    this.sections
+      .filter(
+        (s) =>
+          !!s.format.backgroundColor &&
+          !isSystemColor(s.format.backgroundColor),
+      )
+      .forEach((s) => customColors.add(s.format.backgroundColor))
+    this.contents
+      .filter(
+        (c) =>
+          c instanceof TextContentModel &&
+          !!c.format.color &&
+          !isSystemColor(c.format.color),
+      )
+      .forEach((c) => customColors.add((c as TextContentModel).format.color))
+    return Array.from(customColors)
   }
 }

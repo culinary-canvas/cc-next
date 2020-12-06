@@ -30,6 +30,7 @@ export const ImageContentEdit = observer((props: Props) => {
     const width = FormatService.imageWidth(content)
 
     setFigureFormatStyle({
+      backgroundColor: format.backgroundColor,
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,

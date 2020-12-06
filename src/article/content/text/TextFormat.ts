@@ -52,7 +52,7 @@ export class TextFormat extends Format {
 
   @field()
   @observable
-  color: ColorType = COLOR.BLACK
+  color: ColorType | string = COLOR.BLACK
 
   @field(Padding)
   @observable

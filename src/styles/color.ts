@@ -1,18 +1,20 @@
 export const COLOR = {
-  WHITE: '#FFFFFF',
   BLACK: '#000000',
   GREY_DARK: '#5f686d',
   GREY: '#949ea3',
-  GREY_LIGHT: '#E7EBED',
+  GREY_LIGHT: '#b7bbbd',
+  GREY_LIGHTER: '#E7EBED',
+  WHITE: '#FFFFFF',
   BLUE: '#003EEE',
   BLUE_LIGHT: '#7fa0ff',
   RED: '#e70c3f',
   PINK: '#EBB7B7',
   YELLOW: '#FEE100',
   BEIGE: '#EBE1B7',
+  GREEN: '#1B998B',
 } as const
 
-export type ColorType = typeof COLOR[keyof typeof COLOR]
+export type ColorType = typeof COLOR[keyof typeof COLOR] | string
 
 export function RGBToHex(rgb: string) {
   // Choose correct separator
@@ -35,4 +37,8 @@ export function RGBToHex(rgb: string) {
   }
 
   return '#' + r + g + b
+}
+
+export function isSystemColor(hex: string) {
+  return Object.values(COLOR).some(c => c === hex)
 }

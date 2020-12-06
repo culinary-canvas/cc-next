@@ -27,9 +27,5 @@ export class SectionFormat extends Format {
 
   @field()
   @observable
-  backgroundColor: ColorType
-
-  @field()
-  @observable
   shadow = false
 }

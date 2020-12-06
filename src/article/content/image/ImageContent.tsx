@@ -42,6 +42,7 @@ export const ImageContent = observer((props: Props) => {
   useAutorun(() => {
     const { format } = content
     setFigureFormatStyle({
+      backgroundColor: format.backgroundColor,
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,

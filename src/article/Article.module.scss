@@ -1,4 +1,9 @@
 @import '../styles/article';
+@import '../styles/grid';
+
+.gridContainer {
+  @include gridContainer();
+}
 
 .content {
   @include articleContent();

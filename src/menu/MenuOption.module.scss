@@ -1,0 +1,71 @@
+@import '../styles/layout';
+@import '../styles/animation';
+@import '../styles/color';
+@import '../styles/font';
+@import '../styles/shadow';
+
+.button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem 0.8rem;
+  background-color: transparent !important;
+  border: 0;
+  border-radius: 0;
+  margin: 0 !important;
+  font-family: $font-family-forma;
+  font-size: 18px;
+  font-weight: 400;
+  z-index: 20;
+  align-items: center;
+  justify-content: center;
+
+  &,
+  label {
+    transition: all $animation-slow ease-in-out;
+  }
+
+  label {
+    z-index: 1;
+    text-decoration: none;
+    cursor: pointer;
+    padding-top: 2px;
+    color: $black;
+    display: block;
+  }
+
+  &:hover {
+    box-shadow: none;
+    label {
+      color: $black;
+    }
+  }
+
+  @include media('<=phone') {
+    &.hideOnMobile {
+      display: none;
+    }
+    margin: 0 $spacing-s;
+  }
+
+  @include media('>phone') {
+    margin: 0 0.5rem;
+  }
+
+  &.admin label {
+    color: $blue !important;
+  }
+
+  &.otherHovered {
+    label {
+      color: $grey !important;
+    }
+    &.admin label {
+      color: $blue-light !important;
+    }
+  }
+
+  &:disabled {
+    opacity: 1;
+  }
+}

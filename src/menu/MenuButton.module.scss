@@ -1,0 +1,44 @@
+@import '../styles/layout';
+@import '../styles/color';
+@import '../styles/icon';
+@import '../styles/animation';
+
+.menuButton {
+  position: relative;
+  display: block;
+  border: 0;
+  cursor: pointer;
+
+  @include media('>phone') {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 19px;
+  }
+  @include media('<=phone') {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 12px;
+  }
+
+  &,
+  * {
+    transition: all $animation-really-fast ease-in-out;
+  }
+
+  .bar {
+    position: absolute;
+    left: 0;
+    display: block;
+    background-color: $black;
+  }
+
+  .bar:nth-child(1) {
+    top: 33%;
+  }
+
+  .bar:nth-child(2) {
+    top: 60%;
+  }
+}

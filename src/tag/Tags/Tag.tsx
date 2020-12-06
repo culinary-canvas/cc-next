@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function Tag(props: Props) {
-  const { tag, onClick, selected = true, backgroundColor = COLOR.GREY_LIGHT } = props
+  const { tag, onClick, selected = true, backgroundColor = COLOR.GREY_LIGHTER } = props
 
   return (
     <Button

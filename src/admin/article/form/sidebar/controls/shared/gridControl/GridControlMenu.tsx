@@ -12,7 +12,7 @@ import { GridMap } from './GridMap'
 import { ArticlePart } from '../../../../../../../article/ArticlePart'
 import { SectionModel } from '../../../../../../../article/section/Section.model'
 import { GridControlMenuButton } from './GridControlMenuButton'
-import { GridModal } from './GridModal'
+import { Modal } from '../../../../../../../shared/modal/Modal'
 
 interface Props<T extends ArticlePart> {
   gridMap: GridMap<T>
@@ -149,7 +149,7 @@ export const GridControlMenu = observer(
         </div>
 
         {modalVisible && (
-          <GridModal
+          <Modal
             title="Confirm remove row"
             message={`Section${
               gridMap.get(row).parts.length > 1 ? 's' : ''

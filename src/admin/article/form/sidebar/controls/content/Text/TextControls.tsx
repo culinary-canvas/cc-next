@@ -7,15 +7,13 @@ import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignBu
 import { ColorPicker } from '../../shared/colorPicker/ColorPicker'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { FONT } from '../../../../../../../styles/font'
-import { TextContentModel } from '../../../../../../../article/content/text/TextContent.model'
 import { runInAction } from 'mobx'
+import { useAdmin } from '../../../../../../Admin'
+import { TextContentModel } from '../../../../../../../article/content/text/TextContent.model'
 
-interface Props {
-  content: TextContentModel
-}
-
-export const TextControls = observer((props: Props) => {
-  const { content } = props
+export const TextControls = observer(() => {
+  const admin = useAdmin()
+  const content = admin.content as TextContentModel
 
   return (
     <>
@@ -78,6 +76,8 @@ export const TextControls = observer((props: Props) => {
         id="color"
         value={content.format.color}
         onSelect={(color) => runInAction(() => (content.format.color = color))}
+        additionalColors={admin.article.colors}
+        showTransparent
       />
 
       <label htmlFor="text-padding">Padding</label>

@@ -16,6 +16,7 @@ import { classnames } from '../../../../../../services/importHelpers'
 import { useAdmin } from '../../../../../Admin'
 import { GridControl } from '../shared/gridControl/GridControl'
 import { runInAction } from 'mobx'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()
@@ -62,13 +63,20 @@ export const ContentControls = observer(() => {
         }
       />
 
-      {content instanceof TextContentModel && (
-        <TextControls content={content} />
-      )}
+      <label htmlFor="content-background-color">Background color</label>
+      <ColorPicker
+        id="content-background-color"
+        value={content.format.backgroundColor}
+        onSelect={(c) =>
+          runInAction(() => (content.format.backgroundColor = c))
+        }
+        additionalColors={article.colors}
+        showTransparent
+      />
 
-      {content instanceof ImageContentModel && (
-        <ImageControls content={content} section={section} />
-      )}
+      {content instanceof TextContentModel && <TextControls />}
+
+      {content instanceof ImageContentModel && <ImageControls />}
 
       <Button
         loading={deleting}

@@ -82,7 +82,8 @@ export const SectionControls = observer(() => {
           onSelect={(c) =>
             runInAction(() => (section.format.backgroundColor = c))
           }
-          includeTransparent
+          additionalColors={article.colors}
+          showTransparent
         />
 
         <Checkbox

@@ -1,78 +1,76 @@
+@import '../styles/animation';
 @import '../styles/layout';
 @import '../styles/color';
 @import '../styles/font';
 @import '../styles/shadow';
 
-
 .container {
   position: absolute;
-  display: flex;
   z-index: 40;
-  justify-content: center;
-  width: 100%;
-  height: $header-height;
-
-  @include media('<=phone') {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: $mobile-header-height;
-    background-color: $grey-lighter;
-  }
-  //  border-bottom: 2px solid $black;
-}
-
-.content {
-  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-
-  @include media('<=phone') {
-    justify-content: space-between;
-  }
-
   @include media('>phone') {
-    flex-direction: row;
-    padding: 0 3rem;
+    height: $header-height;
   }
-}
-
-.leftContainer {
-  position: relative;
-}
-
-.logo {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  box-shadow: $softCenteredShadow;
-
   @include media('<=phone') {
-    max-width: 60vw;
+    height: $mobile-header-height;
   }
 
-  @include media('>phone') {
-    bottom: -1px;
-    max-height: 3rem;
-    background-color: $white;
-  }
-}
-.navMeta {
-  box-shadow: $softCenteredShadow;
-  @include media('<=phone') {
-    display: none;
-  }
-  @include media('>phone') {
+  .leftContainer {
     position: absolute;
-    top: 5rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 3rem;
-    padding: 1rem;
-    background-color: $white;
-    font-family: $font-family-forma;
-    font-size: 18px;
+    flex-direction: column;
+    @include media('>phone') {
+      top: 1.5rem;
+      left: 3rem;
+    }
+    @include media('<=phone') {
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .logo {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $white;
+
+      @include media('>phone') {
+        height: 3rem;
+        padding: 1rem;
+      }
+      @include media('<=phone') {
+        height: 32px;
+        padding: 0.6rem;
+      }
+      &:hover {
+        box-shadow: $centeredShadow;
+      }
+    }
+
+    .navMeta {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: fit-content;
+      box-shadow: $softCenteredShadow;
+      background-color: $white;
+      font-family: $font-family-forma;
+      @include media('>phone') {
+        font-size: 18px;
+        height: 3rem;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+      @include media('<=phone') {
+        font-size: 14px;
+        height: 32px;
+        padding: 0.6rem;
+        margin-top: 0.6rem;
+      }
+    }
   }
 }

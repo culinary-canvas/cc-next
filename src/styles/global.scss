@@ -14,13 +14,12 @@ body,
 
 body {
   margin: 0;
+  background-color: $grey-lighter;
   color: $black;
   font-family: filson-pro, sans-serif;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  //  background-color: #f2eedd;
-  //  background-image: linear-gradient(to bottom, #7de2fc 0%, #ffecd2 100%);
 }
 
 #app {
@@ -32,11 +31,8 @@ body {
   align-items: center;
   height: 100%;
   min-height: 100vh;
-  background-image: url("/assets/ccbg.png");
-  background-size: 100% auto;
-  background-repeat: repeat-y;
 
-  > * {
+    > * {
     transition: transform $animation-really-fast ease-in-out,
       width $animation-really-fast ease-in-out;
   }

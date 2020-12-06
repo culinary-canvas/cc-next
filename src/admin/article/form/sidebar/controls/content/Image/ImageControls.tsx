@@ -4,20 +4,16 @@ import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { Checkbox } from '../../../../../../../form/checkbox/Checkbox'
 import { ImageContentModel } from '../../../../../../../article/content/image/ImageContent.model'
-import { SectionModel } from '../../../../../../../article/section/Section.model'
 import { runInAction } from 'mobx'
 import { useReaction } from '../../../../../../../hooks/useReaction'
 import s from './ImageControls.module.scss'
 import { FixedSizeControls } from '../../shared/fixedSize/FixedSizeControls'
 import { ImageFitButtons } from '../../shared/imageFItButtons/ImageFitButtons'
+import { useAdmin } from '../../../../../../Admin'
 
-interface Props {
-  content: ImageContentModel
-  section: SectionModel
-}
-
-export const ImageControls = observer((props: Props) => {
-  const { content, section } = props
+export const ImageControls = observer(() => {
+  const admin = useAdmin()
+  const content = admin.content as ImageContentModel
   const [alt, setAlt] = useState<string>(content.set.alt)
 
   useEffect(() => {

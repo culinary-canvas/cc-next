@@ -33,6 +33,7 @@ export const TextContentEdit = observer((props: Props) => {
 
     setStyle({
       color: format.color,
+      backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
       fontSize: `${format.fontSize}px`,
       fontFamily: content.format.fontFamily,

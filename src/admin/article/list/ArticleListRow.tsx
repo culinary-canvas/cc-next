@@ -60,7 +60,6 @@ export const ArticleListRow = (props: Props) => {
           >
             +
           </Button>
-          {article.sortOrder}
         </section>
       </td>
       <td className={s.title}>
