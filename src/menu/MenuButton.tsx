@@ -25,13 +25,13 @@ export function MenuButton(props: Props) {
   const [bar1Anim, setBar1Anim] = useSpring(() => ({
     transform: 'translateX(0%) translateY(0%) rotateZ(0deg)',
     width: '75%',
-    config: { tension: 200, velocity: 70, clamp: true },
+    config: { tension: 400 },
   }))
 
   const [bar2Anim, setBar2Anim] = useSpring(() => ({
     transform: 'translateX(0%) translateY(0%) rotateZ(0deg)',
     width: '100%',
-    config: { tension: 200, velocity: 70, clamp: true },
+    config: { tension: 400 },
   }))
 
   const animateNormal = useCallback(() => {
