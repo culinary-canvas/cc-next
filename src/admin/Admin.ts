@@ -30,9 +30,10 @@ export interface Admin {
 }
 
 export function useAdminState(): Admin {
-  const [showUnpublishedOnStartPage, setShowUnpublishedOnStartPage] = useState<
-    boolean
-  >(false)
+  const [
+    showUnpublishedOnStartPage,
+    setShowUnpublishedOnStartPage,
+  ] = useState<boolean>(false)
   const [sidebar, setSidebar] = useState<boolean>(false)
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [formControl, setFormControl] = useState<FormControl<ArticleModel>>()

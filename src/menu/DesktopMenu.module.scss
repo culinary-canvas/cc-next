@@ -9,15 +9,14 @@
   top: 1.5rem;
   right: 3rem;
   display: flex;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 0.5rem;
   height: 48px;
+  padding: 0 0.5rem;
   box-shadow: $softCenteredShadow;
   background-color: $white;
-  transition: all $animation-fast ease-in;
   overflow: hidden;
-  flex-wrap: nowrap;
 
   .activeMarker {
     position: absolute;
@@ -26,9 +25,9 @@
   }
 
   .menuButton {
-    margin-left: auto;
-    margin-right: 0;
     position: absolute;
     right: 0.5rem;
+    margin-right: 0;
+    margin-left: auto;
   }
 }

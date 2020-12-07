@@ -20,11 +20,6 @@
   align-items: center;
   justify-content: center;
 
-  &,
-  label {
-    transition: all $animation-slow ease-in-out;
-  }
-
   label {
     z-index: 1;
     text-decoration: none;
