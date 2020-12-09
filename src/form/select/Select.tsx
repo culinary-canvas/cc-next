@@ -1,5 +1,4 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { useObserver } from 'mobx-react'
 
 interface Props {
   id?: string
@@ -32,7 +31,7 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
     onChange(numeric ? Number(v) : v)
   }
 
-  return useObserver(() => (
+  return (
     <select
       ref={ref}
       id={id}
@@ -53,7 +52,7 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
         </option>
       ))}
     </select>
-  ))
+  )
 })
 
 Select.displayName = 'Select'

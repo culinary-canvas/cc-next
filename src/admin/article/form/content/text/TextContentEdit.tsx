@@ -7,6 +7,7 @@ import { useAutorun } from '../../../../../hooks/useAutorun'
 import { classnames } from '../../../../../services/importHelpers'
 import s from './TextContentEdit.module.scss'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
+import { runInAction } from 'mobx'
 
 interface Props {
   content: TextContentModel
@@ -63,7 +64,7 @@ export const TextContentEdit = observer((props: Props) => {
       value={content.value}
       style={{ ...style } as any}
       onFocus={() => admin.setContent(content)}
-      onChange={(v) => (content.value = v.target.value)}
+      onChange={(v) => runInAction(() => (content.value = v.target.value))}
       placeholder={content.placeholder}
     />
   )

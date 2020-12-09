@@ -1,5 +1,4 @@
 import { ArticleModel } from './Article.model'
-import { User } from 'firebase'
 import { initFirebase } from '../services/firebase/Firebase.service'
 import { Transformer } from '../services/db/Transformer'
 import { Api } from '../services/api/Api'
@@ -7,9 +6,8 @@ import type { PlainObject } from '../types/PlainObject'
 import { ArticleService } from './Article.service'
 import { SortableService } from '../services/sortable/Sortable.service'
 import { isNil } from '../services/importHelpers'
-import { SectionService } from './section/Section.service'
-import { ContentService } from './content/Content.service'
 import { ArticleType } from './ArticleType'
+import firebase from 'firebase'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
@@ -111,7 +109,7 @@ export class ArticleApi {
 
   static async save(
     article: ArticleModel,
-    user: User,
+    user: firebase.User,
     onProgress: (progress: number, message?: string) => any = this.logProgress,
   ) {
     onProgress(0, '')
@@ -136,7 +134,7 @@ export class ArticleApi {
 
   static async delete(
     article: ArticleModel,
-    user: User,
+    user: firebase.User,
     onProgress?: (progress: number, message: string) => any,
   ) {
     onProgress(0, `Deleting ${article.title || 'article with no title'}`)

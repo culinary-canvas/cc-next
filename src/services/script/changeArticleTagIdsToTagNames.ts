@@ -3,8 +3,9 @@ import { Transformer } from '../db/Transformer'
 import { ArticleModel } from '../../article/Article.model'
 import { TagModel } from '../../tag/Tag.model'
 import { TagApi } from '../../tag/Tag.api'
+import firebase from 'firebase/app'
 
-export async function changeArticleTagIdsToTagNames(user) {
+export async function changeArticleTagIdsToTagNames(user: firebase.User) {
   const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
   const tags = Transformer.allToApp(await TagApi.all(), TagModel)
 

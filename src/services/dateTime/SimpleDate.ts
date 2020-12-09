@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import { computed, observable } from 'mobx'
+import { action, computed, observable } from 'mobx'
 
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import { DateInterface } from './DateTime.interface'
 import Day from './Day'
@@ -72,6 +72,7 @@ class SimpleDate implements DateInterface {
     return new SimpleDate(year, month, day)
   }
 
+  @action
   static createFromDate = (date: Date): SimpleDate => {
     const simpleDate = new SimpleDate()
     simpleDate.year = date.getFullYear()
@@ -85,8 +86,7 @@ class SimpleDate implements DateInterface {
   static createFromFirestoreTimestamp = (
     timestamp: firebase.firestore.Timestamp,
   ): SimpleDate => {
-    const simpleDate = SimpleDate.createFromDate(timestamp.toDate())
-    return simpleDate
+    return SimpleDate.createFromDate(timestamp.toDate())
   }
 
   get = (field: string) => {

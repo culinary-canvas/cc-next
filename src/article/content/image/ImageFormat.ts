@@ -12,9 +12,6 @@ export class ImageFormat extends Format {
   constructor(initial?: Partial<ImageFormat>) {
     super(initial)
   }
-  @field(GridPosition)
-  @observable
-  gridPosition: GridPosition
 
   @field()
   @observable

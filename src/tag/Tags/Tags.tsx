@@ -19,7 +19,7 @@ interface Props {
   backgroundColor?: string
 }
 
-export const Tags = observer((props: Props) => {
+export function Tags (props: Props) {
   const {
     id,
     selected,
@@ -123,4 +123,4 @@ export const Tags = observer((props: Props) => {
     setNewTag('')
     setSaving(false)
   }
-})
+}

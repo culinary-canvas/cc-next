@@ -1,5 +1,5 @@
 import { ArticleApi } from '../../article/Article.api'
-import { User } from 'firebase'
+import firebase from 'firebase'
 import { Transformer } from '../db/Transformer'
 import { ArticleModel } from '../../article/Article.model'
 import { GridPosition } from '../../article/grid/GridPosition'
@@ -104,7 +104,7 @@ function setContentLayers(contents: ContentModel[]) {
   }
 }
 
-export async function transformToGridPositions(user: User) {
+export async function transformToGridPositions(user: firebase.User) {
   const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
   articles.forEach((a) => {
     console.group(a.title)

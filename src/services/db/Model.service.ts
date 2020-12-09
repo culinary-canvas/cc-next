@@ -1,9 +1,9 @@
 import { Model } from './Model'
-import { User } from 'firebase'
+import firebase from 'firebase'
 import DateTime from '../dateTime/DateTime'
 
 export class ModelService {
-  static beforeSave<T extends Model>(model: T, user: User) {
+  static beforeSave<T extends Model>(model: T, user: firebase.User) {
     if (!model.id) {
       model.created = DateTime.create()
       model.createdById = user.uid

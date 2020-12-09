@@ -1,5 +1,4 @@
 import React, { ButtonHTMLAttributes, forwardRef } from 'react'
-import { useObserver } from 'mobx-react'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { classnames } from '../../services/importHelpers'
 import { COLOR, ColorType } from '../../styles/color'
@@ -40,7 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...restProps
     } = props
 
-    return useObserver(() => (
+    return (
       <button
         ref={ref}
         onClick={(e) => !disabled && !!onClick && onClick(e)}
@@ -71,6 +70,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           children
         )}
       </button>
-    ))
+    )
   },
 )

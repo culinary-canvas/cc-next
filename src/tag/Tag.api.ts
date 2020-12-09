@@ -1,4 +1,4 @@
-import { User } from 'firebase'
+import firebase from 'firebase'
 import { initFirebase } from '../services/firebase/Firebase.service'
 import { Api } from '../services/api/Api'
 import { PlainObject } from '../types/PlainObject'
@@ -29,7 +29,7 @@ export class TagApi {
     return Api.all(this.COLLECTION)
   }
 
-  static async save(tag: TagModel, user: User): Promise<string> {
+  static async save(tag: TagModel, user: firebase.User): Promise<string> {
     return Api.save(tag, user)
   }
 

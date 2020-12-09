@@ -1,5 +1,4 @@
-import * as firebase from 'firebase'
-import { User } from 'firebase'
+import firebase from 'firebase'
 import { Transformer } from '../db/Transformer'
 import { initFirebase } from '../firebase/Firebase.service'
 import { Model } from '../db/Model'
@@ -42,7 +41,10 @@ export class Api {
     }
   }
 
-  static async save<T extends Model>(model: T, user: User): Promise<string> {
+  static async save<T extends Model>(
+    model: T,
+    user: firebase.User,
+  ): Promise<string> {
     const { firestore } = initFirebase()
 
     ModelService.beforeSave(model, user)

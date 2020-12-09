@@ -1,10 +1,10 @@
 import { ArticleApi } from '../../article/Article.api'
-import { User } from 'firebase'
+import firebase from 'firebase'
 import { Transformer } from '../db/Transformer'
 import { ArticleModel } from '../../article/Article.model'
 import { SectionPreset } from '../../article/section/SectionPreset'
 
-export async function changeSectionPresetNames(user: User) {
+export async function changeSectionPresetNames(user: firebase.User) {
   const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
   articles.forEach((a) =>
     a.sections.forEach((s) => {
