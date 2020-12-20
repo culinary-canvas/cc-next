@@ -1,7 +1,4 @@
 import { ArticleApi } from '../../article/Article.api'
-import { User } from 'firebase'
-import { Transformer } from '../db/Transformer'
-import { ArticleModel } from '../../article/Article.model'
 import { GridPosition } from '../../article/grid/GridPosition'
 import { Fit } from '../../article/shared/Fit'
 import { Size } from '../../article/shared/format/Size'
@@ -104,8 +101,8 @@ function setContentLayers(contents: ContentModel[]) {
   }
 }
 
-export async function transformToGridPositions(user: User) {
-  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
+export async function transformToGridPositions(userId: string) {
+  const articles = await ArticleApi.all()
   articles.forEach((a) => {
     console.group(a.title)
     a.sections.forEach((s) => {
@@ -126,5 +123,7 @@ export async function transformToGridPositions(user: User) {
     })
     console.groupEnd()
   })
-  return Promise.all(articles.map(async (a) => await ArticleApi.save(a, user)))
+  return Promise.all(
+    articles.map(async (a) => await ArticleApi.save(a, userId)),
+  )
 }

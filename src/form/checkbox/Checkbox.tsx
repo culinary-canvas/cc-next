@@ -1,8 +1,7 @@
 import React, { forwardRef, useRef } from 'react'
-import { useObserver } from 'mobx-react'
 import s from './Checkbox.module.scss'
 import { v1 as uuid } from 'uuid'
-import {classnames} from '../../services/importHelpers'
+import { classnames } from '../../services/importHelpers'
 
 interface Props {
   checked: boolean
@@ -22,7 +21,7 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>((props, ref) => {
   } = props
   const id = useRef(uuid()).current
 
-  return useObserver(() => (
+  return (
     <span className={classnames(s.checkbox, containerClassName)}>
       <input
         ref={ref}
@@ -36,7 +35,7 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>((props, ref) => {
         {label}
       </label>
     </span>
-  ))
+  )
 })
 
 Checkbox.displayName = 'Checkbox'

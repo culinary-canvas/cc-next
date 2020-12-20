@@ -110,7 +110,7 @@ export function useMenuState(): MenuParams {
     async (activeName = active.name) => {
       const activeRef = optionElementRefs.get(activeName)
       if (markerAnimations.top.getValue() === 0) {
-        await new Promise((r) =>
+        await new Promise<void>((r) =>
           _setMarkerAnimation({
             left: activeRef.offsetLeft + 10,
             top: activeRef.offsetTop + 16,
@@ -134,7 +134,7 @@ export function useMenuState(): MenuParams {
   )
 
   const open = useCallback(async () => {
-    await new Promise((r) =>
+    await new Promise<void>((r) =>
       _setContainerAnimation({
         width: _expandedWidth,
         onRest: () => null,
@@ -143,7 +143,7 @@ export function useMenuState(): MenuParams {
       }),
     )
     if (_expandedHeight !== _height) {
-      await new Promise((r) =>
+      await new Promise<void>((r) =>
         _setContainerAnimation({
           height: _expandedHeight,
           // @ts-ignore
@@ -156,7 +156,7 @@ export function useMenuState(): MenuParams {
       )
     }
     let i = 0
-    await new Promise((r) =>
+    await new Promise<void>((r) =>
       _setOptionsAnimations({
         opacity: 1,
         onRest: () => {
@@ -176,7 +176,7 @@ export function useMenuState(): MenuParams {
     })
 
     let i = 0
-    await new Promise((r) =>
+    await new Promise<void>((r) =>
       _setOptionsAnimations({
         opacity: 0,
         onRest: () => {
@@ -185,7 +185,7 @@ export function useMenuState(): MenuParams {
         },
       }),
     )
-    await new Promise((r) =>
+    await new Promise<void>((r) =>
       _setContainerAnimation({
         height: _height,
         onRest: () => null,

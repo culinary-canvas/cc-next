@@ -1,11 +1,11 @@
 import { ArticleApi } from '../../article/Article.api'
-import { User } from 'firebase'
+import firebase from 'firebase'
 import { Transformer } from '../db/Transformer'
 import { ArticleModel } from '../../article/Article.model'
 import { SectionPreset } from '../../article/section/SectionPreset'
 
-export async function changeSectionPresetNames(user: User) {
-  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
+export async function changeSectionPresetNames(userId: string) {
+  const articles = await ArticleApi.all()
   articles.forEach((a) =>
     a.sections.forEach((s) => {
       switch (s.preset) {
@@ -36,5 +36,5 @@ export async function changeSectionPresetNames(user: User) {
       }*/
     }),
   )
-  return Promise.all(articles.map(async (a) => await ArticleApi.save(a, user)))
+  return Promise.all(articles.map(async (a) => await ArticleApi.save(a, userId)))
 }

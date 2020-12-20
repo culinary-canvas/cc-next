@@ -1,16 +1,14 @@
 import React from 'react'
 import { ArticleList } from '../../../admin/article/list/ArticleList'
 import { GetServerSideProps } from 'next'
-import { initFirebase } from '../../../services/firebase/Firebase.service'
-import { ArticleApi } from '../../../article/Article.api'
 import { ArticleModel } from '../../../article/Article.model'
 import { useTransform } from '../../../hooks/useTransform'
 import s from './articleList.module.scss'
-import {useAuth} from '../../../services/auth/Auth'
-import {useAuthGuard} from '../../../hooks/useAuthGuard'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
+import { ArticleApi } from '../../../article/Article.api'
 
 interface Props {
-  articleData: Partial<ArticleModel>[]
+  articleData: any[]
 }
 
 function ArticleListPage({ articleData }: Props) {
@@ -28,11 +26,10 @@ function ArticleListPage({ articleData }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  initFirebase()
   const articleData = await ArticleApi.all()
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
   }
 }

@@ -1,29 +1,21 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { ArticleModel } from '../../../article/Article.model'
-import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleApi } from '../../../article/Article.api'
 import { useTransform } from '../../../hooks/useTransform'
-import { PlainObject } from '../../../types/PlainObject'
 import s from './articlePage.module.scss'
 import { ContentType } from '../../../article/content/ContentType'
 import { TextContentModel } from '../../../article/content/text/TextContent.model'
 import { PageHead } from '../../../head/PageHead'
 import { Article } from '../../../article/Article'
+import { ArticleApi } from '../../../article/Article.api'
 
 interface Props {
-  articleData: PlainObject<ArticleModel>
+  articleData: any
 }
 
 const ArticlePage = observer(({ articleData }: Props) => {
-  const router = useRouter()
-
   const article = useTransform([articleData], ArticleModel)[0]
-
-  if (router.isFallback) {
-    return <main>Loading...</main>
-  }
 
   return (
     <>
@@ -60,18 +52,18 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
         slug: article.slug,
       },
     })),
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 
-export const getStaticProps: GetStaticProps<
-  Props & { [key: string]: any },
-  StaticProps
-> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
+  params,
+}) => {
   const articleData = await ArticleApi.bySlug(params.slug)
+
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
     revalidate: 1,
   }

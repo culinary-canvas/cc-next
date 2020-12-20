@@ -1,10 +1,14 @@
 const withImages = require('next-images')
-
-module.exports = withImages({
-  sassOptions: {
-    includePaths: ['src/styles'],
-  },
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
 })
+module.exports = withBundleAnalyzer(
+  withImages({
+    sassOptions: {
+      includePaths: ['src/styles'],
+    },
+  }),
+)
 
 /*
  * Uncomment to get webpack config in startup log

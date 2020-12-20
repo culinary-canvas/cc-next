@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import s from './articlesPerType.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleType } from '../../article/ArticleType'
@@ -8,30 +8,19 @@ import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
+import { useTransform } from '../../hooks/useTransform'
+import { ArticleTypeService } from '../../article/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
-import { useRouter } from 'next/router'
 
 interface Props {
-  articlesData: Partial<ArticleModel>[]
+  articlesData: any[]
   type: ArticleType
 }
 
 const PAGE_SIZE = 4
 
 function ArticlesPerType({ articlesData, type }: Props) {
-  const router = useRouter()
-
-  if (router.isFallback) {
-    return <main>Loading...</main>
-  }
-
-  const [articles, setArticles] = useState<ArticleModel[]>(
-    Transformer.allToApp(articlesData, ArticleModel),
-  )
-
-  useEffect(() => {
-    setArticles(Transformer.allToApp(articlesData, ArticleModel))
-  }, [articlesData])
+  const articles = useTransform(articlesData, ArticleModel)
 
   return (
     <>
@@ -44,13 +33,13 @@ function ArticlesPerType({ articlesData, type }: Props) {
       <main className={classnames(s.container)}>
         <ArticleGrid
           initialArticles={articles}
-          load={async (lastLoaded) => {
+          load={async (last) => {
             const data = await ArticleApi.publishedByTypePagedBySortOrderDesc(
               type,
               PAGE_SIZE,
-              lastLoaded.sortOrder,
+              last.sortOrder,
             )
-            return !!data ? Transformer.allToApp(data, ArticleModel) : null
+            return !!data ? Transformer.dbToModels(data, ArticleModel) : null
           }}
         />
       </main>
@@ -59,19 +48,18 @@ function ArticlesPerType({ articlesData, type }: Props) {
 }
 
 interface StaticProps {
-  type: ArticleType
+  type: string
   [key: string]: string
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
-  console.log(Object.values(ArticleType))
   return {
     paths: Object.values(ArticleType).map((type) => ({
       params: {
         type: StringUtils.toLowerKebabCase(type),
       },
     })),
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 
@@ -79,17 +67,15 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const type = Object.values(ArticleType).find(
-    (t) => StringUtils.toLowerKebabCase(t) === params.type,
-  )
-
+  const type = ArticleTypeService.findByKebabCase(params.type)
   const articlesData = await ArticleApi.publishedByTypePagedBySortOrderDesc(
     type,
     PAGE_SIZE,
   )
+
   return {
     props: {
-      articlesData,
+      articlesData: JSON.parse(JSON.stringify(articlesData)),
       type,
     },
     revalidate: 1,

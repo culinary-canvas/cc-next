@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import copyPasteIcon from '../../../../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import editIcon from '../../../../../../../public/assets/icons/streamline-icon-pencil-write-3-alternate@140x140.svg'
-import { observer } from 'mobx-react'
 import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
 import { Select } from '../../../../../../form/select/Select'
 import { runInAction, toJS } from 'mobx'
@@ -22,7 +21,7 @@ import { useAuth } from '../../../../../../services/auth/Auth'
 import { useRouter } from 'next/router'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 
-export const ArticleControls = observer(() => {
+export function ArticleControls() {
   const auth = useAuth()
   const router = useRouter()
   const admin = useAdmin()
@@ -50,8 +49,7 @@ export const ArticleControls = observer(() => {
     if (!!article) {
       ArticleApi.all().then((all) => {
         const other = all.filter((a) => a.id !== article.id && !a.parentId)
-        const transformed = other.map((a) => Transformer.toApp(a, ArticleModel))
-        setOtherArticles(transformed)
+        setOtherArticles(other)
       })
     }
   }, [article])
@@ -181,7 +179,7 @@ export const ArticleControls = observer(() => {
     if (goodToGo) {
       setDeleting(true)
       overlay.toggle()
-      await ArticleApi.delete(admin.article, auth.user, onProgress)
+      await ArticleApi.delete(admin.article, auth.userId, onProgress)
       setTimeout(() => overlay.toggle(), 1000)
       router.replace('/admin/articles')
     }
@@ -191,4 +189,4 @@ export const ArticleControls = observer(() => {
     message && overlay.setText(message)
     overlay.setProgress(progress)
   }
-})
+}

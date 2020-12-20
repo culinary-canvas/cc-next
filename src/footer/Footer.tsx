@@ -1,7 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import s from './Footer.module.scss'
-import YearMonth from '../services/dateTime/YearMonth'
 import Link from 'next/link'
 import { SocialMediaLinks } from '../shared/socialMediaLinks/SocialMediaLinks'
 import { COLOR } from '../styles/color'
@@ -31,7 +30,7 @@ export const Footer = observer(() => {
         <SocialMediaLinks color={COLOR.WHITE} />
 
         <section className={s.copyright}>
-          {YearMonth.create().year} © Culinary Canvas
+          {new Date().getFullYear()} © Culinary Canvas
         </section>
       </div>
     </footer>

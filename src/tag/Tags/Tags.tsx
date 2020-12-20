@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
 import { Button } from '../../form/button/Button'
 import { TagModel } from '../Tag.model'
 import StringUtils from '../../services/utils/StringUtils'
@@ -19,7 +18,7 @@ interface Props {
   backgroundColor?: string
 }
 
-export const Tags = observer((props: Props) => {
+export function Tags(props: Props) {
   const {
     id,
     selected,
@@ -91,14 +90,14 @@ export const Tags = observer((props: Props) => {
             }
             onKeyPress={async (e) => {
               if (e.key === 'Enter' || e.keyCode === 13) {
-                add(auth.user)
+                add()
               }
             }}
             placeholder="New tag"
           />
           <Button
-            onClick={() => add(auth.user)}
-            onKeyPress={() => add(auth.user)}
+            onClick={() => add()}
+            onKeyPress={() => add()}
             loading={saving}
             loadingText="Adding..."
             className="add-button"
@@ -110,17 +109,17 @@ export const Tags = observer((props: Props) => {
     </section>
   )
 
-  async function add(user) {
+  async function add() {
     setSaving(true)
 
     if (!tags.includes(newTag)) {
       const tagToAdd = new TagModel()
       tagToAdd.name = newTag
-      await TagApi.save(tagToAdd, auth.user)
+      await TagApi.save(tagToAdd, auth.userId)
       onAdd(newTag)
     }
     setShowInput(false)
     setNewTag('')
     setSaving(false)
   }
-})
+}

@@ -1,5 +1,9 @@
 import 'reflect-metadata'
 
+/**
+ * This annotation is only for verbosity when defining classes. Could be removed, or used to automate 'popluate' methods
+ */
+
 export function transient(): PropertyDecorator {
   return function (target, key) {
     Reflect.defineMetadata('transient', true, target, key)

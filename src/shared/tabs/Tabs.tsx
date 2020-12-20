@@ -1,6 +1,5 @@
 import React from 'react'
 import './Tabs.module.scss'
-import { useObserver } from 'mobx-react'
 import { isString } from 'lodash'
 import { classnames } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
@@ -32,7 +31,7 @@ export function Tabs<T extends TabProperty | string = string>(props: Props<T>) {
     onAdd,
   } = props
 
-  return useObserver(() => (
+  return (
     <>
       <div className={classnames(s.container, containerClassName)}>
         {tabs.map((tab, i) => {
@@ -61,7 +60,7 @@ export function Tabs<T extends TabProperty | string = string>(props: Props<T>) {
       </div>
       {children}
     </>
-  ))
+  )
 
   function getId(tab: T) {
     return isString(tab) ? (tab as string) : (tab as TabProperty).id

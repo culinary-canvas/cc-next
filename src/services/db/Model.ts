@@ -1,13 +1,11 @@
-import DateTime from '../dateTime/DateTime'
-
 export interface Model {
   id: string
 
-  created: DateTime
+  created: Date
 
   createdById: string
 
-  modified: DateTime
+  modified: Date
 
   modifiedById: string
 }

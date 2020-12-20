@@ -265,11 +265,12 @@ export class SectionService {
     }
     return section
   }
-  static contentsToDb = (objects) => objects?.map((o) => Transformer.toDb(o))
+  static contentsToDb = (objects: any[]) =>
+    objects?.map((o) => Transformer.modelToDb(o))
 
-  static contentsToApp = (objects) =>
+  static contentsToApp = (objects: any[]) =>
     objects?.map((o) =>
-      Transformer.toApp<ContentModel>(
+      Transformer.dbToModel<ContentModel>(
         o,
         !!o.type && o.type === ContentType.IMAGE
           ? ImageContentModel

@@ -1,23 +1,21 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import s from './start.module.scss'
-import { GetStaticProps } from 'next'
 import { classnames } from '../services/importHelpers'
 import { ArticleModel } from '../article/Article.model'
 import { PageHead } from '../head/PageHead'
-import { ArticleApi } from '../article/Article.api'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
-import { Transformer } from '../services/db/Transformer'
+import { ArticleApi } from '../article/Article.api'
+import { GetStaticProps } from 'next'
+import { useTransform } from '../hooks/useTransform'
 
 interface Props {
-  articlesData: Partial<ArticleModel>[]
+  articlesData: any[]
 }
 
 const PAGE_SIZE = 4
 
 function Start({ articlesData }: Props) {
-  const articles = useRef<ArticleModel[]>(
-    Transformer.allToApp(articlesData, ArticleModel),
-  ).current
+  const articles = useTransform(articlesData, ArticleModel)
 
   return (
     <>
@@ -30,25 +28,24 @@ function Start({ articlesData }: Props) {
       <main className={classnames(s.container)}>
         <ArticleGrid
           initialArticles={articles}
-          load={async (lastLoaded) => {
-            const data = await ArticleApi.publishedPagedBySortOrderDesc(
+          load={async (lastLoaded) =>
+            ArticleApi.publishedPagedBySortOrderDesc(
               PAGE_SIZE,
               lastLoaded.sortOrder,
             )
-            return !!data ? Transformer.allToApp(data, ArticleModel) : null
-          }}
+          }
         />
       </main>
     </>
   )
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async () => {
   const articlesData = await ArticleApi.publishedPagedBySortOrderDesc(PAGE_SIZE)
 
   return {
     props: {
-      articlesData,
+      articlesData: JSON.parse(JSON.stringify(articlesData)),
     },
     revalidate: 1,
   }

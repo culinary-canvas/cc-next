@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
-import { PlainObject } from '../../../../types/PlainObject'
 import { ArticleModel } from '../../../../article/Article.model'
 import { useTransform } from '../../../../hooks/useTransform'
 import { useFormControl } from '../../../../form/formControl/useFormControl'
 import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
-import { ArticleApi } from '../../../../article/Article.api'
 import { useAdmin } from '../../../../admin/Admin'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { ArticleApi } from '../../../../article/Article.api'
 
 interface Props {
-  articleData: PlainObject<ArticleModel>
+  articleData: any
 }
 
 export default function ArticleEdit({ articleData }) {
@@ -56,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
   }
 }

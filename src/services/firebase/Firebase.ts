@@ -1,5 +1,5 @@
-import * as firebase from 'firebase/app'
-import 'firebase/storage'
+import firebase from 'firebase/app'
+// import 'firebase/storage'
 
 export const initFirebase = () => {
   console.debug('Initializing Firebase...')

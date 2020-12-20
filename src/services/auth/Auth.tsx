@@ -1,4 +1,4 @@
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 import 'firebase/auth'
 import {
   createContext,
@@ -7,11 +7,10 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { initFirebase } from '../firebase/Firebase.service'
+import { initFirebase } from '../firebase/Firebase'
 
 export interface Auth {
-  readonly user: firebase.User
-  readonly setUser: (v: firebase.User) => void
+  readonly userId: string
   readonly isSignedIn: boolean
   readonly init: () => void
   readonly signIn: (email: string, password: string) => Promise<void>
@@ -20,6 +19,7 @@ export interface Auth {
 
 export function useAuthState(): Auth {
   const [user, setUser] = useState<firebase.User>()
+  const [userId, setUserId] = useState<string>()
   const isSignedIn = useMemo(() => !!user, [user])
 
   const init = () => {
@@ -38,11 +38,11 @@ export function useAuthState(): Auth {
 
   function authStateChanged(user: firebase.User) {
     setUser(user)
+    setUserId(user.uid)
   }
 
   return {
-    user,
-    setUser,
+    userId,
     isSignedIn,
     init,
     signIn,
