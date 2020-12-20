@@ -4,32 +4,29 @@ import { SectionModel } from './section/Section.model'
 import { ArticleType } from './ArticleType'
 import { ContentType } from './content/ContentType'
 import { field } from '../services/db/decorators/field.decorator'
-import { collection } from '../services/db/decorators/collection.decorator'
 import { TextContentModel } from './content/text/TextContent.model'
 import { ContentModel } from './content/ContentModel'
-import DateTime from '../services/dateTime/DateTime'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { Sortable } from '../types/Sortable'
 import { isSystemColor } from '../styles/color'
 import { ArticleFormat } from './ArticleFormat'
 
-@collection('articles')
 export class ArticleModel implements Model, Sortable {
   @observable
   @field()
   id: string
 
   @observable
-  @field(DateTime)
-  created: DateTime
+  @field()
+  created: Date
 
   @observable
   @field()
   createdById: string
 
   @observable
-  @field(DateTime)
-  modified: DateTime
+  @field()
+  modified: Date
 
   @observable
   @field()

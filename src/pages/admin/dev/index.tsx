@@ -3,13 +3,12 @@ import { observer } from 'mobx-react'
 import { Button } from '../../../form/button/Button'
 import { fixSortOrders } from '../../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
-import { setArticleSlug } from '../../../services/script/setArticleSlug'
-import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 import s from './dev.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useAuth } from '../../../services/auth/Auth'
-import {changeSectionPresetNames} from '../../../services/script/changeSectionPresetNames'
-import {transformToGridPositions} from '../../../services/script/transformToGridPositions'
+import { changeSectionPresetNames } from '../../../services/script/changeSectionPresetNames'
+import { transformToGridPositions } from '../../../services/script/transformToGridPositions'
+import { GetStaticProps } from 'next'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -26,7 +25,7 @@ const AdminDevArea = observer(() => {
         <Button
           onClick={async () => {
             setRunning('fixSortOrders')
-            await fixSortOrders(auth.user)
+            await fixSortOrders(auth.userId)
             setRunning(null)
           }}
           loading={running === 'fixSortOrders'}
@@ -48,7 +47,7 @@ const AdminDevArea = observer(() => {
         <Button
           onClick={async () => {
             setRunning('changeSectionPresetNames')
-            await changeSectionPresetNames(auth.user)
+            await changeSectionPresetNames(auth.userId)
             setRunning(null)
           }}
           loading={running === 'changeSectionPresetNames'}
@@ -59,7 +58,7 @@ const AdminDevArea = observer(() => {
         <Button
           onClick={async () => {
             setRunning('transformToGridPositions')
-            await transformToGridPositions(auth.user)
+            await transformToGridPositions(auth.userId)
             setRunning(null)
           }}
           loading={running === 'transformToGridPositions'}
@@ -70,5 +69,9 @@ const AdminDevArea = observer(() => {
     </div>
   )
 })
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
+}
 
 export default AdminDevArea

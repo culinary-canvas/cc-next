@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { ArticleModel } from '../../../article/Article.model'
 import Link from 'next/link'
-import { dateTimeService } from '../../../services/dateTime/DateTime.service'
 import s from './ArticleListRow.module.scss'
 import { SortOrder } from './SortOrder'
 import StringUtils from '../../../services/utils/StringUtils'
@@ -35,7 +34,7 @@ export const ArticleListRow = (props: Props) => {
               saving(true)
               const toSave = ArticleService.changeSortOrderDown(article, all)
               await Promise.all(
-                toSave.map(async (a) => await ArticleApi.save(a, auth.user)),
+                toSave.map(async (a) => await ArticleApi.save(a, auth.userId)),
               )
               saving(false)
             }}
@@ -53,7 +52,7 @@ export const ArticleListRow = (props: Props) => {
               saving(true)
               const toSave = ArticleService.changeSortOrderUp(article, all)
               await Promise.all(
-                toSave.map(async (a) => await ArticleApi.save(a, auth.user)),
+                toSave.map(async (a) => await ArticleApi.save(a, auth.userId)),
               )
               saving(false)
             }}
@@ -72,8 +71,8 @@ export const ArticleListRow = (props: Props) => {
       </td>
       <td>{StringUtils.toDisplayText(article.type)}</td>
       <td>{article.published ? 'Published' : 'WIP'}</td>
-      <td>{dateTimeService.calendar(article.created)}</td>
-      <td>{dateTimeService.calendar(article.modified)}</td>
+      <td>{article.created.toLocaleDateString()}</td>
+      <td>{article.modified.toLocaleDateString()}</td>
     </tr>
   )
 }

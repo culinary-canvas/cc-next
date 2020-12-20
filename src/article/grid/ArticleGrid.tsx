@@ -12,7 +12,7 @@ import { Transformer } from '../../services/db/Transformer'
 
 interface Props {
   initialArticles?: ArticleModel[]
-  load: (lastLoaded: ArticleModel) => Promise<ArticleModel[] | null>
+  load: (last: ArticleModel) => Promise<ArticleModel[]>
 }
 
 export const ArticleGrid = observer((props: Props) => {
@@ -44,8 +44,8 @@ export const ArticleGrid = observer((props: Props) => {
 
     const articlesToAddData = await loadFn(articles[articles.length - 1])
 
-    if (!!articlesToAddData) {
-      const transformed = Transformer.allToApp(articlesToAddData, ArticleModel)
+    if (!!articlesToAddData.length) {
+      const transformed = Transformer.dbToModels(articlesToAddData, ArticleModel)
       setArticles([...articles, ...transformed])
     } else {
       setEndReached(true)

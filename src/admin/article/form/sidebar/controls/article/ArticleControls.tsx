@@ -49,8 +49,7 @@ export function ArticleControls() {
     if (!!article) {
       ArticleApi.all().then((all) => {
         const other = all.filter((a) => a.id !== article.id && !a.parentId)
-        const transformed = other.map((a) => Transformer.toApp(a, ArticleModel))
-        setOtherArticles(transformed)
+        setOtherArticles(other)
       })
     }
   }, [article])
@@ -180,7 +179,7 @@ export function ArticleControls() {
     if (goodToGo) {
       setDeleting(true)
       overlay.toggle()
-      await ArticleApi.delete(admin.article, auth.user, onProgress)
+      await ArticleApi.delete(admin.article, auth.userId, onProgress)
       setTimeout(() => overlay.toggle(), 1000)
       router.replace('/admin/articles')
     }

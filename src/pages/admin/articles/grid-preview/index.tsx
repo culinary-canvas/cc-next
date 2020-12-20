@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import s from './gridPreview.module.scss'
 import { GetStaticProps } from 'next'
 import { ArticleModel } from '../../../../article/Article.model'
@@ -7,19 +7,17 @@ import { PageHead } from '../../../../head/PageHead'
 import { classnames } from '../../../../services/importHelpers'
 import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../../../article/Article.api'
-import {useAuthGuard} from '../../../../hooks/useAuthGuard'
+import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { useTransform } from '../../../../hooks/useTransform'
 
 interface Props {
-  articlesData: Partial<ArticleModel>[]
+  articlesData: any[]
 }
 
 const PAGE_SIZE = 4
 
 function Start({ articlesData }: Props) {
-  const articles = useRef<ArticleModel[]>(
-    Transformer.allToApp(articlesData, ArticleModel),
-  ).current
-
+  const articles = useTransform(articlesData, ArticleModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {
@@ -37,7 +35,7 @@ function Start({ articlesData }: Props) {
               PAGE_SIZE,
               lastLoaded.sortOrder,
             )
-            return !!data ? Transformer.allToApp(data, ArticleModel) : null
+            return !!data ? Transformer.dbToModels(data, ArticleModel) : null
           }}
         />
       </main>
@@ -50,7 +48,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: {
-      articlesData,
+      articlesData: JSON.parse(JSON.stringify(articlesData)),
     },
     revalidate: 1,
   }

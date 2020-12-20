@@ -9,7 +9,6 @@ import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from '../../content/image/ImageContent.model'
 import { TextContentModel } from '../../content/text/TextContent.model'
 import StringUtils from '../../../services/utils/StringUtils'
-import { dateTimeService } from '../../../services/dateTime/DateTime.service'
 import { ImageService } from '../../content/image/Image.service'
 import { useRouter } from 'next/router'
 

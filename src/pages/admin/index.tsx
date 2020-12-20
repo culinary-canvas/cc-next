@@ -3,6 +3,7 @@ import { useAuth } from '../../services/auth/Auth'
 import { useRouter } from 'next/router'
 import { SignIn } from '../../admin/signIn/SingIn'
 import s from './signIn.module.scss'
+import { GetStaticProps } from 'next'
 
 function AdminHome() {
   const auth = useAuth()
@@ -19,6 +20,11 @@ function AdminHome() {
       <SignIn />
     </main>
   )
+}
+
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
 }
 
 export default AdminHome

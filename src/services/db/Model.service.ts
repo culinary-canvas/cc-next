@@ -1,13 +1,11 @@
 import { Model } from './Model'
-import firebase from 'firebase'
-import DateTime from '../dateTime/DateTime'
 
 export class ModelService {
-  static beforeSave<T extends Model>(model: T, user: firebase.User) {
+  static beforeSave<T extends Model>(model: T, userId: string) {
     if (!model.id) {
-      model.created = DateTime.create()
-      model.createdById = user.uid
+      model.created = new Date()
+      model.createdById = userId
     }
-    model.modified = DateTime.create()
+    model.modified = new Date()
   }
 }

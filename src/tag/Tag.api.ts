@@ -1,39 +1,46 @@
-import firebase from 'firebase'
-import { initFirebase } from '../services/firebase/Firebase.service'
-import { Api } from '../services/api/Api'
-import { PlainObject } from '../types/PlainObject'
-import { Transformer } from '../services/db/Transformer'
 import { TagModel } from './Tag.model'
+import { Transformer } from '../services/db/Transformer'
+import { initFirebase } from '../services/firebase/Firebase'
+import 'firebase/firestore'
 
 export class TagApi {
   private static readonly COLLECTION = 'tags'
 
-  static async byId(id: string) {
-    return Api.byId(id, this.COLLECTION)
+  static async byId(id: string): Promise<TagModel> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<TagModel>(Transformer.firestoreConverter(TagModel))
+      .doc(id)
+      .get()
+    return response.exists ? response.data() : null
   }
-
-  static async byIdIn(ids: string[]) {
+  static async all(): Promise<TagModel[]> {
     const { firestore } = initFirebase()
 
-    const snapshot = await firestore()
+    const response = await firestore()
       .collection(this.COLLECTION)
-      .where('id', 'in', ids)
+      .withConverter<TagModel>(Transformer.firestoreConverter(TagModel))
       .get()
 
-    if (!!snapshot.size) {
-      return Transformer.listToJson(snapshot.docs)
-    }
+    return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
-  static async all(): Promise<PlainObject<TagModel>[]> {
-    return Api.all(this.COLLECTION)
+  static async save(tag: TagModel, userId: string): Promise<string> {
+    const { firestore } = initFirebase()
+
+    let collectionRef = firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(TagModel))
+
+    const doc = !!tag.id ? collectionRef.doc(tag.id) : collectionRef.doc()
+
+    await doc.set(tag)
+    return doc.id
   }
 
-  static async save(tag: TagModel, user: firebase.User): Promise<string> {
-    return Api.save(tag, user)
-  }
-
-  static async delete(id: string): Promise<void> {
-    return Api.delete(id, this.COLLECTION)
+  static async delete(tag: TagModel) {
+    const { firestore } = initFirebase()
+    await firestore().collection(this.COLLECTION).doc(tag.id).delete()
   }
 }

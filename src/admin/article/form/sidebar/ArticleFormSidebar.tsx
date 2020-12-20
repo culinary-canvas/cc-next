@@ -5,7 +5,6 @@ import { MenuButton } from '../../../../menu/MenuButton'
 import { Button } from '../../../../form/button/Button'
 import { Controls } from './controls/Controls'
 import { ArticleApi } from '../../../../article/Article.api'
-import { COLOR } from '../../../../styles/color'
 import { useAuth } from '../../../../services/auth/Auth'
 import s from './ArticleFormSidebar.module.scss'
 import { useRouter } from 'next/router'
@@ -89,7 +88,7 @@ const ArticleFormSidebar = observer((props: Props) => {
   async function onSave() {
     setSaving(true)
     overlay.toggle()
-    const id = await ArticleApi.save(admin.article, auth.user, onProgress)
+    const id = await ArticleApi.save(admin.article, auth.userId, onProgress)
 
     setTimeout(async () => {
       const { slug } = await ArticleApi.byId(id)

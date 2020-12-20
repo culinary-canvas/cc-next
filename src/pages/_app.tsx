@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import '../styles/global.scss'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
 import TagManager from 'react-gtm-module'
-import { dateTimeService } from '../services/dateTime/DateTime.service'
 import { AdminContext, useAdminState } from '../admin/Admin'
 import { OverlayContext, useOverlayState } from '../shared/overlay/OverlayStore'
 import {
@@ -37,9 +36,6 @@ function App({ Component, pageProps }: Props) {
   useEffect(() => {
     if (IS_PROD) {
       TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
-    }
-    if (!isServer) {
-      dateTimeService.init()
     }
   }, [])
 
@@ -83,8 +79,6 @@ function App({ Component, pageProps }: Props) {
 
 App.getStaticProps = async () => {
   if (isServer) {
-    dateTimeService.init()
-
     return {}
   }
 }

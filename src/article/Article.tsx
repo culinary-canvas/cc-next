@@ -26,7 +26,7 @@ export const Article = observer(({ article }: Props) => {
   useEffect(() => {
     ArticleApi.allPagedBySortOrderDesc(4).then((data) => {
       if (!!data) {
-        const articles = Transformer.allToApp(data, ArticleModel).filter(
+        const articles = Transformer.dbToModels(data, ArticleModel).filter(
           (a) => a.id !== article.id,
         )
         setInitialGridArticles(articles)
@@ -68,7 +68,7 @@ export const Article = observer(({ article }: Props) => {
               lastLoaded?.sortOrder,
             )
             return !!data
-              ? Transformer.allToApp(data, ArticleModel).filter(
+              ? Transformer.dbToModels(data, ArticleModel).filter(
                   (a) => a.id !== article.id,
                 )
               : null
