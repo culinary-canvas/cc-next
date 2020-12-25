@@ -9,6 +9,11 @@
   font-family: filson-pro, sans-serif;
   font-size: 14px;
   font-weight: 600;
+
+  &:hover {
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.05);
+    opacity: 1;
+  }
 }
 
 @mixin form-element-height {
@@ -26,14 +31,14 @@
     }
 
     &:not(:first-child):not(:last-child) {
-      border-radius: unset !important;
       margin-left: -1px;
+      border-radius: unset !important;
     }
 
     &:last-child {
+      margin-left: -1px;
       border-bottom-left-radius: unset !important;
       border-top-left-radius: unset !important;
-      margin-left: -1px;
     }
   }
 
@@ -95,11 +100,6 @@
   }
 
   &.toggleable.selected {
-    opacity: 1;
-  }
-
-  &:hover {
-    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.05);
     opacity: 1;
   }
 }

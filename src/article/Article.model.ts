@@ -17,7 +17,7 @@ export class ArticleModel implements Model, Sortable {
   id: string
 
   @observable
-  @field()
+  @field(Date)
   created: Date
 
   @observable
@@ -25,7 +25,7 @@ export class ArticleModel implements Model, Sortable {
   createdById: string
 
   @observable
-  @field()
+  @field(Date)
   modified: Date
 
   @observable

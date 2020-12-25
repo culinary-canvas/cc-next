@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
 import { ArticleModel } from '../../../article/Article.model'

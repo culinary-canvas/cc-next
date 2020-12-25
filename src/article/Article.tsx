@@ -59,21 +59,7 @@ export const Article = observer(({ article }: Props) => {
       </article>
 
       <div className={s.gridContainer}>
-      <h1>More articles</h1>
-        <ArticleGrid
-          initialArticles={initialGridArticles}
-          load={async (lastLoaded) => {
-            const data = await ArticleApi.allPagedBySortOrderDesc(
-              4,
-              lastLoaded?.sortOrder,
-            )
-            return !!data
-              ? Transformer.dbToModels(data, ArticleModel).filter(
-                  (a) => a.id !== article.id,
-                )
-              : null
-          }}
-        />
+        <h1>More articles</h1>
       </div>
     </>
   )

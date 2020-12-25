@@ -8,7 +8,7 @@ import { classnames } from '../../../../services/importHelpers'
 import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../../../article/Article.api'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { useTransform } from '../../../../hooks/useTransform'
+import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 
 interface Props {
   articlesData: any[]
@@ -17,7 +17,7 @@ interface Props {
 const PAGE_SIZE = 4
 
 function Start({ articlesData }: Props) {
-  const articles = useTransform(articlesData, ArticleModel)
+  const articles = useTransformToModel(articlesData, ArticleModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {

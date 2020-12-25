@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { ArticleModel } from '../../../article/Article.model'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useTransform } from '../../../hooks/useTransform'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import s from './articlePage.module.scss'
 import { ContentType } from '../../../article/content/ContentType'
 import { TextContentModel } from '../../../article/content/text/TextContent.model'
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const ArticlePage = observer(({ articleData }: Props) => {
-  const article = useTransform([articleData], ArticleModel)[0]
+  const article = useTransformToModel([articleData], ArticleModel)[0]
 
   return (
     <>

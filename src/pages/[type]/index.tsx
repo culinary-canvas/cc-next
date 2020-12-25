@@ -8,7 +8,7 @@ import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
-import { useTransform } from '../../hooks/useTransform'
+import { useTransformToModel } from '../../hooks/useTransformToModel'
 import { ArticleTypeService } from '../../article/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
 
@@ -20,7 +20,7 @@ interface Props {
 const PAGE_SIZE = 4
 
 function ArticlesPerType({ articlesData, type }: Props) {
-  const articles = useTransform(articlesData, ArticleModel)
+  const articles = useTransformToModel(articlesData, ArticleModel)
 
   return (
     <>

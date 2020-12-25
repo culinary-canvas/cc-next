@@ -160,7 +160,7 @@ export function useMenuState(): MenuParams {
       _setOptionsAnimations({
         opacity: 1,
         onRest: () => {
-          options[i].name === active.name && r()
+          options[i].name === active?.name && r()
           i++
         },
       }),

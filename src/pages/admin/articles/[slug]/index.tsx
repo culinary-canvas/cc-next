@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
 import { ArticleModel } from '../../../../article/Article.model'
-import { useTransform } from '../../../../hooks/useTransform'
+import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 import { useFormControl } from '../../../../form/formControl/useFormControl'
 import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
 import { useAdmin } from '../../../../admin/Admin'
@@ -16,7 +16,7 @@ interface Props {
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
-  const article = useTransform([articleData], ArticleModel)[0]
+  const article = useTransformToModel([articleData], ArticleModel)[0]
   const allowed = useAuthGuard()
 
   const formControl = useFormControl(article, [

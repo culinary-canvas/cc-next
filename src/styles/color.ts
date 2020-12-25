@@ -8,6 +8,7 @@ export const COLOR = {
   BLUE: '#003EEE',
   BLUE_LIGHT: '#7fa0ff',
   RED: '#e70c3f',
+  RED_DARK: '#AE0930',
   PINK: '#EBB7B7',
   YELLOW: '#FEE100',
   BEIGE: '#EBE1B7',
@@ -40,5 +41,5 @@ export function RGBToHex(rgb: string) {
 }
 
 export function isSystemColor(hex: string) {
-  return Object.values(COLOR).some(c => c === hex)
+  return Object.values(COLOR).some((c) => c === hex)
 }

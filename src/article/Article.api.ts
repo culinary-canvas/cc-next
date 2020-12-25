@@ -44,6 +44,16 @@ export class ArticleApi {
     return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
+  static async allNoTransform(): Promise<{ [key: string]: any }[]> {
+    const { firestore } = initFirebase()
+
+    const response = await firestore().collection(this.COLLECTION).get()
+
+    return !!response.size
+      ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
+      : []
+  }
+
   static async publishedPagedBySortOrderDesc(
     limit: number,
     startAfter?: any,

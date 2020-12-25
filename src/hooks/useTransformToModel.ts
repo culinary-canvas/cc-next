@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import { Transformer } from '../services/db/Transformer'
 import { Class } from '../types/Class'
 
-export function useTransform<T = any>(
-  dbObjects: any[] = [],
+export function useTransformToModel<T = any>(
+  dbObjects: { [key: string]: any }[] = [],
   Clazz: Class<T>,
 ): T[] {
   return useMemo<T[]>(
