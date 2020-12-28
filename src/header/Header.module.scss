@@ -10,6 +10,11 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  pointer-events: none;
+  > div {
+    pointer-events: all;
+  }
+
   @include media('>phone') {
     height: $header-height;
   }
@@ -21,6 +26,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
+
     @include media('>phone') {
       top: 1.5rem;
       left: 3rem;
@@ -60,16 +66,16 @@
       background-color: $white;
       font-family: $font-family-forma;
       @include media('>phone') {
-        font-size: 18px;
         height: 3rem;
         padding: 1rem;
         margin-top: 1rem;
+        font-size: 18px;
       }
       @include media('<=phone') {
-        font-size: 14px;
         height: 32px;
         padding: 0.6rem;
         margin-top: 0.6rem;
+        font-size: 14px;
       }
     }
   }

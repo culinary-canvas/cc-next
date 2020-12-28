@@ -150,7 +150,6 @@ export class GridPositionService {
     const rows = this.numberOfRows(parts) + 1
     for (let i = row; i <= rows; i++) {
       const partsToShrink = this.partsEndingOnRow(parts, i)
-      console.log('parts to shrink', i, toJS(partsToShrink))
       partsToShrink.forEach(
         (p) =>
           (p.format.gridPosition.endRow = p.format.gridPosition.endRow - 1),

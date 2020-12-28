@@ -5,7 +5,6 @@ import { animated } from 'react-spring'
 import s from './DesktopMenu.module.scss'
 import MenuOption from './MenuOption'
 import { MenuButton } from './MenuButton'
-import { MenuOptionDefinition } from './MenuOptionDefinition'
 import { useMenu } from './useMenu'
 
 export function DesktopMenu() {

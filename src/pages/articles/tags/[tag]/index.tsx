@@ -1,25 +1,22 @@
 import React, { useEffect } from 'react'
-import s from './articlesByType.module.scss'
+import s from './articlesByTag.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleType } from '../../article/ArticleType'
-import { ArticleModel } from '../../article/Article.model'
-import { PageHead } from '../../head/PageHead'
-import { classnames } from '../../services/importHelpers'
-import { ArticleGrid } from '../../article/grid/ArticleGrid'
-import { ArticleApi } from '../../article/Article.api'
-import { useTransformToModel } from '../../hooks/useTransformToModel'
-import { ArticleTypeService } from '../../article/ArticleType.service'
-import StringUtils from '../../services/utils/StringUtils'
-import { initFirebase } from '../../services/firebase/Firebase'
+import { useTransformToModel } from '../../../../hooks/useTransformToModel'
+import { ArticleModel } from '../../../../article/Article.model'
+import { PageHead } from '../../../../head/PageHead'
+import { classnames } from '../../../../services/importHelpers'
+import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
+import ArticleApi from '../../../../article/Article.api'
+import { initFirebase } from '../../../../services/firebase/Firebase'
 
 interface Props {
   articlesData: any[]
-  type: ArticleType
+  tag: string
 }
 
 const PAGE_SIZE = 6
 
-function ArticlesPerType({ articlesData, type }: Props) {
+function ArticlesPerType({ articlesData, tag }: Props) {
   const articles = useTransformToModel(articlesData, ArticleModel)
 
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
@@ -27,6 +24,7 @@ function ArticlesPerType({ articlesData, type }: Props) {
   return (
     <>
       <PageHead
+        title={`Culinary Canvas — #${tag} (${articles.length} articles)`}
         image={articles[0].imageContent.url}
         imageWidth={articles[0].imageContent.set.cropped.width}
         imageHeight={articles[0].imageContent.set.cropped.height}
@@ -36,8 +34,8 @@ function ArticlesPerType({ articlesData, type }: Props) {
         <ArticleGrid
           initialArticles={articles}
           load={async (last) =>
-            ArticleApi.publishedByTypePagedBySortOrderDesc(
-              type,
+            ArticleApi.publishedByTagPagedBySortOrderDesc(
+              tag,
               PAGE_SIZE,
               last.sortOrder,
             )
@@ -49,15 +47,19 @@ function ArticlesPerType({ articlesData, type }: Props) {
 }
 
 interface StaticProps {
-  type: string
+  tag: string
   [key: string]: string
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
+  const { firestore } = initFirebase()
+  const response = await firestore().collection('tags').get()
+  const tags = response.docs.map((d) => d.data())
+
   return {
-    paths: Object.values(ArticleType).map((type) => ({
+    paths: tags.map((tag) => ({
       params: {
-        type: StringUtils.toLowerKebabCase(type),
+        tag: tag.name,
       },
     })),
     fallback: 'blocking',
@@ -69,12 +71,11 @@ export const getStaticProps: GetStaticProps<
   StaticProps
 > = async ({ params }) => {
   const { firestore } = initFirebase()
-  const type = ArticleTypeService.findByKebabCase(params.type)
 
   const response = await firestore()
     .collection('articles')
     .where('published', '==', true)
-    .where('type', '==', type)
+    .where('tagNames', 'array-contains', params.tag)
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
@@ -83,7 +84,7 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       articlesData: JSON.parse(JSON.stringify(articlesData)),
-      type,
+      tag: params.tag,
     },
     revalidate: 1,
   }

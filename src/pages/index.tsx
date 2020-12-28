@@ -13,7 +13,7 @@ interface Props {
   articlesData: any[]
 }
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 6
 
 function Start({ articlesData }: Props) {
   const articles = useTransformToModel(articlesData, ArticleModel)

@@ -74,10 +74,7 @@ export const ColorPicker = observer((props: Props) => {
             width="100%"
             colors={palette}
             color={value}
-            onChangeComplete={(color) => {
-              console.log(value, color)
-              onSelect(color.hex)
-            }}
+            onChangeComplete={(color) => onSelect(color.hex)}
           />
         </animated.div>
       )}
