@@ -28,9 +28,10 @@ export const ArticleGrid = observer((props: Props) => {
     setEndReached(false)
   }, [initialArticles])
 
-  // Trigger next load when initial load fits the screen (only triggered on scroll now)
+  // TODO: Also trigger next load when initial load fits the screen (only triggered on scroll now)
   const onScroll = useCallback(() => {
     if (
+      !!endRef.current &&
       !endReached &&
       !loading &&
       scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop

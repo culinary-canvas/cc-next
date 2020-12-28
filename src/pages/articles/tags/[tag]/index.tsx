@@ -8,6 +8,8 @@ import { classnames } from '../../../../services/importHelpers'
 import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../../article/Article.api'
 import { initFirebase } from '../../../../services/firebase/Firebase'
+import { useRouter } from 'next/router'
+import { isServer } from '../../../_app'
 
 interface Props {
   articlesData: any[]
@@ -16,10 +18,18 @@ interface Props {
 
 const PAGE_SIZE = 6
 
-function ArticlesPerType({ articlesData, tag }: Props) {
+function ArticlesByTag({ articlesData, tag }: Props) {
   const articles = useTransformToModel(articlesData, ArticleModel)
-
+  const router = useRouter()
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
+
+  if (router.isFallback) {
+    if (isServer) {
+      return null
+    }
+    router.replace('/')
+    return null
+  }
 
   return (
     <>
@@ -53,16 +63,15 @@ interface StaticProps {
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   const { firestore } = initFirebase()
-  const response = await firestore().collection('tags').get()
-  const tags = response.docs.map((d) => d.data())
-
+  const response = await firestore().collection('articles').get()
+  const tags = response.docs.flatMap((d) => d.data().tagNames)
   return {
     paths: tags.map((tag) => ({
       params: {
-        tag: tag.name,
+        tag,
       },
     })),
-    fallback: 'blocking',
+    fallback: true,
   }
 }
 
@@ -90,4 +99,4 @@ export const getStaticProps: GetStaticProps<
   }
 }
 
-export default ArticlesPerType
+export default ArticlesByTag

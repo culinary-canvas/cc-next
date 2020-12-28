@@ -142,7 +142,6 @@ export const ArticleControls = observer(() => {
       />
 
       <label htmlFor="article-background-color">Background color</label>
-      {article.format.backgroundColor}
       <ColorPicker
         id="article-background-color"
         value={article.format.backgroundColor}

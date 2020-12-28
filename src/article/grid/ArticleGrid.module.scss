@@ -4,30 +4,54 @@
 
 .grid {
   display: grid;
-  grid-auto-flow: dense;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 4rem;
   @include main-container-width();
 
   @include media('<=phone') {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    padding: 1rem;
+    gap: 2rem;
   }
+
   @include media('>phone') {
+    grid-auto-flow: dense;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 4rem;
     gap: 4rem;
   }
 
   .articleContainer {
-    &.promoted {
-      @include media('>phone') {
+    @include media('>tablet') {
+      height: 65vh;
+
+      &.promoted {
         grid-column-end: span 2;
-        height: 65vh;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
       }
     }
 
-    &:not(.promoted) {
-      grid-column-end: span 1;
-      max-height: 65vh;
+    @include media('>phone', '<=tablet') {
+      height: 100vh;
+      &.promoted {
+        grid-column-end: span 2;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
+    }
+
+    @include media('<=phone') {
+      height: 80vh;
+      &.promoted {
+        grid-column-end: span 1;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
     }
   }
 }

@@ -18,21 +18,6 @@ export const Article = observer(({ article }: Props) => {
   const router = useRouter()
   const auth = useAuth()
 
-  const [initialGridArticles, setInitialGridArticles] = useState<
-    ArticleModel[]
-  >([])
-
-  useEffect(() => {
-    ArticleApi.allPagedBySortOrderDesc(4).then((data) => {
-      if (!!data) {
-        const articles = Transformer.dbToModels(data, ArticleModel).filter(
-          (a) => a.id !== article.id,
-        )
-        setInitialGridArticles(articles)
-      }
-    })
-  }, [])
-
   return (
     <>
       {auth.isSignedIn && (
@@ -59,6 +44,7 @@ export const Article = observer(({ article }: Props) => {
 
       <div className={s.gridContainer}>
         <h1>More articles</h1>
+
       </div>
     </>
   )

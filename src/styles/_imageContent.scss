@@ -7,14 +7,6 @@
     position: relative;
     overflow: hidden;
 
-    &.fit-COVER .content {
-      object-fit: cover;
-    }
-
-    &.fit-CONTAIN .content {
-      object-fit: contain;
-    }
-
     .content {
       &.circle {
         clip-path: circle();
@@ -30,21 +22,15 @@
 
   @include media('<=phone') {
     .container {
-      justify-content: center;
-      grid-area: unset !important;
-      grid-row-start: unset !important;
-      overflow: hidden;
       &.first {
         .content {
-          width: 100% !important;
           padding: 0 !important;
         }
       }
 
       &:not(.first, .circle) {
         .content {
-          width: unset !important;
-          height: unset !important;
+          height: 100%;
           padding: 1rem 1rem 0 !important;
         }
       }

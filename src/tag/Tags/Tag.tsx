@@ -24,6 +24,8 @@ export function Tag(props: Props) {
     <Button
       onMouseOver={() => setHovered(true)}
       onMouseOut={() => setHovered(false)}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setHovered(false)}
       key={tag}
       onClick={(e) => {
         e.preventDefault()

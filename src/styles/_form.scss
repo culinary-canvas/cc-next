@@ -14,22 +14,21 @@
     opacity $animation-fast ease-in;
 
   &:after {
-    transition: max-width $animation-medium ease-in-out;
     position: absolute;
-    background-color: inherit;
-    opacity: 0.2;
-    filter: contrast(50%);
-    content: '';
-    max-width: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    left: 0;
+    max-width: 0;
+    background-color: inherit;
+    opacity: 0.2;
+    transition: max-width $animation-medium ease-in-out;
+    content: '';
+    filter: contrast(50%);
   }
   &:hover:not(:disabled) {
     opacity: 1;
-    &:after{
+    &:after {
       max-width: 100%;
-
     }
   }
 }
