@@ -2,7 +2,7 @@ import { field } from '../../services/db/decorators/field.decorator'
 import { observable } from 'mobx'
 import { Fit } from '../shared/Fit'
 import { Format } from '../shared/format/Format'
-import { ColorType } from '../../styles/color'
+import { ColorType } from '../../styles/_color'
 import { Size } from '../shared/format/Size'
 
 export class SectionFormat extends Format {

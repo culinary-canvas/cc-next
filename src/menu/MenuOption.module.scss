@@ -25,15 +25,11 @@
     text-decoration: none;
     cursor: pointer;
     padding-top: 2px;
-    color: $black;
     display: block;
   }
 
   &:hover {
     box-shadow: none;
-    label {
-      color: $black;
-    }
   }
 
   @include media('<=phone') {
@@ -45,19 +41,6 @@
 
   @include media('>phone') {
     margin: 0 0.5rem;
-  }
-
-  &.admin label {
-    color: $blue !important;
-  }
-
-  &.otherHovered {
-    label {
-      color: $grey !important;
-    }
-    &.admin label {
-      color: $blue-light !important;
-    }
   }
 
   &:disabled {

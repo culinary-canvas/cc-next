@@ -7,6 +7,9 @@ module.exports = withBundleAnalyzer(
     sassOptions: {
       includePaths: ['src/styles'],
     },
+    images: {
+      domains: ['firebasestorage.googleapis.com'],
+    },
   }),
 )
 

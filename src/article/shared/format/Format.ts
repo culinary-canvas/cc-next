@@ -1,7 +1,7 @@
 import { GridPosition } from '../../grid/GridPosition'
 import { field } from '../../../services/db/decorators/field.decorator'
 import { observable } from 'mobx'
-import { ColorType } from '../../../styles/color'
+import { ColorType } from '../../../styles/_color'
 
 export abstract class Format {
   protected constructor(initial?: any) {

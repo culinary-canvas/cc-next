@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { ArticleModel } from '../Article.model'
-import styles from './ArticleGrid.module.scss'
+import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
 import { ArticlePreview } from './articlePreview/ArticlePreview'
-import s from '../../pages/start.module.scss'
 import { Spinner } from '../../shared/spinner/Spinner'
-import { COLOR } from '../../styles/color'
+import { COLOR } from '../../styles/_color'
 import { Transformer } from '../../services/db/Transformer'
+import { Splash } from './splash/Splash'
 
 interface Props {
   initialArticles?: ArticleModel[]
   load: (last: ArticleModel) => Promise<ArticleModel[]>
+  showSplash?: boolean
 }
 
 export const ArticleGrid = observer((props: Props) => {
-  const { initialArticles = [], load: loadFn } = props
-
+  const { initialArticles = [], load: loadFn, showSplash = false } = props
   const endRef = useRef<HTMLDivElement>()
   const [loading, setLoading] = useState<boolean>(false)
   const [endReached, setEndReached] = useState<boolean>(false)
@@ -41,11 +41,13 @@ export const ArticleGrid = observer((props: Props) => {
 
   const load = useCallback(async () => {
     setLoading(true)
-
     const articlesToAddData = await loadFn(articles[articles.length - 1])
 
     if (!!articlesToAddData.length) {
-      const transformed = Transformer.dbToModels(articlesToAddData, ArticleModel)
+      const transformed = Transformer.dbToModels(
+        articlesToAddData,
+        ArticleModel,
+      )
       setArticles([...articles, ...transformed])
     } else {
       setEndReached(true)
@@ -60,21 +62,20 @@ export const ArticleGrid = observer((props: Props) => {
   })
 
   return (
-    <div className={styles.grid}>
+    <div className={s.grid}>
       {articles.map((article, i) => (
-        <Link
-          href="/articles/[slug]"
-          as={`/articles/${article.slug}`}
-          key={article.id}
-        >
-          <a
-            className={classnames(styles.article, {
-              [styles.promoted]: article.promoted || i === 0,
-            })}
-          >
-            <ArticlePreview article={article} first={i === 0}/>
-          </a>
-        </Link>
+        <React.Fragment key={i}>
+          {showSplash && i === 1 && <Splash />}
+          <Link href="/articles/[slug]" as={`/articles/${article.slug}`}>
+            <a
+              className={classnames(s.articleContainer, {
+                [s.promoted]: article.promoted || i === 0,
+              })}
+            >
+              <ArticlePreview article={article} priority={i === 0} />
+            </a>
+          </Link>
+        </React.Fragment>
       ))}
       <div
         id="end"

@@ -8,7 +8,7 @@ import { TextContentModel } from './content/text/TextContent.model'
 import { ContentModel } from './content/ContentModel'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { Sortable } from '../types/Sortable'
-import { isSystemColor } from '../styles/color'
+import { isSystemColor } from '../styles/_color'
 import { ArticleFormat } from './ArticleFormat'
 
 export class ArticleModel implements Model, Sortable {

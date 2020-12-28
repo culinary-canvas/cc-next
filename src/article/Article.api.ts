@@ -128,7 +128,7 @@ export class ArticleApi {
       article.slug = ArticleService.createSlug(article)
     }
 
-    onProgress(0.2, 'Sorting...')
+    onProgress(0.2, 'Uploading images...')
     await ArticleService.uploadNewImages(article, onProgress, 0.2)
 
     //TODO: Move to functions

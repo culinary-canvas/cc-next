@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import s from './Overlay.module.scss'
-import { COLOR, ColorType } from '../../styles/color'
+import { COLOR, ColorType } from '../../styles/_color'
 import { isNil } from '../../services/importHelpers'
 
 interface Props {

@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import s from './Spinner.module.scss'
 import {ICON, IconSizeType} from '../../styles/icon'
-import {COLOR, ColorType} from '../../styles/color'
+import {COLOR, ColorType} from '../../styles/_color'
 
 interface Props {
   size?: IconSizeType

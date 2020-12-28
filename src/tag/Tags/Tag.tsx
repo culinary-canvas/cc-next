@@ -1,32 +1,36 @@
-import React from 'react'
-import { classnames } from '../../services/importHelpers'
-import { COLOR } from '../../styles/color'
+import React, { useState } from 'react'
+import { COLOR, ColorType } from '../../styles/_color'
 import { Button } from '../../form/button/Button'
 import s from './Tag.module.scss'
 
 interface Props {
   tag: string
   onClick?: () => any
-  selected?: boolean
-  backgroundColor?: string
+  color?: ColorType
+  hoverColor?: ColorType
 }
 
 export function Tag(props: Props) {
-  const { tag, onClick, selected = true, backgroundColor = COLOR.GREY_LIGHTER } = props
+  const {
+    tag,
+    onClick,
+    color = COLOR.GREY_DARK,
+    hoverColor = COLOR.PINK_DARK,
+  } = props
+
+  const [isHovered, setHovered] = useState<boolean>(false)
 
   return (
     <Button
+      onMouseOver={() => setHovered(true)}
+      onMouseOut={() => setHovered(false)}
       key={tag}
       onClick={(e) => {
         e.preventDefault()
         onClick && onClick()
       }}
-      className={classnames(s.tag, { [s.selected]: selected })}
-      color={selected ? COLOR.BLACK : COLOR.GREY_DARK}
-      style={{
-        color: selected ? COLOR.BLACK : COLOR.GREY_DARK,
-        backgroundColor,
-      }}
+      className={s.tag}
+      color={isHovered ? hoverColor : color}
     >
       {tag}
     </Button>

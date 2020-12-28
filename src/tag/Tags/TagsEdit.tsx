@@ -1,33 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from '../../form/button/Button'
-import { TagModel } from '../Tag.model'
-import StringUtils from '../../services/utils/StringUtils'
 import { TagApi } from '../Tag.api'
 import { useAuth } from '../../services/auth/Auth'
 import { Tag } from './Tag'
 import { classnames } from '../../services/importHelpers'
-import styles from './Tags.module.scss'
+import s from './TagsEdit.module.scss'
+import { Button } from '../../form/button/Button'
+import StringUtils from '../../services/utils/StringUtils'
+import { TagModel } from '../Tag.model'
+import { COLOR } from '../../styles/_color'
 
 interface Props {
   selected: string[]
-  onRemove?: (tag: string) => any
-  onAdd?: (tag: string) => any
+  onRemove: (tag: string) => any
+  onAdd: (tag: string) => any
   id?: string
-  edit?: boolean
   containerClassName?: string
-  backgroundColor?: string
 }
 
-export function Tags(props: Props) {
-  const {
-    id,
-    selected,
-    onRemove,
-    onAdd,
-    edit = false,
-    containerClassName,
-    backgroundColor,
-  } = props
+export function TagsEdit(props: Props) {
+  const { id, selected, onRemove, onAdd, containerClassName } = props
   const auth = useAuth()
 
   const [showInput, setShowInput] = useState<boolean>(false)
@@ -37,10 +28,8 @@ export function Tags(props: Props) {
   const [all, setAll] = useState<string[]>([])
 
   useEffect(() => {
-    if (edit) {
-      TagApi.all().then((all) => setAll(all.map((t) => t.name)))
-    }
-  }, [edit])
+    TagApi.all().then((all) => setAll(all.map((t) => t.name)))
+  }, [])
 
   useEffect(() => {
     const distinct = new Set<string>([...selected, ...all])
@@ -50,37 +39,25 @@ export function Tags(props: Props) {
   return (
     <section
       id={id}
-      className={classnames(styles.tagsContainer, containerClassName)}
+      className={classnames(s.tagsContainer, containerClassName)}
     >
-      <div className={styles.tags}>
-        {tags.map((tag) => {
-          const isSelected = selected.includes(tag)
-          return (
-            <Tag
-              key={tag}
-              tag={tag}
-              selected={isSelected}
-              backgroundColor={backgroundColor}
-              onClick={
-                edit
-                  ? () => {
-                      isSelected ? onRemove(tag) : onAdd(tag)
-                    }
-                  : undefined
-              }
-            />
-          )
-        })}
-        {edit && !showInput && (
-          <Button
-            onClick={() => setShowInput(true)}
-            className={styles.addButton}
-          >
-            +
-          </Button>
-        )}
-      </div>
-      {edit && showInput && (
+      {tags.map((tag) => {
+        const isSelected = selected.includes(tag)
+        return (
+          <Tag
+            key={tag}
+            tag={tag}
+            color={isSelected ? COLOR.GREY_DARK : COLOR.GREY}
+            onClick={() => (isSelected ? onRemove(tag) : onAdd(tag))}
+          />
+        )
+      })}
+      {!showInput && (
+        <Button onClick={() => setShowInput(true)} className={s.addButton}>
+          +
+        </Button>
+      )}
+      {showInput && (
         <>
           <input
             type="text"

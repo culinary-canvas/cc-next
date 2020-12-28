@@ -9,6 +9,7 @@ import { FormatService } from '../../../../../article/shared/format/Format.servi
 import { classnames } from '../../../../../services/importHelpers'
 import { ImageEdit } from '../../../../../form/imageEdit/ImageEdit'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
+import { runInAction } from 'mobx'
 
 interface Props {
   content: ImageContentModel
@@ -21,25 +22,18 @@ export const ImageContentEdit = observer((props: Props) => {
   const admin = useAdmin()
 
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
-  const [imageFormatStyle, setImageFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
     const { format } = content
-    const height = FormatService.imageHeight(section, content)
-    const width = FormatService.imageWidth(content)
 
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
-      paddingTop: `${format.padding.top}px`,
-      paddingBottom: `${format.padding.bottom}px`,
-      paddingLeft: `${format.padding.left}px`,
-      paddingRight: `${format.padding.right}px`,
-    })
-
-    setImageFormatStyle({
-      height,
-      width,
+      height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
+      marginTop: `${format.padding.top}px`,
+      marginBottom: `${format.padding.bottom}px`,
+      marginLeft: `${format.padding.left}px`,
+      marginRight: `${format.padding.right}px`,
     })
   }, [content, section, content.format])
 
@@ -69,16 +63,14 @@ export const ImageContentEdit = observer((props: Props) => {
     >
       <ImageEdit
         set={content.set}
-        style={{
-          ...imageFormatStyle,
-        }}
+        format={content.format}
         className={classnames([
           s.content,
           { [s.circle]: content.format.circle },
         ])}
         onFocus={() => admin.setContent(content)}
         enableModal={admin.content.uid === content.uid}
-        onChange={(set) => (content.set = set)}
+        onChange={(set) => runInAction(() => (content.set = set))}
       />
     </figure>
   )

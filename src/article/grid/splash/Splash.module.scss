@@ -1,0 +1,36 @@
+@import '../../../styles/font';
+@import '../../../styles/color';
+
+.container {
+  grid-column-end: span 2;
+  width: 120%;
+  margin-left: -20%;
+  position: relative;
+
+  h1 {
+    font-family: $font-family-filson;
+    font-size: $font-size-xxxxl;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  p {
+    padding-left: 30%;
+    color: $grey-dark;
+    font-size: $font-size-xl;
+    font-weight: 600;
+
+
+  }
+
+  &:before {
+    top: 12%;
+    width: 60%;
+    height: 60%;
+    background-color: $pink-light;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(0 19%, 100% 33%, 81% 89%, 20% 100%);
+  }
+}

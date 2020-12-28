@@ -4,7 +4,6 @@ import editIcon from '../../../../../../../public/assets/icons/streamline-icon-p
 import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
 import { Select } from '../../../../../../form/select/Select'
 import { runInAction, toJS } from 'mobx'
-import { Tags } from '../../../../../../tag/Tags/Tags'
 import { Button } from '../../../../../../form/button/Button'
 import { ArticleModel } from '../../../../../../article/Article.model'
 import StringUtils from '../../../../../../services/utils/StringUtils'
@@ -12,16 +11,17 @@ import { copyTextToClipboard } from '../../../../../../services/utils/Utils'
 import { ArticleType } from '../../../../../../article/ArticleType'
 import s from './ArticleControls.module.scss'
 import { ArticleApi } from '../../../../../../article/Article.api'
-import { Transformer } from '../../../../../../services/db/Transformer'
 import { useAdmin } from '../../../../../Admin'
 import { useReaction } from '../../../../../../hooks/useReaction'
-import { COLOR } from '../../../../../../styles/color'
+import { COLOR } from '../../../../../../styles/_color'
 import { useOverlay } from '../../../../../../shared/overlay/OverlayStore'
 import { useAuth } from '../../../../../../services/auth/Auth'
 import { useRouter } from 'next/router'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { observer } from 'mobx-react'
+import { TagsEdit } from '../../../../../../tag/Tags/TagsEdit'
 
-export function ArticleControls() {
+export const ArticleControls = observer(() => {
   const auth = useAuth()
   const router = useRouter()
   const admin = useAdmin()
@@ -142,6 +142,7 @@ export function ArticleControls() {
       />
 
       <label htmlFor="article-background-color">Background color</label>
+      {article.format.backgroundColor}
       <ColorPicker
         id="article-background-color"
         value={article.format.backgroundColor}
@@ -149,12 +150,12 @@ export function ArticleControls() {
           runInAction(() => (article.format.backgroundColor = c))
         }
         additionalColors={article.colors}
+        showTransparent
       />
 
       <label htmlFor="tags">Tags</label>
-      <Tags
+      <TagsEdit
         selected={toJS(article.tagNames)}
-        edit
         onAdd={(tag) => article.tagNames.push(tag)}
         onRemove={(tag) =>
           (article.tagNames = article.tagNames.filter((id) => id !== tag))
@@ -189,4 +190,4 @@ export function ArticleControls() {
     message && overlay.setText(message)
     overlay.setProgress(progress)
   }
-}
+})

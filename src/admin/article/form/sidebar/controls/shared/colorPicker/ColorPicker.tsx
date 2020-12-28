@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import s from './ColorPicker.module.scss'
-import { COLOR, ColorType } from '../../../../../../../styles/color'
+import { COLOR, ColorType } from '../../../../../../../styles/_color'
 import { isNil } from '../../../../../../../services/importHelpers'
-import { AlphaPicker, BlockPicker } from 'react-color'
+import { BlockPicker } from 'react-color'
 import { Button } from '../../../../../../../form/button/Button'
 import { animated, config, useSpring } from 'react-spring'
 
@@ -59,7 +59,6 @@ export const ColorPicker = observer((props: Props) => {
         className={s.button}
         color={value || COLOR.GREY_LIGHTER}
         onClick={() => showModal(!isModalVisible)}
-        circle
         style={{
           backgroundColor: background ? value : undefined,
         }}
@@ -75,12 +74,10 @@ export const ColorPicker = observer((props: Props) => {
             width="100%"
             colors={palette}
             color={value}
-            onChangeComplete={(color) => onSelect(color.hex)}
-          />
-          <AlphaPicker
-            className={s.alphaContainer}
-            color={value}
-            onChangeComplete={(color) => console.log(color)}
+            onChangeComplete={(color) => {
+              console.log(value, color)
+              onSelect(color.hex)
+            }}
           />
         </animated.div>
       )}

@@ -74,10 +74,6 @@ export class ArticleService {
         let newSum = sum
         newSum += StorageService.isLocal(content.set.original.url) ? 1 : 0
         newSum += StorageService.isLocal(content.set.cropped.url) ? 1 : 0
-        newSum += StorageService.isLocal(content.set.xl.url) ? 1 : 0
-        newSum += StorageService.isLocal(content.set.l.url) ? 1 : 0
-        newSum += StorageService.isLocal(content.set.m.url) ? 1 : 0
-        newSum += StorageService.isLocal(content.set.s.url) ? 1 : 0
         return newSum
       }, 0)
 
@@ -90,11 +86,7 @@ export class ArticleService {
         content instanceof ImageContentModel &&
         !!content.set.original?.url &&
         (StorageService.isLocal(content.set.original.url) ||
-          StorageService.isLocal(content.set.cropped.url) ||
-          StorageService.isLocal(content.set.xl.url) ||
-          StorageService.isLocal(content.set.l.url) ||
-          StorageService.isLocal(content.set.m.url) ||
-          StorageService.isLocal(content.set.s.url)),
+          StorageService.isLocal(content.set.cropped.url)),
     ) as ImageContentModel[]
 
     return Promise.all(

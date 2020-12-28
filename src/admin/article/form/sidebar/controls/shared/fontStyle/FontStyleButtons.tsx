@@ -1,7 +1,7 @@
 import React from 'react'
 import s from './FontStyleButtons.module.scss'
 import { Button } from '../../../../../../../form/button/Button'
-import { COLOR } from '../../../../../../../styles/color'
+import { COLOR } from '../../../../../../../styles/_color'
 import italicIcon from '../../../../../../../../public/assets/icons/streamline-icon-text-italic@140x140.svg'
 import capsIcon from '../../../../../../../../public/assets/icons/streamline-icon-caps@140x140.svg'
 import { classnames } from '../../../../../../../services/importHelpers'

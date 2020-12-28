@@ -9,6 +9,7 @@ import { TextContentModel } from '../../../article/content/text/TextContent.mode
 import { PageHead } from '../../../head/PageHead'
 import { Article } from '../../../article/Article'
 import { ArticleApi } from '../../../article/Article.api'
+import { initFirebase } from '../../../services/firebase/Firebase'
 
 interface Props {
   articleData: any
@@ -20,9 +21,9 @@ const ArticlePage = observer(({ articleData }: Props) => {
   return (
     <>
       <PageHead
-        image={article.imageContent.set.l.url}
-        imageWidth={article.imageContent.set.l.width}
-        imageHeight={article.imageContent.set.l.height}
+        image={article.imageContent.url}
+        imageWidth={article.imageContent.set.cropped.width}
+        imageHeight={article.imageContent.set.cropped.height}
         imageAlt={article.imageContent.alt}
         title={article.title}
         description={
@@ -59,7 +60,13 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
 export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
   params,
 }) => {
-  const articleData = await ArticleApi.bySlug(params.slug)
+  const { firestore } = initFirebase()
+
+  const response = await firestore()
+    .collection('articles')
+    .where('slug', '==', params.slug)
+    .get()
+  const articleData = !!response.size ? response.docs[0].data() : []
 
   return {
     props: {

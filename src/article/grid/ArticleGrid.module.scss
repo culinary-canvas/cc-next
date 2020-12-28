@@ -4,23 +4,24 @@
 
 .grid {
   display: grid;
-  grid-auto-flow: row;
-  grid-template-rows: minmax(10%, max-content);
-  @include main-content-width();
+  grid-auto-flow: dense;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 4rem;
+  @include main-container-width();
 
   @include media('<=phone') {
     grid-template-columns: 1fr;
     gap: 3rem;
   }
   @include media('>phone') {
-    grid-template-columns: minmax(40%, auto) minmax(40%, auto);
-    gap: 5rem;
+    gap: 4rem;
   }
 
-  .article {
+  .articleContainer {
     &.promoted {
       @include media('>phone') {
         grid-column-end: span 2;
+        height: 90vh;
       }
     }
 

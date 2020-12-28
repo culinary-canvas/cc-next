@@ -1,9 +1,4 @@
 @import 'src/styles/grid';
 
 .container {
-  @include gridContainer();
-}
-
-.end.loading {
-  padding-top: 4rem;
 }
