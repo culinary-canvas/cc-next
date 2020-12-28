@@ -240,12 +240,6 @@ export class SectionService {
 
   static removeContent(content: ContentModel, section: SectionModel) {
     const row = content.format.gridPosition.startRow
-    console.log(
-      'deleting content',
-      row,
-      toJS(GridPositionService.partsStartingOnRow(section.contents, row)),
-      GridPositionService.numberOfRows(section.contents),
-    )
     if (
       GridPositionService.partsStartingOnRow(section.contents, row).length ===
         1 &&

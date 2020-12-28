@@ -44,17 +44,17 @@ export const Header = () => {
           </a>
         </Link>
         {!!router.query.type && (
-          <div className={styles.navMeta}>{getSiteHeader()}</div>
+          <div className={styles.navMeta}>{getArticleTypeHeader()}</div>
+        )}
+        {!!router.query.tag && (
+          <div className={styles.navMeta}>#{router.query.tag}</div>
         )}
       </div>
       <Menu />
     </header>
   )
 
-  function getSiteHeader() {
-    if (!router.query) {
-      return false
-    }
+  function getArticleTypeHeader() {
     switch (router.query.type as ArticleType) {
       case StringUtils.toLowerKebabCase(ArticleType.DISH):
         return 'Dishes'

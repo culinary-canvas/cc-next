@@ -129,7 +129,6 @@ export class ArticleService {
     const other = all
       .filter((a) => a.sortOrder < target.sortOrder)
       .reduce((found, a) => (a.sortOrder > found.sortOrder ? a : found))
-    console.log(target.sortOrder, other.sortOrder)
     target.sortOrder--
     other.sortOrder++
     return [target, other]

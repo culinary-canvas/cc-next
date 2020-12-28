@@ -61,7 +61,7 @@ export class GridManager {
   @action hovering(row: number, column: number) {
     if (this.isMarking) {
       this.unmarkLastRowBasedOnDirection(row)
-      this.unmarkLastColumnBasedOnDirection(column, row)
+      this.unmarkLastColumnBasedOnDirection(column)
       this.markRow(row)
       this.markColumn(column)
     }
@@ -81,13 +81,9 @@ export class GridManager {
     }
     this._markedRows.add(row)
     this.lastMarkedRow = row
-    console.log('marked row', row)
   }
 
-  @action private unmarkLastColumnBasedOnDirection(
-    column: number,
-    row: number,
-  ) {
+  @action private unmarkLastColumnBasedOnDirection(column: number) {
     if (
       (this.lastMarkedColumn !== this.firstMarkedColumn &&
         column >= this.firstMarkedColumn &&

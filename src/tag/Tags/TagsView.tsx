@@ -19,11 +19,13 @@ export function TagsView(props: Props) {
       id={id}
       className={classnames(s.tagsContainer, containerClassName)}
     >
-      {tags.map((tag) => {
-        return (
-          <Tag key={tag} tag={tag} onClick={() => console.log('TODO show tag grid') /*router.navigate*/} />
-        )
-      })}
+      {tags.map((tag) => (
+        <Tag
+          key={tag}
+          tag={tag}
+          onClick={() => router.push(`/articles/tags/${tag}`)}
+        />
+      ))}
     </section>
   )
 }

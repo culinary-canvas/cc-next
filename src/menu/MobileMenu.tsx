@@ -11,7 +11,6 @@ import { useMenu } from './useMenu'
 export function MobileMenu() {
   const router = useRouter()
   const auth = useAuth()
-  console.log(useMenu())
   const {
     options,
     open,
