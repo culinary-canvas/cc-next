@@ -21,12 +21,13 @@
     &.promoted {
       @include media('>phone') {
         grid-column-end: span 2;
-        height: 90vh;
+        height: 65vh;
       }
     }
 
     &:not(.promoted) {
       grid-column-end: span 1;
+      max-height: 65vh;
     }
   }
 }
