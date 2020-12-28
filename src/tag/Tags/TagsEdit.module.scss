@@ -1,0 +1,15 @@
+@import '../../styles/layout';
+
+.tagsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0;
+
+  .addButton {
+    height: auto;
+    padding: 0.2rem 0.5rem;
+    margin: 0.25rem 0;
+  }
+}

@@ -6,7 +6,8 @@ import { PageHead } from '../head/PageHead'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
-import { useTransform } from '../hooks/useTransform'
+import { useTransformToModel } from '../hooks/useTransformToModel'
+import { initFirebase } from '../services/firebase/Firebase'
 
 interface Props {
   articlesData: any[]
@@ -15,18 +16,19 @@ interface Props {
 const PAGE_SIZE = 4
 
 function Start({ articlesData }: Props) {
-  const articles = useTransform(articlesData, ArticleModel)
+  const articles = useTransformToModel(articlesData, ArticleModel)
 
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.set.l.url}
-        imageWidth={articles[0].imageContent.set.l.width}
-        imageHeight={articles[0].imageContent.set.l.height}
+        image={articles[0].imageContent.url}
+        imageWidth={articles[0].imageContent.set.cropped.width}
+        imageHeight={articles[0].imageContent.set.cropped.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
         <ArticleGrid
+          showSplash
           initialArticles={articles}
           load={async (lastLoaded) =>
             ArticleApi.publishedPagedBySortOrderDesc(
@@ -41,7 +43,15 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const articlesData = await ArticleApi.publishedPagedBySortOrderDesc(PAGE_SIZE)
+  const { firestore } = initFirebase()
+
+  const response = await firestore()
+    .collection('articles')
+    .where('published', '==', true)
+    .orderBy('sortOrder', 'desc')
+    .limit(PAGE_SIZE)
+    .get()
+  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
 
   return {
     props: {

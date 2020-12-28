@@ -4,7 +4,7 @@ import facebook from '../../../public/assets/icons/streamline-icon-social-media-
 import instagram from '../../../public/assets/icons/streamline-icon-social-instagram@140x140.svg'
 import pinterest from '../../../public/assets/icons/streamline-icon-social-pinterest@140x140.svg'
 import { ICON, IconSizeType } from '../../styles/icon'
-import {COLOR} from '../../styles/color'
+import {COLOR} from '../../styles/_color'
 
 interface Props {
   color?: typeof COLOR.WHITE | typeof COLOR.BLACK

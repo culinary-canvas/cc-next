@@ -23,7 +23,6 @@ export function MobileMenu() {
     moveMarker,
   } = useMenu()
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [hoveringOption, setHoveringOption] = useState<MenuOptionDefinition>()
   const [isOpen, setOpen] = useState<boolean>(false)
 
   return (
@@ -37,9 +36,6 @@ export function MobileMenu() {
             show={isOpen}
             style={animationProps}
             definition={definition}
-            onHover={(v) => setHoveringOption(v)}
-            onBlur={() => setHoveringOption(null)}
-            currentHoveredOption={hoveringOption}
             onRender={(ref) => addOptionElementRef(definition.name, ref)}
             onClick={async (def) => {
               moveMarker(def.name)

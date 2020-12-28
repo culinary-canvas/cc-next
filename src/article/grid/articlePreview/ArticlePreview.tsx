@@ -1,49 +1,49 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Tags } from '../../../tag/Tags/Tags'
+import { TagsView } from '../../../tag/Tags/TagsView'
 import s from './ArticlePreview.module.scss'
 import { Button } from '../../../form/button/Button'
 import { ArticleModel } from '../../Article.model'
 import { ContentType } from '../../content/ContentType'
-import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from '../../content/image/ImageContent.model'
 import { TextContentModel } from '../../content/text/TextContent.model'
 import StringUtils from '../../../services/utils/StringUtils'
-import { ImageService } from '../../content/image/Image.service'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import { classnames } from '../../../services/importHelpers'
+import { animated, useSpring } from 'react-spring'
 
 interface Props {
   article: ArticleModel
-  first: boolean
+  priority: boolean
+  className?: string
 }
 
 export const ArticlePreview = observer((props: Props) => {
-  const { article, first } = props
+  const { article, priority, className } = props
   const router = useRouter()
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
-  const [loadImage, setLoadImage] = useState<boolean>(false)
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false)
+  const [isHovered, setHovered] = useState<boolean>(false)
+  const [textContentHeight, setTextContentHeight] = useState<number>(0)
 
-  const shouldLoadImage = useCallback(() => {
-    if (!loadImage && scrollY + window.innerHeight > ref.current.offsetTop) {
-      setLoadImage(true)
-    }
-  }, [loadImage])
-
-  useEffect(() => {
-    shouldLoadImage()
-    window.addEventListener('scroll', shouldLoadImage)
-    return () => window.removeEventListener('scroll', shouldLoadImage)
+  const { height } = useSpring({
+    height: isHovered ? `${textContentHeight}px` : '0px',
+    config: { mass: 2, tension: 350, friction: 40 },
   })
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setTextContentHeight(node.scrollHeight)
+    }
+  }, [])
 
   useEffect(() => {
-    const image = article.sections[0].contents.find(
+    const image = article.contents.find(
       (c) => c.type === ContentType.IMAGE,
     ) as ImageContentModel
 
-    const subHeading = article.sections[0].contents.find(
+    const subHeading = article.contents.find(
       (c) => c.type === ContentType.SUB_HEADING,
     ) as TextContentModel
 
@@ -53,27 +53,26 @@ export const ArticlePreview = observer((props: Props) => {
 
   return (
     <article
-      className={classnames(s.article, {
-        [s.promoted]: article.promoted || first,
-      })}
-      style={{ backgroundColor: article.format.backgroundColor }}
+      className={classnames(s.article, className)}
+      onMouseOver={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <section className={s.image} ref={ref}>
-        {!!imageContent && loadImage && (
-          <img
-            alt={imageContent.alt}
-            className={classnames(s[`content-type-${imageContent.type}`], {
-              [s.hide]: !imageLoaded,
-            })}
-            srcSet={ImageService.srcSet(imageContent)}
-            onLoad={() => setImageLoaded(true)}
+        {!!imageContent && (
+          <Image
+            priority={priority}
+            alt={imageContent.set.alt}
+            layout="fill"
+            objectFit="cover"
+            src={imageContent.set.cropped.url}
           />
         )}
-        {!imageLoaded && <figure className={s.imageSkeleton} />}
       </section>
 
-      <section className={s.articleType}>
+      <section className={s.text}>
         <Button
+          className={s.articleType}
+          unsetStyle
           onClick={(e) => {
             e.preventDefault()
             router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
@@ -81,18 +80,21 @@ export const ArticlePreview = observer((props: Props) => {
         >
           {StringUtils.toDisplayText(article.type)}
         </Button>
-      </section>
 
-      <section className={s.title}>
         <h2>{article.title}</h2>
-      </section>
 
-      <section className={s.subHeading}>
-        {!!subHeadingContent && <h3> {subHeadingContent.value} </h3>}
-      </section>
-
-      <section className={s.meta}>
-        <Tags selected={article.tagNames} />
+        <animated.div
+          style={{
+            height,
+            overflow: 'hidden',
+          }}
+          ref={measuredRef}
+        >
+          <p className={s.subHeading}>{subHeadingContent?.value}</p>
+          {!!article.tagNames.length && (
+            <TagsView tagNames={article.tagNames} containerClassName={s.tags} />
+          )}
+        </animated.div>
       </section>
     </article>
   )

@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import s from './articlesPerType.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ArticleType } from '../../article/ArticleType'
 import { ArticleModel } from '../../article/Article.model'
-import { Transformer } from '../../services/db/Transformer'
 import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
-import { useTransform } from '../../hooks/useTransform'
+import { useTransformToModel } from '../../hooks/useTransformToModel'
 import { ArticleTypeService } from '../../article/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
+import { initFirebase } from '../../services/firebase/Firebase'
+import { Transformer } from '../../services/db/Transformer'
 
 interface Props {
   articlesData: any[]
@@ -20,26 +21,37 @@ interface Props {
 const PAGE_SIZE = 4
 
 function ArticlesPerType({ articlesData, type }: Props) {
-  const articles = useTransform(articlesData, ArticleModel)
+  const articles = useTransformToModel(articlesData, ArticleModel)
+
+  useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.set.l.url}
-        imageWidth={articles[0].imageContent.set.l.width}
-        imageHeight={articles[0].imageContent.set.l.height}
+        image={articles[0].imageContent.url}
+        imageWidth={articles[0].imageContent.set.cropped.width}
+        imageHeight={articles[0].imageContent.set.cropped.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
         <ArticleGrid
           initialArticles={articles}
           load={async (last) => {
-            const data = await ArticleApi.publishedByTypePagedBySortOrderDesc(
+            console.log(
+              type,
+              PAGE_SIZE,
+              last.sortOrder,
+              await ArticleApi.publishedByTypePagedBySortOrderDesc(
+                type,
+                PAGE_SIZE,
+                last.sortOrder,
+              ),
+            )
+            return ArticleApi.publishedByTypePagedBySortOrderDesc(
               type,
               PAGE_SIZE,
               last.sortOrder,
             )
-            return !!data ? Transformer.dbToModels(data, ArticleModel) : null
           }}
         />
       </main>
@@ -67,12 +79,20 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
+  const { firestore } = initFirebase()
   const type = ArticleTypeService.findByKebabCase(params.type)
-  const articlesData = await ArticleApi.publishedByTypePagedBySortOrderDesc(
-    type,
-    PAGE_SIZE,
-  )
 
+  const response = await firestore()
+    .collection('articles')
+    .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+    .where('published', '==', true)
+    .where('type', '==', type)
+    .orderBy('sortOrder', 'desc')
+    .limit(PAGE_SIZE)
+    .get()
+  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+
+  console.log(articlesData.map((a) => a.title))
   return {
     props: {
       articlesData: JSON.parse(JSON.stringify(articlesData)),

@@ -26,7 +26,7 @@ export const Share = (props: Props) => {
   const router = useRouter()
 
   const quote = `${article.title} @ Culinary Canvas`
-  const image = article.imageContent.set.s.url
+  const image = article.imageContent.url
   const hashtag = 'culinarycanvas'
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}${router.asPath}`
   const description = !!article.subHeading

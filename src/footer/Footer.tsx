@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import s from './Footer.module.scss'
 import Link from 'next/link'
 import { SocialMediaLinks } from '../shared/socialMediaLinks/SocialMediaLinks'
-import { COLOR } from '../styles/color'
+import { COLOR } from '../styles/_color'
 
 export const Footer = observer(() => {
   return (

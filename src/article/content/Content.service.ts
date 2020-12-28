@@ -12,7 +12,7 @@ import { GridPositionService } from '../grid/GridPosition.service'
 import { GridPosition } from '../grid/GridPosition'
 import { HorizontalAlign } from '../shared/HorizontalAlign'
 import { FONT } from '../../styles/font'
-import { COLOR } from '../../styles/color'
+import { COLOR } from '../../styles/_color'
 import { TextFormat } from './text/TextFormat'
 
 export class ContentService {

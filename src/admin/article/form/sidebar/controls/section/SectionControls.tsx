@@ -5,7 +5,7 @@ import { SectionPresetButtons } from '../shared/sectionPreset/SectionPresetButto
 import { runInAction } from 'mobx'
 import { SectionService } from '../../../../../../article/section/Section.service'
 import { ArticleService } from '../../../../../../article/Article.service'
-import { COLOR } from '../../../../../../styles/color'
+import { COLOR } from '../../../../../../styles/_color'
 import s from './SectionControls.module.scss'
 import { useAdmin } from '../../../../../Admin'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'

@@ -8,7 +8,7 @@ export class TagModel implements Model {
   id: string
 
   @observable
-  @field()
+  @field(Date)
   created: Date
 
   @observable
@@ -16,7 +16,7 @@ export class TagModel implements Model {
   createdById: string
 
   @observable
-  @field()
+  @field(Date)
   modified: Date
 
   @observable

@@ -12,6 +12,7 @@ import {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from '@firebase/firestore-types'
+import firebase from 'firebase/app'
 
 export class Transformer {
   static firestoreConverter<T>(clazz: Class<T>): FirestoreDataConverter<T> {
@@ -73,7 +74,7 @@ export class Transformer {
   }
 
   static dbToModel<T>(
-    data: DocumentData | QueryDocumentSnapshot,
+    data: { [key: string]: any } | QueryDocumentSnapshot,
     Clazz: Class<T>,
   ): T {
     let dbObject
@@ -126,11 +127,14 @@ export class Transformer {
     return fieldValue
   }
 
-  private static toModelValue<T>(fieldValue: any, type: Class<T>) {
+  private static toModelValue(fieldValue: any, type: Class) {
     if (!!type) {
-      return Transformer.dbToModel(fieldValue, type)
-    } else if (!!fieldValue.toDate && typeof fieldValue.toDate === 'function') {
-      return fieldValue.toDate()
+      return type === Date && !!fieldValue.seconds
+        ? new firebase.firestore.Timestamp(
+            fieldValue.seconds,
+            fieldValue.nanoseconds,
+          ).toDate()
+        : Transformer.dbToModel(fieldValue, type)
     }
     return fieldValue
   }

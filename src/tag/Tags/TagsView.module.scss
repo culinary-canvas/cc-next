@@ -1,0 +1,9 @@
+@import '../../styles/layout';
+
+.tagsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0;
+}

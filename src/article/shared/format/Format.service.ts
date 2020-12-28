@@ -8,14 +8,14 @@ export class FormatService {
     if (!!image.format.fixedWidth) {
       return `${image.format.fixedWidth}px`
     }
-    return null
+    return image.set.cropped.width
   }
 
   static imageHeight(section: SectionModel, image: ImageContentModel) {
     if (!!image.format.fixedHeight) {
       return `${image.format.fixedHeight}px`
     }
-    return null
+    return image.set.cropped.height
   }
 
   static className<T extends Format>(format: T, property: keyof T) {

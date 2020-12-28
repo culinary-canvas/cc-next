@@ -10,6 +10,7 @@ import { TextContentEdit } from '../content/text/TextContentEdit'
 import { ImageContentEdit } from '../content/image/ImageContentEdit'
 import { GridPositionService } from '../../../../article/grid/GridPosition.service'
 import { TextContentModel } from '../../../../article/content/text/TextContent.model'
+import { TextContent } from '../../../../article/content/text/TextContent'
 
 interface Props {
   section: SectionModel
@@ -22,12 +23,6 @@ export const SectionEdit = observer((props: Props) => {
 
   const [style, setStyle] = useState<CSSProperties>()
   const ref = useRef<HTMLElement>()
-
-  useEffect(() => {
-    if (!!ref.current && admin.section.uid === section.uid) {
-      ref.current.scrollIntoView({behavior: 'smooth'})
-    }
-  }, [admin.section, section, ref])
 
   useAutorun(() => {
     const css: CSSProperties = {}
@@ -60,7 +55,15 @@ export const SectionEdit = observer((props: Props) => {
       >
         {section.contents.map((content) =>
           content instanceof TextContentModel ? (
-            <TextContentEdit key={content.uid} content={content} />
+            admin.content.uid === content.uid ? (
+              <TextContentEdit key={content.uid} content={content} />
+            ) : (
+              <TextContent
+                key={content.uid}
+                content={content}
+                onClick={() => admin.setContent(content)}
+              />
+            )
           ) : (
             <ImageContentEdit
               key={content.uid}

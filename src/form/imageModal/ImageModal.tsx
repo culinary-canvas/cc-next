@@ -11,7 +11,7 @@ import { ImageFile } from '../../article/content/image/ImageFile'
 import { ImageCropValues } from '../../article/content/image/ImageCropValues'
 import { ImageService } from '../../article/content/image/Image.service'
 import { cloneDeep } from '../../services/importHelpers'
-import { COLOR } from '../../styles/color'
+import { COLOR } from '../../styles/_color'
 import { useImageModal } from './ImageModal.store'
 
 export interface ImageModalProps {

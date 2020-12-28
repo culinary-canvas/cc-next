@@ -28,7 +28,7 @@ export class ImageContentModel extends ContentModel<ImageFormat> {
 
   @computed
   get url() {
-    return this.set.image?.url
+    return this.set.cropped?.url
   }
 
   @computed

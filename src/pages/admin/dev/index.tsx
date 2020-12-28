@@ -9,6 +9,8 @@ import { useAuth } from '../../../services/auth/Auth'
 import { changeSectionPresetNames } from '../../../services/script/changeSectionPresetNames'
 import { transformToGridPositions } from '../../../services/script/transformToGridPositions'
 import { GetStaticProps } from 'next'
+import { updateImageFormats } from '../../../services/script/updateImageFormats'
+import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -64,6 +66,27 @@ const AdminDevArea = observer(() => {
           loading={running === 'transformToGridPositions'}
         >
           transformToGridPositions
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('updateImageFormats')
+            await updateImageFormats(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'updateImageFormats'}
+        >
+          Update image formats
+        </Button>
+        <Button
+          onClick={async () => {
+            setRunning('changeArticleTagIdsToTagNames')
+            await changeArticleTagIdsToTagNames(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'changeArticleTagIdsToTagNames'}
+        >
+          Update articles' tag reference from ID to names
         </Button>
       </div>
     </div>

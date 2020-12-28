@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './contact.module.scss'
-import { COLOR } from '../../styles/color'
+import { COLOR } from '../../styles/_color'
 import { GetStaticProps } from 'next'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { PageHead } from '../../head/PageHead'

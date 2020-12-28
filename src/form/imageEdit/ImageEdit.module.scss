@@ -1,17 +1,17 @@
 @import '../../styles/color';
 
 .content {
+  position: relative;
   width: 100%;
-  justify-content: center;
-  display: flex;
+  height: 100%;
 
   &.noFile {
+    height: 100%;
+    padding: 1rem 0;
     border: 2px dashed $grey;
     border-radius: 8px;
+    cursor: pointer;
     color: $grey;
     font-weight: 400;
-    padding: 1rem 0;
-    cursor: pointer;
-    height: 100%;
   }
 }

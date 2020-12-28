@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, forwardRef } from 'react'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { classnames } from '../../services/importHelpers'
-import { COLOR, ColorType } from '../../styles/color'
+import { COLOR, ColorType } from '../../styles/_color'
 import s from './Button.module.scss'
 
 export interface ButtonProps

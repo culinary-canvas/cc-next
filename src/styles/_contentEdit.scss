@@ -1,8 +1,8 @@
 @import 'color';
 
 @mixin contentInEdit {
-  .inEdit {
-    border: 4px dashed $blue-light;
-    outline: 0;
+  .inEdit,
+  .inEdit:hover {
+    box-shadow: 0 0 20px 8px transparentize($blue-light, 0.8);
   }
 }

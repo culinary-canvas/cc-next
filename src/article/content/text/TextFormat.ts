@@ -5,7 +5,7 @@ import { VerticalAlign } from '../../shared/VerticalAlign'
 import { Padding } from '../../shared/Padding'
 import { Format } from '../../shared/format/Format'
 import { FONT, FontFamily, FontSize, FontWeight } from '../../../styles/font'
-import { COLOR, ColorType } from '../../../styles/color'
+import { COLOR, ColorType } from '../../../styles/_color'
 import { SPACING } from '../../../styles/layout'
 
 export class TextFormat extends Format {

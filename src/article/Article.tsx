@@ -7,7 +7,6 @@ import { useAuth } from '../services/auth/Auth'
 import s from './Article.module.scss'
 import { Section } from './section/Section'
 import { ArticleFooter } from './ArticleFooter'
-import { ArticleGrid } from './grid/ArticleGrid'
 import { ArticleApi } from './Article.api'
 import { Transformer } from '../services/db/Transformer'
 
@@ -59,21 +58,7 @@ export const Article = observer(({ article }: Props) => {
       </article>
 
       <div className={s.gridContainer}>
-      <h1>More articles</h1>
-        <ArticleGrid
-          initialArticles={initialGridArticles}
-          load={async (lastLoaded) => {
-            const data = await ArticleApi.allPagedBySortOrderDesc(
-              4,
-              lastLoaded?.sortOrder,
-            )
-            return !!data
-              ? Transformer.dbToModels(data, ArticleModel).filter(
-                  (a) => a.id !== article.id,
-                )
-              : null
-          }}
-        />
+        <h1>More articles</h1>
       </div>
     </>
   )

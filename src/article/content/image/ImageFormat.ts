@@ -23,7 +23,7 @@ export class ImageFormat extends Format {
 
   @field()
   @observable
-  fit = ImageFit.COVER
+  fit = ImageFit.CONTAIN
 
   @field()
   @observable

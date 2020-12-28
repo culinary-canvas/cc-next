@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './about.module.scss'
-import { COLOR } from '../../styles/color'
+import { COLOR } from '../../styles/_color'
 import { GetStaticProps } from 'next'
 import { PageHead } from '../../head/PageHead'
 import {SocialMediaLinks} from '../../shared/socialMediaLinks/SocialMediaLinks'

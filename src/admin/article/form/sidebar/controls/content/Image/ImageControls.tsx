@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
-import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { Checkbox } from '../../../../../../../form/checkbox/Checkbox'
 import { ImageContentModel } from '../../../../../../../article/content/image/ImageContent.model'
@@ -29,7 +28,11 @@ export const ImageControls = observer(() => {
 
   return (
     <>
-      <ImageEdit set={content.set} onChange={(set) => (content.set = set)} />
+      {/*<ImageEdit
+        set={content.set}
+        format={content.format}
+        onChange={(set) => (content.set = set)}
+      />*/}
 
       <input
         id="alt"

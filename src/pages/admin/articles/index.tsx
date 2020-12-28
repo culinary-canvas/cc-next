@@ -2,17 +2,18 @@ import React from 'react'
 import { ArticleList } from '../../../admin/article/list/ArticleList'
 import { GetServerSideProps } from 'next'
 import { ArticleModel } from '../../../article/Article.model'
-import { useTransform } from '../../../hooks/useTransform'
 import s from './articleList.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
-import { ArticleApi } from '../../../article/Article.api'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import ArticleApi from '../../../article/Article.api'
+import { useRouter } from 'next/router'
 
 interface Props {
-  articleData: any[]
+  articleData: { [key: string]: any }[]
 }
 
 function ArticleListPage({ articleData }: Props) {
-  const articles = useTransform(articleData, ArticleModel)
+  const articles = useTransformToModel(articleData, ArticleModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {
@@ -26,7 +27,8 @@ function ArticleListPage({ articleData }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const articleData = await ArticleApi.all()
+  const articleData = await ArticleApi.allNoTransform()
+
   return {
     props: {
       articleData: JSON.parse(JSON.stringify(articleData)),

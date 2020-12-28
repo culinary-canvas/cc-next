@@ -122,9 +122,9 @@ export function useMenuState(): MenuParams {
         )
       }
       _setMarkerAnimation({
-        height: 12,
+        height: 8,
         left: activeRef.offsetLeft + 10,
-        top: activeRef.offsetTop + 16,
+        top: activeRef.offsetTop + 20,
         width: activeRef.offsetWidth - 20,
         onRest: () => null,
         config: markerAnimationConfig,
@@ -160,7 +160,7 @@ export function useMenuState(): MenuParams {
       _setOptionsAnimations({
         opacity: 1,
         onRest: () => {
-          options[i].name === active.name && r()
+          options[i].name === active?.name && r()
           i++
         },
       }),

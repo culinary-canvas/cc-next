@@ -1,10 +1,12 @@
 @import 'content';
+@import 'color';
+@import 'animation';
 
 @mixin textContent {
   .content {
     z-index: 20;
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
 
     &.italic {
       font-style: italic;
@@ -20,6 +22,15 @@
 
     @at-root textarea#{&} {
       margin-bottom: 0;
+    }
+
+    a {
+      text-decoration: underline;
+      transition: color $animation-fast ease-in;
+
+      &:hover {
+        color: $blue;
+      }
     }
   }
 

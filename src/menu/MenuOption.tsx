@@ -5,14 +5,11 @@ import { useRouter } from 'next/router'
 import { animated, useSpring } from 'react-spring'
 import { MenuOptionDefinition } from './MenuOptionDefinition'
 import { useMenu } from './useMenu'
-import { COLOR } from '../styles/color'
+import { COLOR } from '../styles/_color'
 
 interface Props {
   definition: MenuOptionDefinition
   onClick?: (def: MenuOptionDefinition) => any
-  onHover: (def: MenuOptionDefinition) => void
-  onBlur: () => void
-  currentHoveredOption: MenuOptionDefinition
   isLoading?: boolean
   style: CSSProperties
   onRender: (ref: HTMLButtonElement) => void
@@ -24,9 +21,6 @@ export default function MenuOption(props: Props) {
   const {
     definition,
     onClick,
-    onHover,
-    onBlur,
-    currentHoveredOption,
     isLoading = false,
     style,
     onRender,
@@ -37,6 +31,7 @@ export default function MenuOption(props: Props) {
   const router = useRouter()
   const { active } = useMenu()
   const [isActive, setActive] = useState<boolean>(false)
+  const [isHovered, setHovered] = useState<boolean>(false)
 
   useEffect(() => setActive(active?.name === definition.name), [
     active,
@@ -44,14 +39,13 @@ export default function MenuOption(props: Props) {
   ])
 
   const { color } = useSpring({
-    color:
-      !currentHoveredOption || currentHoveredOption.name === definition.name
-        ? definition.isAdmin
-          ? COLOR.BLUE
-          : COLOR.BLACK
-        : definition.isAdmin
+    color: isHovered
+      ? definition.isAdmin
         ? COLOR.BLUE_LIGHT
-        : COLOR.GREY,
+        : COLOR.PINK_DARK
+      : definition.isAdmin
+      ? COLOR.BLUE
+      : COLOR.BLACK,
     config: { tension: 400 },
   })
 
@@ -71,8 +65,8 @@ export default function MenuOption(props: Props) {
         !!onClick && onClick(definition)
         !!definition.path && router.push(definition.path)
       }}
-      onMouseOver={() => onHover(definition)}
-      onMouseOut={() => onBlur()}
+      onMouseOver={() => setHovered(true)}
+      onMouseOut={() => setHovered(false)}
       disabled={isActive || isLoading}
     >
       <label>{definition.label}</label>

@@ -23,7 +23,6 @@ export function DesktopMenu() {
   } = useMenu()
 
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [hoveringOption, setHoveringOption] = useState<MenuOptionDefinition>()
   const [isOpen, setOpen] = useState<boolean>(false)
   const [showArrows, setShowArrows] = useState<boolean>(false)
 
@@ -41,9 +40,6 @@ export function DesktopMenu() {
             style={animationProps}
             show={isOpen}
             definition={definition}
-            onHover={(v) => setHoveringOption(v)}
-            onBlur={() => setHoveringOption(null)}
-            currentHoveredOption={hoveringOption}
             onRender={(ref) => addOptionElementRef(definition.name, ref)}
             onClick={async (def) => {
               moveMarker(def.name)
