@@ -55,7 +55,9 @@ export const ArticlePreview = observer((props: Props) => {
     <article
       className={classnames(s.article, className)}
       onMouseOver={() => setHovered(true)}
+      onTouchStart={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onTouchEnd={() => setHovered(false)}
     >
       <section className={s.image} ref={ref}>
         {!!imageContent && (

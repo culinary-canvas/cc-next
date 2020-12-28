@@ -1,4 +1,4 @@
-import React, { CSSProperties, useRef, useState } from 'react'
+import React, { CSSProperties, useState } from 'react'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../section/Section.model'
@@ -8,6 +8,7 @@ import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import Image from 'next/image'
 import { Size } from '../../shared/format/Size'
+import { isBrowser } from 'react-device-detect'
 
 interface Props {
   content: ImageContentModel
@@ -17,7 +18,6 @@ interface Props {
 
 export const ImageContent = observer((props: Props) => {
   const { content, section, first = false } = props
-  const ref = useRef<HTMLElement>()
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
@@ -26,10 +26,11 @@ export const ImageContent = observer((props: Props) => {
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
       height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
-      paddingTop: `${format.padding.top}px`,
-      paddingBottom: `${format.padding.bottom}px`,
-      paddingLeft: `${format.padding.left}px`,
-      paddingRight: `${format.padding.right}px`,
+      width: `calc(100% - ${format.padding.left}px - ${format.padding.right}px)`,
+      marginTop: `${format.padding.top}px`,
+      marginBottom: `${format.padding.bottom}px`,
+      marginLeft: `${format.padding.left}px`,
+      marginRight: `${format.padding.right}px`,
     })
   }, [content, content.format])
 
@@ -41,7 +42,7 @@ export const ImageContent = observer((props: Props) => {
   }, [content, section, content.format])
 
   return (
-    <div
+    <figure
       className={classnames([
         s.container,
         s[`horizontal-align-${content.format.horizontalAlign}`],
@@ -67,7 +68,7 @@ export const ImageContent = observer((props: Props) => {
         }
         // @ts-ignore
         layout={
-          section.format.height === Size.FULL_SCREEN ? 'fill' : 'responsive'
+          section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
         }
         quality={75}
         objectFit="cover"
@@ -79,6 +80,6 @@ export const ImageContent = observer((props: Props) => {
           [s.circle]: content.format.circle,
         })}
       />
-    </div>
+    </figure>
   )
 })

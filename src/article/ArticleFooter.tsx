@@ -1,7 +1,6 @@
 import React from 'react'
 import s from './Article.module.scss'
 import { TagsView } from '../tag/Tags/TagsView'
-import { COLOR } from '../styles/_color'
 import { Share } from './shared/share/Share'
 import { ArticleModel } from './Article.model'
 import { observer } from 'mobx-react'

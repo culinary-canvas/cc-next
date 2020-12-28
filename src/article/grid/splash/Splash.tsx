@@ -4,7 +4,10 @@ import s from './Splash.module.scss'
 export function Splash() {
   return (
     <article className={s.container}>
-      <h1>Welcome to Culinary Canvas</h1>
+      <h1>
+        Welcome to
+        <br />Culinary Canvas
+      </h1>
       <p>
         Here you’ll discover insightful profiles on culinary creators from the
         far corners of the globe, learn how their signature dishes came into

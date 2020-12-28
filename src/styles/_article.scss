@@ -17,10 +17,6 @@ $article-border-radius: 1rem;
     margin-inline-start: 0;
     margin-inline-end: 0;
   }
-
-  @include media('<=phone') {
-    padding-top: $mobile-header-height;
-  }
 }
 
 @mixin articleGrid {
@@ -35,8 +31,10 @@ $article-border-radius: 1rem;
 }
 
 @mixin articleContent {
-  gap: 2rem;
-  @include articleGrid();
+  @include media('>phone') {
+    gap: 2rem;
+    @include articleGrid();
+  }
 }
 
 @mixin articleFooter {
@@ -50,7 +48,6 @@ $article-border-radius: 1rem;
   margin-top: 2rem;
   border-top: 1px solid black;
   font-size: $font-size-s;
-  justify-self: center;
 }
 
 @mixin articleEditButton {

@@ -47,7 +47,7 @@ export function TagsEdit(props: Props) {
           <Tag
             key={tag}
             tag={tag}
-            color={isSelected ? COLOR.GREY_DARK : COLOR.GREY}
+            color={isSelected ? COLOR.BLACK : COLOR.GREY_LIGHT}
             onClick={() => (isSelected ? onRemove(tag) : onAdd(tag))}
           />
         )

@@ -11,7 +11,7 @@ export const COLOR = {
   RED_DARK: '#AE0930',
   PINK_LIGHT: '#f2cfcf',
   PINK: '#EBB7B7',
-  PINK_DARK: '#E59F9F',
+  PINK_DARK: '#DC7F7F',
   YELLOW: '#FEE100',
   BEIGE: '#EBE1B7',
   GREEN: '#1B998B',

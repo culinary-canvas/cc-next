@@ -3,7 +3,7 @@ import { SectionModel } from './Section.model'
 import { observer } from 'mobx-react'
 import { ImageContentModel } from '../content/image/ImageContent.model'
 import { classnames } from '../../services/importHelpers'
-import styles from './Section.module.scss'
+import s from './Section.module.scss'
 import { TextContent } from '../content/text/TextContent'
 import { ImageContent } from '../content/image/ImageContent'
 import { GridPositionService } from '../grid/GridPosition.service'
@@ -33,9 +33,9 @@ export const Section = observer((props: Props) => {
     <>
       <section
         className={classnames([
-          styles.container,
-          styles[`height-${section.format.height}`],
-          { [styles.shadow]: section.format.shadow },
+          s.container,
+          s[`height-${section.format.height}`],
+          { [s.shadow]: section.format.shadow },
         ])}
         style={{ ...style }}
       >

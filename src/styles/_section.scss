@@ -4,10 +4,7 @@
 
 @mixin sectionContainer {
   .container {
-    display: grid;
     justify-content: center;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(auto-fill, 1fr);
     // overflow: hidden;
 
     &,
@@ -23,21 +20,29 @@
       box-shadow: $softCenteredShadow;
     }
 
-    @include media('<=phone') {
-      grid-auto-rows: minmax(1rem, auto);
-      grid-column-end: 2 !important;
-      grid-column-start: 1 !important;
-      grid-template-columns: 100vw !important;
-      width: 100vw;
+    &.height-FULL_SCREEN {
+      height: 100vh;
+      > * {
+        max-height: 100vh;
+      }
     }
 
     @include media('>phone') {
-      &.height-FULL_SCREEN {
-        height: 100vh;
-        > * {
-          max-height: 100vh;
-        }
-      }
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(auto-fill, 1fr);
     }
+
+    @include media('<=phone') {
+      grid-area: unset !important;
+      grid-row-start: unset !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      position: relative;
+    }
+
   }
 }
