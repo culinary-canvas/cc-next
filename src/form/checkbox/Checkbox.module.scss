@@ -4,18 +4,21 @@
 
 .checkbox {
   display: flex;
-  width: 100%;
   align-items: center;
+  width: 100%;
   margin: 0 0 0.5rem;
 
   input {
     margin: unset;
+    &:after {
+      content: none;
+    }
   }
   label {
-    text-transform: none;
-    color: $black;
-    font-size: 1rem;
     margin-bottom: unset;
     margin-left: $spacing-m;
+    color: $black;
+    text-transform: none;
+    font-size: 1rem;
   }
 }
