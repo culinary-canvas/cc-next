@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { TagsView } from '../../../tag/Tags/TagsView'
 import s from './ArticlePreview.module.scss'
@@ -11,7 +11,7 @@ import StringUtils from '../../../services/utils/StringUtils'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { classnames } from '../../../services/importHelpers'
-import { animated, useSpring } from 'react-spring'
+import { motion, useCycle } from 'framer-motion'
 
 interface Props {
   article: ArticleModel
@@ -25,18 +25,6 @@ export const ArticlePreview = observer((props: Props) => {
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
-  const [isHovered, setHovered] = useState<boolean>(false)
-  const [textContentHeight, setTextContentHeight] = useState<number>(0)
-
-  const { height } = useSpring({
-    height: isHovered ? `${textContentHeight}px` : '0px',
-    config: { mass: 2, tension: 350, friction: 40 },
-  })
-  const measuredRef = useCallback((node) => {
-    if (node !== null) {
-      setTextContentHeight(node.scrollHeight)
-    }
-  }, [])
 
   useEffect(() => {
     const image = article.contents.find(
@@ -51,16 +39,32 @@ export const ArticlePreview = observer((props: Props) => {
     setSubHeadingContent(subHeading)
   }, [article.contents, article.sections])
 
+  const [h, toggleH] = useState<boolean>(false)
+  const variants = useRef({
+    hovered: { height: 'auto' },
+    blurred: { height: 0 },
+  }).current
+
   return (
-    <article
+    <motion.article
       className={classnames(s.article, className)}
-      onMouseOver={() => setHovered(true)}
-      onTouchStart={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onTouchEnd={() => setHovered(false)}
+      onHoverStart={() => toggleH(true)}
+      onHoverEnd={() => toggleH(false)}
+      whileTap={{ scale: 0.95 }}
+      animate={h ? 'hovered' : 'blurred'}
+      variants={{
+        hovered: {
+          borderRadius: '18px',
+          boxShadow: '0 0 30px 0 rgba(0,0,0,0.15)',
+        },
+        blurred: { },
+      }}
     >
-      <section className={s.image} ref={ref}>
-        {!!imageContent && (
+      {!!imageContent && (
+        <motion.figure
+          className={s.image}
+          ref={ref}
+        >
           <Image
             priority={priority}
             alt={imageContent.set.alt}
@@ -68,8 +72,8 @@ export const ArticlePreview = observer((props: Props) => {
             objectFit="cover"
             src={imageContent.set.cropped.url}
           />
-        )}
-      </section>
+        </motion.figure>
+      )}
 
       <section className={s.text}>
         <Button
@@ -85,19 +89,13 @@ export const ArticlePreview = observer((props: Props) => {
 
         <h2>{article.title}</h2>
 
-        <animated.div
-          style={{
-            height,
-            overflow: 'hidden',
-          }}
-          ref={measuredRef}
-        >
+        <motion.div className={s.moreText} variants={variants}>
           <p className={s.subHeading}>{subHeadingContent?.value}</p>
           {!!article.tagNames.length && (
             <TagsView tagNames={article.tagNames} containerClassName={s.tags} />
           )}
-        </animated.div>
+        </motion.div>
       </section>
-    </article>
+    </motion.article>
   )
 })

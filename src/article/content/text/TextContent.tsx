@@ -7,15 +7,17 @@ import s from './TextContent.module.scss'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import ReactMarkdown from 'react-markdown'
+import { motion } from 'framer-motion'
 
 interface Props {
   content: TextContentModel
+  index: number
   onClick?: () => any
   style?: CSSProperties
 }
 
 export const TextContent = observer((props: Props) => {
-  const { content, style, onClick } = props
+  const { content, index, style, onClick } = props
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
   const [formatClassNames, setFormatClassNames] = useState<string>('')
 
@@ -56,15 +58,21 @@ export const TextContent = observer((props: Props) => {
   }, [content.type, content.format])
 
   return content.type === ContentType.TITLE ? (
-    <h1
+    <motion.h1
       className={formatClassNames}
       style={{ ...formatStyle, ...style }}
       onClick={() => !!onClick && onClick()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
     >
       {content.value}
-    </h1>
+    </motion.h1>
   ) : (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
       className={formatClassNames}
       style={{ ...formatStyle, ...style }}
       onClick={() => !!onClick && onClick()}
@@ -80,6 +88,6 @@ export const TextContent = observer((props: Props) => {
       >
         {content.value}
       </ReactMarkdown>
-    </div>
+    </motion.div>
   )
 })

@@ -9,6 +9,7 @@ import { Spinner } from '../../shared/spinner/Spinner'
 import { COLOR } from '../../styles/_color'
 import { Transformer } from '../../services/db/Transformer'
 import { Splash } from './splash/Splash'
+import { motion } from 'framer-motion'
 
 interface Props {
   initialArticles?: ArticleModel[]
@@ -62,19 +63,33 @@ export const ArticleGrid = observer((props: Props) => {
     return () => window.removeEventListener('scroll', onScroll)
   })
 
+  const variants = {
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.5 },
+    },
+    hidden: { opacity: 0 },
+  }
+
   return (
-    <div className={s.grid}>
+    <motion.div
+      className={s.grid}
+      initial="hidden"
+      animate="visible"
+      variants={variants}
+    >
       {articles.map((article, i) => (
         <React.Fragment key={i}>
           {showSplash && i === 1 && <Splash />}
-          <Link href="/articles/[slug]" as={`/articles/${article.slug}`}>
-            <a
+          <Link href={`/articles/${article.slug}`}>
+            <motion.a
+              variants={variants}
               className={classnames(s.articleContainer, {
                 [s.promoted]: article.promoted || i === 0,
               })}
             >
               <ArticlePreview article={article} priority={i === 0} />
-            </a>
+            </motion.a>
           </Link>
         </React.Fragment>
       ))}
@@ -85,6 +100,6 @@ export const ArticleGrid = observer((props: Props) => {
       >
         {loading && <Spinner size={64} color={COLOR.GREY} />}
       </div>
-    </div>
+    </motion.div>
   )
 })

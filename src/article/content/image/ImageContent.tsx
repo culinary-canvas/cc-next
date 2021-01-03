@@ -8,16 +8,17 @@ import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import Image from 'next/image'
 import { Size } from '../../shared/format/Size'
-import { isBrowser } from 'react-device-detect'
+import { motion } from 'framer-motion'
 
 interface Props {
   content: ImageContentModel
   section: SectionModel
   first: boolean
+  index: number
 }
 
 export const ImageContent = observer((props: Props) => {
-  const { content, section, first = false } = props
+  const { content, section, first = false, index } = props
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
@@ -42,7 +43,7 @@ export const ImageContent = observer((props: Props) => {
   }, [content, section, content.format])
 
   return (
-    <figure
+    <motion.figure
       className={classnames([
         s.container,
         s[`horizontal-align-${content.format.horizontalAlign}`],
@@ -56,6 +57,9 @@ export const ImageContent = observer((props: Props) => {
         ...gridStyle,
         ...figureFormatStyle,
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
     >
       <Image
         width={
@@ -80,6 +84,6 @@ export const ImageContent = observer((props: Props) => {
           [s.circle]: content.format.circle,
         })}
       />
-    </figure>
+    </motion.figure>
   )
 })

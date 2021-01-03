@@ -9,18 +9,13 @@
   flex-direction: column;
   height: 100%;
   max-width: 100%;
-  background-color: $white;
-  // transition: box-shadow 300ms ease-in-out;
-
+  cursor: pointer;
+  overflow: hidden;
   &:hover {
     // box-shadow: 0 0 0 1rem transparentize($pink, 0.2);
   }
 
-
-  section.image {
-    flex-grow: 2;
-    min-height: 80vh;
-    transition: max-width 300ms ease-in-out, margin 300ms ease-in-out;
+  figure.image {
     overflow: hidden;
   }
 
@@ -30,10 +25,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 100%;
+    width: 101%;
     padding: 1rem;
     background-color: $white;
-    height: fit-content;
     h2 {
       padding: 1rem 0;
       margin-right: auto;
@@ -57,11 +51,15 @@
       color: $black !important;
     }
 
-    p.subHeading{
+    .moreText {
+      overflow: hidden;
+    }
+
+    p.subHeading {
       font-family: $font-family-garamond;
     }
 
-    .tags{
+    .tags {
       padding: 1rem 0;
     }
   }
