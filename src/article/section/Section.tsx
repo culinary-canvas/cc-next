@@ -8,6 +8,7 @@ import { TextContent } from '../content/text/TextContent'
 import { ImageContent } from '../content/image/ImageContent'
 import { GridPositionService } from '../grid/GridPosition.service'
 import { TextContentModel } from '../content/text/TextContent.model'
+import { motion } from 'framer-motion'
 
 interface Props {
   section: SectionModel
@@ -31,7 +32,10 @@ export const Section = observer((props: Props) => {
 
   return (
     <>
-      <section
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: first ? 0 : 1 }}
         className={classnames([
           s.container,
           s[`height-${section.format.height}`],
@@ -39,19 +43,20 @@ export const Section = observer((props: Props) => {
         ])}
         style={{ ...style }}
       >
-        {section.contents.map((content) =>
+        {section.contents.map((content, i) =>
           content instanceof TextContentModel ? (
-            <TextContent key={content.uid} content={content} />
+            <TextContent key={content.uid} content={content} index={i} />
           ) : (
             <ImageContent
               key={content.uid}
               content={content as ImageContentModel}
               section={section}
               first={first}
+              index={i}
             />
           ),
         )}
-      </section>
+      </motion.section>
     </>
   )
 })

@@ -32,7 +32,11 @@ export function TextEditMenu(props: Props) {
 
   useEffect(() => {
     setUrl('')
-    setExistingUrl(TextEditService.getLinkInPosition(content.value, start, end))
+    if (!!content.value) {
+      setExistingUrl(
+        TextEditService.getLinkInPosition(content.value, start, end),
+      )
+    }
   }, [content.value, start, end])
 
   const insertLink = useCallback(
