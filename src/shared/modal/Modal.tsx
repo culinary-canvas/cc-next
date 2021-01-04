@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import s from './Modal.module.scss'
 import { Button } from '../../form/button/Button'
 import { classnames } from '../../services/importHelpers'
@@ -10,6 +10,7 @@ interface Props {
   onCancel?: () => any
   dark?: boolean
   children?: any
+  style?: CSSProperties
 }
 
 export function Modal({
@@ -19,10 +20,14 @@ export function Modal({
   onCancel,
   dark = false,
   children,
+  style = {},
 }: Props) {
   return (
     <div className={classnames(s.background, { [s.dark]: dark })}>
-      <div className={s.container}>
+      <div
+        className={s.container}
+        style={{ ...style }}
+      >
         {!!title && <h4>{title}</h4>}
         {!!message && <p>{message}</p>}
         {!!children && children}

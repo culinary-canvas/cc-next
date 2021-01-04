@@ -1,0 +1,13 @@
+@import '../../../styles/color';
+
+.container {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  background-color: $white;
+  z-index: 200;
+  margin-left: 3rem;
+  margin-top: 5rem;
+  padding: 1rem;
+}

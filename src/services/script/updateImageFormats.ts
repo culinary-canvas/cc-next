@@ -2,6 +2,8 @@ import { ArticleApi } from '../../article/Article.api'
 import { Size } from '../../article/shared/format/Size'
 import { ImageContentModel } from '../../article/content/image/ImageContent.model'
 import { ImageFit } from '../../article/content/image/ImageFit'
+import { HorizontalAlign } from '../../article/shared/HorizontalAlign'
+import { VerticalAlign } from '../../article/shared/VerticalAlign'
 
 export async function updateImageFormats(userId: string) {
   const articles = await ArticleApi.all()
@@ -19,6 +21,8 @@ export async function updateImageFormats(userId: string) {
               : ImageFit.COVER
           console.log('setting fit', fit)
           content.format.fit = fit
+          content.format.horizontalAlign = HorizontalAlign.CENTER
+          content.format.verticalAlign = VerticalAlign.CENTER
         })
     })
     ArticleApi.save(article, userId)

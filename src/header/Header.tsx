@@ -60,7 +60,7 @@ export const Header = () => {
         return 'Dishes'
       case StringUtils.toLowerKebabCase(ArticleType.PORTRAIT):
         return 'Portraits'
-      case StringUtils.toLowerKebabCase(ArticleType.HOW_TO):
+      case StringUtils.toLowerKebabCase(ArticleType.RECIPE):
         return 'Recipes'
     }
   }

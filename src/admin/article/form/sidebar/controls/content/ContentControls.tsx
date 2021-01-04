@@ -9,7 +9,6 @@ import { ImageContentModel } from '../../../../../../article/content/image/Image
 import { ImageControls } from './Image/ImageControls'
 import { Button } from '../../../../../../form/button/Button'
 import { COLOR } from '../../../../../../styles/_color'
-import { SectionService } from '../../../../../../article/section/Section.service'
 import { observer } from 'mobx-react'
 import s from './ContentControls.module.scss'
 import { classnames } from '../../../../../../services/importHelpers'
@@ -17,9 +16,12 @@ import { useAdmin } from '../../../../../Admin'
 import { GridControl } from '../shared/gridControl/GridControl'
 import { runInAction } from 'mobx'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { Modal } from '../../../../../../shared/modal/Modal'
+import { SectionService } from '../../../../../../article/section/Section.service'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [deleting, setDeleting] = useState<boolean>(false)
   const { content, section, article } = admin
   if (!content || !section || !article) {
@@ -82,11 +84,7 @@ export const ContentControls = observer(() => {
         loading={deleting}
         color={COLOR.RED}
         loadingText="Deleting"
-        onClick={() => {
-          setDeleting(true)
-          SectionService.removeContent(content, section)
-          setDeleting(false)
-        }}
+        onClick={() => setShowDeleteModal(true)}
         disabled={
           section.uid === article.titleSection.uid &&
           content.type === ContentType.TITLE
@@ -100,6 +98,22 @@ export const ContentControls = observer(() => {
       >
         Delete
       </Button>
+
+      {showDeleteModal && (
+        <Modal
+          dark
+          style={{ position: 'absolute', bottom: '1rem', width: '90%' }}
+          title="Confirm"
+          message={`Are you sure you want to delete "${content.displayName}"?`}
+          onOk={() => {
+            setShowDeleteModal(false)
+            setDeleting(true)
+            SectionService.removeContent(content, section)
+            setDeleting(false)
+          }}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
     </section>
   )
 })

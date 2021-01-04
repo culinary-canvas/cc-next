@@ -9,6 +9,7 @@ import s from './TextContentEdit.module.scss'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
 import { runInAction } from 'mobx'
 import { TextEditMenu } from './TextEditMenu'
+import { TextContentService } from '../../../../../article/content/text/TextContent.service'
 
 interface Props {
   content: TextContentModel
@@ -28,7 +29,15 @@ export const TextContentEdit = observer((props: Props) => {
 
   useEffect(() => {
     if (!!textareaRef.current && admin.content.uid === content.uid) {
-      textareaRef.current.scrollIntoView({ behavior: 'smooth' })
+      if (
+        textareaRef.current.getBoundingClientRect().top < 0 ||
+        textareaRef.current.getBoundingClientRect().top > window.innerHeight
+      ) {
+        window.scrollBy({
+          behavior: 'smooth',
+          top: textareaRef.current.getBoundingClientRect().top - 64,
+        })
+      }
     }
   }, [admin.content, content, textareaRef])
 
@@ -50,13 +59,20 @@ export const TextContentEdit = observer((props: Props) => {
       color: format.color,
       backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
-      fontSize: `${format.fontSize}px`,
+      fontSize: TextContentService.getResponsiveFontSize(format.fontSize),
       fontFamily: content.format.fontFamily,
     })
   }, [content.format])
 
   return (
-    <div className={s.wrapper} style={{ ...gridWrapperStyle }}>
+    <div
+      className={classnames(
+        s.wrapper,
+        s[`horizontal-align-${content.format.horizontalAlign}`],
+        s[`vertical-align-${content.format.verticalAlign}`],
+      )}
+      style={{ ...gridWrapperStyle }}
+    >
       <TextEditMenu
         content={content}
         selectionStart={selection.start}

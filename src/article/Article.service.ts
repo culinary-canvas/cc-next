@@ -14,10 +14,6 @@ export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = [
     'original',
     'cropped',
-    'xl',
-    'l',
-    'm',
-    's',
   ]
 
   @action

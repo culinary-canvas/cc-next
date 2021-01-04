@@ -8,6 +8,7 @@ import { useAutorun } from '../../../hooks/useAutorun'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import ReactMarkdown from 'react-markdown'
 import { motion } from 'framer-motion'
+import { TextContentService } from './TextContent.service'
 
 interface Props {
   content: TextContentModel
@@ -31,7 +32,7 @@ export const TextContent = observer((props: Props) => {
       color: format.color,
       backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
-      fontSize: `${format.fontSize}px`,
+      fontSize: TextContentService.getResponsiveFontSize(format.fontSize),
       fontFamily: content.format.fontFamily,
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,

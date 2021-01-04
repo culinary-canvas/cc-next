@@ -5,7 +5,6 @@ import { ImageContentModel } from '../../../../../article/content/image/ImageCon
 import { SectionModel } from '../../../../../article/section/Section.model'
 import { useAdmin } from '../../../../Admin'
 import { useAutorun } from '../../../../../hooks/useAutorun'
-import { FormatService } from '../../../../../article/shared/format/Format.service'
 import { classnames } from '../../../../../services/importHelpers'
 import { ImageEdit } from '../../../../../form/imageEdit/ImageEdit'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
@@ -48,11 +47,9 @@ export const ImageContentEdit = observer((props: Props) => {
     <figure
       className={classnames([
         s.container,
-        s[`horizontal-align-${content.format.horizontalAlign}`],
-        s[`vertical-align-${content.format.verticalAlign}`],
         s[`fit-${content.format.fit}`],
         {
-          [s.inEdit]: admin.content.uid === content.uid,
+          [s.inEdit]: admin.content?.uid === content.uid,
           [s.first]: first,
         },
       ])}
@@ -69,7 +66,7 @@ export const ImageContentEdit = observer((props: Props) => {
           { [s.circle]: content.format.circle },
         ])}
         onFocus={() => admin.setContent(content)}
-        enableModal={admin.content.uid === content.uid}
+        enableModal={admin.content?.uid === content.uid}
         onChange={(set) => runInAction(() => (content.set = set))}
       />
     </figure>

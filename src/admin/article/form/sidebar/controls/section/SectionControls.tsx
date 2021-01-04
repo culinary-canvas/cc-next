@@ -14,11 +14,13 @@ import { GridControl } from '../shared/gridControl/GridControl'
 import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { SectionModel } from '../../../../../../article/section/Section.model'
 import { HeightButtons } from '../shared/height/HeightButtons'
+import { Modal } from '../../../../../../shared/modal/Modal'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
   const { article } = admin
 
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
   const [deleting, setDeleting] = useState<boolean>(false)
   const [sections, setSections] = useState<SectionModel[]>([])
   const [section, setSection] = useState<SectionModel>()
@@ -107,11 +109,7 @@ export const SectionControls = observer(() => {
           loading={deleting}
           color={COLOR.RED}
           loadingText="Deleting"
-          onClick={() => {
-            setDeleting(true)
-            ArticleService.removeSection(section, article)
-            setDeleting(false)
-          }}
+          onClick={() => setShowDeleteModal(true)}
           disabled={section.uid === article.titleSection.uid}
           title={
             section.uid === article.titleSection.uid
@@ -121,6 +119,22 @@ export const SectionControls = observer(() => {
         >
           Delete section
         </Button>
+
+        {showDeleteModal && (
+          <Modal
+            dark
+            style={{ position: 'absolute', bottom: '1rem', width: '90%' }}
+            title="Confirm"
+            message={`Are you sure you want to delete "${section.displayName}"?`}
+            onOk={() => {
+              setShowDeleteModal(false)
+              setDeleting(true)
+              ArticleService.removeSection(section, article)
+              setDeleting(false)
+            }}
+            onCancel={() => setShowDeleteModal(false)}
+          />
+        )}
       </section>
     </>
   )

@@ -11,6 +11,7 @@ import { transformToGridPositions } from '../../../services/script/transformToGr
 import { GetStaticProps } from 'next'
 import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
+import { changeArticleTypeHOW_TOToRECIPE } from '../../../services/script/changeArticleTypeHOW_TOToRECIPE'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -78,6 +79,7 @@ const AdminDevArea = observer(() => {
         >
           Update image formats
         </Button>
+
         <Button
           onClick={async () => {
             setRunning('changeArticleTagIdsToTagNames')
@@ -87,6 +89,17 @@ const AdminDevArea = observer(() => {
           loading={running === 'changeArticleTagIdsToTagNames'}
         >
           Update articles' tag reference from ID to names
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('changeArticleTypeHOW_TOToRECIPE')
+            await changeArticleTypeHOW_TOToRECIPE(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'changeArticleTypeHOW_TOToRECIPE'}
+        >
+          Change articles' type from HOW_TO to RECIPE
         </Button>
       </div>
     </div>

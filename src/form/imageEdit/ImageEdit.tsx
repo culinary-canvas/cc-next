@@ -8,6 +8,8 @@ import { useOverlay } from '../../shared/overlay/OverlayStore'
 import Image from 'next/image'
 import { ImageFormat } from '../../article/content/image/ImageFormat'
 import { ImageFit } from '../../article/content/image/ImageFit'
+import { observer } from 'mobx-react'
+import { toJS } from 'mobx'
 
 interface Props {
   set: ImageSet
@@ -17,9 +19,10 @@ interface Props {
   onCancel?: () => any
   enableModal?: boolean
   onFocus?: () => any
+  id?: string
 }
 
-export function ImageEdit(props: Props) {
+export const ImageEdit = observer((props: Props) => {
   const {
     set,
     format,
@@ -28,6 +31,7 @@ export function ImageEdit(props: Props) {
     className,
     enableModal = true,
     onFocus,
+    id,
   } = props
   const overlay = useOverlay()
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
@@ -36,6 +40,7 @@ export function ImageEdit(props: Props) {
     <>
       {!set.cropped?.fileName ? (
         <div
+          id={id}
           onClick={() => {
             enableModal && setModalOpen(true)
             onFocus && onFocus()
@@ -53,14 +58,9 @@ export function ImageEdit(props: Props) {
       ) : (
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <Image
-          width={
-            format.fit === ImageFit.CONTAIN &&
-            (format.fixedWidth || set.cropped.width)
-          }
-          height={
-            format.fit === ImageFit.CONTAIN &&
-            (format.fixedHeight || set.cropped.height)
-          }
+          id={id}
+          width={format.fit === ImageFit.CONTAIN && set.cropped.width}
+          height={format.fit === ImageFit.CONTAIN && set.cropped.height}
           onClick={() => {
             enableModal && setModalOpen(true)
             onFocus && onFocus()
@@ -72,6 +72,7 @@ export function ImageEdit(props: Props) {
           // @ts-ignore
           layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
           objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
+          objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
           alt={set.alt}
           src={set.cropped.url}
           className={classnames([s.content, className])}
@@ -95,7 +96,7 @@ export function ImageEdit(props: Props) {
             const newSet = new ImageSet()
             newSet.alt = set.alt
 
-            newSet.original = set.original
+            newSet.original = original
             newSet.cropValues = cropValues
 
             overlay.setProgress(0.5, 'Generating cropped image...')
@@ -113,4 +114,4 @@ export function ImageEdit(props: Props) {
       />
     </>
   )
-}
+})

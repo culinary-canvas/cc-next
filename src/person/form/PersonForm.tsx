@@ -9,6 +9,8 @@ import { useFormControl } from '../../form/formControl/useFormControl'
 import { PersonApi } from '../Person.api'
 import { Button } from '../../form/button/Button'
 import s from './PersonForm.module.scss'
+import { ImageEdit } from '../../form/imageEdit/ImageEdit'
+import { Select } from '../../form/select/Select'
 
 interface Props {
   person: PersonModel
@@ -29,25 +31,6 @@ export const PersonForm = observer((props: Props) => {
 
   return (
     <article className={s.container}>
-      <label htmlFor="name">Name</label>
-      <input
-        type="text"
-        id="name"
-        value={person.name}
-        onChange={(e) => {
-          console.log(e.target.value)
-          runInAction(() => (formControl.mutable.name = e.target.value))
-        }}
-      />
-
-      <label htmlFor="web">Web site</label>
-      <input
-        type="text"
-        id="web"
-        value={person.web}
-        onChange={(e) => runInAction(() => (person.web = e.target.value))}
-      />
-
       <Button
         type="submit"
         disabled={formControl.isClean || !formControl.isValid}
@@ -64,6 +47,51 @@ export const PersonForm = observer((props: Props) => {
       >
         Save
       </Button>
+
+      <label htmlFor="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        value={person.name}
+        onChange={(e) => {
+          console.log(e.target.value)
+          runInAction(() => (formControl.mutable.name = e.target.value))
+        }}
+      />
+
+      <label htmlFor="company">Company</label>
+      <Select
+        id="company"
+        value={undefined}
+        options={[]}
+        disabled
+        onChange={() => null}
+      ></Select>
+
+      <label htmlFor="title">Title</label>
+      <input
+        type="text"
+        id="title"
+        value={person.title}
+        onChange={(e) => runInAction(() => (person.title = e.target.value))}
+      />
+
+      <label htmlFor="web">Web site</label>
+      <input
+        type="text"
+        id="web"
+        value={person.web}
+        onChange={(e) => runInAction(() => (person.web = e.target.value))}
+      />
+
+      <label htmlFor="image" style={{ marginBottom: '1rem' }}>
+        Image
+      </label>
+      <ImageEdit
+        set={person.image}
+        format={person.imageFormat}
+        onChange={(imageSet) => runInAction(() => (person.image = imageSet))}
+      />
     </article>
   )
 })

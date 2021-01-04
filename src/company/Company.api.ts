@@ -3,6 +3,7 @@ import { ModelService } from '../services/db/Model.service'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { CompanyModel } from './Company.model'
+import { StorageService } from '../services/storage/Storage.service'
 
 export class CompanyApi {
   private static readonly COLLECTION = 'companies'
@@ -46,10 +47,13 @@ export class CompanyApi {
     onProgress(0, '')
     const { firestore } = initFirebase()
 
-    onProgress(0.33)
+    onProgress(0.25)
     ModelService.beforeSave(company, userId)
-    console.log(company)
-    onProgress(0.66)
+
+    onProgress(0.25, 'Uploading images')
+    await this.uploadNewImages(company, onProgress)
+
+    onProgress(0.8)
     let collectionRef = firestore()
       .collection(this.COLLECTION)
       .withConverter(Transformer.firestoreConverter(CompanyModel))
@@ -58,7 +62,7 @@ export class CompanyApi {
       ? collectionRef.doc(company.id)
       : collectionRef.doc()
     await doc.set(company)
-    console.log(doc)
+
     onProgress(1, 'Done!')
     return doc.id
   }
@@ -77,5 +81,28 @@ export class CompanyApi {
 
   private static logProgress(progress: number, message?: string) {
     console.debug(progress, message)
+  }
+
+  private static async uploadNewImages(
+    company: CompanyModel,
+    onProgress: (progress: number, message: string) => any,
+  ) {
+    if (StorageService.isLocal(company.image.cropped.url)) {
+      company.image.cropped.url = await StorageService.storeFileFromLocalUrl(
+        company.image.cropped.url,
+        company.image.cropped.fileName,
+        `companies/${company.id}`,
+        (p) => onProgress(0.25 + p * 0.25, 'Uploaded cropped image'),
+      )
+    }
+
+    if (StorageService.isLocal(company.image.original.url)) {
+      company.image.original.url = await StorageService.storeFileFromLocalUrl(
+        company.image.original.url,
+        company.image.original.fileName,
+        `companies/${company.id}`,
+        (p) => onProgress(0.5 + p * 0.25, 'Uploaded original image'),
+      )
+    }
   }
 }

@@ -4,7 +4,6 @@ import { Padding } from '../../shared/Padding'
 import { HorizontalAlign } from '../../shared/HorizontalAlign'
 import { VerticalAlign } from '../../shared/VerticalAlign'
 import { SPACING } from '../../../styles/layout'
-import { GridPosition } from '../../grid/GridPosition'
 import { Format } from '../../shared/format/Format'
 import { ImageFit } from './ImageFit'
 
@@ -12,14 +11,6 @@ export class ImageFormat extends Format {
   constructor(initial?: Partial<ImageFormat>) {
     super(initial)
   }
-
-  @field()
-  @observable
-  fixedWidth: number
-
-  @field()
-  @observable
-  fixedHeight: number
 
   @field()
   @observable

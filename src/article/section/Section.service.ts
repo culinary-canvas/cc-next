@@ -66,15 +66,11 @@ export class SectionService {
       ContentType.IMAGE,
       section,
     )
-    image.format.fixedWidth = 200
-    image.format.fixedHeight = 200
     image.format.circle = true
     image.format.padding = new Padding(40, 16, 16, 16)
     image.format.horizontalAlign = HorizontalAlign.CENTER
     image.format.verticalAlign = VerticalAlign.CENTER
     image.format.gridPosition = new GridPosition(2, 4, 1, 2)
-    image.format.fixedWidth = null
-    image.format.fixedHeight = null
 
     const name = this.getOrCreateParagraph(section, 0)
     name.format.fontWeight = 500

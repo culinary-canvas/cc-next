@@ -46,8 +46,6 @@ export const ImageContent = observer((props: Props) => {
     <motion.figure
       className={classnames([
         s.container,
-        s[`horizontal-align-${content.format.horizontalAlign}`],
-        s[`vertical-align-${content.format.verticalAlign}`],
         s[`fit-${content.format.fit}`],
         {
           [s.first]: first,
@@ -64,11 +62,11 @@ export const ImageContent = observer((props: Props) => {
       <Image
         width={
           section.format.height === Size.FIT_CONTENT &&
-          (content.format.fixedWidth || content.set.cropped.width)
+          content.set.cropped.width
         }
         height={
           section.format.height === Size.FIT_CONTENT &&
-          (content.format.fixedHeight || content.set.cropped.height)
+          content.set.cropped.height
         }
         // @ts-ignore
         layout={
