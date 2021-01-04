@@ -7,7 +7,7 @@ import { ContentModel } from '../content/ContentModel'
 import { Orientation } from '../shared/Orientation'
 import { SectionPreset } from './SectionPreset'
 import { transform } from '../../services/db/decorators/transform.decorator'
-import { ArticlePart } from '../ArticlePart'
+import { ArticlePart } from '../shared/ArticlePart'
 import { SectionService } from './Section.service'
 
 export class SectionModel implements ArticlePart {

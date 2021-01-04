@@ -9,7 +9,7 @@ import EditPosition from '../../../../../../../../public/assets/icons/streamline
 import { classnames } from '../../../../../../../services/importHelpers'
 import { GridPositionService } from '../../../../../../../article/grid/GridPosition.service'
 import { GridMap } from './GridMap'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { SectionModel } from '../../../../../../../article/section/Section.model'
 import { GridControlMenuButton } from './GridControlMenuButton'
 import { Modal } from '../../../../../../../shared/modal/Modal'

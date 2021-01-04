@@ -21,11 +21,6 @@ const ArticleFormSidebar = observer((props: Props) => {
 
   const [saving, setSaving] = useState<boolean>(false)
 
-  const onProgress = (progress, message) => {
-    message && overlay.setText(message)
-    overlay.setProgress(progress)
-  }
-
   return (
     <>
       <div
@@ -88,7 +83,9 @@ const ArticleFormSidebar = observer((props: Props) => {
   async function onSave() {
     setSaving(true)
     overlay.toggle()
-    const id = await ArticleApi.save(admin.article, auth.userId, onProgress)
+    const id = await ArticleApi.save(admin.article, auth.userId, (v, t) =>
+      overlay.setProgress(v, t),
+    )
 
     setTimeout(async () => {
       const { slug } = await ArticleApi.byId(id)

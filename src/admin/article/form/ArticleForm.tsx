@@ -4,7 +4,7 @@ import { classnames } from '../../../services/importHelpers'
 import { SectionEdit } from './section/SectionEdit'
 import s from './ArticleForm.module.scss'
 import { useAdmin } from '../../Admin'
-import { ArticleFooter } from '../../../article/ArticleFooter'
+import { ArticleFooter } from '../../../article/shared/ArticleFooter'
 
 interface Props {}
 

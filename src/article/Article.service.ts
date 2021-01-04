@@ -1,5 +1,5 @@
 import { ArticleModel } from './Article.model'
-import { ArticleType } from './ArticleType'
+import { ArticleType } from './shared/ArticleType'
 import { SectionModel } from './section/Section.model'
 import { action } from 'mobx'
 import { SectionService } from './section/Section.service'

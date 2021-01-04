@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction } from 'mobx'
 import { GridPosition } from '../../../../../../../article/grid/GridPosition'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { GridPositionService } from '../../../../../../../article/grid/GridPosition.service'
 
 export class GridManager {

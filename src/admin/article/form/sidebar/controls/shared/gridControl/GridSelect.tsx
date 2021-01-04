@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { GridManager } from './GridManager'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { useAutorun } from '../../../../../../../hooks/useAutorun'
 import { GridMap } from './GridMap'
 import { classnames } from '../../../../../../../services/importHelpers'

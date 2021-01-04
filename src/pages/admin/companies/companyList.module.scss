@@ -1,0 +1,7 @@
+@import '../../../styles/color';
+@import '../../../styles/page';
+
+.container {
+  @include pageContainer();
+  background-color: $white;
+}

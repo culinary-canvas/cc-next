@@ -1,7 +1,7 @@
 import React from 'react'
 import { classnames } from '../../../../../../../services/importHelpers'
 import s from './GridContent.module.scss'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { SectionModel } from '../../../../../../../article/section/Section.model'
 import { Size } from '../../../../../../../article/shared/format/Size'
 import { observer } from 'mobx-react'

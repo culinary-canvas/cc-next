@@ -9,7 +9,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { ArticlePart } from '../article/ArticlePart'
+import { ArticlePart } from '../article/shared/ArticlePart'
 
 export interface Admin {
   readonly showUnpublishedOnStartPage: boolean

@@ -1,4 +1,4 @@
-import { ArticleType } from '../article/ArticleType'
+import { ArticleType } from '../article/shared/ArticleType'
 
 export class MenuOptionDefinition {
   private readonly _name?: string

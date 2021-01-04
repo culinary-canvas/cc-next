@@ -8,7 +8,7 @@ import { Button } from '../../../../../../form/button/Button'
 import { ArticleModel } from '../../../../../../article/Article.model'
 import StringUtils from '../../../../../../services/utils/StringUtils'
 import { copyTextToClipboard } from '../../../../../../services/utils/Utils'
-import { ArticleType } from '../../../../../../article/ArticleType'
+import { ArticleType } from '../../../../../../article/shared/ArticleType'
 import s from './ArticleControls.module.scss'
 import { ArticleApi } from '../../../../../../article/Article.api'
 import { useAdmin } from '../../../../../Admin'
@@ -179,14 +179,11 @@ export const ArticleControls = observer(() => {
     if (goodToGo) {
       setDeleting(true)
       overlay.toggle()
-      await ArticleApi.delete(admin.article, auth.userId, onProgress)
+      await ArticleApi.delete(admin.article, auth.userId, (v, t) =>
+        overlay.setProgress(v, t),
+      )
       setTimeout(() => overlay.toggle(), 1000)
       router.replace('/admin/articles')
     }
-  }
-
-  const onProgress = (progress, message) => {
-    message && overlay.setText(message)
-    overlay.setProgress(progress)
   }
 })

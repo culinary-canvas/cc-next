@@ -1,77 +1,13 @@
 @import '../../../styles/layout';
 @import '../../../styles/color';
+@import '../../../styles/table';
 
 .list {
   display: flex;
   flex-direction: column;
   width: 100%;
 
-  .title {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-
-    h1{
-      display: flex;
-      align-items: center;
-
-      button{
-        margin-left: 1em;
-        font-weight: 900;
-      }
-    }
-  }
-
-  .createButton {
-    position: absolute;
-    right: 0;
-    bottom: 50%;
-  }
-
   table {
-    border-collapse: collapse;
-    border-spacing: 0;
-
-    td:first-child {
-      width: 100%;
-    }
-
-    th,
-    td {
-      padding-top: 0.5rem;
-      padding-right: 1rem;
-      padding-bottom: 0.5rem;
-      text-align: left;
-      word-break: normal;
-      white-space: nowrap;
-
-      &:first-child {
-        width: 9rem;
-      }
-    }
-
-    th {
-      cursor: pointer;
-      text-transform: uppercase;
-      > span {
-        display: inline;
-      }
-    }
-
-    thead {
-      tr th {
-        border-bottom: 1px solid $black;
-      }
-    }
-
-    tbody {
-      tr:nth-child(even) {
-        background-color: transparentize($grey, 0.8);
-      }
-
-      tr.child > td:first-child {
-        padding-left: 2rem;
-      }
-    }
+    @include table();
   }
 }

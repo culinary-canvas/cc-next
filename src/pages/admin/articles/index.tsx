@@ -6,7 +6,7 @@ import s from './articleList.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import ArticleApi from '../../../article/Article.api'
-import { useRouter } from 'next/router'
+import { AdminMenu } from '../../../admin/menu/AdminMenu'
 
 interface Props {
   articleData: { [key: string]: any }[]
@@ -21,6 +21,7 @@ function ArticleListPage({ articleData }: Props) {
   }
   return (
     <main className={s.container}>
+      <AdminMenu/>
       <ArticleList articles={articles} />
     </main>
   )

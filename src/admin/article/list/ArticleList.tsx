@@ -33,14 +33,12 @@ export const ArticleList = observer(({ articles }: Props) => {
 
   return (
     <article className={s.list}>
-      <div className={s.title}>
-        <h1>
-          Articles{' '}
-          <Button onClick={() => router.push('/admin/articles/create')}>
-            + New
-          </Button>
-        </h1>
-      </div>
+      <h1>
+        Articles{' '}
+        <Button onClick={() => router.push('/admin/articles/create')}>
+          Create
+        </Button>
+      </h1>
       <table summary="List of articles for admin purposes">
         <thead>
           <tr>

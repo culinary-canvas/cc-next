@@ -2,7 +2,7 @@ import React, { useCallback, useReducer, useState } from 'react'
 import { observer } from 'mobx-react'
 import { GridPositionService } from '../../../../../../../article/grid/GridPosition.service'
 import { GridContent } from './GridContent'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { GridMap } from './GridMap'
 
 interface Props<T extends ArticlePart> {

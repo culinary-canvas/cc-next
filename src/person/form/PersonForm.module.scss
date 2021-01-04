@@ -1,0 +1,30 @@
+@import '../../styles/layout';
+@import '../../styles/color';
+@import '../../styles/font';
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 20%;
+  margin: $header-height 0;
+  background-color: $white;
+  @include main-content-width();
+
+  label {
+    color: $grey;
+    font-size: $font-size-m;
+    &:first-child {
+      margin-top: 4rem;
+    }
+  }
+
+  input {
+    margin-bottom: 4rem;
+    font-size: $font-size-m;
+  }
+
+  button {
+    width: fit-content;
+  }
+}

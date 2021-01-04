@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid'
 import { Orientation } from '../shared/Orientation'
 import { ContentType } from './ContentType'
 import StringUtils from '../../services/utils/StringUtils'
-import { ArticlePart } from '../ArticlePart'
+import { ArticlePart } from '../shared/ArticlePart'
 
 export abstract class ContentModel<T extends Format = Format>
   implements ArticlePart {
