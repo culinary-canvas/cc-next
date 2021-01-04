@@ -53,7 +53,7 @@ export const SectionEdit = observer((props: Props) => {
         ])}
         style={{ ...style }}
       >
-        {section.contents.map((content) =>
+        {section.contents.map((content,i) =>
           content instanceof TextContentModel ? (
             admin.content.uid === content.uid ? (
               <TextContentEdit key={content.uid} content={content} />
@@ -62,6 +62,7 @@ export const SectionEdit = observer((props: Props) => {
                 key={content.uid}
                 content={content}
                 onClick={() => admin.setContent(content)}
+                index={i}
               />
             )
           ) : (

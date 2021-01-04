@@ -89,8 +89,7 @@ export function ImageEdit(props: Props) {
           setModalOpen(false)
 
           if (!!newImage || !!newCropValues) {
-            overlay.setText('Crunching image sizes...')
-            overlay.setProgress(0)
+            overlay.setProgress(0, 'Crunching image sizes...')
             overlay.toggle()
 
             const newSet = new ImageSet()
@@ -99,12 +98,10 @@ export function ImageEdit(props: Props) {
             newSet.original = set.original
             newSet.cropValues = cropValues
 
-            overlay.setText('Generating cropped image...')
-            overlay.setProgress(0.5)
+            overlay.setProgress(0.5, 'Generating cropped image...')
             newSet.cropped = await ImageService.crop(original, cropValues)
-            overlay.setProgress(1)
+            overlay.setProgress(1, 'Done!')
 
-            overlay.setText('Done!')
             setTimeout(() => overlay.setVisible(false), 500)
             onChange(newSet)
           }
