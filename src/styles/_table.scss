@@ -1,0 +1,49 @@
+@import 'color';
+@import 'font';
+@import 'animation';
+
+@mixin table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  th,
+  td {
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+    text-align: left;
+    font-size: $font-size-s;
+    word-break: normal;
+    white-space: nowrap;
+  }
+
+  th {
+    cursor: pointer;
+    text-transform: uppercase;
+    > span {
+      display: inline;
+    }
+  }
+
+  thead {
+    tr th {
+      border-bottom: 1px solid $black;
+    }
+  }
+
+  tbody {
+    tr {
+      width: 100%;
+      transition: opacity $animation-fast ease-in-out;
+      &:hover {
+        opacity: 0.8;
+      }
+      &:nth-child(even) {
+        background-color: transparentize($grey, 0.8);
+      }
+      &.child > td:first-child {
+        padding-left: 2rem;
+      }
+    }
+  }
+}

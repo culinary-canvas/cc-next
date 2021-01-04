@@ -17,7 +17,6 @@ import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar
 import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
-import { AnimateSharedLayout } from 'framer-motion'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
@@ -62,9 +61,7 @@ function App({ Component, pageProps }: Props) {
               })}
             >
               <Header />
-              <AnimateSharedLayout>
-                <Component {...pageProps} />
-              </AnimateSharedLayout>
+              <Component {...pageProps} />
               <Footer />
             </div>
           </OverlayContext.Provider>

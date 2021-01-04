@@ -19,7 +19,7 @@ export default function ArticleEdit({ articleData }) {
   const article = useTransformToModel([articleData], ArticleModel)[0]
   const allowed = useAuthGuard()
 
-  const formControl = useFormControl(article, [
+  const [formControl] = useFormControl(article, [
     { field: 'title', required: true },
   ])
   useEffect(() => {

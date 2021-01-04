@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx'
-import { ArticlePart } from '../../../../../../../article/ArticlePart'
+import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { GridPositionService } from '../../../../../../../article/grid/GridPosition.service'
 import { ArrayUtils } from '../../../../../../../services/utils/ArrayUtils'
 import { SectionModel } from '../../../../../../../article/section/Section.model'

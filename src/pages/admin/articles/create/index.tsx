@@ -11,7 +11,7 @@ export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
   const allowed = useAuthGuard()
 
-  const formControl = useFormControl(ArticleService.create(), [
+  const [formControl] = useFormControl(ArticleService.create(), [
     { field: 'title', required: true },
   ])
 

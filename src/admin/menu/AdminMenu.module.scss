@@ -1,0 +1,21 @@
+@import '../../styles/color';
+
+.container {
+  display: flex;
+
+  .link {
+    padding: 0.5rem;
+    cursor: pointer;
+    color: $blue;
+    position: relative;
+    width: 100%;
+
+    .linkBottomBorder {
+      display: block;
+      width: 0;
+      height: 4px;
+      left: 0;
+      position: absolute;
+    }
+  }
+}

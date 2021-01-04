@@ -1,8 +1,8 @@
 import React from 'react'
-import s from './Article.module.scss'
-import { TagsView } from '../tag/Tags/TagsView'
-import { Share } from './shared/share/Share'
-import { ArticleModel } from './Article.model'
+import s from '../Article.module.scss'
+import { TagsView } from '../../tag/Tags/TagsView'
+import { Share } from './share/Share'
+import { ArticleModel } from '../Article.model'
 import { observer } from 'mobx-react'
 
 interface Props {

@@ -1,7 +1,7 @@
 import { Model } from '../services/db/Model'
 import { computed, observable } from 'mobx'
 import { SectionModel } from './section/Section.model'
-import { ArticleType } from './ArticleType'
+import { ArticleType } from './shared/ArticleType'
 import { ContentType } from './content/ContentType'
 import { field } from '../services/db/decorators/field.decorator'
 import { TextContentModel } from './content/text/TextContent.model'
@@ -9,7 +9,7 @@ import { ContentModel } from './content/ContentModel'
 import { ImageContentModel } from './content/image/ImageContent.model'
 import { Sortable } from '../types/Sortable'
 import { isSystemColor } from '../styles/_color'
-import { ArticleFormat } from './ArticleFormat'
+import { ArticleFormat } from './shared/ArticleFormat'
 
 export class ArticleModel implements Model, Sortable {
   @observable

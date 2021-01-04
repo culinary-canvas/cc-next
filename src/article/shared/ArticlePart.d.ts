@@ -1,4 +1,4 @@
-import {Format} from './shared/format/Format'
+import {Format} from './format/Format'
 
 export interface ArticlePart{
   uid: string

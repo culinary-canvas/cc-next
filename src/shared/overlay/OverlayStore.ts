@@ -4,9 +4,8 @@ export interface Overlay {
   readonly isVisible: boolean
   readonly setVisible: (v: boolean) => void
   readonly text: string
-  readonly setText: (v: string) => void
   readonly progress: number
-  readonly setProgress: (v: number) => void
+  readonly setProgress: (value: number, text?: string) => void
   readonly addProgress: (v: number) => void
   readonly toggle: () => void
 }
@@ -14,7 +13,12 @@ export interface Overlay {
 export function useOverlayState(): Overlay {
   const [isVisible, setVisible] = useState<boolean>(false)
   const [text, setText] = useState<string>()
-  const [progress, setProgress] = useState<number>()
+  const [progress, _setProgress] = useState<number>()
+
+  const setProgress = useCallback((v: number, t?: string) => {
+    _setProgress(v)
+    !!t && setText(t)
+  }, [])
 
   const toggle = useCallback(() => {
     setVisible(!isVisible)
@@ -25,13 +29,14 @@ export function useOverlayState(): Overlay {
     }
   }, [isVisible])
 
-  const addProgress = useCallback((v: number) => setProgress(progress + v), [progress])
+  const addProgress = useCallback((v: number) => _setProgress(progress + v), [
+    progress,
+  ])
 
   return {
     isVisible,
     setVisible,
     text,
-    setText,
     progress,
     setProgress,
     addProgress,

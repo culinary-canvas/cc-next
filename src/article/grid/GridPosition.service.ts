@@ -1,7 +1,7 @@
 import { GridPosition } from './GridPosition'
 import { action, toJS } from 'mobx'
 import { CSSProperties } from 'react'
-import { ArticlePart } from '../ArticlePart'
+import { ArticlePart } from '../shared/ArticlePart'
 import { inRange } from 'lodash'
 import { ArrayUtils } from '../../services/utils/ArrayUtils'
 

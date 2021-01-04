@@ -6,7 +6,7 @@ import { ArticleModel } from './Article.model'
 import { useAuth } from '../services/auth/Auth'
 import s from './Article.module.scss'
 import { Section } from './section/Section'
-import { ArticleFooter } from './ArticleFooter'
+import { ArticleFooter } from './shared/ArticleFooter'
 import { ArticleApi } from './Article.api'
 import { Transformer } from '../services/db/Transformer'
 

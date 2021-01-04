@@ -1,6 +1,6 @@
 import { MenuOptionDefinition } from './MenuOptionDefinition'
 import StringUtils from '../services/utils/StringUtils'
-import { ArticleType } from '../article/ArticleType'
+import { ArticleType } from '../article/shared/ArticleType'
 
 export const menuOptions: MenuOptionDefinition[] = [
   new MenuOptionDefinition({
@@ -23,8 +23,8 @@ export const menuOptions: MenuOptionDefinition[] = [
     articleType: ArticleType.PORTRAIT,
   }),
   new MenuOptionDefinition({
-    path: '/admin/articles',
-    label: 'Articles',
+    path: '/admin',
+    label: 'Admin',
     isAdmin: true,
     includeSubRoutes: true,
     hideOnMobile: true,
