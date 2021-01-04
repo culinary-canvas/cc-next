@@ -3,6 +3,8 @@ import { field } from '../services/db/decorators/field.decorator'
 import { transient } from '../services/db/decorators/transient.decorator'
 import { CompanyModel } from '../company/Company.model'
 import { Model } from '../services/db/Model'
+import { ImageSet } from '../article/content/image/ImageSet'
+import { ImageFormat } from '../article/content/image/ImageFormat'
 
 export class PersonModel implements Model {
   @observable
@@ -27,19 +29,28 @@ export class PersonModel implements Model {
 
   @observable
   @field()
-  name: string
+  name = ''
 
   @observable
   @field()
-  title: string
+  title = ''
 
   @observable
   @field()
-  web: string
+  web = ''
 
   @observable
   @field()
   companyId: string
+
+  @observable
+  @field(ImageSet)
+  image = new ImageSet()
+
+  @observable
+  @field(ImageFormat)
+  imageFormat = new ImageFormat()
+
   @observable
   @transient()
   company: CompanyModel

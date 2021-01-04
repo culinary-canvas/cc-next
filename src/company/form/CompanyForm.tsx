@@ -9,6 +9,7 @@ import { useFormControl } from '../../form/formControl/useFormControl'
 import { CompanyApi } from '../Company.api'
 import { Button } from '../../form/button/Button'
 import s from './CompanyForm.module.scss'
+import { ImageEdit } from '../../form/imageEdit/ImageEdit'
 
 interface Props {
   company: CompanyModel
@@ -29,6 +30,23 @@ export const CompanyForm = observer((props: Props) => {
 
   return (
     <article className={s.container}>
+      <Button
+        type="submit"
+        disabled={formControl.isClean || !formControl.isValid}
+        onClick={async () => {
+          overlay.toggle()
+          const id = await CompanyApi.save(company, userId, (v, t) =>
+            overlay.setProgress(v, t),
+          )
+          setTimeout(() => overlay.setVisible(false), 1000)
+          router.replace(
+            !!router.query.id ? `/admin/companies` : `/admin/companies/${id}`,
+          )
+        }}
+      >
+        Save
+      </Button>
+
       <label htmlFor="name">Name</label>
       <input
         type="text"
@@ -51,22 +69,14 @@ export const CompanyForm = observer((props: Props) => {
         onChange={(e) => runInAction(() => (company.web = e.target.value))}
       />
 
-      <Button
-        type="submit"
-        disabled={formControl.isClean || !formControl.isValid}
-        onClick={async () => {
-          overlay.toggle()
-          const id = await CompanyApi.save(company, userId, (v, t) =>
-            overlay.setProgress(v, t),
-          )
-          setTimeout(() => overlay.setVisible(false), 1000)
-          router.replace(
-            !!router.query.id ? `/admin/companies` : `/admin/companies/${id}`,
-          )
-        }}
-      >
-        Save
-      </Button>
+      <label htmlFor="image" style={{ marginBottom: '1rem' }}>
+        Image
+      </label>
+      <ImageEdit
+        set={company.image}
+        format={company.imageFormat}
+        onChange={(imageSet) => runInAction(() => (company.image = imageSet))}
+      />
     </article>
   )
 })

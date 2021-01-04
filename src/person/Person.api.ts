@@ -3,6 +3,7 @@ import { ModelService } from '../services/db/Model.service'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { PersonModel } from './Person.model'
+import { StorageService } from '../services/storage/Storage.service'
 
 export class PersonApi {
   private static readonly COLLECTION = 'persons'
@@ -46,17 +47,20 @@ export class PersonApi {
     onProgress(0, '')
     const { firestore } = initFirebase()
 
-    onProgress(0.33)
+    onProgress(0.25)
     ModelService.beforeSave(person, userId)
-    console.log(person)
-    onProgress(0.66)
+
+    onProgress(0.25, 'Uploading images')
+    await this.uploadNewImages(person, onProgress)
+
+    onProgress(0.8)
     let collectionRef = firestore()
       .collection(this.COLLECTION)
       .withConverter(Transformer.firestoreConverter(PersonModel))
 
     const doc = !!person.id ? collectionRef.doc(person.id) : collectionRef.doc()
     await doc.set(person)
-    console.log(doc)
+
     onProgress(1, 'Done!')
     return doc.id
   }
@@ -75,5 +79,28 @@ export class PersonApi {
 
   private static logProgress(progress: number, message?: string) {
     console.debug(progress, message)
+  }
+
+  private static async uploadNewImages(
+    person: PersonModel,
+    onProgress: (progress: number, message: string) => any,
+  ) {
+    if (StorageService.isLocal(person.image.cropped.url)) {
+      await StorageService.storeFileFromLocalUrl(
+        person.image.cropped.url,
+        person.image.cropped.fileName,
+        `persons/${person.id}`,
+        (p) => onProgress(0.25 + p * 0.25, 'Uploaded cropped image'),
+      )
+    }
+
+    if (StorageService.isLocal(person.image.original.url)) {
+      await StorageService.storeFileFromLocalUrl(
+        person.image.original.url,
+        person.image.original.fileName,
+        `persons/${person.id}`,
+        (p) => onProgress(0.5 + p * 0.25, 'Uploaded original image'),
+      )
+    }
   }
 }
