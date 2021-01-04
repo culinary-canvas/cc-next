@@ -9,6 +9,7 @@ import s from './TextContentEdit.module.scss'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
 import { runInAction } from 'mobx'
 import { TextEditMenu } from './TextEditMenu'
+import { TextContentService } from '../../../../../article/content/text/TextContent.service'
 
 interface Props {
   content: TextContentModel
@@ -58,7 +59,7 @@ export const TextContentEdit = observer((props: Props) => {
       color: format.color,
       backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
-      fontSize: `${format.fontSize}px`,
+      fontSize: TextContentService.getResponsiveFontSize(format.fontSize),
       fontFamily: content.format.fontFamily,
     })
   }, [content.format])
