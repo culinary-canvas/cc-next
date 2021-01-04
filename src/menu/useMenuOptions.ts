@@ -13,9 +13,9 @@ export const menuOptions: MenuOptionDefinition[] = [
     articleType: ArticleType.DISH,
   }),
   new MenuOptionDefinition({
-    path: `/${StringUtils.toLowerKebabCase(ArticleType.HOW_TO)}`,
+    path: `/${StringUtils.toLowerKebabCase(ArticleType.RECIPE)}`,
     label: 'Recipes',
-    articleType: ArticleType.HOW_TO,
+    articleType: ArticleType.RECIPE,
   }),
   new MenuOptionDefinition({
     path: `/${StringUtils.toLowerKebabCase(ArticleType.PORTRAIT)}`,
