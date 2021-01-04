@@ -8,6 +8,7 @@ import { useOverlay } from '../../shared/overlay/OverlayStore'
 import Image from 'next/image'
 import { ImageFormat } from '../../article/content/image/ImageFormat'
 import { ImageFit } from '../../article/content/image/ImageFit'
+import { observer } from 'mobx-react'
 
 interface Props {
   set: ImageSet
@@ -19,7 +20,7 @@ interface Props {
   onFocus?: () => any
 }
 
-export function ImageEdit(props: Props) {
+export const ImageEdit = observer((props: Props) => {
   const {
     set,
     format,
@@ -53,14 +54,8 @@ export function ImageEdit(props: Props) {
       ) : (
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <Image
-          width={
-            format.fit === ImageFit.CONTAIN &&
-            (format.fixedWidth || set.cropped.width)
-          }
-          height={
-            format.fit === ImageFit.CONTAIN &&
-            (format.fixedHeight || set.cropped.height)
-          }
+          width={format.fit === ImageFit.CONTAIN && set.cropped.width}
+          height={format.fit === ImageFit.CONTAIN && set.cropped.height}
           onClick={() => {
             enableModal && setModalOpen(true)
             onFocus && onFocus()
@@ -72,6 +67,7 @@ export function ImageEdit(props: Props) {
           // @ts-ignore
           layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
           objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
+          objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
           alt={set.alt}
           src={set.cropped.url}
           className={classnames([s.content, className])}
@@ -113,4 +109,4 @@ export function ImageEdit(props: Props) {
       />
     </>
   )
-}
+})

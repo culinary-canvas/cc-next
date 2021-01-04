@@ -55,7 +55,7 @@ export const SectionEdit = observer((props: Props) => {
       >
         {section.contents.map((content,i) =>
           content instanceof TextContentModel ? (
-            admin.content.uid === content.uid ? (
+            admin.content?.uid === content.uid ? (
               <TextContentEdit key={content.uid} content={content} />
             ) : (
               <TextContent

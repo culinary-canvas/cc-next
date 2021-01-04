@@ -38,7 +38,6 @@
     border: 1px solid $black !important;
     object-fit: contain;
     font-size: $font-size-s;
-    transition: all $animation-fast ease-in-out;
 
     &.hoveringOther:not(:disabled) {
       border-color: $grey !important;

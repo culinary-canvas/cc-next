@@ -28,7 +28,15 @@ export const TextContentEdit = observer((props: Props) => {
 
   useEffect(() => {
     if (!!textareaRef.current && admin.content.uid === content.uid) {
-      textareaRef.current.scrollIntoView({ behavior: 'smooth' })
+      if (
+        textareaRef.current.getBoundingClientRect().top < 0 ||
+        textareaRef.current.getBoundingClientRect().top > window.innerHeight
+      ) {
+        window.scrollBy({
+          behavior: 'smooth',
+          top: textareaRef.current.getBoundingClientRect().top - 64,
+        })
+      }
     }
   }, [admin.content, content, textareaRef])
 
@@ -56,7 +64,14 @@ export const TextContentEdit = observer((props: Props) => {
   }, [content.format])
 
   return (
-    <div className={s.wrapper} style={{ ...gridWrapperStyle }}>
+    <div
+      className={classnames(
+        s.wrapper,
+        s[`horizontal-align-${content.format.horizontalAlign}`],
+        s[`vertical-align-${content.format.verticalAlign}`],
+      )}
+      style={{ ...gridWrapperStyle }}
+    >
       <TextEditMenu
         content={content}
         selectionStart={selection.start}

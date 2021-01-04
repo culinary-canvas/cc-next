@@ -6,7 +6,5 @@
 @import '../../../../../styles/imageContent';
 @import '../../../../../styles/contentEdit';
 
-@include imageHorizontalAlign();
-@include verticalAlign();
 @include imageContent();
 @include contentInEdit();

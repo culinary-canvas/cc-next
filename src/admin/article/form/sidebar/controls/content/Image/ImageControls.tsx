@@ -6,9 +6,11 @@ import { ImageContentModel } from '../../../../../../../article/content/image/Im
 import { runInAction } from 'mobx'
 import { useReaction } from '../../../../../../../hooks/useReaction'
 import s from './ImageControls.module.scss'
-import { FixedSizeControls } from '../../shared/fixedSize/FixedSizeControls'
 import { ImageFitButtons } from '../../shared/imageFItButtons/ImageFitButtons'
 import { useAdmin } from '../../../../../../Admin'
+import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
+import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
+import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignButtons'
 
 export const ImageControls = observer(() => {
   const admin = useAdmin()
@@ -28,12 +30,13 @@ export const ImageControls = observer(() => {
 
   return (
     <>
-      {/*<ImageEdit
-        set={content.set}
-        format={content.format}
-        onChange={(set) => (content.set = set)}
-      />*/}
-
+      <div className={s.imageEdit}>
+        <ImageEdit
+          set={content.set}
+          format={content.format}
+          onChange={(set) => (content.set = set)}
+        />
+      </div>
       <input
         id="alt"
         type="text"
@@ -41,20 +44,25 @@ export const ImageControls = observer(() => {
         onChange={(v) => setAlt(v.target.value)}
         placeholder="Describe the image..."
       />
-
       <Checkbox
         label="Circle"
         checked={content.format.circle}
         onChange={(v) => (content.format.circle = v)}
       />
-
       <ImageFitButtons
         selected={content.format.fit}
         onSelected={(fit) => runInAction(() => (content.format.fit = fit))}
       />
-
-      <FixedSizeControls content={content} />
-
+      <HorizontalAlignButtons
+        selected={content.format.horizontalAlign}
+        onSelected={(v) => (content.format.horizontalAlign = v)}
+      />
+      {!content.format.circle && (
+        <VerticalAlignButtons
+          selected={content.format.verticalAlign}
+          onSelected={(v) => (content.format.verticalAlign = v)}
+        />
+      )}
       <label className={s.label}>Padding</label>
       <PaddingControls
         padding={content.format.padding}

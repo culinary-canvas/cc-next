@@ -9,7 +9,6 @@ import { GridControlMenu } from './GridControlMenu'
 import { observer } from 'mobx-react'
 import { GridSelect } from './GridSelect'
 import { GridLayout } from './GridLayout'
-import { toJS } from 'mobx'
 
 interface Props<T extends ArticlePart> {
   parts: T[]
@@ -34,7 +33,6 @@ export const GridControl = observer(
     const admin = useAdmin()
     const [gridMap, setGridMap] = useState<GridMap<T>>()
     const [isSelecting, selecting] = useState<boolean>(false)
-    const [hoveredPart, hoverPart] = useState<T>()
     const [rowsHoverDisabled, disableHoverOfRows] = useState<number[]>([])
     const [hoveredRow, hoverRow] = useReducer<
       (
@@ -58,17 +56,15 @@ export const GridControl = observer(
 
     const onGridBlur = useCallback(() => {
       hoverRow({ row: null })
-      hoverPart(null)
-    }, [hoverRow, hoverPart])
+    }, [hoverRow])
 
     const onAreaHover = useCallback(
       (row: number, part?: T) => {
         if (!isSelecting) {
-          hoverPart(part)
           hoverRow({ row })
         }
       },
-      [hoverPart, hoverRow],
+      [hoverRow],
     )
 
     const onAreaClick = useCallback(
@@ -111,24 +107,26 @@ export const GridControl = observer(
         {!!hoveredRow && !isSelecting && (
           <GridControlMenu
             gridMap={gridMap}
-            row={hoveredRow}
-            part={hoveredPart}
+            row={currentPart.format.gridPosition.startRow}
+            part={currentPart}
             columnDefinitions={columnDefinitions}
             onDeleteRow={(parts) => onDelete(parts)}
             onRowUpClick={() =>
-              hoverRow({ row: hoveredRow - 1, disable: [hoveredRow] })
+              hoverRow({
+                row: currentPart.format.gridPosition.startRow - 1,
+                disable: [currentPart.format.gridPosition.startRow],
+              })
             }
             onRowDownClick={() =>
               hoverRow({
-                row: hoveredRow + 1,
-                disable: [hoveredRow - 1, hoveredRow],
+                row: currentPart.format.gridPosition.startRow + 1,
+                disable: [
+                  currentPart.format.gridPosition.startRow - 1,
+                  currentPart.format.gridPosition.startRow,
+                ],
               })
             }
-            onEditPosition={() => {
-              hoveredPart?.uid !== currentPart.uid &&
-                admin.setArticlePart(hoveredPart)
-              selecting(!isSelecting)
-            }}
+            onEditPosition={() => selecting(!isSelecting)}
           />
         )}
       </article>

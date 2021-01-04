@@ -5,6 +5,7 @@ import { ArticlePart } from '../../../../../../../article/shared/ArticlePart'
 import { SectionModel } from '../../../../../../../article/section/Section.model'
 import { Size } from '../../../../../../../article/shared/format/Size'
 import { observer } from 'mobx-react'
+import { motion } from 'framer-motion'
 
 interface Props<T> {
   rowStart: number
@@ -38,7 +39,18 @@ export const GridContent = observer(
 
     return (
       <>
-        <button
+        <motion.button
+          /*
+          drag
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0}
+          dragTransition={{
+            power: 0,
+            modifyTarget: (target) => Math.round(target / 50) * 50,
+          }}
+          dragDirectionLock
+          */
+          onDrag={(e, info) => console.log(info)}
           key={`${rowStart}_${rowEnd}_${columnStart}_${columnEnd}`}
           style={{
             gridRowStart: rowStart,
@@ -64,7 +76,7 @@ export const GridContent = observer(
           onMouseUp={() => !!onMouseUp && onMouseUp()}
         >
           {!!part && <span className={s.name}>{part.displayName}</span>}
-        </button>
+        </motion.button>
       </>
     )
   },

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../../../../../../../form/button/Button'
-import s from './ImageFitButtons.module.scss'
+import s from './ImagePositionButtons.module.scss'
 import { ImageFit } from '../../../../../../../article/content/image/ImageFit'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   onSelected: (v: ImageFit) => any
 }
 
-export function ImageFitButtons(props: Props) {
+export function ImagePositionButtons(props: Props) {
   const { selected, onSelected } = props
 
   return (
