@@ -11,7 +11,7 @@ import StringUtils from '../../../services/utils/StringUtils'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { classnames } from '../../../services/importHelpers'
-import { motion, useCycle } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface Props {
   article: ArticleModel
@@ -25,6 +25,7 @@ export const ArticlePreview = observer((props: Props) => {
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
+  const [tagsHovered, setTagsHovered] = useState<boolean>(false)
 
   useEffect(() => {
     const image = article.contents.find(
@@ -50,21 +51,17 @@ export const ArticlePreview = observer((props: Props) => {
       className={classnames(s.article, className)}
       onHoverStart={() => toggleH(true)}
       onHoverEnd={() => toggleH(false)}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: tagsHovered ? 1 : 0.95 }}
       animate={h ? 'hovered' : 'blurred'}
       variants={{
         hovered: {
-          borderRadius: '18px',
-          boxShadow: '0 0 30px 0 rgba(0,0,0,0.15)',
+          boxShadow: '0 0 20px 0 rgba(0,0,0,0.1)',
         },
-        blurred: { },
+        blurred: {},
       }}
     >
       {!!imageContent && (
-        <motion.figure
-          className={s.image}
-          ref={ref}
-        >
+        <motion.figure className={s.image} ref={ref}>
           <Image
             priority={priority}
             alt={imageContent.set.alt}
@@ -75,7 +72,7 @@ export const ArticlePreview = observer((props: Props) => {
         </motion.figure>
       )}
 
-      <section className={s.text}>
+      <motion.section className={s.text}>
         <Button
           className={s.articleType}
           unsetStyle
@@ -92,10 +89,15 @@ export const ArticlePreview = observer((props: Props) => {
         <motion.div className={s.moreText} variants={variants}>
           <p className={s.subHeading}>{subHeadingContent?.value}</p>
           {!!article.tagNames.length && (
-            <TagsView tagNames={article.tagNames} containerClassName={s.tags} />
+            <TagsView
+              tagNames={article.tagNames}
+              containerClassName={s.tags}
+              onHover={() => setTagsHovered(true)}
+              onBlur={() => setTagsHovered(false)}
+            />
           )}
         </motion.div>
-      </section>
+      </motion.section>
     </motion.article>
   )
 })

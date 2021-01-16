@@ -5,12 +5,10 @@
 
 .article {
   position: relative;
-  display: flex;
-  flex-direction: column;
   height: 100%;
   max-width: 100%;
   cursor: pointer;
-  overflow: hidden;
+  display: block;
   &:hover {
     // box-shadow: 0 0 0 1rem transparentize($pink, 0.2);
   }
