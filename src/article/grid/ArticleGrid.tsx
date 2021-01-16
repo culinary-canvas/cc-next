@@ -72,27 +72,29 @@ export const ArticleGrid = observer((props: Props) => {
   }
 
   return (
-    <motion.div
-      className={s.grid}
-      initial="hidden"
-      animate="visible"
-      variants={variants}
-    >
-      {articles.map((article, i) => (
-        <React.Fragment key={i}>
-          {showSplash && i === 1 && <Splash />}
-          <Link href={`/articles/${article.slug}`}>
-            <motion.a
-              variants={variants}
-              className={classnames(s.articleContainer, {
-                [s.promoted]: article.promoted || i === 0,
-              })}
-            >
-              <ArticlePreview article={article} priority={i === 0} />
-            </motion.a>
-          </Link>
-        </React.Fragment>
-      ))}
+    <>
+      <motion.div
+        className={s.grid}
+        initial="hidden"
+        animate="visible"
+        variants={variants}
+      >
+        {articles.map((article, i) => (
+          <React.Fragment key={i}>
+            {showSplash && i === 1 && <Splash />}
+            <Link href={`/articles/${article.slug}`}>
+              <motion.a
+                variants={variants}
+                className={classnames(s.articleContainer, {
+                  [s.promoted]: article.promoted || i === 0,
+                })}
+              >
+                <ArticlePreview article={article} priority={i === 0} />
+              </motion.a>
+            </Link>
+          </React.Fragment>
+        ))}
+      </motion.div>
       <div
         id="end"
         ref={endRef}
@@ -100,6 +102,6 @@ export const ArticleGrid = observer((props: Props) => {
       >
         {loading && <Spinner size={64} color={COLOR.GREY} />}
       </div>
-    </motion.div>
+    </>
   )
 })
