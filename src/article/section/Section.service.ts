@@ -159,7 +159,7 @@ export class SectionService {
     byline.format.verticalAlign = VerticalAlign.BOTTOM
     byline.format.gridPosition = new GridPosition(3, 5, 3, 4)
 
-    image.format.padding = new Padding(0, 16)
+    image.format.padding = new Padding(0)
     title.format.padding = new Padding(16, 40, 16, 40)
     subHeading.format.padding = new Padding(16, 40, 16, 40)
     byline.format.padding = new Padding(16)
