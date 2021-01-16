@@ -15,10 +15,6 @@ export class ImageContentModel extends ContentModel<ImageFormat> {
   @observable
   format: ImageFormat
 
-  @transient()
-  @observable
-  renderedHeight: number
-
   constructor() {
     super()
     this.set = new ImageSet()

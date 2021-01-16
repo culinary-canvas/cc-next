@@ -14,6 +14,10 @@ export class ImageFormat extends Format {
 
   @field()
   @observable
+  maxHeight: number
+
+  @field()
+  @observable
   fit = ImageFit.CONTAIN
 
   @field()

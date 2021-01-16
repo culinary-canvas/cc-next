@@ -11,6 +11,7 @@ import { useAdmin } from '../../../../../../Admin'
 import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
 import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
 import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignButtons'
+import { CheckboxSliderControl } from '../../shared/checkboxSliderControl/CheckboxSliderControl'
 
 export const ImageControls = observer(() => {
   const admin = useAdmin()
@@ -53,6 +54,14 @@ export const ImageControls = observer(() => {
         selected={content.format.fit}
         onSelected={(fit) => runInAction(() => (content.format.fit = fit))}
       />
+
+      <CheckboxSliderControl
+        value={content.format.maxHeight}
+        max={content.set.cropped?.height}
+        onChange={(v) => runInAction(() => (content.format.maxHeight = v))}
+        label="Max height"
+      />
+
       <HorizontalAlignButtons
         selected={content.format.horizontalAlign}
         onSelected={(v) => (content.format.horizontalAlign = v)}
