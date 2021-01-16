@@ -43,4 +43,14 @@ export class TagApi {
     const { firestore } = initFirebase()
     await firestore().collection(this.COLLECTION).doc(tag.id).delete()
   }
+
+  static async existsByName(name: string): Promise<boolean> {
+    const { firestore } = initFirebase()
+
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .where('name', '==', name)
+      .get()
+    return !response.empty
+  }
 }

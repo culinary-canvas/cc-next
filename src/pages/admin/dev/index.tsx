@@ -12,6 +12,7 @@ import { GetStaticProps } from 'next'
 import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 import { changeArticleTypeHOW_TOToRECIPE } from '../../../services/script/changeArticleTypeHOW_TOToRECIPE'
+import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -100,6 +101,17 @@ const AdminDevArea = observer(() => {
           loading={running === 'changeArticleTypeHOW_TOToRECIPE'}
         >
           Change articles' type from HOW_TO to RECIPE
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('setArticleTypeAsTag')
+            await setArticleTypeAsTag(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'setArticleTypeAsTag'}
+        >
+          Set article type as tag
         </Button>
       </div>
     </div>

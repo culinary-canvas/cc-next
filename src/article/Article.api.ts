@@ -149,6 +149,7 @@ export class ArticleApi {
     if (!article.slug) {
       article.slug = ArticleService.createSlug(article)
     }
+    await ArticleService.setArticleTypeAsTag(article, userId)
 
     onProgress(0.2, 'Uploading images...')
     await ArticleService.uploadNewImages(article, onProgress, 0.2)
