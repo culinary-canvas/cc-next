@@ -114,6 +114,10 @@
   &.toggleable.selected {
     opacity: 1;
   }
+
+  &.clicked {
+    opacity: 0.8;
+  }
 }
 
 @mixin a {

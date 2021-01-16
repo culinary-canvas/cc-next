@@ -17,10 +17,10 @@ export function Spinner(props: Props) {
   const containerWidth = `${size}px`
 
   return (
-    <span className={s.container} style={{ width: containerWidth }}>
+    <div className={s.container} style={{ width: containerWidth }}>
       <span className={s.dot} style={{ backgroundColor, width, height }} />
       <span className={s.dot} style={{ backgroundColor, width, height }} />
       <span className={s.dot} style={{ backgroundColor, width, height }} />
-    </span>
+    </div>
   )
 }

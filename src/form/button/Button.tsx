@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, forwardRef } from 'react'
+import React, { ButtonHTMLAttributes, forwardRef, useState } from 'react'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { classnames } from '../../services/importHelpers'
 import { COLOR, ColorType } from '../../styles/_color'
@@ -39,10 +39,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...restProps
     } = props
 
+    const [clicked, setClicked] = useState<boolean>(false)
+
     return (
       <button
         ref={ref}
-        onClick={(e) => !disabled && !!onClick && onClick(e)}
+        onClick={(e) => {
+          if (!disabled) {
+            setClicked(true)
+            !!onClick && onClick(e)
+          }
+        }}
         style={{
           borderColor: color,
           color,
@@ -56,6 +63,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           { [s.disabled]: disabled },
           { [s.toggleable]: toggleable },
           { [s.selected]: selected },
+          { [s.clicked]: clicked },
         ])}
         title={title}
         {...restProps}
