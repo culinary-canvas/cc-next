@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
@@ -17,6 +17,7 @@ import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar
 import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
+import { useRouter } from 'next/router'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
@@ -42,6 +43,38 @@ function App({ Component, pageProps }: Props) {
     auth.init()
   }, [])
 
+  const router = useRouter()
+  const [routeChanging, setRouteChanging] = useState<boolean>(false)
+  const [routeHasChanged, setRouteHasChanged] = useState<boolean>(false)
+  const [currentRoute, setCurrentRoute] = useState<string>(router.pathname)
+
+  useEffect(() => {
+    function handleRouteChangeStart(url, { shallow }) {
+      if (url !== currentRoute) {
+        console.log('animating in')
+        setRouteHasChanged(true)
+        setCurrentRoute(url)
+        setRouteChanging(true)
+      }
+    }
+    function handleRouteChangeComplete(url, { shallow }) {
+      if (url === currentRoute) {
+        console.log('animating out')
+        setRouteChanging(false)
+      }
+    }
+    if (!!router) {
+      router.events.on('routeChangeStart', handleRouteChangeStart)
+      router.events.on('routeChangeComplete', handleRouteChangeComplete)
+    }
+    return () => {
+      if (!!router) {
+        router.events.off('routeChangeStart', handleRouteChangeStart)
+        router.events.off('routeChangeComplete', handleRouteChangeComplete)
+      }
+    }
+  }, [router, routeChanging, currentRoute])
+
   return (
     <ImageModalContext.Provider value={imageModalValues}>
       <AuthContext.Provider value={auth}>
@@ -53,6 +86,12 @@ function App({ Component, pageProps }: Props) {
               <Overlay text={overlay.text} progress={overlay.progress} />
             )}
             {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
+            <div
+              className={classnames('route-change-splash', {
+                'animate-in': routeChanging,
+                'animate-out': routeHasChanged && !routeChanging,
+              })}
+            />
 
             <div
               id="app"
