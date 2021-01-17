@@ -13,7 +13,6 @@ export function ImageFitButtons(props: Props) {
 
   return (
     <>
-      <label htmlFor="image-fit">Fit</label>
       <div id="image-fit" className={s.container}>
         <Button
           toggleable

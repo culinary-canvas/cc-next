@@ -51,7 +51,6 @@ function App({ Component, pageProps }: Props) {
   useEffect(() => {
     function handleRouteChangeStart(url, { shallow }) {
       if (url !== currentRoute) {
-        console.log('animating in')
         setRouteHasChanged(true)
         setCurrentRoute(url)
         setRouteChanging(true)
@@ -59,7 +58,6 @@ function App({ Component, pageProps }: Props) {
     }
     function handleRouteChangeComplete(url, { shallow }) {
       if (url === currentRoute) {
-        console.log('animating out')
         setRouteChanging(false)
       }
     }
@@ -83,7 +81,7 @@ function App({ Component, pageProps }: Props) {
             {IS_PROD && <CookieBanner />}
 
             {overlay.isVisible && (
-              <Overlay text={overlay.text} progress={overlay.progress} />
+              <Overlay text={overlay.text} progress={overlay.progress} children={overlay.children}/>
             )}
             {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
             <div

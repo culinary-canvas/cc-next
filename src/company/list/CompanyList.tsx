@@ -4,6 +4,7 @@ import { CompanyModel } from '../Company.model'
 import { Button } from '../../form/button/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import StringUtils from '../../services/utils/StringUtils'
 
 interface Props {
   companies: CompanyModel[]
@@ -23,6 +24,7 @@ export function CompanyList({ companies }: Props) {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Type</th>
             <th>Web site</th>
             <th>Created</th>
           </tr>
@@ -35,9 +37,8 @@ export function CompanyList({ companies }: Props) {
                   {company.name}
                 </Link>
               </td>
-
+              <td>{StringUtils.toDisplayText(company.type)}</td>
               <td>{company.web}</td>
-
               <td>{company.created?.toLocaleDateString()}</td>
             </tr>
           ))}

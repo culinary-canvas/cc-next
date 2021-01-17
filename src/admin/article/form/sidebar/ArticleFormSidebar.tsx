@@ -3,13 +3,14 @@ import { observer } from 'mobx-react'
 import classnames from 'classnames'
 import { MenuButton } from '../../../../menu/MenuButton'
 import { Button } from '../../../../form/button/Button'
-import { Controls } from './controls/Controls'
-import { ArticleApi } from '../../../../article/Article.api'
 import { useAuth } from '../../../../services/auth/Auth'
 import s from './ArticleFormSidebar.module.scss'
 import { useRouter } from 'next/router'
 import { useAdmin } from '../../../Admin'
 import { useOverlay } from '../../../../shared/overlay/OverlayStore'
+import { Controls } from './controls/Controls'
+import ArticleApi from '../../../../article/Article.api'
+import { OverlayConfirm } from '../../../../shared/overlay/OverlayConfirm'
 
 interface Props {}
 
@@ -48,13 +49,16 @@ const ArticleFormSidebar = observer((props: Props) => {
           <section className={s.buttons}>
             <Button
               onClick={() => {
-                let goodToGo = true
                 if (admin.formControl.isDirty) {
-                  goodToGo = window.confirm(
-                    'You have unsaved changes. Are you sure you want to leave this page?',
+                  overlay.setChildren(
+                    <OverlayConfirm
+                      onOk={() => router.back()}
+                      title="Are you sure?"
+                      message="'You have unsaved changes. Are you sure you want to leave this page?'"
+                    />,
                   )
-                }
-                if (goodToGo) {
+                  overlay.toggle()
+                } else {
                   router.back()
                 }
               }}
@@ -75,6 +79,7 @@ const ArticleFormSidebar = observer((props: Props) => {
           </section>
 
           <Controls />
+
         </article>
       </aside>
     </>

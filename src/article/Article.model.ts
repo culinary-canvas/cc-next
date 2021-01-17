@@ -63,6 +63,9 @@ export class ArticleModel implements Model, Sortable {
   @field()
   promoted = false
 
+  /**
+   * @deprecated
+   */
   @observable
   @field()
   parentId: string
@@ -85,6 +88,14 @@ export class ArticleModel implements Model, Sortable {
   @observable
   @field()
   format = new ArticleFormat()
+
+  @observable
+  @field()
+  personIds: string[] = []
+
+  @observable
+  @field()
+  companyIds: string[] = []
 
   @computed get contents(): ContentModel[] {
     return this.sections.flatMap((s) => s.contents)

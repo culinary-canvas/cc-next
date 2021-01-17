@@ -9,7 +9,6 @@ import Image from 'next/image'
 import { ImageFormat } from '../../article/content/image/ImageFormat'
 import { ImageFit } from '../../article/content/image/ImageFit'
 import { observer } from 'mobx-react'
-import { toJS } from 'mobx'
 
 interface Props {
   set: ImageSet
@@ -38,7 +37,7 @@ export const ImageEdit = observer((props: Props) => {
 
   return (
     <>
-      {!set.cropped?.fileName ? (
+      {!set?.cropped?.fileName ? (
         <div
           id={id}
           onClick={() => {
@@ -79,39 +78,41 @@ export const ImageEdit = observer((props: Props) => {
         />
       )}
 
-      <ImageModal
-        image={set.original}
-        cropValues={set.cropValues}
-        isOpen={isModalOpen}
-        onOk={async (newImage, newCropValues) => {
-          const original = newImage || set.original
-          const cropValues = newCropValues || set.cropValues
+      {!!set && (
+        <ImageModal
+          image={set.original}
+          cropValues={set.cropValues}
+          isOpen={isModalOpen}
+          onOk={async (newImage, newCropValues) => {
+            const original = newImage || set.original
+            const cropValues = newCropValues || set.cropValues
 
-          setModalOpen(false)
+            setModalOpen(false)
 
-          if (!!newImage || !!newCropValues) {
-            overlay.setProgress(0, 'Crunching image sizes...')
-            overlay.toggle()
+            if (!!newImage || !!newCropValues) {
+              overlay.setProgress(0, 'Crunching image sizes...')
+              overlay.toggle()
 
-            const newSet = new ImageSet()
-            newSet.alt = set.alt
+              const newSet = new ImageSet()
+              newSet.alt = set.alt
 
-            newSet.original = original
-            newSet.cropValues = cropValues
+              newSet.original = original
+              newSet.cropValues = cropValues
 
-            overlay.setProgress(0.5, 'Generating cropped image...')
-            newSet.cropped = await ImageService.crop(original, cropValues)
-            overlay.setProgress(1, 'Done!')
+              overlay.setProgress(0.5, 'Generating cropped image...')
+              newSet.cropped = await ImageService.crop(original, cropValues)
+              overlay.setProgress(1, 'Done!')
 
-            setTimeout(() => overlay.setVisible(false), 500)
-            onChange(newSet)
-          }
-        }}
-        onCancel={() => {
-          setModalOpen(false)
-          onCancel && onCancel()
-        }}
-      />
+              setTimeout(() => overlay.setVisible(false), 500)
+              onChange(newSet)
+            }
+          }}
+          onCancel={() => {
+            setModalOpen(false)
+            onCancel && onCancel()
+          }}
+        />
+      )}
     </>
   )
 })

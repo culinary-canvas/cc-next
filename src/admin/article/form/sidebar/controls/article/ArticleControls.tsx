@@ -20,6 +20,9 @@ import { useRouter } from 'next/router'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 import { observer } from 'mobx-react'
 import { TagsEdit } from '../../../../../../tag/Tags/TagsEdit'
+import { PersonsArticleControl } from '../shared/personsArticleControl/PersonsArticleControl'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
+import { CompaniesArticleControl } from '../shared/companyArticleControl/CompaniesArticleControl'
 
 export const ArticleControls = observer(() => {
   const auth = useAuth()
@@ -60,17 +63,49 @@ export const ArticleControls = observer(() => {
 
   return (
     <section className={s.controls}>
-      <label htmlFor="title">Title</label>
-      <input
-        type="text"
-        id="title"
-        placeholder="Article title (required)"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-      />
+      <ControlContainer label="Title" id="title">
+        <input
+          type="text"
+          id="title"
+          placeholder="Article title (required)"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+      </ControlContainer>
 
-      <label htmlFor="url">URL</label>
-      <span className={s.urlContainer}>
+      <ControlContainer
+        id="url"
+        label="URL"
+        labelButtons={() => (
+          <>
+            <Button
+              unsetStyle
+              onClick={() => editSlug(!editingSlug)}
+              onKeyPress={() => editSlug(!editingSlug)}
+            >
+              <img src={editIcon} alt="Edit" />
+              <span>Edit</span>
+            </Button>
+
+            <Button
+              unsetStyle
+              onClick={() =>
+                copyTextToClipboard(
+                  `https://culinary-canvas.com/articles/${article.slug}`,
+                )
+              }
+              onKeyPress={() =>
+                copyTextToClipboard(
+                  `https://culinary-canvas.com/articles/${article.slug}`,
+                )
+              }
+            >
+              <img src={copyPasteIcon} alt="Copy" />
+              <span>Copy</span>
+            </Button>
+          </>
+        )}
+      >
         <input
           disabled={!editingSlug}
           title="URL can be shared for unpublished article"
@@ -84,82 +119,61 @@ export const ArticleControls = observer(() => {
             article.slug = StringUtils.toLowerKebabCase(article.slug)
           }}
         />
+      </ControlContainer>
 
-        <Button
-          unsetStyle
-          onClick={() => editSlug(!editingSlug)}
-          onKeyPress={() => editSlug(!editingSlug)}
-        >
-          <img src={editIcon} alt="Edit" />
-        </Button>
+      <ControlContainer label="Type" id="type">
+        <Select
+          id="type"
+          value={article.type}
+          options={Object.values(ArticleType)}
+          onChange={(v) => (article.type = v)}
+          displayFormatter={(v) => StringUtils.toDisplayText(v)}
+        />
+      </ControlContainer>
 
-        <Button
-          unsetStyle
-          onClick={() =>
-            copyTextToClipboard(
-              `https://culinary-canvas.com/articles/${article.slug}`,
-            )
+      <ControlContainer label="Publish settings" direction="row">
+        <Checkbox
+          label="Published"
+          checked={article.published}
+          onChange={(v) => (article.published = v)}
+        />
+        <Checkbox
+          label="Promoted"
+          checked={article.promoted}
+          onChange={(v) => (article.promoted = v)}
+        />
+      </ControlContainer>
+
+      <ControlContainer label="Persons" id="persons">
+        <PersonsArticleControl article={article} />
+      </ControlContainer>
+
+      <ControlContainer label="Companies" id="companies">
+        <CompaniesArticleControl article={article} />
+      </ControlContainer>
+
+      <ControlContainer label="Background color" id="article-background-color">
+        <ColorPicker
+          id="article-background-color"
+          value={article.format.backgroundColor}
+          onSelect={(c) =>
+            runInAction(() => (article.format.backgroundColor = c))
           }
-          onKeyPress={() =>
-            copyTextToClipboard(
-              `https://culinary-canvas.com/articles/${article.slug}`,
-            )
+          additionalColors={article.colors}
+          showTransparent
+        />
+      </ControlContainer>
+
+      <ControlContainer label="Tags" id="tags">
+        <TagsEdit
+          selected={toJS(article.tagNames)}
+          onAdd={(tag) => article.tagNames.push(tag)}
+          onRemove={(tag) =>
+            (article.tagNames = article.tagNames.filter((id) => id !== tag))
           }
-        >
-          <img src={copyPasteIcon} alt="Copy" />
-        </Button>
-      </span>
+        />
+      </ControlContainer>
 
-      <Checkbox
-        label="Published"
-        checked={article.published}
-        onChange={(v) => (article.published = v)}
-      />
-
-      <Checkbox
-        label="Promoted"
-        checked={article.promoted}
-        onChange={(v) => (article.promoted = v)}
-      />
-
-      <label htmlFor="type">Type</label>
-      <Select
-        id="type"
-        value={article.type}
-        options={Object.values(ArticleType)}
-        onChange={(v) => (article.type = v)}
-        displayFormatter={(v) => StringUtils.toDisplayText(v)}
-      />
-
-      <label htmlFor="parent">Parent article</label>
-      <Select
-        id="parent"
-        value={article.parentId}
-        options={otherArticles.map((a) => a.id)}
-        onChange={(v) => (article.parentId = v)}
-        displayFormatter={(v) => otherArticles.find((a) => a.id === v).title}
-        showEmptyOption
-      />
-
-      <label htmlFor="article-background-color">Background color</label>
-      <ColorPicker
-        id="article-background-color"
-        value={article.format.backgroundColor}
-        onSelect={(c) =>
-          runInAction(() => (article.format.backgroundColor = c))
-        }
-        additionalColors={article.colors}
-        showTransparent
-      />
-
-      <label htmlFor="tags">Tags</label>
-      <TagsEdit
-        selected={toJS(article.tagNames)}
-        onAdd={(tag) => article.tagNames.push(tag)}
-        onRemove={(tag) =>
-          (article.tagNames = article.tagNames.filter((id) => id !== tag))
-        }
-      />
       {!!admin.article?.id && (
         <Button
           loading={deleting}

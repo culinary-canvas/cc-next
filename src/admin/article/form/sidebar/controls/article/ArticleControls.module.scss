@@ -7,30 +7,3 @@
 .controls {
   @include controls();
 }
-
-.urlContainer {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding-bottom: 0.5rem;
-
-  input {
-    width: 100%;
-    padding: 0.5rem 0.2rem 0;
-    font-size: $font-size-xs;
-  }
-
-  button {
-    position: relative;
-    min-width: $icon-size-m;
-    min-height: $icon-size-m !important;
-    bottom: 0.2rem !important;
-    margin-left: 0.5rem !important;
-    border: 1px solid $grey-lighter !important;
-
-    img {
-      height: $icon-size-xs;
-    }
-  }
-}

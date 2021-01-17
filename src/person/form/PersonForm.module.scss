@@ -21,12 +21,15 @@
 
   input,
   select {
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     font-size: $font-size-m;
   }
 
-  button {
-    width: fit-content;
-    margin-bottom: 2rem;
+  .buttonsContainer {
+    display: flex;
+    button {
+      width: fit-content;
+      margin: 0 1rem 2rem 0;
+    }
   }
 }

@@ -1,7 +1,7 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 import s from './Modal.module.scss'
 import { Button } from '../../form/button/Button'
-import { classnames } from '../../services/importHelpers'
+import { classnames, isNil } from '../../services/importHelpers'
 
 interface Props {
   title?: string
@@ -11,6 +11,7 @@ interface Props {
   dark?: boolean
   children?: any
   style?: CSSProperties
+  y?: number
 }
 
 export function Modal({
@@ -21,13 +22,19 @@ export function Modal({
   dark = false,
   children,
   style = {},
+  y,
 }: Props) {
+
+  const [position, setPosition] = useState<CSSProperties>({})
+  useEffect(() => {
+    if (!isNil(y)) {
+      setPosition({ position: 'fixed', top: y })
+    }
+  }, [y])
+
   return (
     <div className={classnames(s.background, { [s.dark]: dark })}>
-      <div
-        className={s.container}
-        style={{ ...style }}
-      >
+      <div className={s.container} style={{ ...position, ...style }}>
         {!!title && <h4>{title}</h4>}
         {!!message && <p>{message}</p>}
         {!!children && children}

@@ -54,6 +54,26 @@ export class ArticleApi {
       : []
   }
 
+  static async byCompanyId(companyId: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('companyIds', 'array-contains', companyId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byPersonId(personId: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('personIds', 'array-contains', personId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async publishedPagedBySortOrderDesc(
     limit: number,
     startAfter?: any,

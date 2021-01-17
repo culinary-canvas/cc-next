@@ -7,27 +7,47 @@ export interface Overlay {
   readonly progress: number
   readonly setProgress: (value: number, text?: string) => void
   readonly addProgress: (v: number) => void
-  readonly toggle: () => void
+  readonly children: any
+  readonly setChildren: (children: any) => void
+  readonly toggle: (v?: boolean) => void
+  readonly reset: () => void
 }
 
 export function useOverlayState(): Overlay {
   const [isVisible, setVisible] = useState<boolean>(false)
   const [text, setText] = useState<string>()
   const [progress, _setProgress] = useState<number>()
+  const [children, _setChildren] = useState<any>()
+
+  const reset = useCallback(() => {
+    setText(null)
+    setProgress(null)
+    _setChildren(null)
+    setVisible(false)
+  }, [])
+
+  const setChildren = useCallback((v: any) => {
+    _setProgress(null)
+    _setChildren(v)
+  }, [])
 
   const setProgress = useCallback((v: number, t?: string) => {
+    _setChildren(null)
     _setProgress(v)
     !!t && setText(t)
   }, [])
 
-  const toggle = useCallback(() => {
-    setVisible(!isVisible)
-    if (isVisible) {
-      document.querySelector('body').classList.add('no-scroll')
-    } else {
-      document.querySelector('body').classList.remove('no-scroll')
-    }
-  }, [isVisible])
+  const toggle = useCallback(
+    (v = !isVisible) => {
+      setVisible(v)
+      if (isVisible) {
+        document.querySelector('body').classList.add('no-scroll')
+      } else {
+        document.querySelector('body').classList.remove('no-scroll')
+      }
+    },
+    [isVisible],
+  )
 
   const addProgress = useCallback((v: number) => _setProgress(progress + v), [
     progress,
@@ -41,6 +61,9 @@ export function useOverlayState(): Overlay {
     setProgress,
     addProgress,
     toggle,
+    children,
+    setChildren,
+    reset,
   }
 }
 

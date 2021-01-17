@@ -15,6 +15,7 @@ import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { SectionModel } from '../../../../../../article/section/Section.model'
 import { HeightButtons } from '../shared/height/HeightButtons'
 import { Modal } from '../../../../../../shared/modal/Modal'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
@@ -37,62 +38,67 @@ export const SectionControls = observer(() => {
   return (
     <>
       <section className={s.controls}>
-        <label htmlFor="section-name">Name</label>
-        <input
-          type="text"
-          id="section-name"
-          placeholder={section.displayName}
-          value={section.name || ''}
-          onChange={(event) =>
-            runInAction(() => (section.name = event.target.value))
-          }
-        />
+        <ControlContainer label="Name" id="section-name">
+          <input
+            type="text"
+            id="section-name"
+            placeholder={section.displayName}
+            value={section.name || ''}
+            onChange={(event) =>
+              runInAction(() => (section.name = event.target.value))
+            }
+          />
+        </ControlContainer>
 
-        <label htmlFor="preset">Preset</label>
-        <SectionPresetButtons
-          id="preset"
-          section={section}
-          onSelected={(v) => SectionService.applyPreset(v, section)}
-        />
+        <ControlContainer label="Preset" id="section-preset">
+          <SectionPresetButtons
+            id="section-preset"
+            section={section}
+            onSelected={(v) => SectionService.applyPreset(v, section)}
+          />
+        </ControlContainer>
 
-        <label htmlFor="article-grid-placement">Grid placement</label>
-        <GridControl
-          id="article-grid-placement"
-          parts={sections}
-          columnDefinitions={['1fr', `3fr`, `3fr`, `3fr`, `3fr`, '1fr']}
-          currentPart={section}
-          outlierColumns={[1, 6]}
-          onDelete={(parts) =>
-            runInAction(() => {
-              const uidsToDelete = parts.map((p) => p.uid)
-              article.sections = article.sections.filter(
-                (s) => !uidsToDelete.includes(s.uid),
-              )
-            })
-          }
-        />
+        <ControlContainer label="Grid placement" id="article-grid-placement">
+          <GridControl
+            id="article-grid-placement"
+            parts={sections}
+            columnDefinitions={['1fr', `3fr`, `3fr`, `3fr`, `3fr`, '1fr']}
+            currentPart={section}
+            outlierColumns={[1, 6]}
+            onDelete={(parts) =>
+              runInAction(() => {
+                const uidsToDelete = parts.map((p) => p.uid)
+                article.sections = article.sections.filter(
+                  (s) => !uidsToDelete.includes(s.uid),
+                )
+              })
+            }
+          />
+        </ControlContainer>
 
-        <HeightButtons
-          selected={section.format.height}
-          onSelected={(h) => runInAction(() => (section.format.height = h))}
-        />
+        <ControlContainer label="Height" id="section-height">
+          <HeightButtons
+            selected={section.format.height}
+            onSelected={(h) => runInAction(() => (section.format.height = h))}
+          />
+        </ControlContainer>
 
-        <label htmlFor="section-background-color">Background color</label>
-        <ColorPicker
-          id="section-background-color"
-          value={section.format.backgroundColor}
-          onSelect={(c) =>
-            runInAction(() => (section.format.backgroundColor = c))
-          }
-          additionalColors={article.colors}
-          showTransparent
-        />
-
-        <Checkbox
-          checked={section.format.shadow}
-          onChange={(v) => runInAction(() => (section.format.shadow = v))}
-          label="Shadow"
-        />
+        <ControlContainer id="section-background" label="Background">
+          <ColorPicker
+            id="section-background"
+            value={section.format.backgroundColor}
+            onSelect={(c) =>
+              runInAction(() => (section.format.backgroundColor = c))
+            }
+            additionalColors={article.colors}
+            showTransparent
+          />
+          <Checkbox
+            checked={section.format.shadow}
+            onChange={(v) => runInAction(() => (section.format.shadow = v))}
+            label="Shadow"
+          />
+        </ControlContainer>
 
         <Button
           onClick={() => {
