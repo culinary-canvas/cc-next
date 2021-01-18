@@ -89,7 +89,7 @@ export const ArticlePreview = observer((props: Props) => {
           <div className={s.labels}>
             <span>In this article</span>
             {labels.map((l) => (
-              <label>{l}</label>
+              <label key={l}>{l}</label>
             ))}
           </div>
         )}

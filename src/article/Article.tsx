@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../form/button/Button'
 import { useRouter } from 'next/router'
@@ -7,9 +7,9 @@ import { useAuth } from '../services/auth/Auth'
 import s from './Article.module.scss'
 import { Section } from './section/Section'
 import { ArticleFooter } from './shared/ArticleFooter'
-import { ArticleApi } from './Article.api'
-import { Transformer } from '../services/db/Transformer'
 import { RelatedArticles } from './related/RelatedArticles'
+import { useOnScrollIntoView } from '../hooks/useOnScrollIntoView'
+import { Spinner } from '../shared/spinner/Spinner'
 
 interface Props {
   article: ArticleModel
@@ -18,6 +18,13 @@ interface Props {
 export const Article = observer(({ article }: Props) => {
   const router = useRouter()
   const auth = useAuth()
+
+  const relatedRef = useRef<HTMLElement>()
+  const [showRelated, setShowRelated] = useState<boolean>(false)
+
+  useOnScrollIntoView(relatedRef.current, () => setShowRelated(true), {
+    relativeOffset: 0.9,
+  })
 
   return (
     <>
@@ -43,7 +50,9 @@ export const Article = observer(({ article }: Props) => {
         <ArticleFooter article={article} />
       </article>
 
-      <RelatedArticles article={article} />
+      <section ref={relatedRef}>
+        {showRelated ? <RelatedArticles article={article} /> : <Spinner />}
+      </section>
     </>
   )
 })
