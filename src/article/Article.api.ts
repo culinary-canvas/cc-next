@@ -187,6 +187,51 @@ export class ArticleApi {
     return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
+  static async publishedByPersonIdPagedBySortOrderDesc(
+    personId: string,
+    limit: number,
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
+    const { firestore } = initFirebase()
+
+    let query = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .where('published', '==', true)
+      .where('personIds', 'array-contains', personId)
+      .orderBy('sortOrder', 'desc')
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
+    }
+
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async publishedByCompanyIdPagedBySortOrderDesc(
+    companyId: string,
+    limit: number,
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
+    const { firestore } = initFirebase()
+
+    let query = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .where('published', '==', true)
+      .where('companyIds', 'array-contains', companyId)
+      .orderBy('sortOrder', 'desc')
+      .limit(limit)
+
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
+    }
+
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async save(
     article: ArticleModel,
     userId: string,

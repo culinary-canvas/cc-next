@@ -32,6 +32,10 @@ export class CompanyModel implements Model {
 
   @observable
   @field()
+  slug: string
+
+  @observable
+  @field()
   type: CompanyType
 
   @observable

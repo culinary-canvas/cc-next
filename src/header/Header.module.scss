@@ -11,6 +11,7 @@
   align-items: center;
   width: 100%;
   pointer-events: none;
+
   > div {
     pointer-events: all;
   }
@@ -34,6 +35,10 @@
     @include media('<=phone') {
       top: 1rem;
       left: 1rem;
+    }
+
+    a:after {
+      display: none;
     }
 
     .logo {

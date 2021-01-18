@@ -22,16 +22,8 @@
     @at-root textarea#{&} {
       margin-bottom: 0;
     }
-
-    a {
-      text-decoration: underline;
-      transition: color $animation-fast ease-in;
-
-      &:hover {
-        color: $blue;
-      }
-    }
   }
+
   @include media('>phone') {
     .content {
       overflow: hidden;

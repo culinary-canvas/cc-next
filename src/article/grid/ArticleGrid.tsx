@@ -4,7 +4,7 @@ import { ArticleModel } from '../Article.model'
 import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
-import { ArticlePreview } from './articlePreview/ArticlePreview'
+import { ArticleLabel, ArticlePreview } from './articlePreview/ArticlePreview'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { COLOR } from '../../styles/_color'
 import { Transformer } from '../../services/db/Transformer'
@@ -15,7 +15,7 @@ interface Props {
   initialArticles?: ArticleModel[]
   load: (last: ArticleModel) => Promise<ArticleModel[]>
   showSplash?: boolean
-  labels?: string[]
+  labels?: ArticleLabel[]
 }
 
 export const ArticleGrid = observer((props: Props) => {

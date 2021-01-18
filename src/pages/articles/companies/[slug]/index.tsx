@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import s from './articlesByTag.module.scss'
+import s from './articlesByCompany.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../../article/Article.model'
@@ -10,16 +10,19 @@ import ArticleApi from '../../../../article/Article.api'
 import { initFirebase } from '../../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../../_app'
+import { CompanyModel } from '../../../../company/Company.model'
 
 interface Props {
   articlesData: any[]
-  tag: string
+  companyData: any
 }
 
 const PAGE_SIZE = 6
 
-function ArticlesByTag({ articlesData, tag }: Props) {
+function ArticlesByCompany({ articlesData, companyData }: Props) {
   const articles = useTransformToModel(articlesData, ArticleModel)
+  const company = useTransformToModel([companyData], CompanyModel)[0]
+
   const router = useRouter()
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
@@ -34,23 +37,32 @@ function ArticlesByTag({ articlesData, tag }: Props) {
   return (
     <>
       <PageHead
-        title={`Culinary Canvas — #${tag} (${articles.length} articles)`}
-        image={articles[0].imageContent.url}
-        imageWidth={articles[0].imageContent.set.cropped.width}
-        imageHeight={articles[0].imageContent.set.cropped.height}
-        imageAlt={articles[0].imageContent.alt}
+        title={`Culinary Canvas — #${company.name} (${articles.length} articles)`}
+        image={company.image?.cropped?.url || articles[0].imageContent.url}
+        imageWidth={
+          company.image?.cropped?.width ||
+          articles[0].imageContent.set.cropped.width
+        }
+        imageHeight={
+          company.image?.cropped?.height ||
+          articles[0].imageContent.set.cropped.height
+        }
+        imageAlt={company.image?.alt || articles[0].imageContent.set.alt}
       />
+
       <main className={classnames(s.container)}>
         <ArticleGrid
           initialArticles={articles}
           load={async (last) =>
-            ArticleApi.publishedByTagPagedBySortOrderDesc(
-              tag,
+            ArticleApi.publishedByCompanyIdPagedBySortOrderDesc(
+              company.id,
               PAGE_SIZE,
               last.sortOrder,
             )
           }
-          labels={[{ label: tag, path: `/articles/tags/${tag}` }]}
+          labels={[
+            { label: company.name, path: `/articles/company/${company.slug}` },
+          ]}
         />
       </main>
     </>
@@ -58,18 +70,17 @@ function ArticlesByTag({ articlesData, tag }: Props) {
 }
 
 interface StaticProps {
-  tag: string
+  slug: string
   [key: string]: string
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   const { firestore } = initFirebase()
-  const response = await firestore().collection('articles').get()
-  const tags = response.docs.flatMap((d) => d.data().tagNames)
+  const response = await firestore().collection('companies').get()
   return {
-    paths: tags.map((tag) => ({
+    paths: response.docs.map((d) => ({
       params: {
-        tag,
+        slug: d.data().slug,
       },
     })),
     fallback: true,
@@ -82,22 +93,32 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const { firestore } = initFirebase()
 
-  const response = await firestore()
+  const companyResponse = await firestore()
+    .collection('companies')
+    .where('slug', '==', params.slug)
+    .get()
+
+  const companyData = companyResponse.docs[0].data()
+
+  const articlesResponse = await firestore()
     .collection('articles')
     .where('published', '==', true)
-    .where('tagNames', 'array-contains', params.tag)
+    .where('companyIds', 'array-contains', companyData.id)
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
-  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+
+  const articlesData = !!articlesResponse.size
+    ? articlesResponse.docs.map((d) => d.data())
+    : []
 
   return {
     props: {
       articlesData: JSON.parse(JSON.stringify(articlesData)),
-      tag: params.tag,
+      companyData: JSON.parse(JSON.stringify(companyData)),
     },
     revalidate: 1,
   }
 }
 
-export default ArticlesByTag
+export default ArticlesByCompany

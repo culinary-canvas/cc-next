@@ -4,6 +4,7 @@ import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { CompanyModel } from './Company.model'
 import { StorageService } from '../services/storage/Storage.service'
+import StringUtils from '../services/utils/StringUtils'
 
 export class CompanyApi {
   private static readonly COLLECTION = 'companies'
@@ -19,13 +20,9 @@ export class CompanyApi {
   }
 
   static async byIds(ids: string[]): Promise<CompanyModel[]> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(CompanyModel))
-      .where('id', 'in', ids)
-      .get()
-    return !!response.size ? response.docs.map((d) => d.data()) : []
+    return (await Promise.all(ids.map(async (id) => this.byId(id)))).filter(
+      (m) => !!m,
+    )
   }
 
   static async all(): Promise<CompanyModel[]> {
@@ -59,6 +56,7 @@ export class CompanyApi {
 
     onProgress(0.25)
     ModelService.beforeSave(company, userId)
+    company.slug = StringUtils.toLowerKebabCase(company.name)
 
     if (!!company.image) {
       onProgress(0.25, 'Uploading images')
@@ -83,9 +81,12 @@ export class CompanyApi {
     company: CompanyModel,
     userId: string,
     onProgress?: (progress: number, message: string) => any,
-    initialProgress = 0
+    initialProgress = 0,
   ) {
-    onProgress(initialProgress, `Deleting ${company.name || 'company with no name'}`)
+    onProgress(
+      initialProgress,
+      `Deleting ${company.name || 'company with no name'}`,
+    )
     const { firestore } = initFirebase()
     onProgress(0.5, '')
     await firestore().collection(this.COLLECTION).doc(company.id).delete()

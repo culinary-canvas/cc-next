@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Model } from '../../services/db/Model'
 import { FormControlFieldConfig } from './FormControlFieldConfig'
 import { FormControl } from './FormControl'
+import { useUnmount } from '../../hooks/useUnmount'
 
 export function useFormControl<T extends Model>(
   formObject: T,
@@ -20,6 +21,8 @@ export function useFormControl<T extends Model>(
       setFormControl(new FormControl(formObject, fieldConfigs))
     }
   }, [fieldConfigs, formControl, formObject, id])
+
+  useUnmount(() => formControl?.dispose())
 
   return [formControl, formControl?.mutable]
 }

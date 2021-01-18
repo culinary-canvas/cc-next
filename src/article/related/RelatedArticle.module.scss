@@ -13,19 +13,23 @@
   }
 
   > p {
-    color: $grey;
-    font-size: $font-size-l;
     padding: 0 1rem 1rem;
+    color: $grey;
     text-align: center;
+    font-size: $font-size-l;
   }
 
-  a{
+  a {
     color: $black;
   }
 
   .list {
     display: grid;
     flex-wrap: wrap;
+
+    a:after {
+      display: none;
+    }
 
     @include media('<=phone') {
       grid-auto-rows: minmax(auto, 90vh);
@@ -36,7 +40,7 @@
 
     @include media('>phone') {
       grid-auto-flow: dense;
-      grid-auto-rows: minmax(auto, 800px);
+      grid-auto-rows: minmax(auto, 700px);
       grid-template-columns: 1fr 1fr 1fr;
       padding-top: 4rem;
       padding-bottom: 4rem;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../form/button/Button'
 import { useRouter } from 'next/router'
@@ -10,6 +10,7 @@ import { ArticleFooter } from './shared/ArticleFooter'
 import { RelatedArticles } from './related/RelatedArticles'
 import { useOnScrollIntoView } from '../hooks/useOnScrollIntoView'
 import { Spinner } from '../shared/spinner/Spinner'
+import { ArticleService } from './Article.service'
 
 interface Props {
   article: ArticleModel
@@ -22,9 +23,15 @@ export const Article = observer(({ article }: Props) => {
   const relatedRef = useRef<HTMLElement>()
   const [showRelated, setShowRelated] = useState<boolean>(false)
 
-  useOnScrollIntoView(relatedRef.current, () => setShowRelated(true), {
-    relativeOffset: 0.9,
-  })
+  useOnScrollIntoView(
+    relatedRef.current,
+    () => {
+      setShowRelated(true)
+    },
+    {
+      relativeOffset: 0.9,
+    },
+  )
 
   return (
     <>

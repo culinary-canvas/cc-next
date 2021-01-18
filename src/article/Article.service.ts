@@ -1,7 +1,7 @@
 import { ArticleModel } from './Article.model'
 import { ArticleType } from './shared/ArticleType'
 import { SectionModel } from './section/Section.model'
-import { action } from 'mobx'
+import { action, runInAction } from 'mobx'
 import { SectionService } from './section/Section.service'
 import { SectionPreset } from './section/SectionPreset'
 import StringUtils from '../services/utils/StringUtils'
@@ -11,6 +11,9 @@ import { GridPositionService } from './grid/GridPosition.service'
 import { GridPosition } from './grid/GridPosition'
 import { TagApi } from '../tag/Tag.api'
 import { TagModel } from '../tag/Tag.model'
+import { ContentType } from './content/ContentType'
+import { TextContentModel } from './content/text/TextContent.model'
+import { TextEditService } from '../admin/article/form/content/text/TextEdit.service'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
@@ -141,5 +144,52 @@ export class ArticleService {
       }
       article.tagNames.push(tagName)
     }
+  }
+
+  static async removeLinks(article: ArticleModel, linkedText: string) {
+    article.contents
+      .filter(
+        (c) =>
+          c instanceof TextContentModel &&
+          c.type !== ContentType.TITLE &&
+          c.value.toLowerCase().includes(linkedText.toLowerCase()),
+      )
+      .forEach((content: TextContentModel) => {
+        const start = content.value
+          .toLowerCase()
+          .indexOf(linkedText.toLowerCase())
+        const end = start + linkedText.length
+        if (TextEditService.hasLinkInPosition(content.value, start, end)) {
+          const unlinked = TextEditService.removeLinkInPosition(
+            content.value,
+            start,
+            end,
+          )
+          runInAction(() => (content.value = unlinked))
+        }
+      })
+  }
+
+  static async addLinks(article: ArticleModel, text: string, link: string) {
+    article.contents
+      .filter(
+        (c) =>
+          c instanceof TextContentModel &&
+          c.type !== ContentType.TITLE &&
+          c.value.toLowerCase().includes(text.toLowerCase()),
+      )
+      .forEach((content: TextContentModel) => {
+        const start = content.value.toLowerCase().indexOf(text.toLowerCase())
+        const end = start + text.length
+        if (!TextEditService.hasLinkInPosition(content.value, start, end)) {
+          const linked = TextEditService.insertLinkAtPosition(
+            content.value,
+            link,
+            start,
+            end,
+          )
+          runInAction(() => (content.value = linked))
+        }
+      })
   }
 }

@@ -9,9 +9,7 @@
   height: 100%;
   max-width: 100%;
   cursor: pointer;
-  &:hover {
-    // box-shadow: 0 0 0 1rem transparentize($pink, 0.2);
-  }
+  overflow-anchor: none;
 
   figure.image {
     overflow: hidden;
@@ -50,28 +48,30 @@
     }
 
     .labels {
-      padding-top: 1rem;
-      color: $grey-dark;
-      font-size: $font-size-s;
       display: flex;
       flex-wrap: wrap;
-      margin-left: -4px;
+      padding-top: 1rem;
       margin-top: 4px;
+      margin-left: -4px;
 
       span {
         padding: 0 0.5rem;
-        background-color: $pink-dark;
-        color: white;
         margin-bottom: 4px;
         margin-left: 4px;
+        background-color: $pink-dark;
+        color: $white;
+        font-size: $font-size-s;
       }
 
-      label{
-        white-space: nowrap;
+      button {
         padding: 0 0.5rem;
-        background-color: $grey-lighter;
-        margin-left: 4px;
         margin-bottom: 4px;
+        margin-left: 4px;
+        background-color: $grey-lighter;
+        border-radius: 0;
+        font-size: $font-size-s;
+        font-weight: 400;
+        white-space: nowrap;
       }
     }
 
@@ -79,7 +79,7 @@
       overflow: hidden;
     }
 
-    p.subHeading {
+    .subHeading {
       font-family: $font-family-garamond;
     }
 
