@@ -45,11 +45,11 @@ export class PersonModel implements Model {
 
   @observable
   @field(ImageSet)
-  image = new ImageSet()
+  image: ImageSet
 
   @observable
   @field(ImageFormat)
-  imageFormat = new ImageFormat()
+  imageFormat: ImageFormat
 
   @observable
   @transient()

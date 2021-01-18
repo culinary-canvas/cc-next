@@ -4,12 +4,15 @@ import { PersonModel } from '../Person.model'
 import { Button } from '../../form/button/Button'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { observer } from 'mobx-react'
+import { Spinner } from '../../shared/spinner/Spinner'
+import { COLOR } from '../../styles/_color'
 
 interface Props {
   persons: PersonModel[]
 }
 
-export function PersonList({ persons }: Props) {
+export const PersonList = observer(({ persons }: Props) => {
   const router = useRouter()
   return (
     <>
@@ -24,6 +27,7 @@ export function PersonList({ persons }: Props) {
           <tr>
             <th>Name</th>
             <th>Web site</th>
+            <th>Company</th>
             <th>Created</th>
           </tr>
         </thead>
@@ -31,12 +35,17 @@ export function PersonList({ persons }: Props) {
           {persons.map((person) => (
             <tr key={person.id}>
               <td>
-                <Link href={`/admin/persons/${person.id}`}>
-                  {person.name}
-                </Link>
+                <Link href={`/admin/persons/${person.id}`}>{person.name}</Link>
               </td>
 
               <td>{person.web}</td>
+
+              <td>
+                {!!person.companyId && !person.company && (
+                  <Spinner color={COLOR.GREY_LIGHT} />
+                )}
+                {!!person.company && person.company.name}
+              </td>
 
               <td>{person.created?.toLocaleDateString()}</td>
             </tr>
@@ -45,4 +54,4 @@ export function PersonList({ persons }: Props) {
       </table>
     </>
   )
-}
+})

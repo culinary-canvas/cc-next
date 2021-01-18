@@ -19,7 +19,7 @@ export class ArrayUtils {
     )
   }
 
-  static asArray(target: any | any[]) {
+  static asArray<T = any>(target: T | T[]): T[] {
     return Array.isArray(target) ? target : !isNil(target) ? [target] : []
   }
 

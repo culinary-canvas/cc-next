@@ -18,6 +18,16 @@ export class CompanyApi {
     return response.exists ? response.data() : null
   }
 
+  static async byIds(ids: string[]): Promise<CompanyModel[]> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(CompanyModel))
+      .where('id', 'in', ids)
+      .get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async all(): Promise<CompanyModel[]> {
     const { firestore } = initFirebase()
 
@@ -50,8 +60,10 @@ export class CompanyApi {
     onProgress(0.25)
     ModelService.beforeSave(company, userId)
 
-    onProgress(0.25, 'Uploading images')
-    await this.uploadNewImages(company, onProgress)
+    if (!!company.image) {
+      onProgress(0.25, 'Uploading images')
+      await this.uploadNewImages(company, onProgress)
+    }
 
     onProgress(0.8)
     let collectionRef = firestore()
@@ -71,8 +83,9 @@ export class CompanyApi {
     company: CompanyModel,
     userId: string,
     onProgress?: (progress: number, message: string) => any,
+    initialProgress = 0
   ) {
-    onProgress(0, `Deleting ${company.name || 'company with no name'}`)
+    onProgress(initialProgress, `Deleting ${company.name || 'company with no name'}`)
     const { firestore } = initFirebase()
     onProgress(0.5, '')
     await firestore().collection(this.COLLECTION).doc(company.id).delete()
@@ -92,7 +105,7 @@ export class CompanyApi {
         company.image.cropped.url,
         company.image.cropped.fileName,
         `companies/${company.id}`,
-        (p) => onProgress(0.25 + p * 0.25, 'Uploaded cropped image'),
+        (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )
     }
 
@@ -101,7 +114,7 @@ export class CompanyApi {
         company.image.original.url,
         company.image.original.fileName,
         `companies/${company.id}`,
-        (p) => onProgress(0.5 + p * 0.25, 'Uploaded original image'),
+        (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
       )
     }
   }

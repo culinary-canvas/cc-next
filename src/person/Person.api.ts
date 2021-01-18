@@ -18,6 +18,26 @@ export class PersonApi {
     return response.exists ? response.data() : null
   }
 
+  static async byIds(ids: string[]): Promise<PersonModel[]> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(PersonModel))
+      .where('id', 'in', ids)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byCompanyId(companyId: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(PersonModel))
+      .where('companyId', '==', companyId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async all(): Promise<PersonModel[]> {
     const { firestore } = initFirebase()
 
@@ -50,8 +70,10 @@ export class PersonApi {
     onProgress(0.25)
     ModelService.beforeSave(person, userId)
 
-    onProgress(0.25, 'Uploading images')
-    await this.uploadNewImages(person, onProgress)
+    if (!!person.image) {
+      onProgress(0.25, 'Uploading images')
+      await this.uploadNewImages(person, onProgress)
+    }
 
     onProgress(0.8)
     let collectionRef = firestore()
@@ -69,8 +91,12 @@ export class PersonApi {
     person: PersonModel,
     userId: string,
     onProgress?: (progress: number, message: string) => any,
+    initialProgress = 0,
   ) {
-    onProgress(0, `Deleting ${person.name || 'person with no name'}`)
+    onProgress(
+      initialProgress,
+      `Deleting ${person.name || 'person with no name'}`,
+    )
     const { firestore } = initFirebase()
     onProgress(0.5, '')
     await firestore().collection(this.COLLECTION).doc(person.id).delete()
@@ -86,20 +112,20 @@ export class PersonApi {
     onProgress: (progress: number, message: string) => any,
   ) {
     if (StorageService.isLocal(person.image.cropped.url)) {
-      await StorageService.storeFileFromLocalUrl(
+      person.image.cropped.url = await StorageService.storeFileFromLocalUrl(
         person.image.cropped.url,
         person.image.cropped.fileName,
         `persons/${person.id}`,
-        (p) => onProgress(0.25 + p * 0.25, 'Uploaded cropped image'),
+        (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )
     }
 
     if (StorageService.isLocal(person.image.original.url)) {
-      await StorageService.storeFileFromLocalUrl(
+      person.image.original.url = await StorageService.storeFileFromLocalUrl(
         person.image.original.url,
         person.image.original.fileName,
         `persons/${person.id}`,
-        (p) => onProgress(0.5 + p * 0.25, 'Uploaded original image'),
+        (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
       )
     }
   }

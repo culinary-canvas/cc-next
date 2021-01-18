@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './personList.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
@@ -7,6 +7,7 @@ import { PersonModel } from '../../../person/Person.model'
 import { PersonApi } from '../../../person/Person.api'
 import { PersonList } from '../../../person/list/PersonList'
 import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { PersonService } from '../../../person/Person.service'
 
 interface Props {
   personsData: { [key: string]: any }[]
@@ -15,6 +16,8 @@ interface Props {
 function PersonListPage({ personsData }: Props) {
   const persons = useTransformToModel(personsData, PersonModel)
   const allowed = useAuthGuard()
+
+  useEffect(() => void PersonService.populate(persons), [])
 
   if (!allowed) {
     return null

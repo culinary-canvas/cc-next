@@ -8,5 +8,6 @@
 
 .button {
   @include control-button();
-  width: 6rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }

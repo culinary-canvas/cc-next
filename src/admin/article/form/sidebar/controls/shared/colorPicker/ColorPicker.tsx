@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import s from './ColorPicker.module.scss'
 import { COLOR, ColorType } from '../../../../../../../styles/_color'
-import { isNil } from '../../../../../../../services/importHelpers'
+import { classnames, isNil } from '../../../../../../../services/importHelpers'
 import { BlockPicker } from 'react-color'
 import { Button } from '../../../../../../../form/button/Button'
-import { animated, config, useSpring } from 'react-spring'
+import { config, useSpring } from 'react-spring'
+import { Modal } from '../../../../../../../shared/modal/Modal'
 
 interface Props {
   value: ColorType | string
@@ -15,6 +16,7 @@ interface Props {
   additionalColors?: string[]
   showTransparent?: boolean
   background?: boolean
+  small?: boolean
 }
 
 export const ColorPicker = observer((props: Props) => {
@@ -26,6 +28,7 @@ export const ColorPicker = observer((props: Props) => {
     additionalColors,
     showTransparent,
     background = false,
+    small = false,
   } = props
 
   const [isModalVisible, showModal] = useState<boolean>(false)
@@ -52,32 +55,43 @@ export const ColorPicker = observer((props: Props) => {
     }
     setPalette(Array.from(p))
   }, [colors, additionalColors, showTransparent])
+  const [y, setY] = useState<number>()
 
   return (
-    <div className={s.container} id={id}>
-      <Button
-        className={s.button}
-        color={value || COLOR.GREY_LIGHTER}
-        onClick={() => showModal(!isModalVisible)}
-        style={{
-          backgroundColor: background ? value : undefined,
-        }}
+    <>
+      <div
+        className={classnames(s.container, { [s.small]: small })}
+        id={id}
+        ref={(el) => !!el && setY(el.getBoundingClientRect().y)}
       >
-        {isNil(value) ? 'transparent' : value}
-      </Button>
+        <Button
+          className={classnames(s.button, {
+            [s.transparent]: value === 'transparent',
+          })}
+          color={value || COLOR.GREY_LIGHTER}
+          onClick={() => showModal(!isModalVisible)}
+          style={{
+            backgroundColor: background ? value : undefined,
+          }}
+        >
+          {!small && (isNil(value) ? 'transparent' : value)}
+        </Button>
+      </div>
       {isModalVisible && (
-        <animated.div className={s.colorPicker} style={{ opacity }}>
+        <Modal y={y} style={{ padding: '0.2rem' }}>
           <Button className={s.closeButton} onClick={() => showModal(false)}>
-            X
+            Close
           </Button>
           <BlockPicker
             width="100%"
             colors={palette}
             color={value}
+            triangle="hide"
             onChangeComplete={(color) => onSelect(color.hex)}
+            className={s.colorPicker}
           />
-        </animated.div>
+        </Modal>
       )}
-    </div>
+    </>
   )
 })

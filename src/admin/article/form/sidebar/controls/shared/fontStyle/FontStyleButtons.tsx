@@ -45,6 +45,7 @@ export function FontStyleButtons(props: Props) {
         <span
           style={{
             color: emphasize ? COLOR.WHITE : COLOR.BLACK,
+            padding: 0,
           }}
         >
           Emphasize

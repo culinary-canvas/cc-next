@@ -13,8 +13,6 @@ export function HeightButtons(props: Props) {
 
   return (
     <>
-      <label htmlFor="section-height">Height</label>
-
       <div id="section-height" className={s.container}>
         <Button
           toggleable
@@ -22,7 +20,7 @@ export function HeightButtons(props: Props) {
           selected={selected === Size.FIT_CONTENT}
           className={s.button}
         >
-          Fit content
+          Content height
         </Button>
 
         <Button
@@ -31,7 +29,7 @@ export function HeightButtons(props: Props) {
           selected={selected === Size.FULL_SCREEN}
           className={s.button}
         >
-          Full screen
+          Full screen height
         </Button>
       </div>
     </>

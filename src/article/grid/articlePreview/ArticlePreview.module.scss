@@ -5,12 +5,10 @@
 
 .article {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: block;
   height: 100%;
   max-width: 100%;
   cursor: pointer;
-  overflow: hidden;
   &:hover {
     // box-shadow: 0 0 0 1rem transparentize($pink, 0.2);
   }
@@ -49,6 +47,32 @@
       background-color: $white;
       border-radius: 0;
       color: $black !important;
+    }
+
+    .labels {
+      padding-top: 1rem;
+      color: $grey-dark;
+      font-size: $font-size-s;
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: -4px;
+      margin-top: 4px;
+
+      span {
+        padding: 0 0.5rem;
+        background-color: $pink-dark;
+        color: white;
+        margin-bottom: 4px;
+        margin-left: 4px;
+      }
+
+      label{
+        white-space: nowrap;
+        padding: 0 0.5rem;
+        background-color: $grey-lighter;
+        margin-left: 4px;
+        margin-bottom: 4px;
+      }
     }
 
     .moreText {

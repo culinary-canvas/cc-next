@@ -8,16 +8,20 @@ interface Props {
   tagNames: string[]
   id?: string
   containerClassName?: string
+  onHover?: () => any
+  onBlur?: () => any
 }
 
 export function TagsView(props: Props) {
-  const { id, tagNames: tags, containerClassName } = props
+  const { id, onHover, onBlur, tagNames: tags, containerClassName } = props
   const router = useRouter()
 
   return (
     <section
       id={id}
       className={classnames(s.tagsContainer, containerClassName)}
+      onMouseOver={() => !!onHover && onHover()}
+      onMouseOut={() => !!onBlur && onBlur()}
     >
       {tags.map((tag) => (
         <Tag

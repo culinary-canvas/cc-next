@@ -29,7 +29,6 @@ function CompanyListPage({ companiesData }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const data = await CompanyApi.allNoTransform()
-  console.log(data)
 
   return {
     props: {

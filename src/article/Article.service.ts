@@ -9,12 +9,11 @@ import { ImageContentModel } from './content/image/ImageContent.model'
 import { StorageService } from '../services/storage/Storage.service'
 import { GridPositionService } from './grid/GridPosition.service'
 import { GridPosition } from './grid/GridPosition'
+import { TagApi } from '../tag/Tag.api'
+import { TagModel } from '../tag/Tag.model'
 
 export class ArticleService {
-  private static readonly IMAGE_SET_PROPERTY_NAMES = [
-    'original',
-    'cropped',
-  ]
+  private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
 
   @action
   static create(type = ArticleType.DISH) {
@@ -128,5 +127,19 @@ export class ArticleService {
     target.sortOrder--
     other.sortOrder++
     return [target, other]
+  }
+
+  @action
+  static async setArticleTypeAsTag(article: ArticleModel, userId: string) {
+    const tagName = StringUtils.toDisplayText(article.type)
+    if (!article.tagNames.includes(tagName)) {
+      const tagExists = await TagApi.existsByName(tagName)
+      if (!tagExists) {
+        const tag = new TagModel()
+        tag.name = tagName
+        await TagApi.save(tag, userId)
+      }
+      article.tagNames.push(tagName)
+    }
   }
 }

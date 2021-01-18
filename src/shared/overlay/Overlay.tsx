@@ -9,10 +9,11 @@ interface Props {
   progress?: number
   color?: ColorType
   opacity?: number
+  children?: any
 }
 
 export const Overlay = observer((props: Props) => {
-  const { text, progress, color = COLOR.BLACK, opacity = 0.5 } = props
+  const { text, progress, color = COLOR.BLACK, opacity = 0.5, children } = props
   return (
     <>
       <div className={s.overlay} style={{ backgroundColor: color, opacity }} />
@@ -27,10 +28,11 @@ export const Overlay = observer((props: Props) => {
         />
       )}
       <div className={s.contentContainer}>
-        {text && <h3 className={s.text}>{text}</h3>}
-        {progress && (
+        {!!text && <h3 className={s.text}>{text}</h3>}
+        {!!progress && (
           <h1 className={s.progress}>{Math.floor(progress * 100)}%</h1>
         )}
+        {!!children && children}
       </div>
     </>
   )

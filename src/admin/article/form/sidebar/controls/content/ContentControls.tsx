@@ -18,6 +18,7 @@ import { runInAction } from 'mobx'
 import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 import { Modal } from '../../../../../../shared/modal/Modal'
 import { SectionService } from '../../../../../../article/section/Section.service'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()
@@ -30,51 +31,43 @@ export const ContentControls = observer(() => {
 
   return (
     <section className={classnames(s.controls)}>
-      <label htmlFor="content-type">Type</label>
-      <Select
-        id="content-type"
-        value={content.type}
-        options={Object.values(ContentType)}
-        displayFormatter={(v) => StringUtils.toDisplayText(v)}
-        onChange={(type) => {
-          const contentIndex = section.contents.findIndex(
-            (c) => c.uid === content.uid,
-          )
-          const appliedContent = ContentService.getTypeAppliedContent(
-            content,
-            type,
-          )
-          section.contents.splice(contentIndex, 1, appliedContent)
-          admin.setContent(appliedContent)
-        }}
-      />
-
-      <label htmlFor="contents-grid-placement">Grid placement</label>
-      <GridControl
-        id="contents-grid-placement"
-        parts={section.contents}
-        columnDefinitions={['1fr', '1fr', '1fr', '1fr']}
-        currentPart={content}
-        onDelete={(parts) =>
-          runInAction(() => {
-            const uidsToDelete = parts.map((p) => p.uid)
-            section.contents = section.contents.filter(
-              (s) => !uidsToDelete.includes(s.uid),
+      <ControlContainer id="content-type" label="Type">
+        <Select
+          id="content-type"
+          value={content.type}
+          options={Object.values(ContentType)}
+          displayFormatter={(v) => StringUtils.toDisplayText(v)}
+          onChange={(type) => {
+            const contentIndex = section.contents.findIndex(
+              (c) => c.uid === content.uid,
             )
-          })
-        }
-      />
+            const appliedContent = ContentService.getTypeAppliedContent(
+              content,
+              type,
+            )
+            section.contents.splice(contentIndex, 1, appliedContent)
+            admin.setContent(appliedContent)
+          }}
+        />
+      </ControlContainer>
 
-      <label htmlFor="content-background-color">Background color</label>
-      <ColorPicker
-        id="content-background-color"
-        value={content.format.backgroundColor}
-        onSelect={(c) =>
-          runInAction(() => (content.format.backgroundColor = c))
-        }
-        additionalColors={article.colors}
-        showTransparent
-      />
+      <ControlContainer id="contents-grid-placement" label="Grid placement">
+        <GridControl
+          id="contents-grid-placement"
+          parts={section.contents}
+          columnDefinitions={['1fr', '1fr', '1fr', '1fr']}
+          currentPart={content}
+          onDelete={(parts) =>
+            runInAction(() => {
+              const uidsToDelete = parts.map((p) => p.uid)
+              section.contents = section.contents.filter(
+                (s) => !uidsToDelete.includes(s.uid),
+              )
+            })
+          }
+        />
+      </ControlContainer>
+
 
       {content instanceof TextContentModel && <TextControls />}
 

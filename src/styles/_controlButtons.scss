@@ -6,9 +6,10 @@
 }
 
 @mixin control-button {
-  height: $icon-size-l + 4px;
-  min-width: $icon-size-l + 4px;
-  padding: 0;
+  align-items: center;
+  height: calc(#{$icon-size-s} + 0.5rem);
+  min-width: calc(#{$icon-size-s} + 0.5rem);
+  padding: 0.25rem;
   margin: 0.5rem 0.5rem 1rem;
 
   &:first-child {
@@ -16,6 +17,7 @@
   }
 
   img {
-    width: $icon-size-xs;
+    max-width: 100%;
+    max-height: 100%;
   }
 }

@@ -16,6 +16,7 @@
     color: $grey-dark;
     font-weight: 600;
   }
+
   @include media('<phone') {
     padding: 0 5%;
 
@@ -28,12 +29,13 @@
   }
 
   @include media('>=phone', '<desktop-s') {
+    grid-column-end: span 2;
     h1 {
-      font-size: $font-size-xxl;
+      font-size: $font-size-xxxl;
     }
     p {
       padding-left: 20%;
-      font-size: $font-size-m;
+      font-size: $font-size-l;
     }
   }
 

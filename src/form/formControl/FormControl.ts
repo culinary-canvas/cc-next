@@ -28,7 +28,7 @@ declare interface OldAndNewValue {
 export class FormControl<T> {
   @observable private original: T
   @observable mutable: T
-  @observable private changes = new Map<string, OldAndNewValue>()
+  @observable changes = new Map<string, OldAndNewValue>()
   @observable private fieldConfigs: FormControlFieldConfig[]
   @observable isTouched = false
 

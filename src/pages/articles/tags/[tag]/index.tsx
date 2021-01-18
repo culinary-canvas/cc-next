@@ -50,6 +50,7 @@ function ArticlesByTag({ articlesData, tag }: Props) {
               last.sortOrder,
             )
           }
+          labels={[tag]}
         />
       </main>
     </>

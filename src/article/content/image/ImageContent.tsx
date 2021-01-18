@@ -2,7 +2,7 @@ import React, { CSSProperties, useState } from 'react'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../section/Section.model'
-import { classnames } from '../../../services/importHelpers'
+import { classnames, isNil } from '../../../services/importHelpers'
 import { ImageContentModel } from './ImageContent.model'
 import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
@@ -26,6 +26,8 @@ export const ImageContent = observer((props: Props) => {
     const { format } = content
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
+      minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
+      maxHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
       height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
       width: `calc(100% - ${format.padding.left}px - ${format.padding.right}px)`,
       marginTop: `${format.padding.top}px`,

@@ -17,9 +17,6 @@ export const Controls = observer(() => {
     return null
   }
 
-  console.log('Content in edit: ', admin.content)
-  console.log('Section in edit: ', toJS(admin.section))
-
   return (
     <>
       <Tabs tabs={['Article']} containerClassName={s.controlsTabsContainer}>

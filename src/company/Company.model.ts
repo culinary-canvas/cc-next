@@ -32,7 +32,7 @@ export class CompanyModel implements Model {
 
   @observable
   @field()
-  type = CompanyType.RESTAURANT
+  type: CompanyType
 
   @observable
   @field()
@@ -40,9 +40,9 @@ export class CompanyModel implements Model {
 
   @observable
   @field(ImageSet)
-  image = new ImageSet()
+  image: ImageSet
 
   @observable
   @field(ImageFormat)
-  imageFormat = new ImageFormat()
+  imageFormat: ImageFormat
 }

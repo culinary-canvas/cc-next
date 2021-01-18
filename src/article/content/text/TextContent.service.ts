@@ -16,7 +16,7 @@ export class TextContentService {
   static getResponsiveFontSize(fontSize: number) {
     const vw = fontSize / (window.innerWidth < BREAKPOINT.DESKTOP_S ? 15 : 20)
     const px = window.innerWidth * (vw / 100)
-    const min = fontSize < 14 ? fontSize : 14
+    const min = fontSize < 16 ? fontSize : 16
     const max = fontSize
     return px < min ? `${min}px` : px > max ? `${max}px` : `${vw}vw`
   }

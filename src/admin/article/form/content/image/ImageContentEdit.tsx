@@ -5,7 +5,7 @@ import { ImageContentModel } from '../../../../../article/content/image/ImageCon
 import { SectionModel } from '../../../../../article/section/Section.model'
 import { useAdmin } from '../../../../Admin'
 import { useAutorun } from '../../../../../hooks/useAutorun'
-import { classnames } from '../../../../../services/importHelpers'
+import { classnames, isNil } from '../../../../../services/importHelpers'
 import { ImageEdit } from '../../../../../form/imageEdit/ImageEdit'
 import { GridPositionService } from '../../../../../article/grid/GridPosition.service'
 import { runInAction } from 'mobx'
@@ -28,6 +28,8 @@ export const ImageContentEdit = observer((props: Props) => {
 
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
+      minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
+      maxHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
       height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
       marginTop: `${format.padding.top}px`,
       marginBottom: `${format.padding.bottom}px`,

@@ -14,7 +14,7 @@ body,
 
 body {
   margin: 0;
-  background-color: $grey-lighter;
+  background-color: $white;
   color: $black;
   font-family: filson-pro, sans-serif;
   font-size: 16px;
@@ -32,7 +32,7 @@ body {
   height: 100%;
   min-height: 100vh;
 
-    > * {
+  > * {
     transition: transform $animation-really-fast ease-in-out,
       width $animation-really-fast ease-in-out;
   }
@@ -57,7 +57,6 @@ ul {
 }
 
 a {
-  color: $black;
   text-decoration: none;
 }
 
@@ -128,4 +127,48 @@ input::placeholder {
 
 .a {
   @include a();
+}
+
+@keyframes route-change-in {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes route-change-out {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(-200%);
+  }
+}
+
+.route-change-splash {
+  position: fixed;
+  bottom: -100vh;
+  right: 0;
+  z-index: 2000;
+  width: 100vw;
+  height: 100vh;
+  background-color: $pink;
+
+  &.animate-in {
+    animation-name: route-change-in;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
+    animation-duration: $animation-slow;
+  }
+
+  &.animate-out {
+    animation-name: route-change-out;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+    animation-duration: $animation-medium;
+  }
 }

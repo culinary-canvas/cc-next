@@ -1,0 +1,49 @@
+@import '../../styles/layout';
+@import '../../styles/color';
+@import '../../styles/font';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  h1{
+    padding: 0 0 2rem;
+  }
+
+  > p{
+    color: $grey;
+    font-size: $font-size-l;
+  }
+
+  .list {
+    display: grid;
+    flex-wrap: wrap;
+    @include media('<=phone') {
+      grid-template-columns: 1fr;
+      padding: 1rem;
+      gap: 2rem;
+    }
+
+    @include media('>phone') {
+      grid-auto-flow: dense;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: minmax(auto, 800px);
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      gap: 2rem;
+    }
+
+    @include main-container-width();
+
+    .articlePreview {
+      flex-shrink: 0;
+      margin-bottom: 1rem;
+
+      &:not(:first-child) {
+        margin-left: 1rem;
+      }
+    }
+  }
+}
