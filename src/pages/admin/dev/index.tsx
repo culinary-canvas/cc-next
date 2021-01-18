@@ -13,6 +13,7 @@ import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 import { changeArticleTypeHOW_TOToRECIPE } from '../../../services/script/changeArticleTypeHOW_TOToRECIPE'
 import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
+import { setPersonAndCompanySlugs } from '../../../services/script/setPersonAndCompanySlugs'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -112,6 +113,17 @@ const AdminDevArea = observer(() => {
           loading={running === 'setArticleTypeAsTag'}
         >
           Set article type as tag
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('setPersonAndCompanySlugs')
+            await setPersonAndCompanySlugs(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'setPersonAndCompanySlugs'}
+        >
+          Set Person and Company slugs
         </Button>
       </div>
     </div>

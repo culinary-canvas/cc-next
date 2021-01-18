@@ -52,14 +52,9 @@
     }
 
     a {
-      border-bottom: 1px solid transparent;
+      z-index: 2;
       color: $black;
       font-weight: 900;
-      transition: border-bottom-color $animation-fast ease-in-out;
-
-      &:hover {
-        border-bottom: 1px solid black;
-      }
     }
   }
 }

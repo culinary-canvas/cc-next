@@ -4,7 +4,10 @@ import { ArticleModel } from '../Article.model'
 import s from './RelatedArticle.module.scss'
 import { PersonApi } from '../../person/Person.api'
 import ArticleApi from '../Article.api'
-import { ArticlePreview } from '../grid/articlePreview/ArticlePreview'
+import {
+  ArticleLabel,
+  ArticlePreview,
+} from '../grid/articlePreview/ArticlePreview'
 import { CompanyApi } from '../../company/Company.api'
 
 interface Props {
@@ -13,22 +16,26 @@ interface Props {
 
 interface ArticlesWithLabels {
   article: ArticleModel
-  labels: string[]
+  labels: ArticleLabel[]
 }
 
 export function RelatedArticles({ article }: Props) {
   const [articles, setArticles] = useState<ArticlesWithLabels[]>([])
 
   const load = useCallback(async () => {
-    if (!!article.personIds?.length) {
-      let _articles: ArticlesWithLabels[] = []
+    let _articles: ArticlesWithLabels[] = []
+    if (!!article.companyIds?.length) {
       const companies = await CompanyApi.byIds(article.companyIds)
       const companyArticles = await ArticleApi.byCompanyIds(article.companyIds)
 
       companyArticles.forEach((ca) => {
         const labels = companies
           .filter((c) => article.companyIds.includes(c.id))
-          .map((c) => c.name)
+          .map((c) => ({
+            label: c.name,
+            path: `/articles/companies/${c.name}`,
+          }))
+
         if (!_articles.some((a) => a.article.id === ca.id)) {
           _articles.push({
             article: ca,
@@ -39,8 +46,10 @@ export function RelatedArticles({ article }: Props) {
           withLabels.labels = [...withLabels.labels, ...labels]
         }
       })
-      setArticles(_articles)
+      setArticles(_articles.filter(a => a.article.id !== article.id))
+    }
 
+    if (!!article.personIds?.length) {
       _articles = [..._articles]
       const _persons = await PersonApi.byIds(article.personIds)
       const personArticles = await ArticleApi.byPersonIds(article.personIds)
@@ -48,7 +57,10 @@ export function RelatedArticles({ article }: Props) {
       personArticles.forEach((ca) => {
         const labels = _persons
           .filter((c) => article.personIds.includes(c.id))
-          .map((c) => c.name)
+          .map((c) => ({
+            label: c.name,
+            path: `/articles/persons/${c.name}`,
+          }))
         if (!_articles.some((a) => a.article.id === ca.id)) {
           _articles.push({
             article: ca,
@@ -59,15 +71,17 @@ export function RelatedArticles({ article }: Props) {
           withLabels.labels = [...withLabels.labels, ...labels]
         }
       })
-      setArticles(_articles)
+      setArticles(_articles.filter(a => a.article.id !== article.id))
+    }
 
+    if (!!article.tagNames?.length) {
       _articles = [..._articles]
       const tagArticles = await ArticleApi.byTagNames(article.tagNames)
 
       tagArticles.forEach((ca) => {
         const labels = article.tagNames
           .filter((t) => article.tagNames.includes(t))
-          .map((t) => `#${t}`)
+          .map((t) => ({ label: `#${t}`, path: `/articles/tags/${t}` }))
         if (!_articles.some((a) => a.article.id === ca.id)) {
           _articles.push({
             article: ca,
@@ -78,7 +92,7 @@ export function RelatedArticles({ article }: Props) {
           withLabels.labels = [...withLabels.labels, ...labels]
         }
       })
-      setArticles(_articles)
+      setArticles(_articles.filter(a => a.article.id !== article.id))
     }
   }, [])
 

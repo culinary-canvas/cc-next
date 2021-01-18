@@ -4,6 +4,8 @@ import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { PersonModel } from './Person.model'
 import { StorageService } from '../services/storage/Storage.service'
+import { DocumentChange } from '@firebase/firestore-types'
+import StringUtils from '../services/utils/StringUtils'
 
 export class PersonApi {
   private static readonly COLLECTION = 'persons'
@@ -19,13 +21,9 @@ export class PersonApi {
   }
 
   static async byIds(ids: string[]): Promise<PersonModel[]> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .where('id', 'in', ids)
-      .get()
-    return response.size ? response.docs.map((d) => d.data()) : []
+    return (await Promise.all(ids.map(async (id) => this.byId(id)))).filter(
+      (m) => !!m,
+    )
   }
 
   static async byCompanyId(companyId: string) {
@@ -59,6 +57,18 @@ export class PersonApi {
       : []
   }
 
+  static subscribeAll(
+    onChange: (changes: DocumentChange<PersonModel>[]) => any,
+  ): () => void {
+    const { firestore } = initFirebase()
+    return firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(PersonModel))
+      .onSnapshot((querySnapshot) => {
+        onChange(querySnapshot.docChanges())
+      })
+  }
+
   static async save(
     person: PersonModel,
     userId: string,
@@ -69,6 +79,7 @@ export class PersonApi {
 
     onProgress(0.25)
     ModelService.beforeSave(person, userId)
+    person.slug = StringUtils.toLowerKebabCase(person.name)
 
     if (!!person.image) {
       onProgress(0.25, 'Uploading images')

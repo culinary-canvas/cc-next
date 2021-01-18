@@ -43,7 +43,7 @@ export function TextEditMenu(props: Props) {
     () =>
       runInAction(
         () =>
-          (content.value = TextEditService.insertLinkMarkupAtPosition(
+          (content.value = TextEditService.insertLinkAtPosition(
             content.value,
             url,
             start,

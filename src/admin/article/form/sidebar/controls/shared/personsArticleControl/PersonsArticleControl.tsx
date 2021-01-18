@@ -12,6 +12,8 @@ import addIcon from '../../../../../../../../public/assets/icons/streamline-icon
 import removeIcon from '../../../../../../../../public/assets/icons/streamline-icon-remove-bold@140x140.svg'
 import { Button } from '../../../../../../../form/button/Button'
 import { observer } from 'mobx-react'
+import { ArticleService } from '../../../../../../../article/Article.service'
+import StringUtils from '../../../../../../../services/utils/StringUtils'
 
 interface Props {
   article: ArticleModel
@@ -39,7 +41,7 @@ export const PersonsArticleControl = observer((props: Props) => {
 
   useAutorun(() => {
     if (!!all.length) {
-      setInArticle(article.personIds.map((id) => all.find((p) => p.id === id)))
+      setInArticle(all.filter((p) => article.personIds.includes(p.id)))
       setNotSelected(all.filter((p) => !article.personIds.includes(p.id)))
     }
   }, [all])
@@ -84,12 +86,15 @@ export const PersonsArticleControl = observer((props: Props) => {
 
               <Button
                 onClick={() =>
-                  runInAction(
-                    () =>
-                      (article.personIds = article.personIds.filter(
-                        (id) => id !== p.id,
-                      )),
-                  )
+                  runInAction(() => {
+                    article.personIds = article.personIds.filter(
+                      (id) => id !== p.id,
+                    )
+                    ArticleService.removeLinks(
+                      article,
+                      all.find((a) => a.id === p.id).name,
+                    )
+                  })
                 }
                 title="Remove"
                 className={s.removeButton}
@@ -105,6 +110,11 @@ export const PersonsArticleControl = observer((props: Props) => {
         onSelect={(p) =>
           runInAction(() => {
             article.personIds.push(p.id)
+            ArticleService.addLinks(
+              article,
+              p.name,
+              `/articles/persons/${StringUtils.toLowerKebabCase(p.name)}`,
+            )
           })
         }
         displayField="name"
@@ -114,6 +124,7 @@ export const PersonsArticleControl = observer((props: Props) => {
           const person = new PersonModel()
           person.name = v
           await PersonApi.save(person, auth.userId)
+
           await load()
           setLoading(false)
         }}

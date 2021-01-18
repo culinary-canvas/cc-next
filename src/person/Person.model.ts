@@ -33,6 +33,10 @@ export class PersonModel implements Model {
 
   @observable
   @field()
+  slug: string
+
+  @observable
+  @field()
   title = ''
 
   @observable

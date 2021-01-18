@@ -10,6 +10,8 @@ import { Button } from '../../../../../../../form/button/Button'
 import { CompanyModel } from '../../../../../../../company/Company.model'
 import { CompanyApi } from '../../../../../../../company/Company.api'
 import { observer } from 'mobx-react'
+import { ArticleService } from '../../../../../../../article/Article.service'
+import StringUtils from '../../../../../../../services/utils/StringUtils'
 
 interface Props {
   article: ArticleModel
@@ -36,7 +38,7 @@ export const CompaniesArticleControl = observer((props: Props) => {
 
   useAutorun(() => {
     if (!!all.length) {
-      setInArticle(article.companyIds.map((id) => all.find((c) => c.id === id)))
+      setInArticle(all.filter((c) => article.companyIds.includes(c.id)))
       setNotSelected(all.filter((c) => !article.companyIds.includes(c.id)))
     }
   }, [all])
@@ -59,12 +61,15 @@ export const CompaniesArticleControl = observer((props: Props) => {
 
               <Button
                 onClick={() =>
-                  runInAction(
-                    () =>
-                      (article.companyIds = article.companyIds.filter(
-                        (id) => id !== c.id,
-                      )),
-                  )
+                  runInAction(() => {
+                    article.companyIds = article.companyIds.filter(
+                      (id) => id !== c.id,
+                    )
+                    ArticleService.removeLinks(
+                      article,
+                      all.find((a) => a.id === c.id).name,
+                    )
+                  })
                 }
                 title="Remove"
                 className={s.removeButton}
@@ -78,11 +83,16 @@ export const CompaniesArticleControl = observer((props: Props) => {
 
       <LookupSelect<CompanyModel>
         id="companies"
-        onSelect={(c) =>
+        onSelect={(c) => {
           runInAction(() => {
             article.companyIds.push(c.id)
           })
-        }
+          ArticleService.addLinks(
+            article,
+            c.name,
+            `/articles/companies/${StringUtils.toLowerKebabCase(c.name)}`,
+          )
+        }}
         displayField="name"
         onInput={(v) => notSelected.filter((c) => c.name.includes(v))}
         onCreate={async (v) => {

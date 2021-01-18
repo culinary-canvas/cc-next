@@ -9,7 +9,7 @@ import {
   observable,
   toJS,
 } from 'mobx'
-import { deepObserve } from 'mobx-utils'
+import { deepObserve, IDisposer } from 'mobx-utils'
 import ObjectUtils from '../../services/utils/ObjectUtils'
 import StringUtils from '../../services/utils/StringUtils'
 import { FormControlFieldConfig } from './FormControlFieldConfig'
@@ -31,6 +31,7 @@ export class FormControl<T> {
   @observable changes = new Map<string, OldAndNewValue>()
   @observable private fieldConfigs: FormControlFieldConfig[]
   @observable isTouched = false
+  dispose: IDisposer
 
   @computed
   get isUntouched() {
@@ -79,7 +80,7 @@ export class FormControl<T> {
     this.original = cloneDeep(object)
     this.mutable = object
     this.fieldConfigs = fieldConfigs
-    deepObserve(this.mutable, (change, path) => this.onChange(path, change))
+    this.dispose = deepObserve(this.mutable, (change, path) => this.onChange(path, change))
   }
 
   private onChange(path: string, change: IChange) {

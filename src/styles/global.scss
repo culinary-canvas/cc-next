@@ -57,6 +57,26 @@ ul {
 }
 
 a {
+  position: relative;
+  text-decoration: none;
+
+  &:after {
+    position: absolute;
+    bottom: 12%;
+    left: -3%;
+    z-index: -1;
+    width: 106%;
+    height: 35%;
+    max-width: 0;
+    background-color: $pink-light;
+    opacity: 0;
+    transition: max-width $animation-medium $cubic-spring;
+    content: '';
+  }
+  &:hover:after {
+    max-width: 106%;
+    opacity: 1;
+  }
 }
 
 img {
@@ -150,24 +170,24 @@ input::placeholder {
 
 .route-change-splash {
   position: fixed;
-  bottom: -100vh;
   right: 0;
+  bottom: -100vh;
   z-index: 2000;
   width: 100vw;
   height: 100vh;
   background-color: $pink;
 
   &.animate-in {
+    animation-duration: $animation-slow;
     animation-name: route-change-in;
     animation-timing-function: ease-in;
     animation-fill-mode: both;
-    animation-duration: $animation-slow;
   }
 
   &.animate-out {
+    animation-duration: $animation-medium;
     animation-name: route-change-out;
     animation-timing-function: ease-out;
     animation-fill-mode: both;
-    animation-duration: $animation-medium;
   }
 }

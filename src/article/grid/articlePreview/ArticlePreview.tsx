@@ -12,12 +12,19 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { classnames } from '../../../services/importHelpers'
 import { motion } from 'framer-motion'
+import { COLOR } from '../../../styles/_color'
+import ReactMarkdown from 'react-markdown'
+
+export interface ArticleLabel {
+  label: string
+  path: string
+}
 
 interface Props {
   article: ArticleModel
   priority?: boolean
   className?: string
-  labels?: string[]
+  labels?: ArticleLabel[]
 }
 
 export const ArticlePreview = observer((props: Props) => {
@@ -85,17 +92,16 @@ export const ArticlePreview = observer((props: Props) => {
           {StringUtils.toDisplayText(article.type)}
         </Button>
 
-        {!!labels && (
-          <div className={s.labels}>
-            <span>In this article</span>
-            {labels.map((l) => (
-              <label key={l}>{l}</label>
-            ))}
-          </div>
-        )}
         <h2>{article.title}</h2>
         <motion.div className={s.moreText} variants={variants}>
-          <p className={s.subHeading}>{subHeadingContent?.value}</p>
+          <ReactMarkdown
+            className={s.subHeading}
+            renderers={{
+              link: ({ node }) => node.children[0].value,
+            }}
+          >
+            {subHeadingContent?.value}
+          </ReactMarkdown>
           {!!article.tagNames.length && (
             <TagsView
               tagNames={article.tagNames}
@@ -105,6 +111,24 @@ export const ArticlePreview = observer((props: Props) => {
             />
           )}
         </motion.div>
+        {!!labels && (
+          <div className={s.labels}>
+            <span>In this article</span>
+            {labels.map((l) => (
+              <Button
+                unsetStyle
+                key={l.label}
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push(l.path)
+                }}
+                color={COLOR.GREY_DARK}
+              >
+                {l.label}
+              </Button>
+            ))}
+          </div>
+        )}
       </motion.section>
     </motion.article>
   )

@@ -10,7 +10,7 @@ export class TextEditService {
     'i',
   )
 
-  private static hasLinkInPosition(
+  private static hasLinkForMatchInPosition(
     text: string,
     match: string,
     start: number,
@@ -27,11 +27,23 @@ export class TextEditService {
     return false
   }
 
+  static hasLinkInPosition(text: string, start: number, end: number) {
+    const matches = text.match(this.linkRegex)
+    if (!!matches) {
+      for (const match of matches) {
+        if (this.hasLinkForMatchInPosition(text, match, start, end)) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
   static getLinkInPosition(text: string, start: number, end: number) {
     const matches = text.match(this.linkRegex)
     if (!!matches) {
       for (const match of matches) {
-        if (this.hasLinkInPosition(text, match, start, end)) {
+        if (this.hasLinkForMatchInPosition(text, match, start, end)) {
           return match.substring(match.indexOf('(') + 1, match.lastIndexOf(')'))
         }
       }
@@ -43,7 +55,7 @@ export class TextEditService {
     const matches = text.match(this.linkRegex)
     if (!!matches) {
       for (const match of matches) {
-        if (this.hasLinkInPosition(text, match, start, end)) {
+        if (this.hasLinkForMatchInPosition(text, match, start, end)) {
           const linkedText = match.substring(
             match.indexOf('[') + 1,
             match.lastIndexOf(']'),
@@ -55,12 +67,12 @@ export class TextEditService {
     return ''
   }
 
-  static insertLinkMarkupAtPosition(
+  static insertLinkAtPosition(
     text: string,
     url: string,
     start: number,
     end: number,
-  ) {
+  ): string {
     const head = text.substring(0, start)
     const body = text.substring(start, end)
     const tail = text.substring(end)
