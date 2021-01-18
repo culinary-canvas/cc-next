@@ -18,6 +18,16 @@ export class PersonApi {
     return response.exists ? response.data() : null
   }
 
+  static async byIds(ids: string[]): Promise<PersonModel[]> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(PersonModel))
+      .where('id', 'in', ids)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async byCompanyId(companyId: string) {
     const { firestore } = initFirebase()
     const response = await firestore()
@@ -83,7 +93,10 @@ export class PersonApi {
     onProgress?: (progress: number, message: string) => any,
     initialProgress = 0,
   ) {
-    onProgress(initialProgress, `Deleting ${person.name || 'person with no name'}`)
+    onProgress(
+      initialProgress,
+      `Deleting ${person.name || 'person with no name'}`,
+    )
     const { firestore } = initFirebase()
     onProgress(0.5, '')
     await firestore().collection(this.COLLECTION).doc(person.id).delete()

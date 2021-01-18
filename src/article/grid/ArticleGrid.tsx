@@ -15,10 +15,16 @@ interface Props {
   initialArticles?: ArticleModel[]
   load: (last: ArticleModel) => Promise<ArticleModel[]>
   showSplash?: boolean
+  labels?: string[]
 }
 
 export const ArticleGrid = observer((props: Props) => {
-  const { initialArticles = [], load: loadFn, showSplash = false } = props
+  const {
+    initialArticles = [],
+    load: loadFn,
+    labels,
+    showSplash = false,
+  } = props
   const endRef = useRef<HTMLDivElement>()
   const [loading, setLoading] = useState<boolean>(false)
   const [endReached, setEndReached] = useState<boolean>(false)
@@ -89,7 +95,11 @@ export const ArticleGrid = observer((props: Props) => {
                   [s.promoted]: article.promoted || i === 0,
                 })}
               >
-                <ArticlePreview article={article} priority={i === 0} />
+                <ArticlePreview
+                  article={article}
+                  priority={i === 0}
+                  labels={labels}
+                />
               </motion.a>
             </Link>
           </React.Fragment>

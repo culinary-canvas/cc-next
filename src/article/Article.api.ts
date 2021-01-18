@@ -64,12 +64,42 @@ export class ArticleApi {
     return response.size ? response.docs.map((d) => d.data()) : []
   }
 
+  static async byCompanyIds(companyId: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('companyIds', 'array-contains-any', companyId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async byPersonId(personId: string) {
     const { firestore } = initFirebase()
     const response = await firestore()
       .collection(this.COLLECTION)
       .withConverter(Transformer.firestoreConverter(ArticleModel))
       .where('personIds', 'array-contains', personId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byPersonIds(personIds: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('personIds', 'array-contains-any', personIds)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byTagNames(tagNames: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('tagNames', 'array-contains-any', tagNames)
       .get()
     return response.size ? response.docs.map((d) => d.data()) : []
   }

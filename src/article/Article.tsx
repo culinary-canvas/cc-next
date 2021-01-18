@@ -9,6 +9,7 @@ import { Section } from './section/Section'
 import { ArticleFooter } from './shared/ArticleFooter'
 import { ArticleApi } from './Article.api'
 import { Transformer } from '../services/db/Transformer'
+import { RelatedArticles } from './related/RelatedArticles'
 
 interface Props {
   article: ArticleModel
@@ -42,10 +43,7 @@ export const Article = observer(({ article }: Props) => {
         <ArticleFooter article={article} />
       </article>
 
-      <div className={s.gridContainer}>
-        <h1>More articles</h1>
-
-      </div>
+      <RelatedArticles article={article} />
     </>
   )
 })

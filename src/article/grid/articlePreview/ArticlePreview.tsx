@@ -15,12 +15,13 @@ import { motion } from 'framer-motion'
 
 interface Props {
   article: ArticleModel
-  priority: boolean
+  priority?: boolean
   className?: string
+  labels?: string[]
 }
 
 export const ArticlePreview = observer((props: Props) => {
-  const { article, priority, className } = props
+  const { article, labels, priority = false, className } = props
   const router = useRouter()
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
@@ -84,8 +85,15 @@ export const ArticlePreview = observer((props: Props) => {
           {StringUtils.toDisplayText(article.type)}
         </Button>
 
+        {!!labels && (
+          <div className={s.labels}>
+            <span>In this article</span>
+            {labels.map((l) => (
+              <label>{l}</label>
+            ))}
+          </div>
+        )}
         <h2>{article.title}</h2>
-
         <motion.div className={s.moreText} variants={variants}>
           <p className={s.subHeading}>{subHeadingContent?.value}</p>
           {!!article.tagNames.length && (

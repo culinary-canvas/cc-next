@@ -18,6 +18,16 @@ export class CompanyApi {
     return response.exists ? response.data() : null
   }
 
+  static async byIds(ids: string[]): Promise<CompanyModel[]> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(CompanyModel))
+      .where('id', 'in', ids)
+      .get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
   static async all(): Promise<CompanyModel[]> {
     const { firestore } = initFirebase()
 
