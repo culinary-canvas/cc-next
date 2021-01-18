@@ -45,6 +45,22 @@ export class PersonModel implements Model {
 
   @observable
   @field()
+  facebook = ''
+
+  @observable
+  @field()
+  twitter = ''
+
+  @observable
+  @field()
+  instagram = ''
+
+  @observable
+  @field()
+  description = ''
+
+  @observable
+  @field()
   companyId: string
 
   @observable

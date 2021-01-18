@@ -21,6 +21,8 @@ import { ImageFormat } from '../../article/content/image/ImageFormat'
 import { Select } from '../../form/select/Select'
 import StringUtils from '../../services/utils/StringUtils'
 import { CompanyType } from '../CompanyType'
+import { isNil } from '../../services/importHelpers'
+import TextareaAutosize from 'react-textarea-autosize'
 
 interface Props {
   company: CompanyModel
@@ -171,6 +173,7 @@ export const CompanyForm = observer((props: Props) => {
         type="text"
         id="name"
         value={company.name}
+        onFocus={(e) => e.target.select()}
         onChange={(e) =>
           runInAction(() => (formControl.mutable.name = e.target.value))
         }
@@ -188,10 +191,77 @@ export const CompanyForm = observer((props: Props) => {
 
       <label htmlFor="web">Web site</label>
       <input
-        type="text"
+        type="url"
         id="web"
         value={company.web}
+        placeholder={'https://'}
+        onFocus={(e) => {
+          if (company.web === '' || isNil(company.web)) {
+            runInAction(() => (company.web = 'https://www.facebook.com/'))
+          }
+          setTimeout(() => e.target.select(), 100)
+        }}
         onChange={(e) => runInAction(() => (company.web = e.target.value))}
+      />
+
+      <label htmlFor="facebook">Facebook</label>
+      <input
+        type="url"
+        id="facebook"
+        value={company.facebook}
+        placeholder={'https://www.facebook.com/'}
+        onFocus={(e) => {
+          if (company.facebook === '' || isNil(company.facebook)) {
+            runInAction(() => (company.facebook = 'https://www.facebook.com/'))
+          }
+          setTimeout(() => e.target.select(), 100)
+        }}
+        onChange={(e) => runInAction(() => (company.facebook = e.target.value))}
+      />
+
+      <label htmlFor="instagram">Instagram</label>
+      <input
+        type="url"
+        id="instagram"
+        value={company.instagram}
+        placeholder={'https://www.instagram.com/'}
+        onFocus={(e) => {
+          if (company.instagram === '' || isNil(company.instagram)) {
+            runInAction(
+              () => (company.instagram = 'https://www.instagram.com/'),
+            )
+          }
+          setTimeout(() => e.target.select(), 100)
+        }}
+        onChange={(e) =>
+          runInAction(() => (company.instagram = e.target.value))
+        }
+      />
+
+      <label htmlFor="twitter">Twitter</label>
+      <input
+        type="url"
+        id="twitter"
+        value={company.twitter}
+        placeholder={'https://twitter.com/'}
+        onFocus={(e) => {
+          if (company.twitter === '' || isNil(company.twitter)) {
+            runInAction(() => (company.twitter = 'https://twitter.com/'))
+          }
+          setTimeout(() => e.target.select(), 100)
+        }}
+        onChange={(e) => runInAction(() => (company.twitter = e.target.value))}
+      />
+
+      <label htmlFor="description">Description</label>
+      <TextareaAutosize
+        id="description"
+        onFocus={(e) => e.target.select()}
+        onChange={(e) =>
+          runInAction(() => (company.description = e.target.value))
+        }
+        value={company.description}
+        placeholder="Write a short presentation"
       />
 
       <label htmlFor="image" style={{ marginBottom: '1rem' }}>

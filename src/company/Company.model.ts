@@ -43,6 +43,22 @@ export class CompanyModel implements Model {
   web = ''
 
   @observable
+  @field()
+  facebook = ''
+
+  @observable
+  @field()
+  twitter = ''
+
+  @observable
+  @field()
+  instagram = ''
+
+  @observable
+  @field()
+  description = ''
+
+  @observable
   @field(ImageSet)
   image: ImageSet
 
