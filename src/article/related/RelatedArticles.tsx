@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import Link from 'next/link'
 import { ArticleModel } from '../Article.model'
 import s from './RelatedArticle.module.scss'
 import { PersonApi } from '../../person/Person.api'
@@ -43,7 +44,6 @@ export function RelatedArticles({ article }: Props) {
       _articles = [..._articles]
       const _persons = await PersonApi.byIds(article.personIds)
       const personArticles = await ArticleApi.byPersonIds(article.personIds)
-      console.log(personArticles)
 
       personArticles.forEach((ca) => {
         const labels = _persons
@@ -63,7 +63,6 @@ export function RelatedArticles({ article }: Props) {
 
       _articles = [..._articles]
       const tagArticles = await ArticleApi.byTagNames(article.tagNames)
-      console.log(tagArticles)
 
       tagArticles.forEach((ca) => {
         const labels = article.tagNames
@@ -89,15 +88,23 @@ export function RelatedArticles({ article }: Props) {
     <>
       <div className={s.container}>
         <h1>Want more?</h1>
-        <p>Here's some more reading for you to enjoy</p>
+        <p>Here are some other articles that we think you might enjoy.</p>
+        <p>
+          Do you think we're missing something? Send us an{' '}
+          <a href="mailto:info@culinary-canvas.com">email</a> and tell us what
+          you want to read about
+        </p>
         <div className={s.list}>
           {articles.map((a) => (
-            <ArticlePreview
-              key={a.article.id}
-              article={a.article}
-              className={s.articlePreview}
-              labels={a.labels}
-            />
+            <Link href={`/articles/${a.article.slug}`} key={a.article.id}>
+              <a>
+                <ArticlePreview
+                  article={a.article}
+                  className={s.articlePreview}
+                  labels={a.labels}
+                />
+              </a>
+            </Link>
           ))}
         </div>
       </div>
