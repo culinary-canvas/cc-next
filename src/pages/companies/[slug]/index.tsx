@@ -38,16 +38,16 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
     <>
       <PageHead
         title={`Culinary Canvas — #${company.name} (${articles.length} articles)`}
-        image={company.image?.cropped?.url || articles[0].imageContent.url}
+        image={company.image?.cropped?.url || articles[0]?.imageContent.url}
         imageWidth={
           company.image?.cropped?.width ||
-          articles[0].imageContent.set.cropped.width
+          articles[0]?.imageContent.set.cropped.width
         }
         imageHeight={
           company.image?.cropped?.height ||
-          articles[0].imageContent.set.cropped.height
+          articles[0]?.imageContent.set.cropped.height
         }
-        imageAlt={company.image?.alt || articles[0].imageContent.set.alt}
+        imageAlt={company.image?.alt || articles[0]?.imageContent.set.alt}
       />
 
       <main className={classnames(s.container)}>
