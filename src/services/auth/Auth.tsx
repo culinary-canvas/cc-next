@@ -38,7 +38,7 @@ export function useAuthState(): Auth {
 
   function authStateChanged(user: firebase.User) {
     setUser(user)
-    setUserId(user.uid)
+    setUserId(user?.uid)
   }
 
   return {
