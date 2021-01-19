@@ -38,16 +38,16 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
     <>
       <PageHead
         title={`Culinary Canvas — #${person.name} (${articles.length} articles)`}
-        image={person.image?.cropped?.url || articles[0].imageContent.url}
+        image={person.image?.cropped?.url || articles[0]?.imageContent.url}
         imageWidth={
           person.image?.cropped?.width ||
-          articles[0].imageContent.set.cropped.width
+          articles[0]?.imageContent.set.cropped.width
         }
         imageHeight={
           person.image?.cropped?.height ||
-          articles[0].imageContent.set.cropped.height
+          articles[0]?.imageContent.set.cropped.height
         }
-        imageAlt={person.image?.alt || articles[0].imageContent.set.alt}
+        imageAlt={person.image?.alt || articles[0]?.imageContent.set.alt}
       />
 
       <main className={classnames(s.container)}>
@@ -60,9 +60,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
               last.sortOrder,
             )
           }
-          labels={[
-            { label: person.name, path: `/persons/${person.slug}` },
-          ]}
+          labels={[{ label: person.name, path: `/persons/${person.slug}` }]}
         />
       </main>
     </>
