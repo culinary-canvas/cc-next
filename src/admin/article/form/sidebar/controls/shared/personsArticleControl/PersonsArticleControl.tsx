@@ -113,7 +113,7 @@ export const PersonsArticleControl = observer((props: Props) => {
             ArticleService.addLinks(
               article,
               p.name,
-              `/articles/persons/${StringUtils.toLowerKebabCase(p.name)}`,
+              `/persons/${StringUtils.toLowerKebabCase(p.name)}`,
             )
           })
         }

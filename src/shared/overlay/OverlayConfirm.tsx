@@ -29,7 +29,7 @@ export function OverlayConfirm({
         overlay.isVisible &&
         !DomUtils.hasIdOrParentWithId(e.target as HTMLElement, [id, buttonsId])
       ) {
-        overlay.setVisible(false)
+        overlay.toggle(false)
       }
     }
 
@@ -45,7 +45,7 @@ export function OverlayConfirm({
       <div className={s.buttons} id={buttonsId}>
         <Button
           onClick={() => {
-            overlay.setVisible(false)
+            overlay.toggle(false)
             !!onCancel && onCancel()
           }}
         >
@@ -53,7 +53,7 @@ export function OverlayConfirm({
         </Button>
         <Button
           onClick={() => {
-            overlay.setVisible(false)
+            overlay.toggle(false)
             onOk()
           }}
         >

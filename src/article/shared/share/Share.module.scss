@@ -8,20 +8,36 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  width: 100%;
-  font-size: $font-size-s;
-  gap: 2rem;
+
+  > *:not(:first-child) {
+    margin-left: 1rem;
+  }
 
   button {
-    width: $icon-size-m;
-    padding: 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: $icon-size-l;
+    height: $icon-size-l;
+    padding: 10px;
     border: none;
+    border-radius: 100%;
     cursor: pointer;
-    transition: all $animation-fast ease-out;
-    filter: $filter-grey;
+
+    img {
+      height: 50%;
+      transition: filter $animation-fast ease-out;
+      filter: $filter-grey-lighter;
+    }
 
     &:hover {
-      filter: $filter-black;
+      &:after {
+        display: none;
+      }
+      img {
+        filter: $filter-black;
+      }
     }
   }
 }

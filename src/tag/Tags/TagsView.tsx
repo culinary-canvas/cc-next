@@ -27,7 +27,7 @@ export function TagsView(props: Props) {
         <Tag
           key={tag}
           tag={tag}
-          onClick={() => router.push(`/articles/tags/${tag}`)}
+          onClick={() => router.push(`/tags/${tag}`)}
         />
       ))}
     </section>

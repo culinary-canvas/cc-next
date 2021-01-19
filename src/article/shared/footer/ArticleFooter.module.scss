@@ -1,0 +1,87 @@
+@import '../../../styles/font';
+@import '../../../styles/layout';
+@import '../../../styles/color';
+
+.background {
+  grid-column: 1 / 7;
+  background-color: $grey-lighter;
+
+  @include media('<=phone') {
+    display: none;
+  }
+}
+
+.footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+
+  @include media('<=phone') {
+    padding-top: 1rem;
+    background-color: $grey-lighter;
+  }
+  @include media('>=phone') {
+    grid-column: 2 / 6;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+      padding: 2rem 1rem 0;
+    }
+
+    @include media('<=phone') {
+      justify-content: center;
+    }
+    @include media('>phone') {
+      justify-content: space-between;
+    }
+  }
+
+  .inThisArticle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > * {
+      padding: 2rem 1rem 0;
+    }
+
+    h3 {
+      font-size: $font-size-l;
+    }
+
+    @include media('<=phone') {
+      align-items: center;
+    }
+
+    .cardsWrapper {
+      position: relative;
+      display: grid;
+      grid-auto-flow: row;
+      width: 100%;
+      gap: 2rem;
+
+      @include media('<=phone') {
+        padding: 1rem 4rem;
+      }
+
+      @include media('>phone') {
+        grid-template-columns: repeat(4, 1fr);
+        padding-top: 1rem;
+      }
+
+      > a {
+        display: flex;
+        width: 100%;
+        color: $black;
+
+        > * {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

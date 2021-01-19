@@ -1,3 +1,4 @@
+@import '../../styles/form';
 @import '../../styles/layout';
 @import '../../styles/color';
 @import '../../styles/font';
@@ -19,9 +20,22 @@
     }
   }
 
+  textarea {
+    min-height: 2.2rem;
+    border-right: 2px solid $black;
+    border-bottom: 2px solid $black;
+    border-left: 2px solid $black;
+
+    &::placeholder {
+      color: $grey;
+      font-weight: 300;
+    }
+  }
+
   input,
-  select {
-    margin-bottom: 3rem;
+  select,
+  textarea {
+    margin-bottom: 2rem;
     font-size: $font-size-m;
   }
 

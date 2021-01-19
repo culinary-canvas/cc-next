@@ -48,25 +48,11 @@ export const ArticlePreview = observer((props: Props) => {
     setSubHeadingContent(subHeading)
   }, [article.contents, article.sections])
 
-  const [h, toggleH] = useState<boolean>(false)
-  const variants = useRef({
-    hovered: { height: 'auto' },
-    blurred: { height: 0 },
-  }).current
-
   return (
     <motion.article
       className={classnames(s.article, className)}
-      onHoverStart={() => toggleH(true)}
-      onHoverEnd={() => toggleH(false)}
       whileTap={{ scale: tagsHovered ? 1 : 0.95 }}
-      animate={h ? 'hovered' : 'blurred'}
-      variants={{
-        hovered: {
-          boxShadow: '0 0 20px 0 rgba(0,0,0,0.1)',
-        },
-        blurred: {},
-      }}
+      layout
     >
       {!!imageContent && (
         <motion.figure className={s.image} ref={ref}>
@@ -93,7 +79,7 @@ export const ArticlePreview = observer((props: Props) => {
         </Button>
 
         <h2>{article.title}</h2>
-        <motion.div className={s.moreText} variants={variants}>
+        <div className={s.moreText}>
           <ReactMarkdown
             className={s.subHeading}
             renderers={{
@@ -110,7 +96,7 @@ export const ArticlePreview = observer((props: Props) => {
               onBlur={() => setTagsHovered(false)}
             />
           )}
-        </motion.div>
+        </div>
         {!!labels && (
           <div className={s.labels}>
             <span>In this article</span>

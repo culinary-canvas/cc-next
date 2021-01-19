@@ -4,7 +4,7 @@ import { classnames } from '../../../services/importHelpers'
 import { SectionEdit } from './section/SectionEdit'
 import s from './ArticleForm.module.scss'
 import { useAdmin } from '../../Admin'
-import { ArticleFooter } from '../../../article/shared/ArticleFooter'
+import { ArticleFooter } from '../../../article/shared/footer/ArticleFooter'
 import { ArticleService } from '../../../article/Article.service'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { PersonModel } from '../../../person/Person.model'
@@ -34,10 +34,10 @@ export const ArticleForm = observer((props: Props) => {
 
   const checkForUnlinkedMentions = useCallback(() => {
     persons.forEach((p) =>
-      ArticleService.addLinks(article, p.name, `/articles/persons/${p.slug}`),
+      ArticleService.addLinks(article, p.name, `/persons/${p.slug}`),
     )
     companies.forEach((c) =>
-      ArticleService.addLinks(article, c.name, `/articles/companies/${c.slug}`),
+      ArticleService.addLinks(article, c.name, `/companies/${c.slug}`),
     )
   }, [persons, companies, article])
 

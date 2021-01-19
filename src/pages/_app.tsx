@@ -81,7 +81,11 @@ function App({ Component, pageProps }: Props) {
             {IS_PROD && <CookieBanner />}
 
             {overlay.isVisible && (
-              <Overlay text={overlay.text} progress={overlay.progress} children={overlay.children}/>
+              <Overlay
+                text={overlay.text}
+                progress={overlay.progress}
+                children={overlay.children}
+              />
             )}
             {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
             <div

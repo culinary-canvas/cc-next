@@ -1,0 +1,116 @@
+@import '../styles/animation';
+@import '../styles/color';
+@import '../styles/font';
+@import '../styles/icon';
+@import '../styles/layout';
+@import '../styles/shadow';
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem 1rem;
+  background-color: white;
+  text-align: center;
+  transition: box-shadow $animation-medium $cubic-spring;
+  overflow: hidden;
+
+  &:hover {
+    box-shadow: $superSoftDownShadow;
+  }
+
+  @include media('<=phone') {
+    width: 100%;
+    h2 {
+      font-size: $font-size-l;
+    }
+  }
+  @include media('>phone') {
+    h2 {
+      font-size: $font-size-m;
+    }
+  }
+
+  figure {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+
+    &.noImage {
+      background-color: $pink-light;
+    }
+    span {
+      padding-top: 1rem;
+      color: $white;
+      font-family: $font-family-eloquent;
+      font-size: 4rem;
+    }
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  h2 {
+    z-index: 2;
+    font-weight: 800;
+    a {
+      color: $black;
+    }
+  }
+
+  h4 {
+    padding: 0 1ex;
+    margin-top: 0.5rem;
+    background-color: $pink-dark;
+    color: $white;
+    font-size: $font-size-s;
+    //color: $grey;
+    //font-family: $font-family-garamond;
+    //font-style: italic;
+    font-weight: 400;
+  }
+
+  p {
+    padding-top: 0.5rem;
+    font-family: $font-family-garamond;
+    font-size: $font-size-m;
+  }
+
+  .socialMediaContainer {
+    justify-content: center;
+    padding: 1rem 0;
+
+    .socialMediaLink {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      background-color: $grey-lighter;
+      border-radius: 100%;
+
+      &:not(:first-child) {
+        margin-left: 8px;
+      }
+
+      img {
+        transition: filter $animation-fast $cubic-spring;
+        filter: $filter-grey-light;
+      }
+
+      &:hover {
+        img {
+          filter: $filter-grey-dark;
+        }
+      }
+    }
+  }
+}

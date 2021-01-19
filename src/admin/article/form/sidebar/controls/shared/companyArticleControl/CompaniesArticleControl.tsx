@@ -90,7 +90,7 @@ export const CompaniesArticleControl = observer((props: Props) => {
           ArticleService.addLinks(
             article,
             c.name,
-            `/articles/companies/${StringUtils.toLowerKebabCase(c.name)}`,
+            `/companies/${StringUtils.toLowerKebabCase(c.name)}`,
           )
         }}
         displayField="name"

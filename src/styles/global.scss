@@ -191,3 +191,8 @@ input::placeholder {
     animation-fill-mode: both;
   }
 }
+
+.disable-scroll {
+  overflow: hidden;
+  height: 100vh;
+}

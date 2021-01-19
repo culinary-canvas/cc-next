@@ -10,6 +10,9 @@ import { ImageContentModel } from './content/image/ImageContent.model'
 import { Sortable } from '../types/Sortable'
 import { isSystemColor } from '../styles/_color'
 import { ArticleFormat } from './shared/ArticleFormat'
+import { transient } from '../services/db/decorators/transient.decorator'
+import { PersonModel } from '../person/Person.model'
+import { CompanyModel } from '../company/Company.model'
 
 export class ArticleModel implements Model, Sortable {
   @observable
@@ -96,6 +99,22 @@ export class ArticleModel implements Model, Sortable {
   @observable
   @field()
   companyIds: string[] = []
+
+  @observable
+  @transient()
+  persons: PersonModel[] = []
+
+  @observable
+  @transient()
+  companies: CompanyModel[] = []
+
+  @computed
+  get isPopulated(): boolean {
+    return (
+      this.companies.length === this.companyIds.length &&
+      this.persons.length === this.personIds.length
+    )
+  }
 
   @computed get contents(): ContentModel[] {
     return this.sections.flatMap((s) => s.contents)

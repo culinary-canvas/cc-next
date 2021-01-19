@@ -103,7 +103,7 @@ export const ImageEdit = observer((props: Props) => {
               newSet.cropped = await ImageService.crop(original, cropValues)
               overlay.setProgress(1, 'Done!')
 
-              setTimeout(() => overlay.setVisible(false), 500)
+              setTimeout(() => overlay.toggle(false), 500)
               onChange(newSet)
             }
           }}

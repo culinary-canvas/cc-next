@@ -2,7 +2,6 @@ import { createContext, useCallback, useContext, useState } from 'react'
 
 export interface Overlay {
   readonly isVisible: boolean
-  readonly setVisible: (v: boolean) => void
   readonly text: string
   readonly progress: number
   readonly setProgress: (value: number, text?: string) => void
@@ -14,7 +13,7 @@ export interface Overlay {
 }
 
 export function useOverlayState(): Overlay {
-  const [isVisible, setVisible] = useState<boolean>(false)
+  const [isVisible, _setVisible] = useState<boolean>(false)
   const [text, setText] = useState<string>()
   const [progress, _setProgress] = useState<number>()
   const [children, _setChildren] = useState<any>()
@@ -23,11 +22,11 @@ export function useOverlayState(): Overlay {
     setText(null)
     setProgress(null)
     _setChildren(null)
-    setVisible(false)
+    _setVisible(false)
   }, [])
 
   const setChildren = useCallback((v: any) => {
-    _setProgress(null)
+    reset()
     _setChildren(v)
   }, [])
 
@@ -39,8 +38,8 @@ export function useOverlayState(): Overlay {
 
   const toggle = useCallback(
     (v = !isVisible) => {
-      setVisible(v)
-      if (isVisible) {
+      _setVisible(v)
+      if (v) {
         document.querySelector('body').classList.add('no-scroll')
       } else {
         document.querySelector('body').classList.remove('no-scroll')
@@ -55,7 +54,6 @@ export function useOverlayState(): Overlay {
 
   return {
     isVisible,
-    setVisible,
     text,
     progress,
     setProgress,
