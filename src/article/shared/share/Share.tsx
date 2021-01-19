@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import envelope from '../../../../public/assets/icons/streamline-icon-envelope@140x140.svg'
 import facebook from '../../../../public/assets/icons/streamline-icon-social-media-facebook-1@140x140.svg'
 import twitter from '../../../../public/assets/icons/streamline-icon-social-media-twitter@140x140.svg'
@@ -15,6 +15,7 @@ import { ArticleModel } from '../../Article.model'
 import { useRouter } from 'next/router'
 import s from './Share.module.scss'
 import { classnames } from '../../../services/importHelpers'
+import { COLOR } from '../../../styles/_color'
 
 interface Props {
   article: ArticleModel
@@ -34,6 +35,10 @@ export const Share = (props: Props) => {
     : `${article.title} @ Culinary Canvas`
   const title = `${article.title} @ Culinary Canvas`
 
+  const style = useRef({
+    backgroundColor: COLOR.BLACK,
+  }).current
+
   return (
     <>
       <section className={classnames(s.container, containerClassName)}>
@@ -41,16 +46,27 @@ export const Share = (props: Props) => {
           url={url}
           subject={`"${article.title}" @ Culinary Canvas`}
           body={`I found this article at Culinary Canvas: ${article.title} \nFollow this link to read it:`}
+          style={style}
         >
-          <img src={envelope} alt="Share via email" className="icon" />
+          <img src={envelope} alt="Share via email" />
         </EmailShareButton>
 
-        <FacebookShareButton url={url} quote={quote} hashtag={`#${hashtag}`}>
-          <img src={facebook} alt="Share on Facebook" className="icon" />
+        <FacebookShareButton
+          url={url}
+          quote={quote}
+          hashtag={`#${hashtag}`}
+          style={style}
+        >
+          <img src={facebook} alt="Share on Facebook" />
         </FacebookShareButton>
 
-        <TwitterShareButton url={url} title={title} hashtags={[hashtag]}>
-          <img src={twitter} alt="Share on Twitter" className="icon" />
+        <TwitterShareButton
+          url={url}
+          title={title}
+          hashtags={[hashtag]}
+          style={style}
+        >
+          <img src={twitter} alt="Share on Twitter" />
         </TwitterShareButton>
 
         <LinkedinShareButton
@@ -58,12 +74,18 @@ export const Share = (props: Props) => {
           title={title}
           summary={description}
           source="https://culinary-canvas.com"
+          style={style}
         >
-          <img src={linkedIn} alt="Share on LinkedIn" className="icon" />
+          <img src={linkedIn} alt="Share on LinkedIn" />
         </LinkedinShareButton>
 
-        <PinterestShareButton url={url} media={image} description={description}>
-          <img src={pinterest} alt="Share on Pinterest" className="icon" />
+        <PinterestShareButton
+          url={url}
+          media={image}
+          description={description}
+          style={style}
+        >
+          <img src={pinterest} alt="Share on Pinterest" />
         </PinterestShareButton>
       </section>
     </>

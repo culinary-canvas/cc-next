@@ -14,6 +14,8 @@ import { TagModel } from '../tag/Tag.model'
 import { ContentType } from './content/ContentType'
 import { TextContentModel } from './content/text/TextContent.model'
 import { TextEditService } from '../admin/article/form/content/text/TextEdit.service'
+import { PersonApi } from '../person/Person.api'
+import { CompanyApi } from '../company/Company.api'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
@@ -191,5 +193,16 @@ export class ArticleService {
           runInAction(() => (content.value = linked))
         }
       })
+  }
+
+  static async populate(article: ArticleModel): Promise<void> {
+    if (!!article.personIds.length) {
+      const persons = await PersonApi.byIds(article.personIds)
+      runInAction(() => (article.persons = persons))
+    }
+    if (!!article.companyIds.length) {
+      const companies = await CompanyApi.byIds(article.companyIds)
+      runInAction(() => (article.companies = companies))
+    }
   }
 }

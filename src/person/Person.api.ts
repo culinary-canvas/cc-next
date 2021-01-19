@@ -6,6 +6,7 @@ import { PersonModel } from './Person.model'
 import { StorageService } from '../services/storage/Storage.service'
 import { DocumentChange } from '@firebase/firestore-types'
 import StringUtils from '../services/utils/StringUtils'
+import { PersonService } from './Person.service'
 
 export class PersonApi {
   private static readonly COLLECTION = 'persons'
@@ -80,6 +81,7 @@ export class PersonApi {
     onProgress(0.25)
     ModelService.beforeSave(person, userId)
     person.slug = StringUtils.toLowerKebabCase(person.name)
+    PersonService.ensureHttpInUrls(person)
 
     if (!!person.image) {
       onProgress(0.25, 'Uploading images')

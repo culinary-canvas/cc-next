@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 import s from './articlesByTag.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useTransformToModel } from '../../../../hooks/useTransformToModel'
-import { ArticleModel } from '../../../../article/Article.model'
-import { PageHead } from '../../../../head/PageHead'
-import { classnames } from '../../../../services/importHelpers'
-import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
-import ArticleApi from '../../../../article/Article.api'
-import { initFirebase } from '../../../../services/firebase/Firebase'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import { ArticleModel } from '../../../article/Article.model'
+import { PageHead } from '../../../head/PageHead'
+import { classnames } from '../../../services/importHelpers'
+import { ArticleGrid } from '../../../article/grid/ArticleGrid'
+import ArticleApi from '../../../article/Article.api'
+import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
-import { isServer } from '../../../_app'
+import { isServer } from '../../_app'
 
 interface Props {
   articlesData: any[]
@@ -50,7 +50,7 @@ function ArticlesByTag({ articlesData, tag }: Props) {
               last.sortOrder,
             )
           }
-          labels={[{ label: tag, path: `/articles/tags/${tag}` }]}
+          labels={[{ label: tag, path: `/tags/${tag}` }]}
         />
       </main>
     </>

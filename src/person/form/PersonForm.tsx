@@ -73,7 +73,7 @@ export const PersonForm = observer((props: Props) => {
             const id = await PersonApi.save(person, userId, (v, t) =>
               overlay.setProgress(v, t),
             )
-            setTimeout(() => overlay.setVisible(false), 1000)
+            setTimeout(() => overlay.toggle(false), 1000)
             router.replace(
               !!router.query.id ? `/admin/persons` : `/admin/persons/${id}`,
             )
@@ -92,7 +92,7 @@ export const PersonForm = observer((props: Props) => {
                   onOk={() => router.back()}
                 />,
               )
-              overlay.setVisible(true)
+              overlay.toggle(true)
             } else {
               router.back()
             }

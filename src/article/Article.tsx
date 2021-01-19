@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../form/button/Button'
 import { useRouter } from 'next/router'
@@ -6,7 +6,7 @@ import { ArticleModel } from './Article.model'
 import { useAuth } from '../services/auth/Auth'
 import s from './Article.module.scss'
 import { Section } from './section/Section'
-import { ArticleFooter } from './shared/ArticleFooter'
+import { ArticleFooter } from './shared/footer/ArticleFooter'
 import { RelatedArticles } from './related/RelatedArticles'
 import { useOnScrollIntoView } from '../hooks/useOnScrollIntoView'
 import { Spinner } from '../shared/spinner/Spinner'
@@ -16,16 +16,21 @@ interface Props {
   article: ArticleModel
 }
 
-export const Article = observer(({ article }: Props) => {
+export const Article = observer(({ article: propArticle }: Props) => {
   const router = useRouter()
   const auth = useAuth()
 
   const relatedRef = useRef<HTMLElement>()
   const [showRelated, setShowRelated] = useState<boolean>(false)
+  const [article, setArticle] = useState<ArticleModel>(propArticle)
 
   useOnScrollIntoView(
     relatedRef.current,
-    () => {
+    async () => {
+      if (!article.isPopulated) {
+        await ArticleService.populate(article)
+        setArticle(article)
+      }
       setShowRelated(true)
     },
     {

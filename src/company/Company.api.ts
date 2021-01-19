@@ -5,6 +5,7 @@ import 'firebase/firestore'
 import { CompanyModel } from './Company.model'
 import { StorageService } from '../services/storage/Storage.service'
 import StringUtils from '../services/utils/StringUtils'
+import { CompanyService } from './Company.service'
 
 export class CompanyApi {
   private static readonly COLLECTION = 'companies'
@@ -57,6 +58,7 @@ export class CompanyApi {
     onProgress(0.25)
     ModelService.beforeSave(company, userId)
     company.slug = StringUtils.toLowerKebabCase(company.name)
+    CompanyService.ensureHttpInUrls(company)
 
     if (!!company.image) {
       onProgress(0.25, 'Uploading images')

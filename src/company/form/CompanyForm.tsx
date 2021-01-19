@@ -71,7 +71,7 @@ export const CompanyForm = observer((props: Props) => {
             const id = await CompanyApi.save(company, userId, (v, t) =>
               overlay.setProgress(v, t),
             )
-            setTimeout(() => overlay.setVisible(false), 1000)
+            setTimeout(() => overlay.toggle(false), 1000)
             router.replace(
               !!router.query.id ? `/admin/companies` : `/admin/companies/${id}`,
             )
