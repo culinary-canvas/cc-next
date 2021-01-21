@@ -15,7 +15,7 @@ interface Props {
 
 const PersonEditPage = observer((props: Props) => {
   const { data } = props
-  const person = useTransformToModel([data], PersonModel)[0]
+  const person = useTransformToModel(data, PersonModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {

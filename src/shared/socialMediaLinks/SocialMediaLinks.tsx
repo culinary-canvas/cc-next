@@ -111,7 +111,7 @@ export function SocialMediaLinks(props: Props) {
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          title={twitterUrl}
+          title={twitterTitle}
           onClick={(e) => e.stopPropagation()}
         >
           <img

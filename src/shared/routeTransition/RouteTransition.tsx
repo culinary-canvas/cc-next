@@ -25,7 +25,6 @@ export function RouteTransition() {
         const i = setInterval(() => {
           if (new Date().getTime() > animationInDoneTime) {
             resolve()
-            console.log(i)
             clearInterval(i)
           }
         }, 100)

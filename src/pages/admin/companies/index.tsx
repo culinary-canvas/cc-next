@@ -7,13 +7,14 @@ import { CompanyModel } from '../../../company/Company.model'
 import { CompanyApi } from '../../../company/Company.api'
 import { CompanyList } from '../../../company/list/CompanyList'
 import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   companiesData: { [key: string]: any }[]
 }
 
 function CompanyListPage({ companiesData }: Props) {
-  const companies = useTransformToModel(companiesData, CompanyModel)
+  const companies = useTransformToModels(companiesData, CompanyModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {

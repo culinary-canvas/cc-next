@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './articlesByTag.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../article/Article.model'
 import { PageHead } from '../../../head/PageHead'
 import { classnames } from '../../../services/importHelpers'
@@ -10,6 +9,9 @@ import ArticleApi from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
+import { ArticleWithLabels } from '../../../article/ArticleWithLabels'
+import { ArticleLabel } from '../../../article/ArticleLabel'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   articlesData: any[]
@@ -19,8 +21,13 @@ interface Props {
 const PAGE_SIZE = 6
 
 function ArticlesByTag({ articlesData, tag }: Props) {
-  const articles = useTransformToModel(articlesData, ArticleModel)
+  const articles = useTransformToModels(articlesData, ArticleModel)
   const router = useRouter()
+  const [articlesWithLabels, setArticlesWithLabels] = useState<
+    ArticleWithLabels[]
+  >([])
+  const [label, setLabel] = useState<ArticleLabel>()
+
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   if (router.isFallback) {
@@ -30,6 +37,15 @@ function ArticlesByTag({ articlesData, tag }: Props) {
     router.replace('/')
     return null
   }
+
+  useEffect(() => setLabel(new ArticleLabel(tag, `/tags/${tag}`)), [tag])
+
+  useEffect(() => {
+    !!articles &&
+      setArticlesWithLabels(
+        articles.map((a) => new ArticleWithLabels(a, label)),
+      )
+  }, [articles, label])
 
   return (
     <>
@@ -42,15 +58,17 @@ function ArticlesByTag({ articlesData, tag }: Props) {
       />
       <main className={classnames(s.container)}>
         <ArticleGrid
-          initialArticles={articles}
+          initialArticles={articlesWithLabels}
           load={async (last) =>
-            ArticleApi.publishedByTagPagedBySortOrderDesc(
-              tag,
-              PAGE_SIZE,
-              last.sortOrder,
-            )
+            !!last &&
+            (
+              await ArticleApi.publishedByTagPagedBySortOrderDesc(
+                tag,
+                PAGE_SIZE,
+                last.article.sortOrder,
+              )
+            ).map((a) => new ArticleWithLabels(a, label))
           }
-          labels={[{ label: tag, path: `/tags/${tag}` }]}
         />
       </main>
     </>

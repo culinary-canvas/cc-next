@@ -13,6 +13,7 @@ import StringUtils from '../../services/utils/StringUtils'
 import { initFirebase } from '../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../_app'
+import { useTransformToModels } from '../../hooks/useTransformToModels'
 
 interface Props {
   articlesData: any[]
@@ -22,7 +23,7 @@ interface Props {
 const PAGE_SIZE = 6
 
 function ArticlesPerType({ articlesData, type }: Props) {
-  const articles = useTransformToModel(articlesData, ArticleModel)
+  const articles = useTransformToModels(articlesData, ArticleModel)
   const router = useRouter()
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 

@@ -11,14 +11,9 @@ import StringUtils from '../../../services/utils/StringUtils'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { classnames } from '../../../services/importHelpers'
-import { motion } from 'framer-motion'
 import { COLOR } from '../../../styles/_color'
 import ReactMarkdown from 'react-markdown'
-
-export interface ArticleLabel {
-  label: string
-  path: string
-}
+import { ArticleLabel } from '../../ArticleLabel'
 
 interface Props {
   article: ArticleModel
@@ -33,7 +28,6 @@ export const ArticlePreview = observer((props: Props) => {
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
-  const [tagsHovered, setTagsHovered] = useState<boolean>(false)
 
   useEffect(() => {
     const image = article.contents.find(
@@ -49,24 +43,21 @@ export const ArticlePreview = observer((props: Props) => {
   }, [article.contents, article.sections])
 
   return (
-    <motion.article
-      className={classnames(s.article, className)}
-      whileTap={{ scale: tagsHovered ? 1 : 0.95 }}
-      layout
-    >
+    <article className={classnames(s.article, className)}>
       {!!imageContent && (
-        <motion.figure className={s.image} ref={ref}>
+        <figure className={s.image} ref={ref}>
           <Image
             priority={priority}
+            quality={60}
             alt={imageContent.set.alt}
             layout="fill"
             objectFit="cover"
             src={imageContent.set.cropped.url}
           />
-        </motion.figure>
+        </figure>
       )}
 
-      <motion.section className={s.text}>
+      <section className={s.text}>
         <Button
           className={s.articleType}
           unsetStyle
@@ -78,25 +69,17 @@ export const ArticlePreview = observer((props: Props) => {
           {StringUtils.toDisplayText(article.type)}
         </Button>
 
-        <h2>{article.title}</h2>
-        <div className={s.moreText}>
-          <ReactMarkdown
-            className={s.subHeading}
-            renderers={{
-              link: ({ node }) => node.children[0].value,
-            }}
-          >
-            {subHeadingContent?.value}
-          </ReactMarkdown>
-          {!!article.tagNames.length && (
-            <TagsView
-              tagNames={article.tagNames}
-              containerClassName={s.tags}
-              onHover={() => setTagsHovered(true)}
-              onBlur={() => setTagsHovered(false)}
-            />
-          )}
-        </div>
+        <h2 className={s.title}>{article.title}</h2>
+
+        <ReactMarkdown
+          className={s.subHeading}
+          renderers={{
+            link: ({ node }) => node.children[0].value,
+          }}
+        >
+          {subHeadingContent?.value}
+        </ReactMarkdown>
+
         {!!labels && (
           <div className={s.labels}>
             <span>In this article</span>
@@ -115,7 +98,7 @@ export const ArticlePreview = observer((props: Props) => {
             ))}
           </div>
         )}
-      </motion.section>
-    </motion.article>
+      </section>
+    </article>
   )
 })

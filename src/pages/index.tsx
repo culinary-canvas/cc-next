@@ -8,6 +8,8 @@ import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
 import { useTransformToModel } from '../hooks/useTransformToModel'
 import { initFirebase } from '../services/firebase/Firebase'
+import { Splash } from '../article/grid/splash/Splash'
+import { useTransformToModels } from '../hooks/useTransformToModels'
 
 interface Props {
   articlesData: any[]
@@ -16,7 +18,7 @@ interface Props {
 const PAGE_SIZE = 6
 
 function Start({ articlesData }: Props) {
-  const articles = useTransformToModel(articlesData, ArticleModel)
+  const articles = useTransformToModels(articlesData, ArticleModel)
 
   return (
     <>
@@ -28,7 +30,8 @@ function Start({ articlesData }: Props) {
       />
       <main className={classnames(s.container)}>
         <ArticleGrid
-          showSplash
+          insertComponent={() => <Splash />}
+          insertComponentAtIndex={1}
           initialArticles={articles}
           load={async (lastLoaded) =>
             ArticleApi.publishedPagedBySortOrderDesc(

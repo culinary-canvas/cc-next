@@ -8,13 +8,14 @@ import { PersonApi } from '../../../person/Person.api'
 import { PersonList } from '../../../person/list/PersonList'
 import { AdminMenu } from '../../../admin/menu/AdminMenu'
 import { PersonService } from '../../../person/Person.service'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   personsData: { [key: string]: any }[]
 }
 
 function PersonListPage({ personsData }: Props) {
-  const persons = useTransformToModel(personsData, PersonModel)
+  const persons = useTransformToModels(personsData, PersonModel)
   const allowed = useAuthGuard()
 
   useEffect(() => void PersonService.populate(persons), [])

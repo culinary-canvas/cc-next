@@ -1,4 +1,5 @@
 @import '../../../styles/layout';
+@import '../../../styles/color';
 
 .container {
   position: relative;
@@ -7,10 +8,10 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding-top: 2rem;
-  padding-bottom: $header-height;
+  padding-top: $header-height;
 
-  @include media('<=phone') {
-    padding-top: 5rem;
+  .presentation {
+    @include main-content-width();
+    padding: 0 4rem;
   }
 }

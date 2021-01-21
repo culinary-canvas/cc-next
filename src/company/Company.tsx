@@ -9,28 +9,38 @@ import StringUtils from '../services/utils/StringUtils'
 
 interface Props {
   company: CompanyModel
+  className?: string
+  card?: boolean
 }
 
-export function Company({ company }: Props) {
+export function Company(props: Props) {
+  const { company, className, card = false } = props
   const [description, setDescription] = useState<string>('')
 
   useEffect(() => {
-    const maxLength = 50
-    let truncated = company.description.substring(0, maxLength)
-    if (company.description.length > maxLength) {
-      truncated += '...'
+    if (card) {
+      const maxLength = 50
+      let truncated = company.description.substring(0, maxLength)
+      if (company.description.length > maxLength) {
+        truncated += '...'
+      }
+      setDescription(truncated)
+    } else {
+      setDescription(company.description)
     }
-    setDescription(truncated)
   }, [company])
 
   return (
-    <div className={classnames(s.container)}>
+    <div className={classnames(s.container, className, { [s.card]: card })}>
       <figure
-        className={classnames({ [s.noImage]: !company.image?.cropped?.url })}
+        className={classnames(s.figure, {
+          [s.noImage]: !company.image?.cropped?.url,
+        })}
       >
         {!!company.image?.cropped?.url ? (
           <Image
-            quality={50}
+            quality={60}
+            priority={!card}
             objectFit="contain"
             objectPosition="center"
             layout="fill"
@@ -38,31 +48,42 @@ export function Company({ company }: Props) {
             alt={company.image?.alt}
           />
         ) : (
-          <span>{company.name.substring(0, 1)}</span>
+          <div className={s.noImagePlaceholder}>
+            <span>{company.name.substring(0, 1)}</span>
+          </div>
         )}
       </figure>
-      <SocialMediaLinks
-        size={14}
-        containerClassName={s.socialMediaContainer}
-        linkClassName={s.socialMediaLink}
-        facebookUrl={company.facebook}
-        facebookTitle={`${company.name} @ Facebook`}
-        instagramUrl={company.instagram}
-        instagramTitle={`${company.name} @ Instagram`}
-        twitterUrl={company.twitter}
-        twitterTitle={`${company.name} @ Twitter`}
-        webSiteUrl={company.web}
-        webSiteTitle={`${company.name} @ Twitter`}
-      />
-      <h2>
-        <Link href={`/companies/${company.slug}`}>
-          <a>{company.name}</a>
-        </Link>
-      </h2>
+      <div className={s.grid}>
+        <SocialMediaLinks
+          size={14}
+          containerClassName={s.socialMediaContainer}
+          linkClassName={s.socialMediaLink}
+          facebookUrl={company.facebook}
+          facebookTitle={`${company.name} @ Facebook`}
+          instagramUrl={company.instagram}
+          instagramTitle={`${company.name} @ Instagram`}
+          twitterUrl={company.twitter}
+          twitterTitle={`${company.name} @ Twitter`}
+          webSiteUrl={company.web}
+          webSiteTitle={`${company.name} @ Twitter`}
+        />
 
-      <h4>{StringUtils.toDisplayText(company.type)}</h4>
+        {card ? (
+          <h2 className={s.name}>
+            <Link href={`/companies/${company.slug}`}>
+              <a>{company.name}</a>
+            </Link>
+          </h2>
+        ) : (
+          <h1 className={s.name}>{company.name}</h1>
+        )}
 
-      <p>{description}</p>
+        <h4 className={s.title}>
+          <span>{StringUtils.toDisplayText(company.type)}</span>
+        </h4>
+
+        {!!description && <p className={s.description}>{description}</p>}
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../form/button/Button'
 import { useRouter } from 'next/router'
@@ -37,6 +37,8 @@ export const Article = observer(({ article: propArticle }: Props) => {
       relativeOffset: 0.9,
     },
   )
+
+  useEffect(() => setArticle(propArticle), [propArticle])
 
   return (
     <>

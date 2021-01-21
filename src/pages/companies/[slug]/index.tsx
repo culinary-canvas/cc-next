@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './articlesByCompany.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
@@ -11,6 +11,10 @@ import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
 import { CompanyModel } from '../../../company/Company.model'
+import { ArticleWithLabels } from '../../../article/ArticleWithLabels'
+import { ArticleLabel } from '../../../article/ArticleLabel'
+import { Company } from '../../../company/Company'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   articlesData: any[]
@@ -20,10 +24,15 @@ interface Props {
 const PAGE_SIZE = 6
 
 function ArticlesByCompany({ articlesData, companyData }: Props) {
-  const articles = useTransformToModel(articlesData, ArticleModel)
-  const company = useTransformToModel([companyData], CompanyModel)[0]
-
+  const articles = useTransformToModels(articlesData, ArticleModel)
+  const company = useTransformToModel(companyData, CompanyModel)
   const router = useRouter()
+
+  const [articlesWithLabels, setArticlesWithLabels] = useState<
+    ArticleWithLabels[]
+  >([])
+  const [label, setLabel] = useState<ArticleLabel>()
+
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   if (router.isFallback) {
@@ -33,6 +42,21 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
     router.replace('/')
     return null
   }
+
+  useEffect(
+    () =>
+      !!company &&
+      setLabel(new ArticleLabel(company.name, `/companies/${company.slug}`)),
+    [company],
+  )
+
+  useEffect(() => {
+    !!articles &&
+      !!company &&
+      setArticlesWithLabels(
+        articles.map((a) => new ArticleWithLabels(a, label)),
+      )
+  }, [articles, company, label])
 
   return (
     <>
@@ -51,18 +75,19 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
       />
 
       <main className={classnames(s.container)}>
+        <Company company={company} className={s.presentation} />
         <ArticleGrid
-          initialArticles={articles}
+          initialArticles={articlesWithLabels}
           load={async (last) =>
-            ArticleApi.publishedByCompanyIdPagedBySortOrderDesc(
-              company.id,
-              PAGE_SIZE,
-              last.sortOrder,
-            )
+            !!last &&
+            (
+              await ArticleApi.publishedByCompanyIdPagedBySortOrderDesc(
+                company.id,
+                PAGE_SIZE,
+                last.article.sortOrder,
+              )
+            ).map((a) => new ArticleWithLabels(a, label))
           }
-          labels={[
-            { label: company.name, path: `/articles/company/${company.slug}` },
-          ]}
         />
       </main>
     </>
