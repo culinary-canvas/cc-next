@@ -16,7 +16,7 @@ interface Props {
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
-  const article = useTransformToModel([articleData], ArticleModel)[0]
+  const article = useTransformToModel(articleData, ArticleModel)
   const allowed = useAuthGuard()
 
   const [formControl] = useFormControl(article, [

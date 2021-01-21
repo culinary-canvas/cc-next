@@ -7,13 +7,14 @@ import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import ArticleApi from '../../../article/Article.api'
 import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   articleData: { [key: string]: any }[]
 }
 
 function ArticleListPage({ articleData }: Props) {
-  const articles = useTransformToModel(articleData, ArticleModel)
+  const articles = useTransformToModels(articleData, ArticleModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {

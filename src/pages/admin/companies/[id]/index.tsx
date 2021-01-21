@@ -15,7 +15,7 @@ interface Props {
 
 const CompanyEditPage = observer((props: Props) => {
   const { data } = props
-  const company = useTransformToModel([data], CompanyModel)[0]
+  const company = useTransformToModel(data, CompanyModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {

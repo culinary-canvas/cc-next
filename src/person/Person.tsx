@@ -5,29 +5,42 @@ import { SocialMediaLinks } from '../shared/socialMediaLinks/SocialMediaLinks'
 import Image from 'next/image'
 import { classnames } from '../services/importHelpers'
 import Link from 'next/link'
+import { TextContentService } from '../article/content/text/TextContent.service'
 
 interface Props {
   person: PersonModel
+  className?: string
+  card?: boolean
 }
 
-export function Person({ person }: Props) {
+export function Person(props: Props) {
+  const { person, className, card = false } = props
   const [description, setDescription] = useState<string>('')
 
   useEffect(() => {
-    const maxLength = 50
-    let truncated = person.description.substring(0, maxLength)
-    if (person.description.length > maxLength) {
-      truncated += '...'
+    if (card) {
+      const maxLength = 50
+      let truncated = person.description.substring(0, maxLength)
+      if (person.description.length > maxLength) {
+        truncated += '...'
+      }
+      setDescription(truncated)
+    } else {
+      setDescription(person.description)
     }
-    setDescription(truncated)
   }, [person])
 
   return (
-    <div className={classnames(s.container)}>
-      <figure>
+    <div className={classnames(s.container, className, { [s.card]: card })}>
+      <figure
+        className={classnames(s.figure, {
+          [s.noImage]: !person.image?.cropped?.url,
+        })}
+      >
         {!!person.image?.cropped?.url ? (
           <Image
-            quality={50}
+            quality={60}
+            priority={!card}
             objectFit="cover"
             objectPosition="center"
             layout="fill"
@@ -35,31 +48,46 @@ export function Person({ person }: Props) {
             alt={person.image?.alt}
           />
         ) : (
-          <span>{person.name.substring(0, 1)}</span>
+          <div className={s.noImagePlaceholder}>
+            <span>{person.name.substring(0, 1)}</span>
+          </div>
         )}
       </figure>
-      <SocialMediaLinks
-        size={14}
-        containerClassName={s.socialMediaContainer}
-        linkClassName={s.socialMediaLink}
-        facebookUrl={person.facebook}
-        facebookTitle={`${person.name} @ Facebook`}
-        instagramUrl={person.instagram}
-        instagramTitle={`${person.name} @ Instagram`}
-        twitterUrl={person.twitter}
-        twitterTitle={`${person.name} @ Twitter`}
-        webSiteUrl={person.web}
-        webSiteTitle={`${person.name} @ Twitter`}
-      />
-      <h2>
-        <Link href={`/persons/${person.slug}`}>
-          <a>{person.name}</a>
-        </Link>
-      </h2>
+      <div className={s.grid}>
+        <SocialMediaLinks
+          size={14}
+          containerClassName={s.socialMediaContainer}
+          linkClassName={s.socialMediaLink}
+          facebookUrl={person.facebook}
+          facebookTitle={`${person.name} @ Facebook`}
+          instagramUrl={person.instagram}
+          instagramTitle={`${person.name} @ Instagram`}
+          twitterUrl={person.twitter}
+          twitterTitle={`${person.name} @ Twitter`}
+          webSiteUrl={person.web}
+          webSiteTitle={`${person.name} @ Twitter`}
+        />
 
-      <h4>{person.title}</h4>
+        {card ? (
+          <h2 className={s.name}>
+            <Link href={`/persons/${person.slug}`}>
+              <a>{person.name}</a>
+            </Link>
+          </h2>
+        ) : (
+          <h1 className={s.name}>
+            {person.name}
+          </h1>
+        )}
 
-      <p>{description}</p>
+        {!!person.title && (
+          <h3 className={s.title}>
+            <span>{person.title}</span>
+          </h3>
+        )}
+
+        {!!description && <p className={s.description}>{description}</p>}
+      </div>
     </div>
   )
 }

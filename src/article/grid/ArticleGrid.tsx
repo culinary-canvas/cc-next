@@ -4,114 +4,105 @@ import { ArticleModel } from '../Article.model'
 import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
-import { ArticleLabel, ArticlePreview } from './articlePreview/ArticlePreview'
+import { ArticlePreview } from './articlePreview/ArticlePreview'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { COLOR } from '../../styles/_color'
-import { Transformer } from '../../services/db/Transformer'
-import { Splash } from './splash/Splash'
-import { motion } from 'framer-motion'
+import { ArticleWithLabels } from '../ArticleWithLabels'
 
-interface Props {
-  initialArticles?: ArticleModel[]
-  load: (last: ArticleModel) => Promise<ArticleModel[]>
-  showSplash?: boolean
-  labels?: ArticleLabel[]
+interface Props<T extends ArticleModel | ArticleWithLabels> {
+  initialArticles?: T[]
+  load?: (last: T) => Promise<T[]>
+  insertComponent?: () => any
+  insertComponentAtIndex?: number
 }
 
-export const ArticleGrid = observer((props: Props) => {
-  const {
-    initialArticles = [],
-    load: loadFn,
-    labels,
-    showSplash = false,
-  } = props
-  const endRef = useRef<HTMLDivElement>()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [endReached, setEndReached] = useState<boolean>(false)
-  const [articles, setArticles] = useState<ArticleModel[]>(initialArticles)
+export const ArticleGrid = observer(
+  <T extends ArticleModel | ArticleWithLabels>(props: Props<T>) => {
+    const {
+      initialArticles = [],
+      load: loadFn,
+      insertComponent = false,
+      insertComponentAtIndex = 0,
+    } = props
+    const endRef = useRef<HTMLDivElement>()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [allLoaded, setAllLoaded] = useState<boolean>(false)
+    const [articles, setArticles] = useState<T[]>(initialArticles)
 
-  useEffect(() => {
-    setArticles(initialArticles)
-    setEndReached(false)
-  }, [initialArticles])
+    useEffect(() => {
+      setArticles(initialArticles)
+      setAllLoaded(false)
+    }, [initialArticles])
 
-  // TODO: Also trigger next load when initial load fits the screen (only triggered on scroll now)
-  const onScroll = useCallback(() => {
-    if (
-      !!endRef.current &&
-      !endReached &&
-      !loading &&
-      scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop
-    ) {
-      load()
-    }
-  }, [loading, endReached])
+    const load = useCallback(async () => {
+      if (!!loadFn) {
+        setLoading(true)
+        const articlesToAdd = await loadFn(articles[articles.length - 1])
+        if (!!articlesToAdd.length) {
+          setArticles([...articles, ...articlesToAdd])
+        } else {
+          setAllLoaded(true)
+        }
 
-  const load = useCallback(async () => {
-    setLoading(true)
-    const articlesToAddData = await loadFn(articles[articles.length - 1])
+        setLoading(false)
+      }
+    }, [articles, loadFn])
 
-    if (!!articlesToAddData.length) {
-      const transformed = Transformer.dbToModels(
-        articlesToAddData,
-        ArticleModel,
-      )
-      setArticles([...articles, ...transformed])
-    } else {
-      setEndReached(true)
-    }
+    // TODO: Also trigger next load when initial load fits the screen (only triggered on scroll now)
+    const onScroll = useCallback(() => {
+      if (
+        !!endRef.current &&
+        !allLoaded &&
+        !loading &&
+        scrollY + window.innerHeight > endRef.current.offsetTop * 0.8
+      ) {
+        load()
+      }
+    }, [loading, allLoaded, load])
 
-    setLoading(false)
-  }, [articles])
+    useEffect(() => {
+      window.addEventListener('scroll', onScroll)
+      return () => window.removeEventListener('scroll', onScroll)
+    }, [onScroll])
 
-  useEffect(() => {
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  })
+    return (
+      <>
+        <div className={s.grid}>
+          {articles.map((a, i) => {
+            const article =
+              a instanceof ArticleWithLabels ? a.article : (a as ArticleModel)
+            const labels = a instanceof ArticleWithLabels ? a.labels : null
 
-  const variants = {
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.5 },
-    },
-    hidden: { opacity: 0 },
-  }
-
-  return (
-    <>
-      <motion.div
-        className={s.grid}
-        initial="hidden"
-        animate="visible"
-        variants={variants}
-      >
-        {articles.map((article, i) => (
-          <React.Fragment key={i}>
-            {showSplash && i === 1 && <Splash />}
-            <Link href={`/articles/${article.slug}`}>
-              <motion.a
-                variants={variants}
-                className={classnames(s.articleContainer, {
-                  [s.promoted]: article.promoted || i === 0,
-                })}
-              >
-                <ArticlePreview
-                  article={article}
-                  priority={i === 0}
-                  labels={labels}
-                />
-              </motion.a>
-            </Link>
-          </React.Fragment>
-        ))}
-      </motion.div>
-      <div
-        id="end"
-        ref={endRef}
-        className={classnames(s.end, { [s.loading]: loading })}
-      >
-        {loading && <Spinner size={64} color={COLOR.GREY} />}
-      </div>
-    </>
-  )
-})
+            return (
+              <React.Fragment key={i}>
+                {!!insertComponent &&
+                  i === insertComponentAtIndex &&
+                  insertComponent()}
+                <Link href={`/articles/${article.slug}`}>
+                  <a
+                    className={classnames(s.articleContainer, {
+                      [s.promoted]: article.promoted || i === 0,
+                    })}
+                  >
+                    <ArticlePreview
+                      article={article}
+                      priority={i === 0}
+                      labels={labels}
+                    />
+                  </a>
+                </Link>
+              </React.Fragment>
+            )
+          })}
+        </div>
+        <div
+          id="end"
+          ref={endRef}
+          className={classnames(s.end, { [s.loading]: loading })}
+        >
+          {loading && <Spinner size={64} color={COLOR.GREY} />}
+        </div>
+      </>
+    )
+  },
+)

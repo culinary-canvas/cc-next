@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './articlesByPerson.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../article/Article.model'
 import { PageHead } from '../../../head/PageHead'
-import { classnames } from '../../../services/importHelpers'
+import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
 import { PersonModel } from '../../../person/Person.model'
+import { Person } from '../../../person/Person'
+import { ArticleWithLabels } from '../../../article/ArticleWithLabels'
+import { ArticleLabel } from '../../../article/ArticleLabel'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
   articlesData: any[]
@@ -20,10 +24,15 @@ interface Props {
 const PAGE_SIZE = 6
 
 function ArticlesByPerson({ articlesData, personData }: Props) {
-  const articles = useTransformToModel(articlesData, ArticleModel)
-  const person = useTransformToModel([personData], PersonModel)[0]
-
+  const articles = useTransformToModels(articlesData, ArticleModel)
+  const person = useTransformToModel(personData, PersonModel)
   const router = useRouter()
+
+  const [articlesWithLabels, setArticlesWithLabels] = useState<
+    ArticleWithLabels[]
+  >([])
+  const [label, setLabel] = useState<ArticleLabel>()
+
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   if (router.isFallback) {
@@ -34,10 +43,27 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
     return null
   }
 
+  useEffect(
+    () =>
+      !!person &&
+      setLabel(
+        new ArticleLabel(person.name, `/articles/persons/${person.slug}`),
+      ),
+    [person],
+  )
+
+  useEffect(() => {
+    !!articles &&
+      !!label &&
+      setArticlesWithLabels(
+        articles.map((a) => new ArticleWithLabels(a, label)),
+      )
+  }, [articles, label])
+
   return (
     <>
       <PageHead
-        title={`Culinary Canvas — #${person.name} (${articles.length} articles)`}
+        title={`Culinary Canvas — #${person.name} (${!isNil(articles) ? articles.length : 0} articles)`}
         image={person.image?.cropped?.url || articles[0]?.imageContent.url}
         imageWidth={
           person.image?.cropped?.width ||
@@ -51,16 +77,19 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
       />
 
       <main className={classnames(s.container)}>
+        <Person person={person} className={s.presentation} />
         <ArticleGrid
-          initialArticles={articles}
+          initialArticles={articlesWithLabels}
           load={async (last) =>
-            ArticleApi.publishedByPersonIdPagedBySortOrderDesc(
-              person.id,
-              PAGE_SIZE,
-              last.sortOrder,
-            )
+            !!last &&
+            (
+              await ArticleApi.publishedByPersonIdPagedBySortOrderDesc(
+                person.id,
+                PAGE_SIZE,
+                last.article.sortOrder,
+              )
+            ).map((a) => new ArticleWithLabels(a, label))
           }
-          labels={[{ label: person.name, path: `/persons/${person.slug}` }]}
         />
       </main>
     </>

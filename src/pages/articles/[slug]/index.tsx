@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ArticlePage = observer(({ articleData }: Props) => {
-  const article = useTransformToModel([articleData], ArticleModel)[0]
+  const article = useTransformToModel(articleData, ArticleModel)
 
   return (
     <>

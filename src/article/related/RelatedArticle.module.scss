@@ -9,13 +9,12 @@
   align-items: center;
   padding-top: 4rem;
 
-  h2 {
-    padding: 0 1rem 1rem;
+  > h2 {
     font-size: $font-size-xl;
   }
 
   > p {
-    padding: 0 1rem 1rem;
+    padding: 1rem 1rem 1rem;
     color: $grey;
     text-align: center;
     font-size: $font-size-l;
@@ -42,7 +41,7 @@
 
     @include media('>phone') {
       grid-auto-flow: dense;
-      grid-auto-rows: minmax(auto, 700px);
+      grid-auto-rows: minmax(1fr, 700px);
       grid-template-columns: 1fr 1fr 1fr;
       padding-top: 4rem;
       padding-bottom: 4rem;
@@ -50,14 +49,5 @@
     }
 
     @include main-container-width();
-
-    .articlePreview {
-      flex-shrink: 0;
-      margin-bottom: 1rem;
-
-      &:not(:first-child) {
-        margin-left: 1rem;
-      }
-    }
   }
 }

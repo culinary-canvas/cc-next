@@ -5,95 +5,215 @@
 @import '../styles/layout';
 @import '../styles/shadow';
 
-.container {
-  position: relative;
+@mixin presentation {
+  display: flex;
+
+  .figure {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    min-width: 200px;
+    overflow: hidden;
+
+    .noImagePlaceholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 100%;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-template:
+      'name .' auto
+      'title .' auto
+      'links .' auto
+      'description .' minmax(0, auto);
+    padding-left: 2rem;
+    background-color: $white;
+    text-align: left;
+    overflow: hidden;
+    justify-items: flex-start;
+
+    .name {
+      padding: 1rem 0 0;
+      font-weight: 900;
+    }
+
+    .title {
+      font-size: $font-size-m;
+    }
+
+    .description {
+      padding: 1rem 0;
+      line-height: 1.6;
+    }
+
+    .socialMediaContainer {
+      .socialMediaLink {
+        width: 40px;
+        height: 40px;
+        background-color: $black;
+
+        img {
+          filter: $filter-grey-lighter;
+        }
+
+        &:hover {
+          img {
+            transform: scale(1.4);
+            filter: $filter-white;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin card {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 100%;
   padding: 2rem 1rem;
-  background-color: white;
-  text-align: center;
+  background-color: $white;
   transition: box-shadow $animation-medium $cubic-spring;
-  overflow: hidden;
 
   &:hover {
     box-shadow: $superSoftDownShadow;
   }
 
-  @include media('<=phone') {
-    width: 100%;
-    h2 {
-      font-size: $font-size-l;
-    }
-  }
-  @include media('>phone') {
-    h2 {
-      font-size: $font-size-m;
-    }
-  }
-
-  figure {
+  .figure {
     position: relative;
-    display: flex;
     flex-shrink: 0;
-    justify-content: center;
-    align-items: center;
     width: 100px;
     height: 100px;
-    background-color: $pink-light;
     border-radius: 100%;
     overflow: hidden;
+  }
+
+  .grid {
+    display: grid;
+    grid-template:
+      'links' auto
+      'name' auto
+      'title' auto
+      'description' auto;
+    width: 100%;
+    padding-top: 1rem;
+    text-align: center;
+    justify-items: center;
+    gap: 1rem;
+
+    .name {
+      font-weight: 800;
+
+      @include media('<=phone') {
+        font-size: $font-size-l;
+      }
+      @include media('>phone') {
+        font-size: $font-size-m;
+      }
+    }
+
+    .title {
+      margin: 0;
+      font-size: $font-size-s;
+    }
+
+    .socialMediaLink {
+      width: 32px;
+      height: 32px;
+      background-color: $grey-lighter;
+
+      img {
+        filter: $filter-grey-light;
+      }
+
+      &:hover {
+        img {
+          transform: scale(1.15);
+          filter: $filter-black;
+        }
+      }
+    }
+  }
+}
+
+.container {
+  position: relative;
+
+  &.card {
+    @include card();
+  }
+
+  &:not(.card) {
+    @include media('<=phone') {
+      @include card();
+    }
+    @include media('>phone') {
+      @include presentation();
+    }
+  }
+
+  > *,
+  a {
+    color: $black;
+  }
+  .name {
+    z-index: 2;
+    grid-area: name;
+    margin: 0;
+  }
+
+  .title {
+    position: relative;
+    grid-area: title;
 
     span {
-      padding-top: 1rem;
+      padding: 0 1ex;
+      background-color: $blue;
       color: $white;
-      font-family: $font-family-eloquent;
-      font-size: 4rem;
-    }
-
-    img {
-      object-fit: cover;
     }
   }
 
-  h2 {
-    z-index: 2;
-    font-weight: 800;
-    a {
-      color: $black;
+  .figure {
+    .noImagePlaceholder {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background-color: $green-light;
+
+      span {
+        position: relative;
+        top: 8px;
+        color: $white;
+        font-family: $font-family-eloquent;
+        font-size: 3rem;
+      }
     }
   }
 
-  h4 {
-    padding: 0 1ex;
-    margin-top: 0.5rem;
-    background-color: $blue;
-    color: $white;
-    font-size: $font-size-s;
-    //color: $grey;
-    //font-family: $font-family-garamond;
-    //font-style: italic;
-    font-weight: 400;
-  }
-
-  p {
-    padding-top: 0.5rem;
+  .description {
+    grid-area: description;
+    margin: 0;
     font-family: $font-family-garamond;
     font-size: $font-size-m;
   }
 
   .socialMediaContainer {
     justify-content: center;
-    padding: 1rem 0;
+    grid-area: links;
 
     .socialMediaLink {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 24px;
-      height: 24px;
-      background-color: $grey-lighter;
       border-radius: 100%;
 
       &:not(:first-child) {
@@ -101,14 +221,8 @@
       }
 
       img {
-        transition: filter $animation-fast $cubic-spring;
-        filter: $filter-grey-light;
-      }
-
-      &:hover {
-        img {
-          filter: $filter-grey-dark;
-        }
+        transition: filter $animation-fast $cubic-spring,
+          transform $animation-fast $cubic-spring-more;
       }
     }
   }

@@ -148,50 +148,6 @@ input::placeholder {
   @include a();
 }
 
-@keyframes route-change-in {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-100%);
-  }
-}
-
-@keyframes route-change-out {
-  from {
-    transform: translateY(-100%);
-  }
-
-  to {
-    transform: translateY(-200%);
-  }
-}
-
-.route-change-splash {
-  position: fixed;
-  right: 0;
-  bottom: -100vh;
-  z-index: 2000;
-  width: 100vw;
-  height: 100vh;
-  background-color: $pink;
-
-  &.animate-in {
-    animation-duration: $animation-slow;
-    animation-name: route-change-in;
-    animation-timing-function: ease-in;
-    animation-fill-mode: both;
-  }
-
-  &.animate-out {
-    animation-duration: $animation-medium;
-    animation-name: route-change-out;
-    animation-timing-function: ease-out;
-    animation-fill-mode: both;
-  }
-}
-
 .disable-scroll {
   overflow: hidden;
   height: 100vh;
