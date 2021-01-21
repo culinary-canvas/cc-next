@@ -4,7 +4,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../article/Article.model'
 import { PageHead } from '../../../head/PageHead'
-import { classnames } from '../../../services/importHelpers'
+import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
@@ -63,7 +63,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
   return (
     <>
       <PageHead
-        title={`Culinary Canvas — #${person.name} (${articles.length} articles)`}
+        title={`Culinary Canvas — #${person.name} (${!isNil(articles) ? articles.length : 0} articles)`}
         image={person.image?.cropped?.url || articles[0]?.imageContent.url}
         imageWidth={
           person.image?.cropped?.width ||

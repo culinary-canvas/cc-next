@@ -14,6 +14,8 @@ export function useTransformToModels<T>(
         return source
           .filter((o) => !!o)
           .map((o) => Transformer.dbToModel(o, Clazz))
+      } else {
+        return []
       }
     },
     [Clazz],
