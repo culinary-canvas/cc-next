@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 // import 'firebase/storage'
 
 export const initFirebase = () => {
-  console.debug('Initializing Firebase...')
   try {
     firebase.initializeApp({
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

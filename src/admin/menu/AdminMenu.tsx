@@ -27,7 +27,7 @@ export function AdminMenu({ className, linkClassName }: Props) {
   return (
     <div className={classnames(s.container, className)}>
       <Link href="/admin/articles">
-        <motion.span
+        <motion.a
           variants={linkVariants}
           initial={
             router.pathname.includes('/admin/articles') ? 'hovered' : 'initial'
@@ -45,11 +45,11 @@ export function AdminMenu({ className, linkClassName }: Props) {
             variants={bottomBorderVariants}
             className={s.linkBottomBorder}
           />
-        </motion.span>
+        </motion.a>
       </Link>
 
       <Link href="/admin/companies">
-        <motion.span
+        <motion.a
           variants={linkVariants}
           initial={
             router.pathname.includes('/admin/companies') ? 'hovered' : 'initial'
@@ -67,11 +67,11 @@ export function AdminMenu({ className, linkClassName }: Props) {
             variants={bottomBorderVariants}
             className={s.linkBottomBorder}
           />
-        </motion.span>
+        </motion.a>
       </Link>
 
       <Link href="/admin/persons">
-        <motion.span
+        <motion.a
           variants={linkVariants}
           initial={
             router.pathname.includes('/admin/persons') ? 'hovered' : 'initial'
@@ -87,8 +87,32 @@ export function AdminMenu({ className, linkClassName }: Props) {
             variants={bottomBorderVariants}
             className={s.linkBottomBorder}
           />
-        </motion.span>
+        </motion.a>
       </Link>
+
+      <motion.a
+        href="/admin/articles/grid-preview"
+        target="_blank"
+        variants={linkVariants}
+        initial={
+          router.pathname.includes('/admin/articles/grid-preview')
+            ? 'hovered'
+            : 'initial'
+        }
+        whileHover="hovered"
+        className={classnames(s.link, linkClassName)}
+      >
+        Preview start page
+        <motion.span
+          initial={
+            router.pathname.includes('/admin/articles/grid-preview')
+              ? 'hovered'
+              : 'initial'
+          }
+          variants={bottomBorderVariants}
+          className={s.linkBottomBorder}
+        />
+      </motion.a>
     </div>
   )
 }

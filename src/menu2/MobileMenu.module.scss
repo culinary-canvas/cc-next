@@ -1,0 +1,109 @@
+@import '../styles/font';
+@import '../styles/color';
+@import '../styles/animation';
+
+.button {
+  z-index: 1001;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(80vw);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(80vw);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  height: 100vh;
+
+  background-color: $grey-lighter;
+  animation-duration: $animation-medium;
+  animation-name: slide-out;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+
+  &.open {
+    animation-duration: $animation-slow;
+    animation-name: slide-in;
+    animation-timing-function: ease-in;
+    animation-fill-mode: both;
+
+    &:before {
+      animation-duration: $animation-really-slow;
+      animation-name: fade-in;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: both;
+    }
+      > * {
+      opacity: 1;
+    }
+  }
+
+  &:before {
+    position: absolute;
+    top: 0;
+    right: 80vw;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparentize($black, 0.5);
+    content: '';
+    animation-duration: $animation-really-slow;
+    animation-name: fade-out;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  > * {
+    z-index: 30;
+    padding: 0.5rem 0;
+    color: $black;
+    font-size: $font-size-l;
+  }
+
+  .active {
+    color: $pink-dark;
+    pointer-events: none;
+  }
+}

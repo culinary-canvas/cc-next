@@ -7,7 +7,7 @@
   position: relative;
   display: grid;
   grid-template:
-    'image' auto
+    'image' 1fr
     'text' auto;
   height: 100%;
   max-width: 100%;
@@ -53,14 +53,23 @@
     display: grid;
     justify-content: flex-start;
     grid-area: text;
-    grid-template:
+
+    &.hasLabels {
+      grid-template:
       'title' auto
       'sub-heading' auto
-      'tags' auto
       'labels' auto;
+    }
+
+    &:not(.hasLabels) {
+      grid-template:
+      'title' auto
+      'sub-heading' auto;
+    }
+
+    padding: 1rem;
     background-color: $white;
     gap: 1rem;
-    padding: 1rem;
 
     .articleType {
       position: absolute;
@@ -75,8 +84,8 @@
     }
 
     .title {
-      padding: 1rem 0 0;
       grid-area: title;
+      padding: 1rem 0 0;
       font-weight: 800;
     }
 

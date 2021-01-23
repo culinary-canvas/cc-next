@@ -57,6 +57,7 @@ function ArticlesByTag({ articlesData, tag }: Props) {
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
+        <h1>#{tag}</h1>
         <ArticleGrid
           initialArticles={articlesWithLabels}
           load={async (last) =>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import s from './start.module.scss'
 import { classnames } from '../services/importHelpers'
 import { ArticleModel } from '../article/Article.model'
@@ -6,10 +6,11 @@ import { PageHead } from '../head/PageHead'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
-import { useTransformToModel } from '../hooks/useTransformToModel'
 import { initFirebase } from '../services/firebase/Firebase'
 import { Splash } from '../article/grid/splash/Splash'
 import { useTransformToModels } from '../hooks/useTransformToModels'
+import { useMenu } from '../menu2/Menu.context'
+import { menuOptions } from '../menu2/menuOptions'
 
 interface Props {
   articlesData: any[]
@@ -19,6 +20,9 @@ const PAGE_SIZE = 6
 
 function Start({ articlesData }: Props) {
   const articles = useTransformToModels(articlesData, ArticleModel)
+
+  const { setActiveMenuOption } = useMenu()
+  useEffect(() => setActiveMenuOption(menuOptions.ALL), [])
 
   return (
     <>

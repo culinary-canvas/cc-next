@@ -12,12 +12,11 @@ function AdminHome() {
 
   return (
     <main className={s.container}>
+      <h1>Admin</h1>
       {!auth.isSignedIn ? (
         <SignIn />
       ) : (
-        <>
-          <AdminMenu className={s.menuContainer} linkClassName={s.link}/>
-        </>
+        <AdminMenu className={s.menuContainer} linkClassName={s.link} />
       )}
     </main>
   )

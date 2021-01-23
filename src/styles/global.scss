@@ -32,7 +32,7 @@ body {
   height: 100%;
   min-height: 100vh;
 
-  > * {
+  > *:not(header) {
     transition: transform $animation-really-fast ease-in-out,
       width $animation-really-fast ease-in-out;
   }

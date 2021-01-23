@@ -7,13 +7,14 @@ import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
-import { useTransformToModel } from '../../hooks/useTransformToModel'
 import { ArticleTypeService } from '../../article/shared/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
 import { initFirebase } from '../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../_app'
 import { useTransformToModels } from '../../hooks/useTransformToModels'
+import { useMenu } from '../../menu2/Menu.context'
+import { menuOptions } from '../../menu2/menuOptions'
 
 interface Props {
   articlesData: any[]
@@ -25,6 +26,9 @@ const PAGE_SIZE = 6
 function ArticlesPerType({ articlesData, type }: Props) {
   const articles = useTransformToModels(articlesData, ArticleModel)
   const router = useRouter()
+  const { setActiveMenuOption, activeMenuOption } = useMenu()
+
+  useEffect(() => setActiveMenuOption(menuOptions[type]), [type])
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   if (router.isFallback) {
@@ -43,6 +47,7 @@ function ArticlesPerType({ articlesData, type }: Props) {
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
+        <h1>{activeMenuOption?.text}</h1>
         <ArticleGrid
           initialArticles={articles}
           load={async (last) =>
