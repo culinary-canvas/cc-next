@@ -15,8 +15,8 @@ export default function About() {
       />
 
       <main className={s.container}>
-        <h1>Culinary Canvas</h1>
         <article className={s.content}>
+          <h1>Culinary Canvas</h1>
           <section>
             <p>
               At Culinary Canvas, we celebrate the craftsmanship of the world's
