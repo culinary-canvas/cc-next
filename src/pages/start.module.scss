@@ -1,5 +1,5 @@
 @import 'src/styles/grid';
 
 .container {
-  margin-top: $header-height;
+  @include responsive-header-height-padding-top();
 }

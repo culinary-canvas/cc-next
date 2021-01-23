@@ -13,8 +13,8 @@ import { initFirebase } from '../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../_app'
 import { useTransformToModels } from '../../hooks/useTransformToModels'
-import { useMenu } from '../../menu2/Menu.context'
-import { menuOptions } from '../../menu2/menuOptions'
+import { useMenu } from '../../menu/Menu.context'
+import { menuOptions } from '../../menu/menuOptions'
 
 interface Props {
   articlesData: any[]

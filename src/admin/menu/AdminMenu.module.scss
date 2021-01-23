@@ -3,19 +3,27 @@
 .container {
   display: flex;
 
-  .link {
+  button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: $blue;
+    white-space: nowrap;
+  }
+
+  .link:not(button) {
+    position: relative;
     padding: 0.5rem;
     cursor: pointer;
     color: $blue;
-    position: relative;
-    width: 100%;
 
     .linkBottomBorder {
+      position: absolute;
+      left: 0;
       display: block;
       width: 0;
       height: 4px;
-      left: 0;
-      position: absolute;
     }
   }
 }

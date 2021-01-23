@@ -1,74 +1,66 @@
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import { useAuth } from '../services/auth/Auth'
-import { animated } from 'react-spring'
 import s from './MobileMenu.module.scss'
-import MenuOption from './MenuOption'
-import { MenuButton } from './MenuButton'
-import { useMenu } from './useMenu'
+import Link from 'next/link'
+import { menuOptions } from './menuOptions'
+import { useMenu } from './Menu.context'
+import { classnames } from '../services/importHelpers'
+import { MenuButton } from './button/MenuButton'
 
-export function MobileMenu() {
-  const router = useRouter()
-  const auth = useAuth()
-  const {
-    options,
-    open,
-    close,
-    containerAnimations,
-    optionsAnimations,
-    markerAnimations,
-    addOptionElementRef,
-    moveMarker,
-  } = useMenu()
-  const [isLoading, setLoading] = useState<boolean>(false)
-  const [isOpen, setOpen] = useState<boolean>(false)
+interface Props {
+  className?: string
+  buttonClassName?: string
+}
+
+export function MobileMenu(props: Props) {
+  const { className, buttonClassName } = props
+  const { activeMenuOption } = useMenu()
+
+  const [open, setOpen] = useState<boolean>(false)
+  const [first, setFirst] = useState<boolean>(true)
 
   return (
-    <animated.nav style={{ ...containerAnimations }} className={s.menu}>
-      {optionsAnimations.map((animationProps, i) => {
-        const definition = options[i]
-        return (
-          <MenuOption
-            className={s.option}
-            key={i}
-            show={isOpen}
-            style={animationProps}
-            definition={definition}
-            onRender={(ref) => addOptionElementRef(definition.name, ref)}
-            onClick={async (def) => {
-              moveMarker(def.name)
-              if (definition.name === 'signOut') {
-                setLoading(true)
-                await auth.signOut()
-                router.push('/')
-              }
-            }}
-            isLoading={isLoading}
-          />
-        )
-      })}
-
-      <animated.span
-        className={s.activeMarker}
-        style={{
-          ...markerAnimations,
-        }}
-      />
-
+    <>
       <MenuButton
-        onClick={async () => {
-          if (!isOpen) {
-            setOpen(true)
-            open()
-          } else {
-            await close()
-            setOpen(false)
-          }
+        open={open}
+        onClick={() => {
+          setOpen(!open)
+          setFirst(false)
         }}
-        isOpen={isOpen}
-        className={s.menuButton}
-        barThickness={2}
+        className={classnames(
+          s.button,
+          {
+            [s.open]: open,
+          },
+          buttonClassName,
+        )}
       />
-    </animated.nav>
+
+      <div
+        className={classnames(s.backdrop, {
+          [s.open]: open,
+          [s.close]: !open && !first,
+        })}
+      />
+
+      <div
+        className={classnames(
+          s.container,
+          { [s.open]: open, [s.close]: !open && !first },
+          className,
+        )}
+      >
+        {Object.values(menuOptions).map((option) => (
+          <Link key={option.href} href={option.href}>
+            <a
+              className={classnames({
+                [s.active]: option.equals(activeMenuOption),
+              })}
+            >
+              {option.text}
+            </a>
+          </Link>
+        ))}
+      </div>
+    </>
   )
 }

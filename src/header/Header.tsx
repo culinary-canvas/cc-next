@@ -3,11 +3,11 @@ import s from './Header.module.scss'
 import Link from 'next/link'
 import Logo from '../../public/assets/logo.svg'
 import { useRouter } from 'next/router'
-import { Menu } from '../menu2/Menu'
+import { Menu } from '../menu/Menu'
 import { isServer } from '../pages/_app'
 import { classnames } from '../services/importHelpers'
 import { BrowserView, MobileView } from 'react-device-detect'
-import { MobileMenu } from '../menu2/MobileMenu'
+import { MobileMenu } from '../menu/MobileMenu'
 
 export const Header = () => {
   const router = useRouter()
@@ -23,7 +23,6 @@ export const Header = () => {
       }
     }
     if (!isServer) {
-      console.log('adding')
       window.addEventListener('scroll', onScroll)
     }
     return () => window.removeEventListener('scroll', onScroll)
@@ -45,12 +44,8 @@ export const Header = () => {
           />
         </a>
       </Link>
-      <BrowserView>
-        <Menu className={s.menu} />
-      </BrowserView>
-      <MobileView>
-        <MobileMenu className={s.menu} />
-      </MobileView>
+      <Menu className={classnames(s.menu, s.desktop)} />
+      <MobileMenu className={classnames(s.menu, s.mobile)} buttonClassName={s.mobile}/>
     </header>
   )
 }

@@ -7,8 +7,8 @@
   @include main-container-width();
 
   @include media('<=phone') {
-    grid-template-columns: 1fr;
     grid-auto-rows: minmax(1fr, 800px);
+    grid-template-columns: 1fr;
     padding: 1rem;
     gap: 2rem;
   }
@@ -32,7 +32,7 @@
     @include media('>tablet') {
       height: 100%;
 
-      &:first-child {
+      &:first-child.promoted {
         grid-column-end: span 3;
       }
 
@@ -70,8 +70,8 @@
 }
 
 .end {
-  width: 100%;
   display: flex;
   justify-content: center;
+  width: 100%;
   padding: 2rem 0 4rem;
 }
