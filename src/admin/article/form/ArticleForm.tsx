@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react'
 import { classnames } from '../../../services/importHelpers'
 import { SectionEdit } from './section/SectionEdit'
@@ -20,17 +20,14 @@ export const ArticleForm = observer((props: Props) => {
   const [persons, setPersons] = useState<PersonModel[]>([])
   const [companies, setCompanies] = useState<CompanyModel[]>([])
 
-  if (!article) {
-    return null
-  }
+  useAutorun(() => {
+    !!article && PersonApi.byIds(article.personIds).then((p) => setPersons(p))
+  }, [article])
 
   useAutorun(() => {
-    PersonApi.byIds(article.personIds).then((p) => setPersons(p))
-  }, [article, article.personIds])
-
-  useAutorun(() => {
-    CompanyApi.byIds(article.companyIds).then((c) => setCompanies(c))
-  }, [article, article.personIds])
+    !!article &&
+      CompanyApi.byIds(article.companyIds).then((c) => setCompanies(c))
+  }, [article])
 
   const checkForUnlinkedMentions = useCallback(() => {
     persons.forEach((p) =>
@@ -41,20 +38,9 @@ export const ArticleForm = observer((props: Props) => {
     )
   }, [persons, companies, article])
 
-  useEffect(() => checkForUnlinkedMentions(), [checkForUnlinkedMentions])
-
-  /* TODO: Should only check the content that has changed...
-  useAutorun(
-    () =>
-      article.contents
-        .filter((c) => c instanceof TextContentModel)
-        .map((c: TextContentModel) => c.value)
-        .join(''),
-    () => checkForUnlinkedMentions(),
-    [checkForUnlinkedMentions],
-    { fireImmediately: true },
-  )
-  */
+  if (!article) {
+    return null
+  }
 
   return (
     <>

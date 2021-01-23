@@ -9,7 +9,6 @@ import { ContentControls } from './content/ContentControls'
 import { useAdmin } from '../../../../Admin'
 import { ContentService } from '../../../../../article/content/Content.service'
 import { SectionService } from '../../../../../article/section/Section.service'
-import { toJS } from 'mobx'
 
 export const Controls = observer(() => {
   const admin = useAdmin()

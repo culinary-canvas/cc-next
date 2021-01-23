@@ -31,7 +31,6 @@ export const ArticleControls = observer(() => {
   const overlay = useOverlay()
   const { article } = admin
 
-  const [otherArticles, setOtherArticles] = useState<ArticleModel[]>([])
   const [editingSlug, editSlug] = useState<boolean>(false)
 
   const [title, setTitle] = useState<string>(article.title)
@@ -47,15 +46,6 @@ export const ArticleControls = observer(() => {
     () => article.title,
     (t) => setTitle(t),
   )
-
-  useEffect(() => {
-    if (!!article) {
-      ArticleApi.all().then((all) => {
-        const other = all.filter((a) => a.id !== article.id && !a.parentId)
-        setOtherArticles(other)
-      })
-    }
-  }, [article])
 
   if (!article) {
     return null
@@ -196,7 +186,7 @@ export const ArticleControls = observer(() => {
       await ArticleApi.delete(admin.article, auth.userId, (v, t) =>
         overlay.setProgress(v, t),
       )
-      setTimeout(() => overlay.toggle(), 1000)
+      setTimeout(() => overlay.toggle(false), 1000)
       router.replace('/admin/articles')
     }
   }
