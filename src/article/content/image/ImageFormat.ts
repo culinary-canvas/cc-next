@@ -1,19 +1,24 @@
 import { field } from '../../../services/db/decorators/field.decorator'
 import { observable } from 'mobx'
 import { Padding } from '../../shared/Padding'
-import { Format } from '../../shared/format/Format'
 import { HorizontalAlign } from '../../shared/HorizontalAlign'
 import { VerticalAlign } from '../../shared/VerticalAlign'
-import {SPACING} from '../../../styles/layout'
+import { SPACING } from '../../../styles/layout'
+import { Format } from '../../shared/format/Format'
+import { ImageFit } from './ImageFit'
 
-export class ImageFormat implements Format {
+export class ImageFormat extends Format {
   constructor(initial?: Partial<ImageFormat>) {
-    initial && Object.keys(initial).forEach((key) => (this[key] = initial[key]))
+    super(initial)
   }
 
   @field()
   @observable
-  size: number
+  maxHeight: number
+
+  @field()
+  @observable
+  fit = ImageFit.CONTAIN
 
   @field()
   @observable
@@ -27,11 +32,21 @@ export class ImageFormat implements Format {
   @observable
   padding = new Padding(SPACING.L)
 
+  /**
+   * @deprecated
+   */
   @field()
   @observable
   background = false
 
+  /**
+   * @deprecated
+   */
   @field()
   @observable
-  gridColumnWidth = 1
+  gridColumnWidth: number | 'min-content' | 'max-content' = 1
+
+  @field()
+  @observable
+  circle = false
 }

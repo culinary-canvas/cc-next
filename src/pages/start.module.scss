@@ -1,7 +1,5 @@
 @import 'src/styles/grid';
 
-@include gridContainer();
-
-.end.loading {
-  padding-top: 4rem;
+.container {
+  @include responsive-header-height-padding-top();
 }

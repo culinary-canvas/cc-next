@@ -1,19 +1,18 @@
 import { ArticleApi } from '../../article/Article.api'
-import { Transformer } from '../db/Transformer'
-import { ArticleModel } from '../../article/Article.model'
-import { TagModel } from '../../tag/Tag.model'
 import { TagApi } from '../../tag/Tag.api'
 
-export async function changeArticleTagIdsToTagNames(user) {
-  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
-  const tags = Transformer.allToApp(await TagApi.all(), TagModel)
+export async function changeArticleTagIdsToTagNames(userId: string) {
+  const articles = await ArticleApi.all()
+  const tags = await TagApi.all()
 
-  articles.forEach(
-    (a) =>
-      (a.tagNames = tags
-        .filter((t) => a.tagIds.includes(t.id))
-        .map((t) => t.name)),
-  )
+  articles
+    .filter((a) => !a.tagNames.length)
+    .forEach(
+      (a) =>
+        (a.tagNames = tags
+          .filter((t) => a.tagIds.includes(t.id))
+          .map((t) => t.name)),
+    )
 
-  return Promise.all(articles.map(async (a) => ArticleApi.save(a, user)))
+  return Promise.all(articles.map(async (a) => ArticleApi.save(a, userId)))
 }

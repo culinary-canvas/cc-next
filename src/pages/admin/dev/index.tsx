@@ -3,11 +3,17 @@ import { observer } from 'mobx-react'
 import { Button } from '../../../form/button/Button'
 import { fixSortOrders } from '../../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
-import { setArticleSlug } from '../../../services/script/setArticleSlug'
-import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
 import s from './dev.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useAuth } from '../../../services/auth/Auth'
+import { changeSectionPresetNames } from '../../../services/script/changeSectionPresetNames'
+import { transformToGridPositions } from '../../../services/script/transformToGridPositions'
+import { GetStaticProps } from 'next'
+import { updateImageFormats } from '../../../services/script/updateImageFormats'
+import { changeArticleTagIdsToTagNames } from '../../../services/script/changeArticleTagIdsToTagNames'
+import { changeArticleTypeHOW_TOToRECIPE } from '../../../services/script/changeArticleTypeHOW_TOToRECIPE'
+import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
+import { setPersonAndCompanySlugs } from '../../../services/script/setPersonAndCompanySlugs'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -23,19 +29,8 @@ const AdminDevArea = observer(() => {
       <div className={s.content}>
         <Button
           onClick={async () => {
-            setRunning('setArticleSlug')
-            await setArticleSlug(auth.user)
-            setRunning(null)
-          }}
-          loading={running === 'setArticleSlug'}
-        >
-          Set articles' slug
-        </Button>
-
-        <Button
-          onClick={async () => {
             setRunning('fixSortOrders')
-            await fixSortOrders(auth.user)
+            await fixSortOrders(auth.userId)
             setRunning(null)
           }}
           loading={running === 'fixSortOrders'}
@@ -56,17 +51,87 @@ const AdminDevArea = observer(() => {
 
         <Button
           onClick={async () => {
+            setRunning('changeSectionPresetNames')
+            await changeSectionPresetNames(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'changeSectionPresetNames'}
+        >
+          Update articles' section presets to new names
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('transformToGridPositions')
+            await transformToGridPositions(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'transformToGridPositions'}
+        >
+          transformToGridPositions
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('updateImageFormats')
+            await updateImageFormats(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'updateImageFormats'}
+        >
+          Update image formats
+        </Button>
+
+        <Button
+          onClick={async () => {
             setRunning('changeArticleTagIdsToTagNames')
-            await changeArticleTagIdsToTagNames(auth.user)
+            await changeArticleTagIdsToTagNames(auth.userId)
             setRunning(null)
           }}
           loading={running === 'changeArticleTagIdsToTagNames'}
         >
-          Set articles' tag names
+          Update articles' tag reference from ID to names
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('changeArticleTypeHOW_TOToRECIPE')
+            await changeArticleTypeHOW_TOToRECIPE(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'changeArticleTypeHOW_TOToRECIPE'}
+        >
+          Change articles' type from HOW_TO to RECIPE
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('setArticleTypeAsTag')
+            await setArticleTypeAsTag(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'setArticleTypeAsTag'}
+        >
+          Set article type as tag
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('setPersonAndCompanySlugs')
+            await setPersonAndCompanySlugs(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'setPersonAndCompanySlugs'}
+        >
+          Set Person and Company slugs
         </Button>
       </div>
     </div>
   )
 })
+
+export const getStaticProps: GetStaticProps = async () => {
+  return { props: {} }
+}
 
 export default AdminDevArea

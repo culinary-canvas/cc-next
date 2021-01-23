@@ -1,57 +1,62 @@
-import React, { useEffect, useState } from 'react'
-import s from './articlesPerType.module.scss'
+import React, { useEffect } from 'react'
+import s from './articlesByType.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleType } from '../../article/ArticleType'
+import { ArticleType } from '../../article/shared/ArticleType'
 import { ArticleModel } from '../../article/Article.model'
-import { Transformer } from '../../services/db/Transformer'
 import { PageHead } from '../../head/PageHead'
 import { classnames } from '../../services/importHelpers'
 import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
+import { ArticleTypeService } from '../../article/shared/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
+import { initFirebase } from '../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
+import { isServer } from '../_app'
+import { useTransformToModels } from '../../hooks/useTransformToModels'
+import { useMenu } from '../../menu/Menu.context'
+import { menuOptions } from '../../menu/menuOptions'
 
 interface Props {
-  articlesData: Partial<ArticleModel>[]
+  articlesData: any[]
   type: ArticleType
 }
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 6
 
 function ArticlesPerType({ articlesData, type }: Props) {
+  const articles = useTransformToModels(articlesData, ArticleModel)
   const router = useRouter()
+  const { setActiveMenuOption, activeMenuOption } = useMenu()
+
+  useEffect(() => setActiveMenuOption(menuOptions[type]), [type])
+  useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
   if (router.isFallback) {
-    return <main>Loading...</main>
+    if (isServer) {
+      return null
+    }
+    router.replace('/')
+    return null
   }
-
-  const [articles, setArticles] = useState<ArticleModel[]>(
-    Transformer.allToApp(articlesData, ArticleModel),
-  )
-
-  useEffect(() => {
-    setArticles(Transformer.allToApp(articlesData, ArticleModel))
-  }, [articlesData])
-
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.set.l.url}
-        imageWidth={articles[0].imageContent.set.l.width}
-        imageHeight={articles[0].imageContent.set.l.height}
+        image={articles[0].imageContent.url}
+        imageWidth={articles[0].imageContent.set.cropped.width}
+        imageHeight={articles[0].imageContent.set.cropped.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
+        <h1>{activeMenuOption?.text}</h1>
         <ArticleGrid
           initialArticles={articles}
-          load={async (lastLoaded) => {
-            const data = await ArticleApi.publishedByTypePagedBySortOrderDesc(
+          load={async (last) =>
+            ArticleApi.publishedByTypePagedBySortOrderDesc(
               type,
               PAGE_SIZE,
-              lastLoaded.sortOrder,
+              last.sortOrder,
             )
-            return !!data ? Transformer.allToApp(data, ArticleModel) : null
-          }}
+          }
         />
       </main>
     </>
@@ -59,18 +64,19 @@ function ArticlesPerType({ articlesData, type }: Props) {
 }
 
 interface StaticProps {
-  type: ArticleType
+  type: string
   [key: string]: string
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
-  console.log(Object.values(ArticleType))
   return {
-    paths: Object.values(ArticleType).map((type) => ({
-      params: {
-        type: StringUtils.toLowerKebabCase(type),
-      },
-    })),
+    paths: Object.values(ArticleType)
+      .filter((t) => t !== ArticleType.HOW_TO)
+      .map((type) => ({
+        params: {
+          type: StringUtils.toLowerKebabCase(type),
+        },
+      })),
     fallback: true,
   }
 }
@@ -79,17 +85,21 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const type = Object.values(ArticleType).find(
-    (t) => StringUtils.toLowerKebabCase(t) === params.type,
-  )
+  const { firestore } = initFirebase()
+  const type = ArticleTypeService.findByKebabCase(params.type)
 
-  const articlesData = await ArticleApi.publishedByTypePagedBySortOrderDesc(
-    type,
-    PAGE_SIZE,
-  )
+  const response = await firestore()
+    .collection('articles')
+    .where('published', '==', true)
+    .where('type', '==', type)
+    .orderBy('sortOrder', 'desc')
+    .limit(PAGE_SIZE)
+    .get()
+  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+
   return {
     props: {
-      articlesData,
+      articlesData: JSON.parse(JSON.stringify(articlesData)),
       type,
     },
     revalidate: 1,

@@ -1,5 +1,5 @@
-import firebase from 'firebase/app'
 import 'firebase/storage'
+import { initFirebase } from '../firebase/Firebase'
 
 export class StorageService {
   static async storeFile(
@@ -7,15 +7,13 @@ export class StorageService {
     path?: string,
     progressCallback?: (progress: number) => any,
   ): Promise<string> {
-    const uploadTask = firebase
-      .storage()
-      .ref()
-      .child(`${path}/${file.name}`)
-      .put(file)
+    const { storage } = initFirebase()
+
+    const uploadTask = storage().ref().child(`${path}/${file.name}`).put(file)
 
     return new Promise<string>((resolve, reject) => {
       uploadTask.on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
+        storage.TaskEvent.STATE_CHANGED,
         (snapshot) =>
           !!progressCallback &&
           progressCallback(snapshot.bytesTransferred / snapshot.totalBytes),

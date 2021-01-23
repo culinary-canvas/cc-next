@@ -1,23 +1,23 @@
 @import '../../../../../../../styles/color';
 
-.fixedSizeContainer {
+.label {
+  margin-top: 1rem;
+}
+
+.row{
   display: flex;
-  align-items: flex-end;
-  padding-bottom: 0.5rem;
+  > *:not(:first-child){
+    margin-left: 0.5rem;
+  }
+}
 
-  .fixedSizeCheckbox {
-    flex-shrink: 2;
-    padding-bottom: 0;
-    margin-top: 1rem;
-    margin-bottom: 0;
+.imageEdit {
+  position: relative;
+  height: 200px;
+  margin: 0.5rem 0 1rem;
+  overflow: hidden;
 
-    label {
-      color: $black;
-      text-transform: none;
-      font-size: 14px;
-    }
-    input {
-      height: 1.5rem;
-    }
+  * {
+    height: 100%;
   }
 }

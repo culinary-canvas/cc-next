@@ -1,4 +1,9 @@
 @import '../styles/article';
+@import '../styles/grid';
+
+.gridContainer {
+  @include gridContainer();
+}
 
 .content {
   @include articleContent();
@@ -6,22 +11,6 @@
 
 .footer {
   @include articleFooter();
-  > * {
-    margin: 0 1rem;
-  }
-
-  > :first-child {
-    width: 20%;
-  }
-  .tags {
-    justify-content: center;
-    width: 40%;
-  }
-
-  .share {
-    justify-content: flex-end;
-    width: 40%;
-  }
 }
 
 .editButton {

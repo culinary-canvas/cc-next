@@ -1,20 +1,20 @@
 import React from 'react'
 import { ArticleList } from '../../../admin/article/list/ArticleList'
 import { GetServerSideProps } from 'next'
-import { initFirebase } from '../../../services/firebase/Firebase.service'
-import { ArticleApi } from '../../../article/Article.api'
 import { ArticleModel } from '../../../article/Article.model'
-import { useTransform } from '../../../hooks/useTransform'
 import s from './articleList.module.scss'
-import {useAuth} from '../../../services/auth/Auth'
-import {useAuthGuard} from '../../../hooks/useAuthGuard'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import ArticleApi from '../../../article/Article.api'
+import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
-  articleData: Partial<ArticleModel>[]
+  articleData: { [key: string]: any }[]
 }
 
 function ArticleListPage({ articleData }: Props) {
-  const articles = useTransform(articleData, ArticleModel)
+  const articles = useTransformToModels(articleData, ArticleModel)
   const allowed = useAuthGuard()
 
   if (!allowed) {
@@ -22,17 +22,18 @@ function ArticleListPage({ articleData }: Props) {
   }
   return (
     <main className={s.container}>
+      <AdminMenu/>
       <ArticleList articles={articles} />
     </main>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  initFirebase()
-  const articleData = await ArticleApi.all()
+  const articleData = await ArticleApi.allNoTransform()
+
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
   }
 }

@@ -6,16 +6,19 @@
 
 .sidebarButton {
   position: fixed;
-  top: $spacing-l;
+  top: 0.5rem;
   left: $spacing-s;
+  display: flex;
   z-index: 50;
-  width: 36px;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
   height: 36px;
-  padding: 0.5rem 6px;
   margin: 0 !important;
   background-color: $white;
   border: 2px solid $black;
   border-radius: 99px;
+  overflow: hidden;
 
   &.open {
     left: -$icon-size-l/2;
@@ -36,27 +39,19 @@
 }
 
 .menuButton {
-  :nth-child(1),
-  :nth-child(3) {
-    width: 16px !important;
-  }
-
-  :nth-child(2) {
-    width: 20px !important;
-  }
+  transform: scale(0.8)
 }
 
 .container {
   position: fixed;
-  display: flex;
   z-index: 10;
-  flex-direction: column;
   width: 0;
   height: 100vh;
-  background-color: $grey-light;
+  background-color: $grey-dark;
   border-right: 1px solid $grey;
-  transition: all $animation-really-fast ease-in-out;
-  overflow: auto;
+  transition: all $animation-slow ease-in-out;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   &.open {
     @include sidebar-width();
@@ -68,20 +63,25 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 100%;
+    width: 100%;
 
+    > *:nth-child(2) {
+      padding-top: 4rem;
+    }
     > *:last-child {
       margin-bottom: 2rem;
     }
 
     .buttons {
+      position: fixed;
       display: flex;
       justify-content: center;
-      width: 100%;
-      border-bottom: 1px solid $grey-light;
+      @include sidebar-width();
+      z-index: 300;
+      background-color: $grey-dark;
 
       button {
-        background-color: $grey-light;
+        background-color: $white;
 
         &:not(:first-child) {
           margin-left: $spacing-m;

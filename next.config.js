@@ -1,16 +1,15 @@
 const withImages = require('next-images')
-const withStyles = require('@webdeb/next-styles')
-
-module.exports = withImages(
-  withStyles({
-    sass: true,
-    modules: true,
-    sassLoaderOptions: {
-      sassOptions: {
-        includePaths: ['src/styles'],
-      },
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+module.exports = withBundleAnalyzer(
+  withImages({
+    sassOptions: {
+      includePaths: ['src/styles'],
     },
-    miniCssExtractOptions: { ignoreOrder: true },
+    images: {
+      domains: ['firebasestorage.googleapis.com'],
+    },
   }),
 )
 

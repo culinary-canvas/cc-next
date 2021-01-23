@@ -2,42 +2,119 @@
 @import 'layout';
 @import 'color';
 @import 'font';
+@import 'shadow';
 
 @mixin controls {
   display: flex;
   flex-direction: column;
   flex-grow: 2;
   width: calc(100% - 2rem);
-  padding: 1rem;
-  margin: 0 0.5rem 0.5rem 0;
-  background-color: $white;
+  padding: 0.5rem;
+  margin: 0 0.5rem 2rem 0;
+  box-shadow: $softCenteredShadow;
+  background-color: $grey-lighter;
   border-radius: 0 8px 8px 8px;
 
+  > button{
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@mixin controlContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: $superSoftDownShadow;
+  background-color: $white;
+  border-radius: 8px;
+}
+
+@mixin label() {
+  margin-right: auto;
+  margin-left: 0;
+  color: $grey;
+  text-transform: uppercase;
+  font-size: $font-size-s;
+  font-weight: 700;
+}
+
+@mixin controlLabelContainer {
+  display: flex;
+  justify-content: flex-end;
+  height: 1.5rem;
+
   label {
-    padding-bottom: 0;
-    color: $grey;
-    text-transform: uppercase;
+    @include label();
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem 0.2rem 0;
+    font-size: $font-size-xs;
+  }
+
+  button {
+    position: relative;
+    bottom: 0.2rem !important;
+    display: flex;
+    align-items: center;
+    min-width: $icon-size-m;
+    min-height: $icon-size-m !important;
+    padding: 0 4px;
+    margin-left: 0.5rem !important;
+    border: 1px solid $grey-lighter !important;
+    font-size: $font-size-xs;
+    font-weight: 400;
+
+    img {
+      height: $icon-size-xs;
+      &:not(:last-child) {
+        padding-right: 1ex;
+      }
+    }
+  }
+}
+
+@mixin controlContent {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  > label {
+    @include label();
+  }
+
+  * {
     font-size: $font-size-s;
-    font-weight: 700;
+  }
+
+  span {
+    padding-bottom: 0.5rem;
+  }
+
+  input[type='checkbox'] {
+    height: 1.5rem;
   }
 
   select {
     width: 100%;
   }
 
+  input:not([type='checkbox']) {
+    align-items: flex-end;
+    vertical-align: bottom;
+    width: 100%;
+  }
+
   textarea {
     width: 100%;
     margin: 1rem 0;
-    border: 1px solid $grey-light;
+    border: 1px solid $grey-lighter;
     font-family: $font-family-filson;
     font-weight: 400;
-  }
-}
-
-@mixin align-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  > * {
-    padding-right: 0.5rem;
   }
 }

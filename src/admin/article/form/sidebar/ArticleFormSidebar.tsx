@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import classnames from 'classnames'
-import { MenuButton } from '../../../../menu/MenuButton/MenuButton'
 import { Button } from '../../../../form/button/Button'
-import { Controls } from './controls/Controls'
-import { ArticleApi } from '../../../../article/Article.api'
-import { COLOR } from '../../../../styles/color'
 import { useAuth } from '../../../../services/auth/Auth'
 import s from './ArticleFormSidebar.module.scss'
 import { useRouter } from 'next/router'
 import { useAdmin } from '../../../Admin'
 import { useOverlay } from '../../../../shared/overlay/OverlayStore'
+import { Controls } from './controls/Controls'
+import ArticleApi from '../../../../article/Article.api'
+import { OverlayConfirm } from '../../../../shared/overlay/OverlayConfirm'
+import { MenuButton } from '../../../../menu/button/MenuButton'
 
 interface Props {}
 
@@ -21,12 +21,6 @@ const ArticleFormSidebar = observer((props: Props) => {
   const overlay = useOverlay()
 
   const [saving, setSaving] = useState<boolean>(false)
-  const [deleting, setDeleting] = useState<boolean>(false)
-
-  const onProgress = (progress, message) => {
-    message && overlay.setText(message)
-    overlay.setProgress(progress)
-  }
 
   return (
     <>
@@ -37,6 +31,7 @@ const ArticleFormSidebar = observer((props: Props) => {
         ])}
       >
         <MenuButton
+          open={admin.sidebarOpen}
           onClick={() => {
             admin.setSidebarOpen(!admin.sidebarOpen)
           }}
@@ -54,20 +49,22 @@ const ArticleFormSidebar = observer((props: Props) => {
         <article className={s.content}>
           <section className={s.buttons}>
             <Button
-              color={COLOR.GREY_DARK}
               onClick={() => {
-                let goodToGo = true
                 if (admin.formControl.isDirty) {
-                  goodToGo = window.confirm(
-                    'You have unsaved changes. Are you sure you want to leave this page?',
+                  overlay.setChildren(
+                    <OverlayConfirm
+                      onOk={() => router.back()}
+                      title="Are you sure?"
+                      message="'You have unsaved changes. Are you sure you want to leave this page?'"
+                    />,
                   )
-                }
-                if (goodToGo) {
+                  overlay.toggle()
+                } else {
                   router.back()
                 }
               }}
             >
-              Back
+              {admin.formControl.isDirty ? 'Cancel' : 'Back'}
             </Button>
 
             <Button
@@ -80,17 +77,6 @@ const ArticleFormSidebar = observer((props: Props) => {
             >
               Save
             </Button>
-
-            {!!admin.article?.id && (
-              <Button
-                loading={deleting}
-                color={COLOR.RED}
-                loadingText="Deleting"
-                onClick={onDelete}
-              >
-                Delete...
-              </Button>
-            )}
           </section>
 
           <Controls />
@@ -102,7 +88,9 @@ const ArticleFormSidebar = observer((props: Props) => {
   async function onSave() {
     setSaving(true)
     overlay.toggle()
-    const id = await ArticleApi.save(admin.article, auth.user, onProgress)
+    const id = await ArticleApi.save(admin.article, auth.userId, (v, t) =>
+      overlay.setProgress(v, t),
+    )
 
     setTimeout(async () => {
       const { slug } = await ArticleApi.byId(id)
@@ -113,19 +101,6 @@ const ArticleFormSidebar = observer((props: Props) => {
     }, 1000)
 
     setSaving(false)
-  }
-
-  async function onDelete() {
-    const goodToGo = window.confirm(
-      'Are you really, really sure want to delete this article?',
-    )
-    if (goodToGo) {
-      setDeleting(true)
-      overlay.toggle()
-      await ArticleApi.delete(admin.article, auth.user, onProgress)
-      setTimeout(() => overlay.toggle(), 1000)
-      router.replace('/admin/articles')
-    }
   }
 })
 

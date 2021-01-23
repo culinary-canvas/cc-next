@@ -1,0 +1,23 @@
+@import 'src/styles/page';
+@import 'src/styles/color';
+@import 'src/styles/font';
+
+.container {
+  @include pageContainer();
+  background-color: $white;
+
+  .menuContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    .link {
+      font-size: $font-size-m;
+
+      &:hover{
+        color: $blue;
+      }
+    }
+  }
+}

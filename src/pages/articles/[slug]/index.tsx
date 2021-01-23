@@ -1,40 +1,33 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { ArticleModel } from '../../../article/Article.model'
-import { useRouter } from 'next/router'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleApi } from '../../../article/Article.api'
-import { useTransform } from '../../../hooks/useTransform'
-import { PlainObject } from '../../../services/types/PlainObject'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import s from './articlePage.module.scss'
 import { ContentType } from '../../../article/content/ContentType'
 import { TextContentModel } from '../../../article/content/text/TextContent.model'
 import { PageHead } from '../../../head/PageHead'
 import { Article } from '../../../article/Article'
+import { ArticleApi } from '../../../article/Article.api'
+import { initFirebase } from '../../../services/firebase/Firebase'
 
 interface Props {
-  articleData: PlainObject<ArticleModel>
+  articleData: any
 }
 
 const ArticlePage = observer(({ articleData }: Props) => {
-  const router = useRouter()
-
-  if (router.isFallback) {
-    return <main>Loading...</main>
-  }
-
-  const article = useTransform([articleData], ArticleModel)[0]
+  const article = useTransformToModel(articleData, ArticleModel)
 
   return (
     <>
       <PageHead
-        image={article.imageContent.set.l.url}
-        imageWidth={article.imageContent.set.l.width}
-        imageHeight={article.imageContent.set.l.height}
+        image={article.imageContent.url}
+        imageWidth={article.imageContent.set.cropped.width}
+        imageHeight={article.imageContent.set.cropped.height}
         imageAlt={article.imageContent.alt}
         title={article.title}
         description={
-          (article.titleSection.sortedContents.find(
+          (article.titleSection.contents.find(
             (c) => c.type === ContentType.SUB_HEADING,
           ) as TextContentModel)?.value
         }
@@ -60,18 +53,24 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
         slug: article.slug,
       },
     })),
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 
-export const getStaticProps: GetStaticProps<
-  Props & { [key: string]: any },
-  StaticProps
-> = async ({ params }) => {
-  const articleData = await ArticleApi.bySlug(params.slug)
+export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
+  params,
+}) => {
+  const { firestore } = initFirebase()
+
+  const response = await firestore()
+    .collection('articles')
+    .where('slug', '==', params.slug)
+    .get()
+  const articleData = !!response.size ? response.docs[0].data() : []
+
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
     revalidate: 1,
   }

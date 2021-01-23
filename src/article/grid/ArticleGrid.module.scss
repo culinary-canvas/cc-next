@@ -4,28 +4,74 @@
 
 .grid {
   display: grid;
-  grid-auto-flow: row;
-  grid-template-rows: minmax(10%, max-content);
-  @include main-content-width();
+  @include main-container-width();
 
   @include media('<=phone') {
+    grid-auto-rows: minmax(1fr, 800px);
     grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  @include media('>phone') {
-    grid-template-columns: minmax(40%, auto) minmax(40%, auto);
-    gap: 5rem;
+    padding: 1rem;
+    gap: 2rem;
   }
 
-  .article {
-    &.promoted {
-      @include media('>phone') {
+  @include media('>phone') {
+    grid-auto-flow: dense;
+    grid-auto-rows: minmax(1fr, 800px);
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-bottom: 4rem;
+    gap: 4rem;
+  }
+
+  a {
+    color: black;
+  }
+
+  .articleContainer {
+    &:after {
+      display: none;
+    }
+    @include media('>tablet') {
+      height: 100%;
+
+      &:first-child.promoted {
+        grid-column-end: span 3;
+      }
+
+      &:not(:first-child).promoted {
         grid-column-end: span 2;
+      }
+
+      &:not(:first-child, .promoted) {
+        grid-column-end: span 1;
       }
     }
 
-    &:not(.promoted) {
-      grid-column-end: span 1;
+    @include media('>phone', '<=tablet') {
+      height: 100%;
+      &.promoted {
+        grid-column-end: span 2;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
+    }
+
+    @include media('<=phone') {
+      height: 80vh;
+      &.promoted {
+        grid-column-end: span 1;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
     }
   }
+}
+
+.end {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 0 4rem;
 }

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { v1 as uuid } from 'uuid'
 import s from './Slider.module.scss'
 import ReactSlider from 'react-slider'
-import {classnames} from '../../services/importHelpers'
+import { classnames } from '../../services/importHelpers'
 
 interface Props {
   label?: string
@@ -53,7 +53,7 @@ export const Slider = observer((props: Props) => {
 
       <ReactSlider
         className={s.slider}
-        thumbClassName={s.thumb}
+        thumbClassName={classnames(s.thumb, { [s.disabledThumb]: disabled })}
         trackClassName={s.track}
         value={value}
         min={min}
@@ -68,12 +68,17 @@ export const Slider = observer((props: Props) => {
         id={uid.current}
         value={value}
         type="number"
-        onChange={(v) => onChange(Number(v.target.value))}
+        onChange={(v) => {
+          let inputValue = Number(v.target.value)
+          if (inputValue <= max && inputValue >= min) {
+            onChange(inputValue)
+          }
+        }}
         min={min}
         max={max}
         style={{ width: `${inputWidth}rem` }}
+        className={classnames({ [s.disabledInput]: disabled })}
       />
-
       {children}
     </div>
   )

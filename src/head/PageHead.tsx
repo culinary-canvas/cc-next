@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import YearMonth from '../services/dateTime/YearMonth'
 import { IS_PROD } from '../pages/_app'
 
 interface Props {
@@ -56,7 +55,7 @@ export function PageHead(props: Props) {
       {robotsValue && <meta name="robots" content={robotsValue} />}
       <meta
         name="copyright"
-        content={`Copyright (c) Culinary Canvas ${YearMonth.create().year}`}
+        content={`Copyright (c) Culinary Canvas ${new Date().getFullYear()}`}
       />
       <meta property="quote" key="quote" content={description} />
       <meta property="image" key="image" content={image} />

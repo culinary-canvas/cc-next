@@ -5,29 +5,40 @@ import { classnames } from '../../../services/importHelpers'
 import { ContentType } from '../ContentType'
 import s from './TextContent.module.scss'
 import { useAutorun } from '../../../hooks/useAutorun'
+import { GridPositionService } from '../../grid/GridPosition.service'
+import ReactMarkdown from 'react-markdown'
+import { motion } from 'framer-motion'
+import { TextContentService } from './TextContent.service'
 
 interface Props {
   content: TextContentModel
+  index: number
+  onClick?: () => any
   style?: CSSProperties
 }
 
 export const TextContent = observer((props: Props) => {
-  const { content, style } = props
+  const { content, index, style, onClick } = props
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
   const [formatClassNames, setFormatClassNames] = useState<string>('')
 
   useAutorun(() => {
     const { format } = content
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
 
     setFormatStyle({
       color: format.color,
+      backgroundColor: format.backgroundColor,
       fontWeight: format.fontWeight,
-      fontSize: `${format.fontSize}px`,
+      fontSize: TextContentService.getResponsiveFontSize(format.fontSize),
       fontFamily: content.format.fontFamily,
       paddingTop: `${format.padding.top}px`,
       paddingBottom: `${format.padding.bottom}px`,
       paddingLeft: `${format.padding.left}px`,
       paddingRight: `${format.padding.right}px`,
+      ...gridCss,
     })
   }, [content.format])
 
@@ -48,12 +59,36 @@ export const TextContent = observer((props: Props) => {
   }, [content.type, content.format])
 
   return content.type === ContentType.TITLE ? (
-    <h1 className={formatClassNames} style={{ ...formatStyle, ...style }}>
+    <motion.h1
+      className={formatClassNames}
+      style={{ ...formatStyle, ...style }}
+      onClick={() => !!onClick && onClick()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
+    >
       {content.value}
-    </h1>
+    </motion.h1>
   ) : (
-    <p className={formatClassNames} style={{ ...formatStyle, ...style }}>
-      {content.value}
-    </p>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
+      className={formatClassNames}
+      style={{ ...formatStyle, ...style }}
+      onClick={() => !!onClick && onClick()}
+    >
+      <ReactMarkdown
+        renderers={{
+          link: ({ node }) => (
+            <a href={node.url} rel="noopener" target="_blank">
+              {node.children[0].value}
+            </a>
+          ),
+        }}
+      >
+        {content.value}
+      </ReactMarkdown>
+    </motion.div>
   )
 })

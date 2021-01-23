@@ -1,24 +1,44 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Share } from './shared/share/Share'
 import { Button } from '../form/button/Button'
 import { useRouter } from 'next/router'
-import { ArticleModel as ArticleModel } from './Article.model'
-import { dateTimeService } from '../services/dateTime/DateTime.service'
+import { ArticleModel } from './Article.model'
 import { useAuth } from '../services/auth/Auth'
 import s from './Article.module.scss'
-import { Tags } from '../tag/Tags/Tags'
-import { COLOR } from '../styles/color'
-import { SectionModel } from './section/Section.model'
-import {Section} from './section/Section'
+import { Section } from './section/Section'
+import { ArticleFooter } from './shared/footer/ArticleFooter'
+import { RelatedArticles } from './related/RelatedArticles'
+import { useOnScrollIntoView } from '../hooks/useOnScrollIntoView'
+import { Spinner } from '../shared/spinner/Spinner'
+import { ArticleService } from './Article.service'
 
 interface Props {
   article: ArticleModel
 }
 
-export const Article = observer(({ article }: Props) => {
+export const Article = observer(({ article: propArticle }: Props) => {
   const router = useRouter()
   const auth = useAuth()
+
+  const relatedRef = useRef<HTMLElement>()
+  const [showRelated, setShowRelated] = useState<boolean>(false)
+  const [article, setArticle] = useState<ArticleModel>(propArticle)
+
+  useOnScrollIntoView(
+    relatedRef.current,
+    async () => {
+      if (!article.isPopulated) {
+        await ArticleService.populate(article)
+        setArticle(article)
+      }
+      setShowRelated(true)
+    },
+    {
+      relativeOffset: 0.9,
+    },
+  )
+
+  useEffect(() => setArticle(propArticle), [propArticle])
 
   return (
     <>
@@ -30,24 +50,23 @@ export const Article = observer(({ article }: Props) => {
           Edit
         </Button>
       )}
-      <article className={s.content}>
-        {article.sortedSections.map((section, i) => (
-          <Section first={i === 0} key={section.uid} section={section} />
-        ))}
-        <footer className={s.footer}>
-          <section className={s.published}>
-            Published {dateTimeService.calendar(article.created.date)}
-          </section>
-
-          <Tags
-            selected={article.tagNames}
-            containerClassName={s.tags}
-            backgroundColor={COLOR.WHITE}
+      <article
+        className={s.content}
+        style={{ backgroundColor: article.format.backgroundColor }}
+      >
+        {article.sections.map((section) => (
+          <Section
+            first={section.format.gridPosition.startRow === 1}
+            key={section.uid}
+            section={section}
           />
-
-          <Share article={article} containerClassName={s.share} />
-        </footer>
+        ))}
+        <ArticleFooter article={article} />
       </article>
+
+      <section ref={relatedRef}>
+        {showRelated ? <RelatedArticles article={article} /> : <Spinner />}
+      </section>
     </>
   )
 })

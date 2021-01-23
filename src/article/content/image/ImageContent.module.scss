@@ -5,6 +5,4 @@
 @import '../../../styles/verticalAlign';
 @import '../../../styles/imageContent';
 
-@include imageHorizontalAlign();
-@include verticalAlign();
 @include imageContent();

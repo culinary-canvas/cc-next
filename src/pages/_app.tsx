@@ -5,7 +5,6 @@ import Modal from 'react-modal'
 import '../styles/global.scss'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
 import TagManager from 'react-gtm-module'
-import { dateTimeService } from '../services/dateTime/DateTime.service'
 import { AdminContext, useAdminState } from '../admin/Admin'
 import { OverlayContext, useOverlayState } from '../shared/overlay/OverlayStore'
 import {
@@ -18,6 +17,8 @@ import ArticleFormSidebar from '../admin/article/form/sidebar/ArticleFormSidebar
 import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
+import { RouteTransition } from '../shared/routeTransition/RouteTransition'
+import { MenuContext, useMenuState } from '../menu/Menu.context'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
@@ -32,13 +33,11 @@ function App({ Component, pageProps }: Props) {
     if (IS_PROD) {
       TagManager.initialize({ gtmId: 'GTM-5DF54SC' })
     }
-    if (!isServer) {
-      dateTimeService.init()
-    }
   }, [])
 
   const admin = useAdminState()
   const overlay = useOverlayState()
+  const menu = useMenuState()
   const imageModalValues = useImageModalState()
   const auth = useAuthState()
 
@@ -47,38 +46,45 @@ function App({ Component, pageProps }: Props) {
   }, [])
 
   return (
-    <ImageModalContext.Provider value={imageModalValues}>
-      <AuthContext.Provider value={auth}>
-        <AdminContext.Provider value={admin}>
-          <OverlayContext.Provider value={overlay}>
-            {IS_PROD && <CookieBanner />}
+    <AuthContext.Provider value={auth}>
+      <MenuContext.Provider value={menu}>
+        <ImageModalContext.Provider value={imageModalValues}>
+          <AdminContext.Provider value={admin}>
+            <OverlayContext.Provider value={overlay}>
+              <RouteTransition />
 
-            {overlay.isVisible && (
-              <Overlay text={overlay.text} progress={overlay.progress} />
-            )}
-            {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
+              {IS_PROD && <CookieBanner />}
 
-            <div
-              id="app"
-              className={classnames({
-                'showing-sidebar': admin.sidebarOpen,
-              })}
-            >
-              <Header />
-              <Component {...pageProps} />
-              <Footer />
-            </div>
-          </OverlayContext.Provider>
-        </AdminContext.Provider>
-      </AuthContext.Provider>
-    </ImageModalContext.Provider>
+              {overlay.isVisible && (
+                <Overlay
+                  text={overlay.text}
+                  progress={overlay.progress}
+                  children={overlay.children}
+                />
+              )}
+
+              {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
+
+              <div
+                id="app"
+                className={classnames({
+                  'showing-sidebar': admin.sidebarOpen,
+                })}
+              >
+                <Header />
+                <Component {...pageProps} />
+                <Footer />
+              </div>
+            </OverlayContext.Provider>
+          </AdminContext.Provider>
+        </ImageModalContext.Provider>
+      </MenuContext.Provider>
+    </AuthContext.Provider>
   )
 }
 
 App.getStaticProps = async () => {
   if (isServer) {
-    dateTimeService.init()
-
     return {}
   }
 }

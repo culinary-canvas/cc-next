@@ -1,56 +1,69 @@
-import React, { useRef } from 'react'
+import React, { useEffect } from 'react'
 import s from './start.module.scss'
-import { GetStaticProps } from 'next'
 import { classnames } from '../services/importHelpers'
 import { ArticleModel } from '../article/Article.model'
 import { PageHead } from '../head/PageHead'
-import { ArticleApi } from '../article/Article.api'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
-import { Transformer } from '../services/db/Transformer'
+import { ArticleApi } from '../article/Article.api'
+import { GetStaticProps } from 'next'
+import { initFirebase } from '../services/firebase/Firebase'
+import { Splash } from '../article/grid/splash/Splash'
+import { useTransformToModels } from '../hooks/useTransformToModels'
+import { useMenu } from '../menu/Menu.context'
+import { menuOptions } from '../menu/menuOptions'
 
 interface Props {
-  articlesData: Partial<ArticleModel>[]
+  articlesData: any[]
 }
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 6
 
 function Start({ articlesData }: Props) {
-  const articles = useRef<ArticleModel[]>(
-    Transformer.allToApp(articlesData, ArticleModel),
-  ).current
+  const articles = useTransformToModels(articlesData, ArticleModel)
+
+  const { setActiveMenuOption } = useMenu()
+  useEffect(() => setActiveMenuOption(menuOptions.ALL), [])
 
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.set.l.url}
-        imageWidth={articles[0].imageContent.set.l.width}
-        imageHeight={articles[0].imageContent.set.l.height}
+        image={articles[0].imageContent.url}
+        imageWidth={articles[0].imageContent.set.cropped.width}
+        imageHeight={articles[0].imageContent.set.cropped.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
         <ArticleGrid
+          insertComponent={() => <Splash />}
+          insertComponentAtIndex={1}
           initialArticles={articles}
-          load={async (lastLoaded) => {
-            console.log('loading!', lastLoaded.sortOrder, lastLoaded.title)
-            const data = await ArticleApi.publishedPagedBySortOrderDesc(
+          usePromoted
+          load={async (lastLoaded) =>
+            ArticleApi.publishedPagedBySortOrderDesc(
               PAGE_SIZE,
               lastLoaded.sortOrder,
             )
-            console.log(data)
-            return !!data ? Transformer.allToApp(data, ArticleModel) : null
-          }}
+          }
         />
       </main>
     </>
   )
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const articlesData = await ArticleApi.publishedPagedBySortOrderDesc(PAGE_SIZE)
+export const getStaticProps: GetStaticProps = async () => {
+  const { firestore } = initFirebase()
+
+  const response = await firestore()
+    .collection('articles')
+    .where('published', '==', true)
+    .orderBy('sortOrder', 'desc')
+    .limit(PAGE_SIZE)
+    .get()
+  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
 
   return {
     props: {
-      articlesData,
+      articlesData: JSON.parse(JSON.stringify(articlesData)),
     },
     revalidate: 1,
   }

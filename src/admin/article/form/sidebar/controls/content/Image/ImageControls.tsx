@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
-import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { Checkbox } from '../../../../../../../form/checkbox/Checkbox'
-import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
-import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignButtons'
 import { ImageContentModel } from '../../../../../../../article/content/image/ImageContent.model'
-import { Fit } from '../../../../../../../article/shared/Fit'
-import { SectionModel } from '../../../../../../../article/section/Section.model'
-import { Slider } from '../../../../../../../form/slider/Slider'
 import { runInAction } from 'mobx'
 import { useReaction } from '../../../../../../../hooks/useReaction'
+import s from './ImageControls.module.scss'
+import { ImageFitButtons } from '../../shared/imageFItButtons/ImageFitButtons'
+import { useAdmin } from '../../../../../../Admin'
+import { ImageEdit } from '../../../../../../../form/imageEdit/ImageEdit'
+import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
+import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignButtons'
+import { CheckboxSliderControl } from '../../shared/checkboxSliderControl/CheckboxSliderControl'
+import { ControlContainer } from '../../shared/controlContainer/ControlContainer'
+import { ColorPicker } from '../../shared/colorPicker/ColorPicker'
+import { ImageFit } from '../../../../../../../article/content/image/ImageFit'
 
-interface Props {
-  content: ImageContentModel
-  section: SectionModel
-}
-
-export const ImageControls = observer((props: Props) => {
-  const { content, section } = props
+export const ImageControls = observer(() => {
+  const admin = useAdmin()
+  const content = admin.content as ImageContentModel
   const [alt, setAlt] = useState<string>(content.set.alt)
 
   useEffect(() => {
@@ -32,80 +32,76 @@ export const ImageControls = observer((props: Props) => {
     (t) => setAlt(t),
   )
 
-  const [useFixedSize, setUseFixedSize] = useState<boolean>(
-    !!content?.format.size,
-  )
-
-  useEffect(() => {
-    if (!!content?.uid) {
-      setUseFixedSize(!!content.format.size)
-    }
-  }, [content.uid])
-
   return (
     <>
-      {section.format.fit === Fit.ARTICLE && (
-        <div className="text-align-buttons margin-top-1">
+      <ControlContainer label="Image">
+        <div className={s.imageEdit}>
+          <ImageEdit
+            set={content.set}
+            format={content.format}
+            onChange={(set) => (content.set = set)}
+          />
+        </div>
+        <label htmlFor="alt">Alt</label>
+        <input
+          id="alt"
+          type="text"
+          value={alt}
+          onChange={(v) => setAlt(v.target.value)}
+          placeholder="Describe the image..."
+        />
+      </ControlContainer>
+
+      <ControlContainer>
+        <CheckboxSliderControl
+          value={content.format.maxHeight}
+          max={content.set.cropped?.height}
+          onChange={(v) => runInAction(() => (content.format.maxHeight = v))}
+          label="Max height"
+        />
+      </ControlContainer>
+
+      <ControlContainer label="Style">
+        <Checkbox
+          label="Circle"
+          checked={content.format.circle}
+          onChange={(v) => (content.format.circle = v)}
+        />
+        <ImageFitButtons
+          selected={content.format.fit}
+          onSelected={(fit) => runInAction(() => (content.format.fit = fit))}
+        />
+        <div className={s.row}>
           <HorizontalAlignButtons
             selected={content.format.horizontalAlign}
             onSelected={(v) => (content.format.horizontalAlign = v)}
           />
-
-          <VerticalAlignButtons
-            selected={content.format.verticalAlign}
-            onSelected={(v) => (content.format.verticalAlign = v)}
-          />
+          {!content.format.circle && (
+            <VerticalAlignButtons
+              selected={content.format.verticalAlign}
+              onSelected={(v) => (content.format.verticalAlign = v)}
+            />
+          )}
         </div>
-      )}
-
-      <Checkbox
-        label="Background"
-        checked={content.format.background}
-        onChange={(v) => (content.format.background = v)}
-      />
-
-      <ImageEdit
-        set={content.set}
-        onChange={(set) => (content.set = set)}
-      />
-
-      <input
-        id="alt"
-        type="text"
-        value={alt}
-        onChange={(v) => setAlt(v.target.value)}
-        placeholder="Describe the image..."
-      />
-
-      {section.format.fit === Fit.ARTICLE && (
-        <span className="fixed-size-container">
-          <Checkbox
-            containerClassName="fixed-size-checkbox"
-            checked={useFixedSize}
-            onChange={(v) => {
-              setUseFixedSize(v)
-              if (v) {
-                content.format.size = 100
-              } else {
-                content.format.size = null
-              }
-            }}
-            label="Fixed size"
+        {(content.format.circle || content.format.fit !== ImageFit.COVER) && (
+          <ColorPicker
+            id="content-background-color"
+            value={content.format.backgroundColor}
+            onSelect={(c) =>
+              runInAction(() => (content.format.backgroundColor = c))
+            }
+            additionalColors={admin.article.colors}
+            showTransparent
           />
-          <Slider
-            containerClassName="fixed-size-slider"
-            value={content.format.size}
-            min={1}
-            max={100}
-            onChange={(v) => (content.format.size = v)}
-            disabled={!useFixedSize}
-          />
-        </span>
-      )}
-      <PaddingControls
-        padding={content.format.padding}
-        onChange={(p) => (content.format.padding = p)}
-      />
+        )}
+      </ControlContainer>
+
+      <ControlContainer label="Padding">
+        <PaddingControls
+          padding={content.format.padding}
+          onChange={(p) => (content.format.padding = p)}
+        />
+      </ControlContainer>
     </>
   )
 })

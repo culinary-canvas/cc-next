@@ -1,79 +1,65 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
-import { Tags } from '../../../tag/Tags/Tags'
 import s from './ArticlePreview.module.scss'
 import { Button } from '../../../form/button/Button'
 import { ArticleModel } from '../../Article.model'
 import { ContentType } from '../../content/ContentType'
-import { classnames } from '../../../services/importHelpers'
 import { ImageContentModel } from '../../content/image/ImageContent.model'
 import { TextContentModel } from '../../content/text/TextContent.model'
 import StringUtils from '../../../services/utils/StringUtils'
-import { dateTimeService } from '../../../services/dateTime/DateTime.service'
-import { ImageService } from '../../content/image/Image.service'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import { classnames } from '../../../services/importHelpers'
+import { COLOR } from '../../../styles/_color'
+import ReactMarkdown from 'react-markdown'
+import { ArticleLabel } from '../../ArticleLabel'
 
 interface Props {
   article: ArticleModel
-  first: boolean
+  priority?: boolean
+  className?: string
+  labels?: ArticleLabel[]
 }
 
 export const ArticlePreview = observer((props: Props) => {
-  const { article, first } = props
+  const { article, labels, priority = false, className } = props
   const router = useRouter()
   const ref = useRef<HTMLElement>()
   const [imageContent, setImageContent] = useState<ImageContentModel>()
   const [subHeadingContent, setSubHeadingContent] = useState<TextContentModel>()
-  const [loadImage, setLoadImage] = useState<boolean>(false)
-  const [imageLoaded, setImageLoaded] = useState<boolean>(false)
-
-  const shouldLoadImage = useCallback(() => {
-    if (!loadImage && scrollY + window.innerHeight > ref.current.offsetTop) {
-      setLoadImage(true)
-    }
-  }, [loadImage])
 
   useEffect(() => {
-    shouldLoadImage()
-    window.addEventListener('scroll', shouldLoadImage)
-    return () => window.removeEventListener('scroll', shouldLoadImage)
-  })
-
-  useEffect(() => {
-    const image = article.sortedSections[0].sortedContents.find(
+    const image = article.contents.find(
       (c) => c.type === ContentType.IMAGE,
     ) as ImageContentModel
 
-    const subHeading = article.sortedSections[0].sortedContents.find(
+    const subHeading = article.contents.find(
       (c) => c.type === ContentType.SUB_HEADING,
     ) as TextContentModel
 
     setImageContent(image)
     setSubHeadingContent(subHeading)
-  }, [article.sortedContents, article.sortedSections])
+  }, [article.contents, article.sections])
 
   return (
-    <article
-      className={classnames(s.article, {
-        [s.promoted]: article.promoted || first,
-      })}
-    >
-      <section className={s.image} ref={ref}>
-        {!!imageContent && loadImage && (
-          <img
-            alt={imageContent.alt}
-            className={classnames(s[`content-type-${imageContent.type}`], {
-              [s.hide]: !imageLoaded,
-            })}
-            srcSet={ImageService.srcSet(imageContent)}
-            onLoad={() => setImageLoaded(true)}
+    <article className={classnames(s.article, className)}>
+      {!!imageContent && (
+        <figure className={s.image} ref={ref}>
+          <Image
+            priority={priority}
+            quality={60}
+            alt={imageContent.set.alt}
+            layout="fill"
+            objectFit="cover"
+            src={imageContent.set.cropped.url}
           />
-        )}
-        {!imageLoaded && <figure className={s.imageSkeleton} />}
-      </section>
+        </figure>
+      )}
 
-      <section className={s.articleType}>
+      <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         <Button
+          className={s.articleType}
+          unsetStyle
           onClick={(e) => {
             e.preventDefault()
             router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
@@ -81,21 +67,36 @@ export const ArticlePreview = observer((props: Props) => {
         >
           {StringUtils.toDisplayText(article.type)}
         </Button>
-      </section>
 
-      <section className={s.title}>
-        <h2>{article.title}</h2>
-      </section>
+        <h2 className={s.title}>{article.title}</h2>
 
-      <section className={s.subHeading}>
-        {!!subHeadingContent && <h3> {subHeadingContent.value} </h3>}
-      </section>
+        <ReactMarkdown
+          className={s.subHeading}
+          renderers={{
+            link: ({ node }) => node.children[0].value,
+          }}
+        >
+          {subHeadingContent?.value}
+        </ReactMarkdown>
 
-      <section className={s.meta}>
-        <span className={s.created}>
-          {dateTimeService.calendar(article.created)}
-        </span>
-        <Tags selected={article.tagNames} />
+        {!!labels && (
+          <div className={s.labels}>
+            <span>In this article</span>
+            {labels.map((l) => (
+              <Button
+                unsetStyle
+                key={l.label}
+                onClick={(e) => {
+                  e.preventDefault()
+                  router.push(l.path)
+                }}
+                color={COLOR.GREY_DARK}
+              >
+                {l.label}
+              </Button>
+            ))}
+          </div>
+        )}
       </section>
     </article>
   )

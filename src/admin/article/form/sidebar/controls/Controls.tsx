@@ -4,15 +4,17 @@ import { ArticleControls } from './article/ArticleControls'
 import { SectionControls } from './section/SectionControls'
 import s from './Controls.module.scss'
 import { Tabs } from '../../../../../shared/tabs/Tabs'
-import { SectionModel } from '../../../../../article/section/Section.model'
 import { ArticleService } from '../../../../../article/Article.service'
-import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
 import { ContentControls } from './content/ContentControls'
-import { ArticleModel } from '../../../../../article/Article.model'
 import { useAdmin } from '../../../../Admin'
+import { ContentService } from '../../../../../article/content/Content.service'
+import { SectionService } from '../../../../../article/section/Section.service'
 
 export const Controls = observer(() => {
   const admin = useAdmin()
+  if (!admin.article) {
+    return null
+  }
 
   return (
     <>
@@ -21,7 +23,7 @@ export const Controls = observer(() => {
       </Tabs>
 
       <Tabs
-        tabs={admin.article.sortedSections.map((s) => ({
+        tabs={admin.article.sections.map((s) => ({
           id: s.uid,
           label: s.displayName,
         }))}
@@ -32,7 +34,7 @@ export const Controls = observer(() => {
         }
         showAdd
         onAdd={() => {
-          const newSection = new SectionModel()
+          const newSection = SectionService.create()
           ArticleService.addSection(newSection, admin.article)
           admin.setSection(newSection)
         }}
@@ -42,7 +44,7 @@ export const Controls = observer(() => {
 
       {!!admin.section && (
         <Tabs
-          tabs={admin.section.sortedContents.map((c) => ({
+          tabs={admin.section.contents.map((c) => ({
             id: c.uid,
             label: c.displayName,
           }))}
@@ -53,9 +55,8 @@ export const Controls = observer(() => {
           }
           showAdd
           onAdd={() => {
-            const newContent = new TextContentModel()
-            newContent.sortOrder = admin.section.contents.length
-            admin.section.contents.push(newContent)
+            const newContent = ContentService.create()
+            SectionService.addContent(newContent, admin.section)
             admin.setContent(newContent)
           }}
         >

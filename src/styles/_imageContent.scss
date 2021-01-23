@@ -4,14 +4,15 @@
 
 @mixin imageContent {
   .container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-
-    .content {
-      width: 100%;
+    position: relative;
+    overflow: hidden;
+    * {
       height: 100%;
-      object-fit: cover;
+    }
+    .content {
+      &.circle {
+        clip-path: circle();
+      }
     }
   }
 
@@ -23,27 +24,17 @@
 
   @include media('<=phone') {
     .container {
-      grid-area: unset !important;
-      grid-row-start: unset !important;
-      overflow: hidden;
-      justify-content: center;
       &.first {
         .content {
           padding: 0 !important;
-          width: 100% !important;
         }
       }
 
-      &:not(.background, .first) {
+      &:not(.first, .circle) {
         .content {
-          width: unset !important;
-          height: unset !important;
+          height: 100%;
           padding: 1rem 1rem 0 !important;
         }
-      }
-
-      &.background {
-        position: absolute;
       }
     }
   }

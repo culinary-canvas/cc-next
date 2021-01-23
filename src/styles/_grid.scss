@@ -1,19 +1,16 @@
 @import 'src/styles/layout';
 
 @mixin gridContainer {
-  .container {
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding-top: 2rem;
-    padding-bottom: $header-height;
+    @include responsive-header-height-padding-top();
 
     @include media('<=phone') {
       padding-top: 5rem;
       width: 100%;
     }
-  }
 }

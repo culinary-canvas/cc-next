@@ -5,14 +5,13 @@ import { useFormControl } from '../../../../form/formControl/useFormControl'
 import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
 import { ArticleService } from '../../../../article/Article.service'
 import { useAdmin } from '../../../../admin/Admin'
-import { useAuth } from '../../../../services/auth/Auth'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
   const allowed = useAuthGuard()
 
-  const formControl = useFormControl(ArticleService.create(), [
+  const [formControl] = useFormControl(ArticleService.create(), [
     { field: 'title', required: true },
   ])
 
@@ -22,7 +21,7 @@ export default function ArticleEdit({ articleData }) {
       admin.setSidebarOpen(true)
       admin.setFormControl(formControl)
       admin.setSection(formControl.mutable.titleSection)
-      admin.setContent(formControl.mutable.titleSection.sortedContents[0])
+      admin.setContent(formControl.mutable.titleSection.contents[0])
     }
   }, [formControl])
 

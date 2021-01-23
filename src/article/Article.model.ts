@@ -1,33 +1,35 @@
 import { Model } from '../services/db/Model'
 import { computed, observable } from 'mobx'
 import { SectionModel } from './section/Section.model'
-import { ArticleType } from './ArticleType'
+import { ArticleType } from './shared/ArticleType'
 import { ContentType } from './content/ContentType'
 import { field } from '../services/db/decorators/field.decorator'
-import { collection } from '../services/db/decorators/collection.decorator'
 import { TextContentModel } from './content/text/TextContent.model'
-import { Content } from './content/Content'
-import DateTime from '../services/dateTime/DateTime'
+import { ContentModel } from './content/ContentModel'
 import { ImageContentModel } from './content/image/ImageContent.model'
-import { Sortable } from '../services/types/Sortable'
+import { Sortable } from '../types/Sortable'
+import { isSystemColor } from '../styles/_color'
+import { ArticleFormat } from './shared/ArticleFormat'
+import { transient } from '../services/db/decorators/transient.decorator'
+import { PersonModel } from '../person/Person.model'
+import { CompanyModel } from '../company/Company.model'
 
-@collection('articles')
 export class ArticleModel implements Model, Sortable {
   @observable
   @field()
   id: string
 
   @observable
-  @field(DateTime)
-  created: DateTime
+  @field(Date)
+  created: Date
 
   @observable
   @field()
   createdById: string
 
   @observable
-  @field(DateTime)
-  modified: DateTime
+  @field(Date)
+  modified: Date
 
   @observable
   @field()
@@ -64,6 +66,9 @@ export class ArticleModel implements Model, Sortable {
   @field()
   promoted = false
 
+  /**
+   * @deprecated
+   */
   @observable
   @field()
   parentId: string
@@ -83,16 +88,36 @@ export class ArticleModel implements Model, Sortable {
   @field()
   slug: string
 
-  @computed get sortedSections(): SectionModel[] {
-    return [...this.sections].sort((s1, s2) => s1.sortOrder - s2.sortOrder)
+  @observable
+  @field()
+  format = new ArticleFormat()
+
+  @observable
+  @field()
+  personIds: string[] = []
+
+  @observable
+  @field()
+  companyIds: string[] = []
+
+  @observable
+  @transient()
+  persons: PersonModel[] = []
+
+  @observable
+  @transient()
+  companies: CompanyModel[] = []
+
+  @computed
+  get isPopulated(): boolean {
+    return (
+      this.companies.length === this.companyIds.length &&
+      this.persons.length === this.personIds.length
+    )
   }
 
-  @computed get contents(): Content[] {
+  @computed get contents(): ContentModel[] {
     return this.sections.flatMap((s) => s.contents)
-  }
-
-  @computed get sortedContents(): Content[] {
-    return this.sortedSections.flatMap((s) => s.sortedContents)
   }
 
   @computed get titleSection(): SectionModel {
@@ -110,14 +135,34 @@ export class ArticleModel implements Model, Sortable {
   }
 
   @computed get subHeading(): string {
-    return (this.titleSection.sortedContents.find(
+    return (this.titleSection.contents.find(
       (c) => c.type === ContentType.SUB_HEADING,
     ) as TextContentModel)?.value
   }
 
   @computed get imageContent(): ImageContentModel {
-    return this.sortedContents.find(
+    return this.contents.find(
       (c) => c instanceof ImageContentModel,
     ) as ImageContentModel
+  }
+
+  @computed get colors(): string[] {
+    const customColors = new Set<string>()
+    this.sections
+      .filter(
+        (s) =>
+          !!s.format.backgroundColor &&
+          !isSystemColor(s.format.backgroundColor),
+      )
+      .forEach((s) => customColors.add(s.format.backgroundColor))
+    this.contents
+      .filter(
+        (c) =>
+          c instanceof TextContentModel &&
+          !!c.format.color &&
+          !isSystemColor(c.format.color),
+      )
+      .forEach((c) => customColors.add((c as TextContentModel).format.color))
+    return Array.from(customColors)
   }
 }

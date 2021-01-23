@@ -1,26 +1,25 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
-import { PlainObject } from '../../../../services/types/PlainObject'
 import { ArticleModel } from '../../../../article/Article.model'
-import { useTransform } from '../../../../hooks/useTransform'
+import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 import { useFormControl } from '../../../../form/formControl/useFormControl'
 import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
-import { ArticleApi } from '../../../../article/Article.api'
 import { useAdmin } from '../../../../admin/Admin'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { ArticleApi } from '../../../../article/Article.api'
 
 interface Props {
-  articleData: PlainObject<ArticleModel>
+  articleData: any
 }
 
 export default function ArticleEdit({ articleData }) {
   const admin = useAdmin()
-  const article = useTransform([articleData], ArticleModel)[0]
+  const article = useTransformToModel(articleData, ArticleModel)
   const allowed = useAuthGuard()
 
-  const formControl = useFormControl(article, [
+  const [formControl] = useFormControl(article, [
     { field: 'title', required: true },
   ])
   useEffect(() => {
@@ -29,7 +28,7 @@ export default function ArticleEdit({ articleData }) {
       admin.setSidebarOpen(true)
       admin.setFormControl(formControl)
       admin.setSection(formControl.mutable.titleSection)
-      admin.setContent(formControl.mutable.titleSection.sortedContents[0])
+      admin.setContent(formControl.mutable.titleSection.contents[0])
     }
   }, [formControl])
 
@@ -56,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      articleData,
+      articleData: JSON.parse(JSON.stringify(articleData)),
     },
   }
 }

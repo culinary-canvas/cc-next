@@ -1,109 +1,122 @@
 import 'reflect-metadata'
 import { isArray, isNil } from 'lodash'
-import { Class } from '../types/Class'
-import {
-  getTransformToDb,
-  hasTransformToDb,
-} from './decorators/transformToDb.decorator'
+import { Class } from '../../types/Class'
+import { getToDb, hasToDb } from './decorators/toDb.decorator'
 import { isTransient } from './decorators/transient.decorator'
 import { getField, isField } from './decorators/field.decorator'
-import { Model } from './Model'
-import {
-  getTransformToApp,
-  hasTransformToApp,
-} from './decorators/transformToApp.decorator'
+import { getToModel, hasToModel } from './decorators/toModel.decorator'
 import { toJS } from 'mobx'
-import { getTransform } from './decorators/transform.decorator'
-import firebase from 'firebase'
+import { getTransform, hasTransform } from './decorators/transform.decorator'
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+} from '@firebase/firestore-types'
+import firebase from 'firebase/app'
 
 export class Transformer {
-  static toJson(doc: firebase.firestore.QueryDocumentSnapshot) {
-    return JSON.parse(JSON.stringify({ id: doc.id, ...doc.data() }))
+  static firestoreConverter<T>(clazz: Class<T>): FirestoreDataConverter<T> {
+    return {
+      toFirestore(modelObject: T): DocumentData {
+        return Transformer.modelToDb(modelObject)
+      },
+      fromFirestore(snapshot: QueryDocumentSnapshot): T {
+        return Transformer.dbToModel(snapshot, clazz)
+      },
+    }
   }
 
-  static listToJson(docs: firebase.firestore.QueryDocumentSnapshot[]) {
-    return docs.map((doc) => this.toJson(doc))
-  }
+  static modelToDb<T>(instance: T): DocumentData {
+    Transformer.validateDecorators(instance)
 
-  static toDb(transformable: any): any {
-    Transformer.validateDecorators(transformable)
-
-    if (isNil(transformable)) {
+    if (isNil(instance)) {
       return null
     }
 
-    if (hasTransformToDb(transformable)) {
-      const toDb = getTransformToDb(transformable)
-      return toDb(transformable)
+    if (hasToDb(instance)) {
+      const toDb = getToDb(instance)
+      return toDb(instance)
     }
 
     const transformed = {}
 
-    Object.keys(transformable).forEach((key) => {
-      if (
-        transformable[key] !== undefined &&
-        isField(transformable, key) &&
-        !isNil(transformable[key])
-      ) {
-        const hasType = !!getField(transformable, key).type
-        const toDb = getTransform(transformed, key)?.toDb
+    Object.keys(instance).forEach((key) => {
+      try {
+        if (
+          (instance[key] !== undefined && isField(instance, key)) ||
+          (hasTransform(instance, key) && !isNil(instance[key]))
+        ) {
+          const hasType = !!getField(instance, key).type
+          const fieldTransformer =
+            hasTransform(instance, key) && getTransform(instance, key)?.toDb
 
-        transformed[key] = !!toDb
-          ? toDb(transformable[key])
-          : isArray(transformable[key])
-          ? Array.from(transformable[key]).map((arrayValue) =>
-              Transformer.transformValueToDb(arrayValue, hasType),
-            )
-          : Transformer.transformValueToDb(transformable[key], hasType)
+          transformed[key] = !!fieldTransformer
+            ? fieldTransformer(instance[key])
+            : isArray(instance[key])
+            ? Array.from(instance[key]).map((arrayValue) =>
+                Transformer.toDbValue(arrayValue, hasType),
+              )
+            : Transformer.toDbValue(instance[key], hasType)
+        }
+      } catch (e) {
+        console.error(
+          `Error when transforming field ${key} in ${instance.constructor.name}`,
+        )
+        throw e
       }
     })
 
     return transformed
   }
 
-  static allToApp<T>(documentData: { [key: string]: any }[], Clazz: Class<T>) {
-    return documentData.map((d) => this.toApp(d, Clazz))
+  static dbToModels<T>(dbObjects: any[], Clazz: Class<T>): T[] {
+    return dbObjects.map((d) => this.dbToModel(d, Clazz))
   }
 
-  static toApp<T>(
-    documentData: { [key: string]: any },
+  static dbToModel<T>(
+    data: { [key: string]: any } | QueryDocumentSnapshot,
     Clazz: Class<T>,
-    id?: string,
-  ) {
-    if (hasTransformToApp(Clazz)) {
-      const toApp = getTransformToApp(Clazz)
-      return toApp(documentData)
+  ): T {
+    let dbObject
+    if (!!data.data && typeof data.data === 'function') {
+      dbObject = data.data()
+      if (!!data.id) {
+        dbObject.id = data.id
+      }
+    } else {
+      dbObject = data
+    }
+
+    if (hasToModel(Clazz)) {
+      const toClassInstance = getToModel(Clazz)
+      return toClassInstance(dbObject)
     }
 
     const transformed = new Clazz()
 
-    if (!!id) {
-      ;((transformed as unknown) as Model).id = id
-    }
-
     Object.keys(toJS(transformed)).forEach((key) => {
-      if (isField(transformed, key) && !isNil(documentData[key])) {
+      if (isField(transformed, key) && !isNil(dbObject[key])) {
         const fieldType = getField(transformed, key).type
-        const toApp = getTransform(transformed, key)?.toApp
+        const fieldTransformer = getTransform(transformed, key)?.toApp
 
-        transformed[key] = !!toApp
-          ? toApp(documentData[key])
-          : isArray(documentData[key])
-          ? Array.from(documentData[key]).map((arrayValue) =>
-              Transformer.transformValueToApp(arrayValue, fieldType),
+        transformed[key] = !!fieldTransformer
+          ? fieldTransformer(dbObject[key])
+          : isArray(dbObject[key])
+          ? Array.from(dbObject[key]).map((arrayValue) =>
+              this.toModelValue(arrayValue, fieldType),
             )
-          : Transformer.transformValueToApp(documentData[key], fieldType)
+          : this.toModelValue(dbObject[key], fieldType)
       }
     })
     return transformed
   }
 
-  private static transformValueToDb<T>(fieldValue: any, isRelated: boolean) {
+  private static toDbValue(fieldValue: any, isRelated: boolean) {
     if (isRelated) {
-      return Transformer.toDb(fieldValue)
+      return Transformer.modelToDb(fieldValue)
     }
 
-    if (typeof fieldValue === 'object') {
+    if (!isNil(fieldValue) && typeof fieldValue === 'object') {
       const returnValue = {}
       Object.keys(fieldValue)
         .filter((key) => fieldValue[key] !== undefined)
@@ -114,15 +127,20 @@ export class Transformer {
     return fieldValue
   }
 
-  private static transformValueToApp<T>(fieldValue: any, type: Class<T>) {
-    return !!type ? Transformer.toApp(fieldValue, type) : fieldValue
+  private static toModelValue(fieldValue: any, type: Class) {
+    if (!!type) {
+      return type === Date && !!fieldValue.seconds
+        ? new firebase.firestore.Timestamp(
+            fieldValue.seconds,
+            fieldValue.nanoseconds,
+          ).toDate()
+        : Transformer.dbToModel(fieldValue, type)
+    }
+    return fieldValue
   }
 
   private static validateDecorators(transformable: any) {
-    if (
-      hasTransformToDb(transformable) &&
-      hasTransformToApp(transformable.constructor)
-    ) {
+    if (hasToDb(transformable) && hasToModel(transformable.constructor)) {
       return
     }
     Object.keys(toJS(transformable)).forEach((key) => {

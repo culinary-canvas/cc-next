@@ -2,40 +2,66 @@ import { createContext, useCallback, useContext, useState } from 'react'
 
 export interface Overlay {
   readonly isVisible: boolean
-  readonly setVisible: (v: boolean) => void
   readonly text: string
-  readonly setText: (v: string) => void
   readonly progress: number
-  readonly setProgress: (v: number) => void
+  readonly setProgress: (value: number, text?: string) => void
   readonly addProgress: (v: number) => void
-  readonly toggle: () => void
+  readonly children: any
+  readonly setChildren: (children: any) => void
+  readonly toggle: (v?: boolean) => void
+  readonly reset: () => void
 }
 
 export function useOverlayState(): Overlay {
-  const [isVisible, setVisible] = useState<boolean>(false)
+  const [isVisible, _setVisible] = useState<boolean>(false)
   const [text, setText] = useState<string>()
-  const [progress, setProgress] = useState<number>()
+  const [progress, _setProgress] = useState<number>()
+  const [children, _setChildren] = useState<any>()
 
-  const toggle = useCallback(() => {
-    setVisible(!isVisible)
-    if (isVisible) {
-      document.querySelector('body').classList.add('no-scroll')
-    } else {
-      document.querySelector('body').classList.remove('no-scroll')
-    }
-  }, [isVisible])
+  const reset = useCallback(() => {
+    setText(null)
+    setProgress(null)
+    _setChildren(null)
+    _setVisible(false)
+  }, [])
 
-  const addProgress = useCallback((v: number) => setProgress(progress + v), [progress])
+  const setChildren = useCallback((v: any) => {
+    reset()
+    _setChildren(v)
+  }, [])
+
+  const setProgress = useCallback((v: number, t?: string) => {
+    _setChildren(null)
+    _setProgress(v)
+    !!t && setText(t)
+  }, [])
+
+  const toggle = useCallback(
+    (v = !isVisible) => {
+      _setVisible(v)
+      if (v) {
+        document.querySelector('body').classList.add('no-scroll')
+      } else {
+        document.querySelector('body').classList.remove('no-scroll')
+      }
+    },
+    [isVisible],
+  )
+
+  const addProgress = useCallback((v: number) => _setProgress(progress + v), [
+    progress,
+  ])
 
   return {
     isVisible,
-    setVisible,
     text,
-    setText,
     progress,
     setProgress,
     addProgress,
     toggle,
+    children,
+    setChildren,
+    reset,
   }
 }
 

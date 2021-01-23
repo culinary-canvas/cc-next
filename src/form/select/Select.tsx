@@ -1,5 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react'
-import { useObserver } from 'mobx-react'
+import React, { CSSProperties, forwardRef, useEffect, useState } from 'react'
 
 interface Props {
   id?: string
@@ -9,6 +8,8 @@ interface Props {
   displayFormatter?: (value: any) => any
   showEmptyOption?: boolean
   disabled?: boolean
+  onFocus?: () => any
+  className?: string
 }
 
 export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
@@ -20,6 +21,8 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
     displayFormatter,
     showEmptyOption = false,
     disabled = false,
+    onFocus,
+    className,
   } = props
 
   const [numeric, setNumeric] = useState<boolean>(false)
@@ -32,7 +35,7 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
     onChange(numeric ? Number(v) : v)
   }
 
-  return useObserver(() => (
+  return (
     <select
       ref={ref}
       id={id}
@@ -42,8 +45,10 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
       onChange={(e) =>
         _onChange(e.target.value === 'None' ? undefined : e.target.value)
       }
+      onFocus={() => !!onFocus && onFocus()}
       value={value}
       disabled={disabled}
+      className={className}
     >
       {showEmptyOption && <option value="None">None</option>}
 
@@ -53,7 +58,7 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
         </option>
       ))}
     </select>
-  ))
+  )
 })
 
 Select.displayName = 'Select'

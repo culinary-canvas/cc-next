@@ -1,21 +1,35 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { FitButtons } from '../shared/fit/FitButtons'
 import { Button } from '../../../../../../form/button/Button'
 import { SectionPresetButtons } from '../shared/sectionPreset/SectionPresetButtons'
-import { SortOrderButtons } from '../shared/sortOrder/SortOrderButtons'
 import { runInAction } from 'mobx'
 import { SectionService } from '../../../../../../article/section/Section.service'
 import { ArticleService } from '../../../../../../article/Article.service'
-import { COLOR } from '../../../../../../styles/color'
+import { COLOR } from '../../../../../../styles/_color'
 import s from './SectionControls.module.scss'
 import { useAdmin } from '../../../../../Admin'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
+import { GridControl } from '../shared/gridControl/GridControl'
+import { useAutorun } from '../../../../../../hooks/useAutorun'
+import { SectionModel } from '../../../../../../article/section/Section.model'
+import { HeightButtons } from '../shared/height/HeightButtons'
+import { Modal } from '../../../../../../shared/modal/Modal'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
 
 export const SectionControls = observer(() => {
   const admin = useAdmin()
-  const [deleting, setDeleting] = useState<boolean>(false)
+  const { article } = admin
 
-  const { section, article } = admin
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
+  const [deleting, setDeleting] = useState<boolean>(false)
+  const [sections, setSections] = useState<SectionModel[]>([])
+  const [section, setSection] = useState<SectionModel>()
+
+  useAutorun(() => {
+    setSections(article?.sections)
+    setSection(admin.section)
+  }, [article, admin.section])
 
   if (!article || !section) {
     return null
@@ -24,42 +38,67 @@ export const SectionControls = observer(() => {
   return (
     <>
       <section className={s.controls}>
-        <label htmlFor="section-name">Name</label>
-        <input
-          type="text"
-          id="section-name"
-          placeholder={section.displayName}
-          value={section.name || ''}
-          onChange={(event) =>
-            runInAction(() => (section.name = event.target.value))
-          }
-        />
+        <ControlContainer label="Name" id="section-name">
+          <input
+            type="text"
+            id="section-name"
+            placeholder={section.displayName}
+            value={section.name || ''}
+            onChange={(event) =>
+              runInAction(() => (section.name = event.target.value))
+            }
+          />
+        </ControlContainer>
 
-        <label htmlFor="section-sort-order">Sort order</label>
-        <SortOrderButtons
-          id="section-sort-order"
-          target={section}
-          list={article.sections}
-          forbidden={[0]}
-        />
+        <ControlContainer label="Preset" id="section-preset">
+          <SectionPresetButtons
+            id="section-preset"
+            section={section}
+            onSelected={(v) => SectionService.applyPreset(v, section)}
+          />
+        </ControlContainer>
 
-        <label htmlFor="fit">Content boundary</label>
-        <FitButtons
-          id="fit"
-          selected={section.format.fit}
-          onSelected={(v) => (section.format.fit = v)}
-        />
+        <ControlContainer label="Grid placement" id="article-grid-placement">
+          <GridControl
+            id="article-grid-placement"
+            parts={sections}
+            columnDefinitions={['1fr', `3fr`, `3fr`, `3fr`, `3fr`, '1fr']}
+            currentPart={section}
+            outlierColumns={[1, 6]}
+            onDelete={(parts) =>
+              runInAction(() => {
+                const uidsToDelete = parts.map((p) => p.uid)
+                article.sections = article.sections.filter(
+                  (s) => !uidsToDelete.includes(s.uid),
+                )
+              })
+            }
+          />
+        </ControlContainer>
 
-        {section.sortOrder === 0 && (
-          <>
-            <label htmlFor="title-preset">Preset</label>
-            <SectionPresetButtons
-              id="title-preset"
-              selected={section.preset}
-              onSelected={(v) => SectionService.applyPreset(v, section)}
-            />
-          </>
-        )}
+        <ControlContainer label="Height" id="section-height">
+          <HeightButtons
+            selected={section.format.height}
+            onSelected={(h) => runInAction(() => (section.format.height = h))}
+          />
+        </ControlContainer>
+
+        <ControlContainer id="section-background" label="Background">
+          <ColorPicker
+            id="section-background"
+            value={section.format.backgroundColor}
+            onSelect={(c) =>
+              runInAction(() => (section.format.backgroundColor = c))
+            }
+            additionalColors={article.colors}
+            showTransparent
+          />
+          <Checkbox
+            checked={section.format.shadow}
+            onChange={(v) => runInAction(() => (section.format.shadow = v))}
+            label="Shadow"
+          />
+        </ControlContainer>
 
         <Button
           onClick={() => {
@@ -76,11 +115,7 @@ export const SectionControls = observer(() => {
           loading={deleting}
           color={COLOR.RED}
           loadingText="Deleting"
-          onClick={() => {
-            setDeleting(true)
-            ArticleService.removeSection(section, article)
-            setDeleting(false)
-          }}
+          onClick={() => setShowDeleteModal(true)}
           disabled={section.uid === article.titleSection.uid}
           title={
             section.uid === article.titleSection.uid
@@ -90,6 +125,22 @@ export const SectionControls = observer(() => {
         >
           Delete section
         </Button>
+
+        {showDeleteModal && (
+          <Modal
+            dark
+            style={{ position: 'absolute', bottom: '1rem', width: '90%' }}
+            title="Confirm"
+            message={`Are you sure you want to delete "${section.displayName}"?`}
+            onOk={() => {
+              setShowDeleteModal(false)
+              setDeleting(true)
+              ArticleService.removeSection(section, article)
+              setDeleting(false)
+            }}
+            onCancel={() => setShowDeleteModal(false)}
+          />
+        )}
       </section>
     </>
   )

@@ -30,7 +30,7 @@
 
     .track {
       height: 2px;
-      background-color: $grey-light;
+      background-color: $grey-lighter;
     }
     .thumb {
       top: -10px;
@@ -41,8 +41,12 @@
       outline: none;
     }
 
-    &.disabled .thumb {
-      background-color: $grey;
+    .disabledThumb {
+      background-color: $grey-lighter;
     }
+  }
+
+  .disabledInput {
+    color: $grey-lighter;
   }
 }

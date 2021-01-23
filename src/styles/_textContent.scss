@@ -1,9 +1,11 @@
 @import 'content';
+@import 'color';
+@import 'animation';
 
 @mixin textContent {
   .content {
     z-index: 20;
-    overflow: hidden;
+    width: 100%;
 
     &.italic {
       font-style: italic;
@@ -22,12 +24,20 @@
     }
   }
 
+  @include media('>phone') {
+    .content {
+      overflow: hidden;
+    }
+  }
+
   @include media('<=phone') {
     .content {
       grid-area: unset !important;
       grid-row-start: unset !important;
       padding: 1rem !important;
-      overflow: hidden;
+    }
+    h1.content {
+      margin-top: 0.5rem;
     }
   }
 }

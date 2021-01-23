@@ -1,168 +1,310 @@
 import { ArticleModel } from './Article.model'
-import { User } from 'firebase'
-import { initFirebase } from '../services/firebase/Firebase.service'
 import { Transformer } from '../services/db/Transformer'
-import { Api } from '../services/api/Api'
-import type { PlainObject } from '../services/types/PlainObject'
 import { ArticleService } from './Article.service'
 import { SortableService } from '../services/sortable/Sortable.service'
 import { isNil } from '../services/importHelpers'
-import { SectionService } from './section/Section.service'
-import { ContentService } from './content/Content.service'
-import { ArticleType } from './ArticleType'
+import { ArticleType } from './shared/ArticleType'
+import { ModelService } from '../services/db/Model.service'
+import { initFirebase } from '../services/firebase/Firebase'
+import 'firebase/firestore'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
 
-  static async byId(id: string): Promise<PlainObject<ArticleModel>> {
-    return Api.byId(id, this.COLLECTION)
+  static async byId(id: string): Promise<ArticleModel> {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .doc(id)
+      .get()
+    return response.exists ? response.data() : null
   }
 
-  static async bySlug(slug: string): Promise<PlainObject<ArticleModel>> {
+  static async bySlug(slug: string): Promise<ArticleModel> {
     const { firestore } = initFirebase()
 
-    const snapshot = await firestore()
+    const response = await firestore()
       .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
       .where('slug', '==', slug)
       .get()
 
-    if (!!snapshot.size) {
-      return Transformer.toJson(snapshot.docs[0])
-    }
+    return !!response.size ? response.docs[0].data() : null
   }
 
-  static async byType(type: ArticleType) {
+  static async all(): Promise<ArticleModel[]> {
     const { firestore } = initFirebase()
 
-    const snapshot = await firestore()
+    const response = await firestore()
       .collection(this.COLLECTION)
-      .where('type', '==', type)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
       .get()
 
-    if (!!snapshot.size) {
-      return Transformer.listToJson(snapshot.docs)
-    }
+    return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
-  static async all(): Promise<Partial<ArticleModel>[]> {
-    return Api.all(this.COLLECTION)
+  static async allNoTransform(): Promise<{ [key: string]: any }[]> {
+    const { firestore } = initFirebase()
+
+    const response = await firestore().collection(this.COLLECTION).get()
+
+    return !!response.size
+      ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
+      : []
+  }
+
+  static async byCompanyId(companyId: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('companyIds', 'array-contains', companyId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byCompanyIds(companyId: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('companyIds', 'array-contains-any', companyId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byPersonId(personId: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('personIds', 'array-contains', personId)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byPersonIds(personIds: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('personIds', 'array-contains-any', personIds)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async byTagNames(tagNames: string[]) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+      .where('tagNames', 'array-contains-any', tagNames)
+      .get()
+    return response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async publishedPagedBySortOrderDesc(
     limit: number,
-    startAfterSortOrder?: number,
-  ): Promise<Partial<ArticleModel>[]> {
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
     const { firestore } = initFirebase()
 
     let query = firestore()
       .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
       .where('published', '==', true)
       .orderBy('sortOrder', 'desc')
-    if (!isNil(startAfterSortOrder)) {
-      query = query.startAfter(startAfterSortOrder)
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
     }
-    const snapshot = await query.limit(limit).get()
 
-    if (!!snapshot.size) {
-      return Transformer.listToJson(snapshot.docs)
-    }
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async allPagedBySortOrderDesc(
     limit: number,
-    startAfterSortOrder?: number,
-  ): Promise<Partial<ArticleModel>[]> {
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
     const { firestore } = initFirebase()
 
     let query = firestore()
       .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
       .orderBy('sortOrder', 'desc')
-    if (!isNil(startAfterSortOrder)) {
-      query = query.startAfter(startAfterSortOrder)
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
     }
-    const snapshot = await query.limit(limit).get()
 
-    if (!!snapshot.size) {
-      return Transformer.listToJson(snapshot.docs)
-    }
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async publishedByTypePagedBySortOrderDesc(
     type: ArticleType,
     limit: number,
-    startAfterSortOrder?: number,
-  ): Promise<Partial<ArticleModel>[]> {
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
     const { firestore } = initFirebase()
 
-    let query = firestore()
+    let query = await firestore()
       .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
       .where('published', '==', true)
       .where('type', '==', type)
       .orderBy('sortOrder', 'desc')
-    if (!isNil(startAfterSortOrder)) {
-      query = query.startAfter(startAfterSortOrder)
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
     }
-    const snapshot = await query.limit(limit).get()
 
-    if (!!snapshot.size) {
-      return Transformer.listToJson(snapshot.docs)
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async publishedByTagPagedBySortOrderDesc(
+    tag: string,
+    limit: number,
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
+    const { firestore } = initFirebase()
+
+    let query = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .where('published', '==', true)
+      .where('tagNames', 'array-contains', tag)
+      .orderBy('sortOrder', 'desc')
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
     }
+
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async publishedByPersonIdPagedBySortOrderDesc(
+    personId: string,
+    limit: number,
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
+    const { firestore } = initFirebase()
+
+    let query = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .where('published', '==', true)
+      .where('personIds', 'array-contains', personId)
+      .orderBy('sortOrder', 'desc')
+      .limit(limit)
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
+    }
+
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
+  }
+
+  static async publishedByCompanyIdPagedBySortOrderDesc(
+    companyId: string,
+    limit: number,
+    startAfter?: any,
+  ): Promise<ArticleModel[]> {
+    const { firestore } = initFirebase()
+
+    let query = await firestore()
+      .collection(this.COLLECTION)
+      .withConverter<ArticleModel>(Transformer.firestoreConverter(ArticleModel))
+      .where('published', '==', true)
+      .where('companyIds', 'array-contains', companyId)
+      .orderBy('sortOrder', 'desc')
+      .limit(limit)
+
+    if (!isNil(startAfter)) {
+      query = query.startAfter(startAfter)
+    }
+
+    const response = await query.get()
+    return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async save(
     article: ArticleModel,
-    user: User,
+    userId: string,
     onProgress: (progress: number, message?: string) => any = this.logProgress,
-  ) {
+  ): Promise<string> {
     onProgress(0, '')
+    const { firestore } = initFirebase()
+
+    onProgress(0.1, '')
     if (!article.slug) {
       article.slug = ArticleService.createSlug(article)
     }
+    await ArticleService.setArticleTypeAsTag(article, userId)
 
-    onProgress(0.1, 'Sorting...')
-    await ArticleService.uploadNewImages(article, onProgress, 0.1)
+    onProgress(0.2, 'Uploading images...')
+    await ArticleService.uploadNewImages(article, onProgress, 0.2)
 
-    onProgress(0.6, 'Sorting...')
+    //TODO: Move to functions
+    onProgress(0.7, 'Sorting...')
     if (isNil(article.sortOrder)) {
-      article.sortOrder = (await ArticleApi.all()).length
+      article.sortOrder = (await this.all()).length
     }
 
-    onProgress(0.7, 'Sorting...')
-    article.sections = SectionService.sort(article.sections)
+    //TODO: Move to functions
+    onProgress(0.9)
+    ModelService.beforeSave(article, userId)
 
-    onProgress(0.75)
-    article.sections.forEach(
-      (section) => (section.contents = ContentService.sort(section.contents)),
-    )
-
-    onProgress(0.8)
-    const id = await Api.save(article, user)
+    onProgress(0.95)
+    let collectionRef = firestore()
+      .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(ArticleModel))
+    const doc = !!article.id
+      ? collectionRef.doc(article.id)
+      : collectionRef.doc()
+    await doc.set(article)
 
     onProgress(1, 'Done!')
-    return id
+    return doc.id
   }
 
   static async delete(
     article: ArticleModel,
-    user: User,
+    userId: string,
     onProgress?: (progress: number, message: string) => any,
   ) {
     onProgress(0, `Deleting ${article.title || 'article with no title'}`)
-    await Api.delete(article.id, this.COLLECTION)
+    const { firestore } = initFirebase()
+    await firestore().collection(this.COLLECTION).doc(article.id).delete()
 
     onProgress(0.4, 'Reloading remaining articles')
-    const all = (await ArticleApi.all()).map((a) =>
-      Transformer.toApp(a, ArticleModel),
-    )
+    const all = await this.all()
 
     onProgress(0.7, 'Updating sort orders')
     SortableService.ungapSortOrders(all)
-    await Promise.all(all.map(async (a) => this.save(a, user)))
+    await Promise.all(all.map(async (a) => this.save(a, userId)))
 
     onProgress(1, 'Done!')
+  }
+
+  private static getOrderBySortOrderAndPagingForUrl(
+    limit: number,
+    startAfter?: any,
+  ) {
+    let path = `orderBy=sortOrder&sortOrder=desc&limit=${limit}`
+    if (!isNil(startAfter)) {
+      path = `${path}&startAfter=${startAfter}`
+    }
+    return path
   }
 
   private static logProgress(progress: number, message?: string) {
     console.debug(progress, message)
   }
 }
+
+export default ArticleApi

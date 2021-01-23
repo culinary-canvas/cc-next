@@ -1,87 +1,89 @@
-import React, {
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { CSSProperties, useState } from 'react'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../section/Section.model'
-import { FormatService } from '../../shared/format/Format.service'
-import { classnames } from '../../../services/importHelpers'
+import { classnames, isNil } from '../../../services/importHelpers'
 import { ImageContentModel } from './ImageContent.model'
 import s from './ImageContent.module.scss'
-import { ImageService } from './Image.service'
+import { GridPositionService } from '../../grid/GridPosition.service'
+import Image from 'next/image'
+import { Size } from '../../shared/format/Size'
+import { motion } from 'framer-motion'
 
 interface Props {
   content: ImageContentModel
   section: SectionModel
   first: boolean
-  style?: CSSProperties
+  index: number
 }
 
 export const ImageContent = observer((props: Props) => {
-  const { content, section, first = false, style } = props
-  const ref = useRef<HTMLElement>()
-  const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
-  const [loadImage, setLoadImage] = useState<boolean>(false)
+  const { content, section, first = false, index } = props
+  const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
+  const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   useAutorun(() => {
     const { format } = content
-    const height = FormatService.imageHeight(section, content)
-    const width = FormatService.imageWidth(content)
-    setFormatStyle({
-      paddingTop: `${format.padding.top}px`,
-      paddingBottom: `${format.padding.bottom}px`,
-      paddingLeft: `${format.padding.left}px`,
-      paddingRight: `${format.padding.right}px`,
-      height,
-      width,
+    setFigureFormatStyle({
+      backgroundColor: format.backgroundColor,
+      minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
+      maxHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
+      height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
+      width: `calc(100% - ${format.padding.left}px - ${format.padding.right}px)`,
+      marginTop: `${format.padding.top}px`,
+      marginBottom: `${format.padding.bottom}px`,
+      marginLeft: `${format.padding.left}px`,
+      marginRight: `${format.padding.right}px`,
     })
+  }, [content, content.format])
+
+  useAutorun(() => {
+    const gridCss = GridPositionService.gridPositionAsCss(
+      content.format.gridPosition,
+    )
+    setGridStyle(gridCss)
   }, [content, section, content.format])
 
-  const shouldLoadImage = useCallback(() => {
-    if (
-      !loadImage &&
-      scrollY + window.innerHeight * 1.5 > ref.current.offsetTop
-    ) {
-      setLoadImage(true)
-    }
-  }, [loadImage])
-
-  useEffect(() => {
-    shouldLoadImage()
-    window.addEventListener('scroll', shouldLoadImage)
-    return () => window.removeEventListener('scroll', shouldLoadImage)
-  })
-
   return (
-    <figure
-      ref={ref}
+    <motion.figure
       className={classnames([
         s.container,
-        s[`horizontal-align-${content.format.horizontalAlign}`],
-        s[`vertical-align-${content.format.verticalAlign}`],
+        s[`fit-${content.format.fit}`],
         {
-          [s.background]: content.format.background,
           [s.first]: first,
         },
       ])}
       style={{
-        ...style,
+        ...gridStyle,
+        ...figureFormatStyle,
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.5 }}
     >
-      {loadImage && (
-        <img
-          srcSet={ImageService.srcSet(content)}
-          alt={content.set.alt}
-          style={{
-            ...formatStyle,
-          }}
-          className={classnames([s.content])}
-        />
-      )}
-    </figure>
+      <Image
+        width={
+          section.format.height === Size.FIT_CONTENT &&
+          content.set.cropped.width
+        }
+        height={
+          section.format.height === Size.FIT_CONTENT &&
+          content.set.cropped.height
+        }
+        // @ts-ignore
+        layout={
+          section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
+        }
+        quality={75}
+        objectFit="cover"
+        objectPosition="center"
+        priority={first}
+        alt={content.set.alt}
+        src={content.set.cropped.url}
+        className={classnames(s.content, {
+          [s.circle]: content.format.circle,
+        })}
+      />
+    </motion.figure>
   )
 })

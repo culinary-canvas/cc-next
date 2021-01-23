@@ -17,38 +17,37 @@ $article-border-radius: 1rem;
     margin-inline-start: 0;
     margin-inline-end: 0;
   }
+}
 
-  @include media('<=phone') {
-    padding-top: $mobile-header-height;
-  }
+@mixin articleGrid {
+  display: grid;
+  align-content: center;
+  grid-auto-flow: row;
+  grid-template-columns:
+    1fr
+    repeat(4, minmax(12.5%, 240px))
+    1fr;
+  grid-template-rows: 1fr;
 }
 
 @mixin articleContent {
-  display: grid;
-  align-content: center;
-  grid-template-columns: 1fr minmax(50%, #{$tablet-width}) 1fr;
-  grid-template-rows: 1fr;
-  gap: 2rem;
-
   @include media('>phone') {
-    border-radius: $article-border-radius;
+    gap: 2rem;
+    @include articleGrid();
   }
 }
 
 @mixin articleFooter {
-  @include main-container-width();
   position: relative;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  grid-column: 2 / span 1;
+  align-items: flex-start;
   padding: 2rem 1rem 4rem;
   margin-top: 2rem;
   border-top: 1px solid black;
-  color: $grey-dark;
   font-size: $font-size-s;
-  justify-self: center;
 }
 
 @mixin articleEditButton {

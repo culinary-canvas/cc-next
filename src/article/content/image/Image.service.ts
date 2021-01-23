@@ -1,17 +1,8 @@
 import { ImageCropValues } from './ImageCropValues'
 import { ImageFile } from './ImageFile'
-import Compressor from 'compressorjs'
 import { FileService } from '../../../services/file/FileService'
-import { ImageContentModel } from './ImageContent.model'
 
 export class ImageService {
-  static srcSet(content: ImageContentModel) {
-    return `${content.set.s.url} 688w,
-                  ${content.set.m.url}: 992w,
-                  ${content.set.l.url}: 1312w,
-                  ${content.set.xl.url}: 2048w`
-  }
-
   static async getImageElement(url: string) {
     const imageEl = new Image()
     imageEl.crossOrigin = 'anonymous'
@@ -27,11 +18,6 @@ export class ImageService {
 
     await promise
     return imageEl
-  }
-
-  static async getWidthAndHeight(url: string) {
-    const imageEl = await this.getImageElement(url)
-    return { width: imageEl.naturalWidth, height: imageEl.naturalHeight }
   }
 
   static async crop(
@@ -61,45 +47,6 @@ export class ImageService {
     ctx.drawImage(imageEl, x, y, width, height, 0, 0, width, height)
 
     return tmpCanvas.toDataURL(image.mimeType)
-  }
-
-  static async resize(
-    image: ImageFile,
-    fileNamePrefix = '',
-    quality = 0.9,
-    maxWidth = 3000,
-    maxHeight = maxWidth,
-  ): Promise<ImageFile> {
-    const blob = await FileService.getBlob(image.url, image.mimeType)
-    let resolver
-    const promise = new Promise<ImageFile>((resolve) => (resolver = resolve))
-    // eslint-disable-next-line no-new
-    new Compressor(blob, {
-      quality,
-      maxWidth,
-      maxHeight,
-      mimeType: image.mimeType,
-      success: async (blob: Blob) => {
-        const compressedFile = new File([blob], image.fileName, {
-          type: image.mimeType,
-        })
-        const url = await FileService.getUrl(compressedFile)
-        const { width, height } = await this.getWidthAndHeight(url)
-
-        const resizedImage = new ImageFile()
-        resizedImage.url = url
-        resizedImage.fileName = `${fileNamePrefix}${image.fileName}`
-        resizedImage.mimeType = image.mimeType
-        resizedImage.width = width
-        resizedImage.height = height
-        resolver(resizedImage)
-      },
-      error: (e) => {
-        throw e
-      },
-    })
-
-    return promise
   }
 
   static async getImage(file: File): Promise<ImageFile> {

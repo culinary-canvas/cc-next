@@ -1,5 +1,4 @@
-import { IReactionDisposer, reaction } from 'mobx'
-import { IReactionOptions } from 'mobx/lib/api/autorun'
+import { IReactionDisposer, IReactionOptions, reaction } from 'mobx'
 import { useEffect, useRef } from 'react'
 import { useUnmount } from './useUnmount'
 

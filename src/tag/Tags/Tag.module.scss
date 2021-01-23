@@ -3,28 +3,22 @@
 
 .tag {
   height: auto;
-  padding: 0.1rem 0.3rem;
-  margin: 0.25rem 0;
-  border-color: $grey-light !important;
-  color: $grey !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: transparent;
+  border: none !important;
   font-size: $font-size-s;
+  font-weight: 300;
 
-  &:not(:first-child) {
-    margin-left: 0.25rem;
+  &:before {
+    position: relative;
+    display: inline-block;
+    content: '#';
   }
+
+  padding: 0.25rem 0;
 
   &:not(:last-child) {
-    margin-right: 0.25rem;
-  }
-
-  &:not(.selected) {
-    opacity: 0.4;
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  &.selected {
-    color: $black;
+    margin-right: 0.5rem;
   }
 }

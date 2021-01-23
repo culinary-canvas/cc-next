@@ -1,0 +1,6 @@
+@import '../../styles/table';
+
+table.table {
+  width: 100%;
+  @include table();
+}

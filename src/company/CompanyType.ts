@@ -1,0 +1,10 @@
+export enum CompanyType {
+  RESTAURANT = 'RESTAURANT',
+  BAR = 'BAR',
+  EDITORIAL = 'EDITORIAL',
+  GENERAL = 'GENERAL',
+  EDUCATION = 'EDUCATION',
+  BAKERY = 'BAKERY',
+  CAFE = 'CAFE',
+  EVENTS = 'EVENTS',
+}

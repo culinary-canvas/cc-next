@@ -11,16 +11,18 @@ $tablet-width: 992px;
 $desktop-s-width: 1312px;
 $desktop-l-width: 2048px;
 
+$main-container-width-phone: 100vw;
+$main-container-width-tablet: 100vw;
+$main-container-width-desktop-s: $tablet-width;
+$main-container-width-desktop-l: $desktop-s-width;
+$main-container-width-l-excess: 1580px;
+
 $breakpoints: (
   phone: $phone-width,
   tablet: $tablet-width,
   desktop-s: $desktop-s-width,
+  main-container-width-l-excess: $main-container-width-l-excess,
 );
-
-$main-container-width-phone: 95vw;
-$main-container-width-tablet: 95vw;
-$main-container-width-desktop-s: $tablet-width;
-$main-container-width-desktop-l: $desktop-s-width;
 
 $main-content-width-phone: calc(
   #{$main-container-width-phone} - #{$content-padding}
@@ -127,5 +129,14 @@ $spacing-xxxl: 96px;
   }
   @include media('>=desktop-s') {
     transform: translateX($sidebar-width-desktop-l);
+  }
+}
+
+@mixin responsive-header-height-padding-top {
+  @include media('<phone') {
+    padding-top: $mobile-header-height;
+  }
+  @include media('>=phone') {
+    padding-top: $header-height;
   }
 }

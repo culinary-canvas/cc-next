@@ -1,88 +1,111 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { ArticleModel } from '../Article.model'
-import styles from './ArticleGrid.module.scss'
+import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
 import { ArticlePreview } from './articlePreview/ArticlePreview'
-import s from '../../pages/start.module.scss'
 import { Spinner } from '../../shared/spinner/Spinner'
-import { COLOR } from '../../styles/color'
-import { Transformer } from '../../services/db/Transformer'
+import { COLOR } from '../../styles/_color'
+import { ArticleWithLabels } from '../ArticleWithLabels'
 
-interface Props {
-  initialArticles: ArticleModel[]
-  load: (lastLoaded: ArticleModel) => Promise<ArticleModel[] | null>
+interface Props<T extends ArticleModel | ArticleWithLabels> {
+  initialArticles?: T[]
+  load?: (last: T) => Promise<T[]>
+  insertComponent?: () => any
+  insertComponentAtIndex?: number
+  usePromoted?: boolean
 }
 
-export const ArticleGrid = observer((props: Props) => {
-  const { initialArticles, load: loadFn } = props
+export const ArticleGrid = observer(
+  <T extends ArticleModel | ArticleWithLabels>(props: Props<T>) => {
+    const {
+      initialArticles = [],
+      load: loadFn,
+      insertComponent = false,
+      insertComponentAtIndex = 0,
+      usePromoted = false,
+    } = props
+    const endRef = useRef<HTMLDivElement>()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [allLoaded, setAllLoaded] = useState<boolean>(false)
+    const [articles, setArticles] = useState<T[]>(initialArticles)
 
-  const endRef = useRef<HTMLDivElement>()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [endReached, setEndReached] = useState<boolean>(false)
-  const [articles, setArticles] = useState<ArticleModel[]>(initialArticles)
+    useEffect(() => {
+      setArticles(initialArticles)
+      setAllLoaded(false)
+    }, [initialArticles])
 
-  useEffect(() => {
-    setArticles(initialArticles)
-    setEndReached(false)
-  }, [initialArticles])
+    const load = useCallback(async () => {
+      if (!!loadFn) {
+        setLoading(true)
+        const articlesToAdd = await loadFn(articles[articles.length - 1])
+        if (!!articlesToAdd.length) {
+          setArticles([...articles, ...articlesToAdd])
+        } else {
+          setAllLoaded(true)
+        }
 
-  // Trigger next load when initial load fits the screen (only triggered on scroll now)
-  const onScroll = useCallback(() => {
-    if (
-      !endReached &&
-      !loading &&
-      scrollY + window.innerHeight * 1.5 > endRef.current.offsetTop
-    ) {
-      load()
-    }
-  }, [loading, endReached])
+        setLoading(false)
+      }
+    }, [articles, loadFn])
 
-  const load = useCallback(async () => {
-    setLoading(true)
+    // TODO: Also trigger next load when initial load fits the screen (only triggered on scroll now)
+    const onScroll = useCallback(() => {
+      if (
+        !!endRef.current &&
+        !allLoaded &&
+        !loading &&
+        scrollY + window.innerHeight > endRef.current.offsetTop * 0.8
+      ) {
+        load()
+      }
+    }, [loading, allLoaded, load])
 
-    const articlesToAddData = await loadFn(articles[articles.length - 1])
+    useEffect(() => {
+      window.addEventListener('scroll', onScroll)
+      return () => window.removeEventListener('scroll', onScroll)
+    }, [onScroll])
 
-    if (!!articlesToAddData) {
-      const transformed = Transformer.allToApp(articlesToAddData, ArticleModel)
-      setArticles([...articles, ...transformed])
-    } else {
-      setEndReached(true)
-    }
+    return (
+      <>
+        <div className={s.grid}>
+          {articles.map((a, i) => {
+            const article =
+              a instanceof ArticleWithLabels ? a.article : (a as ArticleModel)
+            const labels = a instanceof ArticleWithLabels ? a.labels : null
 
-    setLoading(false)
-  }, [articles])
-
-  useEffect(() => {
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  })
-
-  return (
-    <div className={styles.grid}>
-      {articles.map((article, i) => (
-        <Link
-          href="/articles/[slug]"
-          as={`/articles/${article.slug}`}
-          key={article.id}
+            return (
+              <React.Fragment key={i}>
+                {!!insertComponent &&
+                  i === insertComponentAtIndex &&
+                  insertComponent()}
+                <Link href={`/articles/${article.slug}`}>
+                  <a
+                    className={classnames(s.articleContainer, {
+                      [s.promoted]:
+                        usePromoted && (article.promoted || i === 0),
+                    })}
+                  >
+                    <ArticlePreview
+                      article={article}
+                      priority={i === 0}
+                      labels={labels}
+                    />
+                  </a>
+                </Link>
+              </React.Fragment>
+            )
+          })}
+        </div>
+        <div
+          id="end"
+          ref={endRef}
+          className={classnames(s.end, { [s.loading]: loading })}
         >
-          <a
-            className={classnames(styles.article, {
-              [styles.promoted]: article.promoted || i === 0,
-            })}
-          >
-            <ArticlePreview article={article} first={i === 0}/>
-          </a>
-        </Link>
-      ))}
-      <div
-        id="end"
-        ref={endRef}
-        className={classnames(s.end, { [s.loading]: loading })}
-      >
-        {loading && <Spinner size={64} color={COLOR.GREY} />}
-      </div>
-    </div>
-  )
-})
+          {loading && <Spinner size={64} color={COLOR.GREY} />}
+        </div>
+      </>
+    )
+  },
+)

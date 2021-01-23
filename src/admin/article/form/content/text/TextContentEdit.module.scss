@@ -1,3 +1,4 @@
+@import '../../../../../styles/animation';
 @import '../../../../../styles/color';
 @import '../../../../../styles/layout';
 @import '../../../../../styles/content';
@@ -6,6 +7,17 @@
 @import '../../../../../styles/contentEdit';
 @import '../../../../../styles/horizontalAlign';
 @import '../../../../../styles/verticalAlign';
+
+.wrapper{
+  position: relative;
+}
+
+.content {
+  transition: box-shadow $animation-fast ease-in-out;
+  &::selection {
+    background: red;
+  }
+}
 
 @include textContent();
 @include contentInEdit();

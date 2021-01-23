@@ -1,0 +1,104 @@
+@import '../../../styles/layout';
+@import '../../../styles/font';
+@import '../../../styles/color';
+
+.container {
+  position: relative;
+
+  h1 {
+    font-family: $font-family-filson;
+    font-weight: 900;
+    line-height: 1.1;
+
+    span {
+      position: relative;
+      display: inline-block;
+      &:before {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background-color: $pink;
+        content: '';
+        transform:  rotateZ(-1deg);
+        z-index: -1;
+        @include media('<=phone'){
+          height: 20px;
+          bottom: 2px;
+        }
+        @include media('>phone'){
+          height: 30px;
+          bottom: 4px;
+        }
+
+      }
+    }
+  }
+
+  p {
+    color: $grey;
+    font-weight: 600;
+  }
+
+  @include media('<phone') {
+    padding: 0 5%;
+
+    h1 {
+      margin-top: 1rem;
+      font-size: 10vw;
+      font-size: $font-size-xxl;
+    }
+    p {
+      font-size: $font-size-l;
+    }
+  }
+
+  @include media('>=phone', '<desktop-s') {
+    grid-column-end: span 2;
+    h1 {
+      margin-top: 3rem;
+      font-size: $font-size-xxxl;
+    }
+    p {
+      padding-left: 20%;
+      font-size: $font-size-l;
+    }
+  }
+
+  @include media('>=desktop-s', '<main-container-width-l-excess') {
+    grid-column-end: span 2;
+    h1 {
+      font-size: $font-size-xxxl;
+    }
+    p {
+      padding-left: 20%;
+      font-size: $font-size-l;
+    }
+  }
+
+  @include media('>=main-container-width-l-excess') {
+    grid-column-end: span 2;
+    width: 120%;
+    margin-left: -20%;
+
+    h1 {
+      font-size: $font-size-xxxxl;
+    }
+    p {
+      padding-left: 30%;
+      font-size: $font-size-xl;
+    }
+  }
+
+  /*
+  &:before {
+    position: absolute;
+    top: 12%;
+    z-index: -1;
+    width: 60%;
+    height: 60%;
+    background-color: $pink-light;
+    content: '';
+    clip-path: polygon(0 19%, 100% 33%, 81% 89%, 20% 100%);
+  }
+  */
+}

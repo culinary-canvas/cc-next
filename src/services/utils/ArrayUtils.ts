@@ -1,4 +1,5 @@
 import ObjectUtils from './ObjectUtils'
+import { isNil } from '../importHelpers'
 
 export class ArrayUtils {
   static areDifferent<T>(a1: T[], a2: T[]) {
@@ -11,24 +12,44 @@ export class ArrayUtils {
 
   static someNotIncluded<T>(array: T[], arrayToLookIn: T[]) {
     return array.some(
-      o1 =>
-        !arrayToLookIn.some(o2 => {
+      (o1) =>
+        !arrayToLookIn.some((o2) => {
           return ObjectUtils.equals(o1, o2)
         }),
     )
   }
 
-  static asArray(target: any | any[]) {
-    return Array.isArray(target) ? target : [target]
+  static asArray<T = any>(target: T | T[]): T[] {
+    return Array.isArray(target) ? target : !isNil(target) ? [target] : []
   }
 
   static distinct(a1: any[], a2: any[]) {
     const distinct = [...a1]
 
     a2.filter(
-      o2 => !distinct.some(o1 => ObjectUtils.equals(o2, o1)),
-    ).forEach(o2 => distinct.push(o2))
+      (o2) => !distinct.some((o1) => ObjectUtils.equals(o2, o1)),
+    ).forEach((o2) => distinct.push(o2))
 
     return distinct
+  }
+
+  static min(array: number[]) {
+    return (
+      !!array && array.reduce((min, current) => (current < min ? current : min))
+    )
+  }
+
+  static max(array: number[]) {
+    return (
+      !!array && array.reduce((max, current) => (current > max ? current : max))
+    )
+  }
+
+  static numbered(length: number, base = 0): number[] {
+    return Array.from(Array(length), (_, i) => base + i)
+  }
+
+  static numberedFrom(entries: any[]): number[] {
+    return entries.map((_, i) => i + 1)
   }
 }

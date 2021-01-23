@@ -1,0 +1,24 @@
+@import '../../../../../../../styles/color';
+@import '../../../../../../../styles/font';
+@import '../../../../../../../styles/shadow';
+@import '../../../../../../../styles/animation';
+
+.menu {
+  position: absolute;
+  top: -14px;
+  display: flex;
+  justify-content: space-evenly;
+  z-index: 100;
+  width: 100%;
+  padding: 0.2rem 0.2rem;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: transparentize($white, 0.2);
+  }
+
+  .section {
+    display: flex;
+    margin: 0 0.5rem;
+  }
+}

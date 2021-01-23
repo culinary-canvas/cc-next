@@ -3,7 +3,7 @@
 @import '../../../../../../../styles/icon';
 
 .container {
-  @include control-buttons-container();
+  display: flex;
   @include button-group();
 }
 

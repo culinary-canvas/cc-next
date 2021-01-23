@@ -7,84 +7,90 @@ import { VerticalAlignButtons } from '../../shared/verticalAlign/VerticalAlignBu
 import { ColorPicker } from '../../shared/colorPicker/ColorPicker'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { FONT } from '../../../../../../../styles/font'
-import { TextContentModel } from '../../../../../../../article/content/text/TextContent.model'
 import { runInAction } from 'mobx'
+import { useAdmin } from '../../../../../../Admin'
+import { TextContentModel } from '../../../../../../../article/content/text/TextContent.model'
+import { ControlContainer } from '../../shared/controlContainer/ControlContainer'
+import s from './TextControls.module.scss'
 
-interface Props {
-  content: TextContentModel
-}
-
-export const TextControls = observer((props: Props) => {
-  const { content } = props
+export const TextControls = observer(() => {
+  const admin = useAdmin()
+  const content = admin.content as TextContentModel
 
   return (
     <>
-      <label htmlFor="fontFamily">Font family</label>
-      <Select
-        id="fontFamily"
-        value={content.format.fontFamily}
-        options={Object.values(FONT.FAMILY)}
-        onChange={(v) => (content.format.fontFamily = v)}
-      />
+      <ControlContainer id="font" label="Font">
+        <div className={s.fontProperties}>
+          <Select
+            id="fontFamily"
+            value={content.format.fontFamily}
+            options={Object.values(FONT.FAMILY)}
+            onChange={(v) => (content.format.fontFamily = v)}
+          />
+          <Select
+            id="fontSize"
+            value={content.format.fontSize}
+            options={Object.values(FONT.SIZE)}
+            onChange={(v) => (content.format.fontSize = v)}
+            className={s.fontProperty}
+          />
+          <Select
+            id="fontWeight"
+            value={content.format.fontWeight}
+            options={FONT.WEIGHT}
+            onChange={(v) => (content.format.fontWeight = v)}
+            className={s.fontProperty}
+          />
+        </div>
+        <div className={s.fontProperties}>
+          <FontStyleButtons
+            emphasize={content.format.emphasize}
+            italic={content.format.italic}
+            uppercase={content.format.uppercase}
+            onSelected={(v) => {
+              switch (v) {
+                case 'emphasize':
+                  content.format.emphasize = !content.format.emphasize
+                  break
+                case 'italic':
+                  content.format.italic = !content.format.italic
+                  break
+                case 'uppercase':
+                  content.format.uppercase = !content.format.uppercase
+              }
+            }}
+          />
+          <ColorPicker
+            background
+            small
+            id="color"
+            value={content.format.color}
+            onSelect={(color) =>
+              runInAction(() => (content.format.color = color))
+            }
+            additionalColors={admin.article.colors}
+          />
+        </div>
 
-      <label htmlFor="fontSize">Font size</label>
-      <Select
-        id="fontSize"
-        value={content.format.fontSize}
-        options={Object.values(FONT.SIZE)}
-        onChange={(v) => (content.format.fontSize = v)}
-      />
+        <div className={s.fontProperties}>
+          <HorizontalAlignButtons
+            selected={content.format.horizontalAlign}
+            onSelected={(v) => (content.format.horizontalAlign = v)}
+          />
 
-      <label htmlFor="fontWeight">Font weight</label>
-      <Select
-        id="fontWeight"
-        value={content.format.fontWeight}
-        options={FONT.WEIGHT}
-        onChange={(v) => (content.format.fontWeight = v)}
-      />
+          <VerticalAlignButtons
+            selected={content.format.verticalAlign}
+            onSelected={(v) => (content.format.verticalAlign = v)}
+          />
+        </div>
+      </ControlContainer>
 
-      <FontStyleButtons
-        emphasize={content.format.emphasize}
-        italic={content.format.italic}
-        uppercase={content.format.uppercase}
-        onSelected={(v) => {
-          switch (v) {
-            case 'emphasize':
-              content.format.emphasize = !content.format.emphasize
-              break
-            case 'italic':
-              content.format.italic = !content.format.italic
-              break
-            case 'uppercase':
-              content.format.uppercase = !content.format.uppercase
-          }
-        }}
-      />
-
-      <div className="text-align-buttons">
-        <HorizontalAlignButtons
-          selected={content.format.horizontalAlign}
-          onSelected={(v) => (content.format.horizontalAlign = v)}
+      <ControlContainer id="text-padding" label="Padding">
+        <PaddingControls
+          padding={content.format.padding}
+          onChange={(p) => (content.format.padding = p)}
         />
-
-        <VerticalAlignButtons
-          selected={content.format.verticalAlign}
-          onSelected={(v) => (content.format.verticalAlign = v)}
-        />
-      </div>
-
-      <label htmlFor="color">Color</label>
-      <ColorPicker
-        id="color"
-        value={content.format.color}
-        onSelect={(color) => runInAction(() => (content.format.color = color))}
-      />
-
-      <label htmlFor="text-padding">Padding</label>
-      <PaddingControls
-        padding={content.format.padding}
-        onChange={(p) => (content.format.padding = p)}
-      />
+      </ControlContainer>
     </>
   )
 })

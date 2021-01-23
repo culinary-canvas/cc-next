@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import copyPasteIcon from '../../../../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import editIcon from '../../../../../../../public/assets/icons/streamline-icon-pencil-write-3-alternate@140x140.svg'
-import { observer } from 'mobx-react'
 import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
 import { Select } from '../../../../../../form/select/Select'
 import { runInAction, toJS } from 'mobx'
-import { Tags } from '../../../../../../tag/Tags/Tags'
 import { Button } from '../../../../../../form/button/Button'
 import { ArticleModel } from '../../../../../../article/Article.model'
 import StringUtils from '../../../../../../services/utils/StringUtils'
 import { copyTextToClipboard } from '../../../../../../services/utils/Utils'
-import { ArticleType } from '../../../../../../article/ArticleType'
+import { ArticleType } from '../../../../../../article/shared/ArticleType'
 import s from './ArticleControls.module.scss'
 import { ArticleApi } from '../../../../../../article/Article.api'
-import { Transformer } from '../../../../../../services/db/Transformer'
 import { useAdmin } from '../../../../../Admin'
 import { useReaction } from '../../../../../../hooks/useReaction'
+import { COLOR } from '../../../../../../styles/_color'
+import { useOverlay } from '../../../../../../shared/overlay/OverlayStore'
+import { useAuth } from '../../../../../../services/auth/Auth'
+import { useRouter } from 'next/router'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { observer } from 'mobx-react'
+import { TagsEdit } from '../../../../../../tag/Tags/TagsEdit'
+import { PersonsArticleControl } from '../shared/personsArticleControl/PersonsArticleControl'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
+import { CompaniesArticleControl } from '../shared/companyArticleControl/CompaniesArticleControl'
 
 export const ArticleControls = observer(() => {
+  const auth = useAuth()
+  const router = useRouter()
   const admin = useAdmin()
-  const [otherArticles, setOtherArticles] = useState<ArticleModel[]>([])
-  const [editingSlug, editSlug] = useState<boolean>(false)
+  const overlay = useOverlay()
   const { article } = admin
 
+  const [editingSlug, editSlug] = useState<boolean>(false)
+
   const [title, setTitle] = useState<string>(article.title)
+  const [deleting, setDeleting] = useState<boolean>(false)
 
   useEffect(() => {
     if (article.title !== title) {
@@ -36,33 +47,55 @@ export const ArticleControls = observer(() => {
     (t) => setTitle(t),
   )
 
-  useEffect(() => {
-    if (!!article) {
-      ArticleApi.all().then((all) => {
-        const other = all.filter((a) => a.id !== article.id && !a.parentId)
-        const transformed = other.map((a) => Transformer.toApp(a, ArticleModel))
-        setOtherArticles(transformed)
-      })
-    }
-  }, [article])
-
   if (!article) {
     return null
   }
 
   return (
     <section className={s.controls}>
-      <label htmlFor="title">Title</label>
-      <input
-        type="text"
-        id="title"
-        placeholder="Article title (required)"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-      />
+      <ControlContainer label="Title" id="title">
+        <input
+          type="text"
+          id="title"
+          placeholder="Article title (required)"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+      </ControlContainer>
 
-      <label htmlFor="url">URL</label>
-      <span className={s.urlContainer}>
+      <ControlContainer
+        id="url"
+        label="URL"
+        labelButtons={() => (
+          <>
+            <Button
+              unsetStyle
+              onClick={() => editSlug(!editingSlug)}
+              onKeyPress={() => editSlug(!editingSlug)}
+            >
+              <img src={editIcon} alt="Edit" />
+              <span>Edit</span>
+            </Button>
+
+            <Button
+              unsetStyle
+              onClick={() =>
+                copyTextToClipboard(
+                  `https://culinary-canvas.com/articles/${article.slug}`,
+                )
+              }
+              onKeyPress={() =>
+                copyTextToClipboard(
+                  `https://culinary-canvas.com/articles/${article.slug}`,
+                )
+              }
+            >
+              <img src={copyPasteIcon} alt="Copy" />
+              <span>Copy</span>
+            </Button>
+          </>
+        )}
+      >
         <input
           disabled={!editingSlug}
           title="URL can be shared for unpublished article"
@@ -76,72 +109,85 @@ export const ArticleControls = observer(() => {
             article.slug = StringUtils.toLowerKebabCase(article.slug)
           }}
         />
+      </ControlContainer>
 
-        <Button
-          unsetStyle
-          onClick={() => editSlug(!editingSlug)}
-          onKeyPress={() => editSlug(!editingSlug)}
-        >
-          <img src={editIcon} alt="Edit" />
-        </Button>
+      <ControlContainer label="Type" id="type">
+        <Select
+          id="type"
+          value={article.type}
+          options={Object.values(ArticleType)}
+          onChange={(v) => (article.type = v)}
+          displayFormatter={(v) => StringUtils.toDisplayText(v)}
+        />
+      </ControlContainer>
 
-        <Button
-          unsetStyle
-          onClick={() =>
-            copyTextToClipboard(
-              `https://culinary-canvas.com/articles/${article.slug}`,
-            )
+      <ControlContainer label="Publish settings" direction="row">
+        <Checkbox
+          label="Published"
+          checked={article.published}
+          onChange={(v) => (article.published = v)}
+        />
+        <Checkbox
+          label="Promoted"
+          checked={article.promoted}
+          onChange={(v) => (article.promoted = v)}
+        />
+      </ControlContainer>
+
+      <ControlContainer label="Persons" id="persons">
+        <PersonsArticleControl article={article} />
+      </ControlContainer>
+
+      <ControlContainer label="Companies" id="companies">
+        <CompaniesArticleControl article={article} />
+      </ControlContainer>
+
+      <ControlContainer label="Background color" id="article-background-color">
+        <ColorPicker
+          id="article-background-color"
+          value={article.format.backgroundColor}
+          onSelect={(c) =>
+            runInAction(() => (article.format.backgroundColor = c))
           }
-          onKeyPress={() =>
-            copyTextToClipboard(
-              `https://culinary-canvas.com/articles/${article.slug}`,
-            )
+          additionalColors={article.colors}
+          showTransparent
+        />
+      </ControlContainer>
+
+      <ControlContainer label="Tags" id="tags">
+        <TagsEdit
+          selected={toJS(article.tagNames)}
+          onAdd={(tag) => article.tagNames.push(tag)}
+          onRemove={(tag) =>
+            (article.tagNames = article.tagNames.filter((id) => id !== tag))
           }
+        />
+      </ControlContainer>
+
+      {!!admin.article?.id && (
+        <Button
+          loading={deleting}
+          color={COLOR.RED}
+          loadingText="Deleting"
+          onClick={onDelete}
         >
-          <img src={copyPasteIcon} alt="Copy" />
+          Delete article...
         </Button>
-      </span>
-
-      <Checkbox
-        label="Published"
-        checked={article.published}
-        onChange={(v) => (article.published = v)}
-      />
-
-      <Checkbox
-        label="Promoted"
-        checked={article.promoted}
-        onChange={(v) => (article.promoted = v)}
-      />
-
-      <label htmlFor="type">Type</label>
-      <Select
-        id="type"
-        value={article.type}
-        options={Object.values(ArticleType)}
-        onChange={(v) => (article.type = v)}
-        displayFormatter={(v) => StringUtils.toDisplayText(v)}
-      />
-
-      <label htmlFor="parent">Parent article</label>
-      <Select
-        id="parent"
-        value={article.parentId}
-        options={otherArticles.map((a) => a.id)}
-        onChange={(v) => (article.parentId = v)}
-        displayFormatter={(v) => otherArticles.find((a) => a.id === v).title}
-        showEmptyOption
-      />
-
-      <label htmlFor="tags">Tags</label>
-      <Tags
-        selected={toJS(article.tagNames)}
-        edit
-        onAdd={(tag) => article.tagNames.push(tag)}
-        onRemove={(tag) =>
-          (article.tagNames = article.tagNames.filter((id) => id !== tag))
-        }
-      />
+      )}
     </section>
   )
+  async function onDelete() {
+    const goodToGo = window.confirm(
+      'Are you really, really sure want to delete this article?',
+    )
+    if (goodToGo) {
+      setDeleting(true)
+      overlay.toggle()
+      await ArticleApi.delete(admin.article, auth.userId, (v, t) =>
+        overlay.setProgress(v, t),
+      )
+      setTimeout(() => overlay.toggle(false), 1000)
+      router.replace('/admin/articles')
+    }
+  }
 })

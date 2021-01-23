@@ -1,12 +1,9 @@
-import {TagModel} from '../../tag/Tag.model'
-import {TagApi} from '../../tag/Tag.api'
-import {ArticleApi} from '../../article/Article.api'
-import {ArticleModel} from '../../article/Article.model'
-import {Transformer} from '../db/Transformer'
+import { TagApi } from '../../tag/Tag.api'
+import { ArticleApi } from '../../article/Article.api'
 
 export async function deleteUnusedTags() {
-  const tags = Transformer.allToApp(await TagApi.all(), TagModel)
-  const articles = Transformer.allToApp(await ArticleApi.all(), ArticleModel)
+  const tags = await TagApi.all()
+  const articles = await ArticleApi.all()
 
   const articlesWithTags = articles.filter((a) => a.tagNames.length)
   console.log(
@@ -29,5 +26,5 @@ export async function deleteUnusedTags() {
     usedTags.map((t) => t.name),
   )
 
-  await Promise.all(unusedTags.map(async (t) => TagApi.delete(t.id)))
+  await Promise.all(unusedTags.map(async (t) => TagApi.delete(t)))
 }

@@ -3,3 +3,9 @@ $animation-really-fast: 100ms;
 $animation-fast: 150ms;
 $animation-medium: 300ms;
 $animation-slow: 500ms;
+$animation-really-slow: 1000ms;
+
+$cubic-spring: cubic-bezier(0.25, 0.25, 0.25, 1.25);
+$cubic-spring-more: cubic-bezier(0.25, 0.25, 0.25, 1.5);
+$ease-out: cubic-bezier(0, 0.54, 0, 0.67);
+$bounce-ease-out: cubic-bezier(.32,.97,.16,.67)
