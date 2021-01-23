@@ -5,6 +5,7 @@ import { menuOptions } from './menuOptions'
 import { useMenu } from './Menu.context'
 import { classnames } from '../services/importHelpers'
 import { MenuButton } from './button/MenuButton'
+import { useRouter } from 'next/router'
 
 interface Props {
   className?: string
@@ -14,9 +15,24 @@ interface Props {
 export function MobileMenu(props: Props) {
   const { className, buttonClassName } = props
   const { activeMenuOption } = useMenu()
+  const router = useRouter()
 
   const [open, setOpen] = useState<boolean>(false)
   const [first, setFirst] = useState<boolean>(true)
+
+  useEffect(() => {
+    function handleRouteChangeStart(url) {
+      setOpen(false)
+    }
+    if (!!router) {
+      router.events.on('routeChangeStart', handleRouteChangeStart)
+    }
+    return () => {
+      if (!!router) {
+        router.events.off('routeChangeStart', handleRouteChangeStart)
+      }
+    }
+  }, [router])
 
   useEffect(() => {
     if (open) {
