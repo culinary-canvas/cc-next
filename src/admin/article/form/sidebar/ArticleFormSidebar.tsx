@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import classnames from 'classnames'
-import { MenuButton } from '../../../../menu/MenuButton'
 import { Button } from '../../../../form/button/Button'
 import { useAuth } from '../../../../services/auth/Auth'
 import s from './ArticleFormSidebar.module.scss'
@@ -11,6 +10,7 @@ import { useOverlay } from '../../../../shared/overlay/OverlayStore'
 import { Controls } from './controls/Controls'
 import ArticleApi from '../../../../article/Article.api'
 import { OverlayConfirm } from '../../../../shared/overlay/OverlayConfirm'
+import { MenuButton } from '../../../../menu/button/MenuButton'
 
 interface Props {}
 
@@ -31,6 +31,7 @@ const ArticleFormSidebar = observer((props: Props) => {
         ])}
       >
         <MenuButton
+          open={admin.sidebarOpen}
           onClick={() => {
             admin.setSidebarOpen(!admin.sidebarOpen)
           }}
@@ -79,7 +80,6 @@ const ArticleFormSidebar = observer((props: Props) => {
           </section>
 
           <Controls />
-
         </article>
       </aside>
     </>

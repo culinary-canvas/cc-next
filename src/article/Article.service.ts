@@ -178,6 +178,7 @@ export class ArticleService {
         (c) =>
           c instanceof TextContentModel &&
           c.type !== ContentType.TITLE &&
+          !!c.value &&
           c.value.toLowerCase().includes(text.toLowerCase()),
       )
       .forEach((content: TextContentModel) => {

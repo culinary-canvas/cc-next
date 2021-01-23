@@ -5,6 +5,7 @@ import { classnames } from '../../services/importHelpers'
 import { COLOR } from '../../styles/_color'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/router'
+import { useAuth } from '../../services/auth/Auth'
 
 interface Props {
   className?: string
@@ -13,6 +14,7 @@ interface Props {
 
 export function AdminMenu({ className, linkClassName }: Props) {
   const router = useRouter()
+  const auth = useAuth()
 
   const linkVariants = useRef({
     initial: { color: COLOR.BLUE_LIGHT },
@@ -113,6 +115,16 @@ export function AdminMenu({ className, linkClassName }: Props) {
           className={s.linkBottomBorder}
         />
       </motion.a>
+      <motion.button
+        variants={linkVariants}
+        whileHover="hovered"
+        onClick={async () => {
+          await auth.signOut()
+        }}
+        className={classnames(s.link, linkClassName)}
+      >
+        Sign out
+      </motion.button>
     </div>
   )
 }

@@ -3,7 +3,7 @@ import s from './about.module.scss'
 import { COLOR } from '../../styles/_color'
 import { GetStaticProps } from 'next'
 import { PageHead } from '../../head/PageHead'
-import {SocialMediaLinks} from '../../shared/socialMediaLinks/SocialMediaLinks'
+import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 
 export default function About() {
   return (
@@ -15,13 +15,8 @@ export default function About() {
       />
 
       <main className={s.container}>
-        <h1>The Culinary Canvas</h1>
+        <h1>Culinary Canvas</h1>
         <article className={s.content}>
-          <img
-            alt="@Yves Le Lay by Johan Ståhlberg"
-            src="https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f"
-          />
-
           <section>
             <p>
               At Culinary Canvas, we celebrate the craftsmanship of the world's
@@ -39,7 +34,16 @@ export default function About() {
 
             <p>We’re serving creativity. Drink up!</p>
 
-            <SocialMediaLinks color={COLOR.BLACK} />
+            <SocialMediaLinks
+              containerClassName={s.socialMediaContainer}
+              linkClassName={s.socialMediaLink}
+            />
+
+            <img
+              className={s.image}
+              alt="@Yves Le Lay by Johan Ståhlberg"
+              src="https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f"
+            />
           </section>
         </article>
       </main>

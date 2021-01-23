@@ -131,3 +131,12 @@ $spacing-xxxl: 96px;
     transform: translateX($sidebar-width-desktop-l);
   }
 }
+
+@mixin responsive-header-height-padding-top {
+  @include media('<phone') {
+    padding-top: $mobile-header-height;
+  }
+  @include media('>=phone') {
+    padding-top: $header-height;
+  }
+}

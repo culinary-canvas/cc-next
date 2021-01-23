@@ -6,7 +6,8 @@ export function Splash() {
     <article className={s.container}>
       <h1>
         Welcome to
-        <br />Culinary Canvas
+        <br />
+        Culinary <span>Canvas</span>
       </h1>
       <p>
         Here you’ll discover insightful profiles on culinary creators from the

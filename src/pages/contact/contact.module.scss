@@ -32,5 +32,34 @@
         padding-right: 2rem;
       }
     }
+
+    .socialMediaContainer {
+      justify-content: center;
+      padding-top: 1rem;
+
+      .socialMediaLink {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 3rem;
+        margin: 1rem;
+        background-color: black;
+        border-radius: 100%;
+
+        img {
+          transition: filter $animation-fast $cubic-spring-more,
+          transform $animation-fast $cubic-spring-more;
+          filter: $filter-grey-light;
+        }
+
+        &:hover {
+          img {
+            transform: scale(1.05);
+            filter: $filter-white;
+          }
+        }
+      }
+    }
   }
 }

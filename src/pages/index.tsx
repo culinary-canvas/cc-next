@@ -9,8 +9,8 @@ import { GetStaticProps } from 'next'
 import { initFirebase } from '../services/firebase/Firebase'
 import { Splash } from '../article/grid/splash/Splash'
 import { useTransformToModels } from '../hooks/useTransformToModels'
-import { useMenu } from '../menu2/Menu.context'
-import { menuOptions } from '../menu2/menuOptions'
+import { useMenu } from '../menu/Menu.context'
+import { menuOptions } from '../menu/menuOptions'
 
 interface Props {
   articlesData: any[]
@@ -37,6 +37,7 @@ function Start({ articlesData }: Props) {
           insertComponent={() => <Splash />}
           insertComponentAtIndex={1}
           initialArticles={articles}
+          usePromoted
           load={async (lastLoaded) =>
             ArticleApi.publishedPagedBySortOrderDesc(
               PAGE_SIZE,

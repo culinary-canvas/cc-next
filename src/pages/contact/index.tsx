@@ -1,6 +1,5 @@
 import React from 'react'
 import s from './contact.module.scss'
-import { COLOR } from '../../styles/_color'
 import { GetStaticProps } from 'next'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { PageHead } from '../../head/PageHead'
@@ -25,7 +24,10 @@ export default function Contact() {
                 info@culinary-canvas.com
               </a>
             </span>
-            <SocialMediaLinks color={COLOR.BLACK} />
+            <SocialMediaLinks
+              containerClassName={s.socialMediaContainer}
+              linkClassName={s.socialMediaLink}
+            />
           </section>
           <img
             alt="@Högtorps gård by Johan Ståhlberg"

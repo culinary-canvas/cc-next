@@ -18,7 +18,7 @@ import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
 import { RouteTransition } from '../shared/routeTransition/RouteTransition'
-import { MenuContext, useMenuState } from '../menu2/Menu.context'
+import { MenuContext, useMenuState } from '../menu/Menu.context'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'

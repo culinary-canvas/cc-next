@@ -78,6 +78,7 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
 
       <main className={classnames(s.container)}>
         <Company company={company} className={s.presentation} />
+        <h2>Articles</h2>
         <ArticleGrid
           initialArticles={articlesWithLabels}
           load={async (last) =>

@@ -4,13 +4,20 @@ import s from './Footer.module.scss'
 import Link from 'next/link'
 import { SocialMediaLinks } from '../shared/socialMediaLinks/SocialMediaLinks'
 import { COLOR } from '../styles/_color'
+import Logo from '../../public/assets/logo.svg'
 
 export const Footer = observer(() => {
   return (
     <footer className={s.container}>
       <div className={s.content}>
         <section>
-          <h3>Culinary Canvas</h3>
+          <img
+            src={Logo}
+            alt="Culinary Canvas"
+            className={s.logo}
+            title="Culinary Canvas"
+          />
+
           <nav>
             <Link href="/about">
               <a>About</a>
@@ -27,7 +34,7 @@ export const Footer = observer(() => {
           </nav>
         </section>
 
-        <SocialMediaLinks color={COLOR.WHITE} />
+        <SocialMediaLinks color={COLOR.WHITE} containerClassName={s.socialMediaContainer}  linkClassName={s.socialMediaLink}/>
 
         <section className={s.copyright}>
           {new Date().getFullYear()} © Culinary Canvas

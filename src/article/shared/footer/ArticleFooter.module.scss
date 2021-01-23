@@ -31,6 +31,7 @@
     > * {
       padding: 2rem 1rem 0;
     }
+    padding: 0 0 2rem;
 
     @include media('<=phone') {
       justify-content: center;

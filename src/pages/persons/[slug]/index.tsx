@@ -78,6 +78,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
 
       <main className={classnames(s.container)}>
         <Person person={person} className={s.presentation} />
+        <h2>Articles</h2>
         <ArticleGrid
           initialArticles={articlesWithLabels}
           load={async (last) =>

@@ -14,6 +14,7 @@ interface Props<T extends ArticleModel | ArticleWithLabels> {
   load?: (last: T) => Promise<T[]>
   insertComponent?: () => any
   insertComponentAtIndex?: number
+  usePromoted?: boolean
 }
 
 export const ArticleGrid = observer(
@@ -23,6 +24,7 @@ export const ArticleGrid = observer(
       load: loadFn,
       insertComponent = false,
       insertComponentAtIndex = 0,
+      usePromoted = false,
     } = props
     const endRef = useRef<HTMLDivElement>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -81,7 +83,8 @@ export const ArticleGrid = observer(
                 <Link href={`/articles/${article.slug}`}>
                   <a
                     className={classnames(s.articleContainer, {
-                      [s.promoted]: article.promoted || i === 0,
+                      [s.promoted]:
+                        usePromoted && (article.promoted || i === 0),
                     })}
                   >
                     <ArticlePreview

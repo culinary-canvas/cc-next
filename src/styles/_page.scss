@@ -3,13 +3,13 @@
 @import 'font';
 
 @mixin pageContainer {
-  @include main-container-width();
+  @include main-content-width();
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: $spacing-xxl;
-  margin: $header-height 0;
+  @include responsive-header-height-padding-top();
   border-radius: 1rem;
 
   h1 {
@@ -19,8 +19,8 @@
     border-bottom: 4px solid $black;
     font-size: $font-size-xxl;
     button {
-      margin-left: auto;
       margin-right: 1rem;
+      margin-left: auto;
       font-weight: 900;
     }
   }
