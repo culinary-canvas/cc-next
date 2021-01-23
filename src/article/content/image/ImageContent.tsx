@@ -74,7 +74,7 @@ export const ImageContent = observer((props: Props) => {
         layout={
           section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
         }
-        quality={75}
+        quality={65}
         objectFit="cover"
         objectPosition="center"
         priority={first}
