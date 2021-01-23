@@ -56,18 +56,18 @@
 
     &.hasLabels {
       grid-template:
-      'title' auto
-      'sub-heading' auto
-      'labels' auto;
+        'title' auto
+        'sub-heading' auto
+        'labels' auto;
     }
 
     &:not(.hasLabels) {
       grid-template:
-      'title' auto
-      'sub-heading' auto;
+        'title' auto
+        'sub-heading' auto;
     }
 
-    padding: 1rem;
+    padding: 1rem 1rem 3rem;
     background-color: $white;
     gap: 1rem;
 
