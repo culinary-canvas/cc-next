@@ -75,6 +75,7 @@ export const ImageEdit = observer((props: Props) => {
           alt={set.alt}
           src={set.cropped.url}
           className={classnames([s.content, className])}
+          quality={65}
         />
       )}
 
