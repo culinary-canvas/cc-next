@@ -1,67 +1,56 @@
-import React, { useState } from 'react'
-import styles from './Header.module.scss'
+import React, { useEffect, useState } from 'react'
+import s from './Header.module.scss'
 import Link from 'next/link'
 import Logo from '../../public/assets/logo.svg'
 import { useRouter } from 'next/router'
-import { ArticleType } from '../article/shared/ArticleType'
-import StringUtils from '../services/utils/StringUtils'
-import { animated, config, useSpring } from 'react-spring'
-import dynamic from 'next/dynamic'
+import { Menu } from '../menu2/Menu'
+import { isServer } from '../pages/_app'
+import { classnames } from '../services/importHelpers'
+import { BrowserView, MobileView } from 'react-device-detect'
+import { MobileMenu } from '../menu2/MobileMenu'
 
 export const Header = () => {
   const router = useRouter()
   const [logoHovered, setLogoHovered] = useState<boolean>(false)
+  const [collapsed, setCollapsed] = useState<boolean>(false)
 
-  const { boxShadow } = useSpring({
-    boxShadow: logoHovered
-      ? '0 0 10px 2px rgba(0,0,0,0.2)'
-      : '0 0 20px 2px rgba(0,0,0,0.1)',
-    config: config.molasses,
-  })
-
-  const Menu = dynamic(() => import('../menu/Menu'))
+  useEffect(() => {
+    function onScroll() {
+      if (window.pageYOffset > 100) {
+        setCollapsed(true)
+      } else {
+        setCollapsed(false)
+      }
+    }
+    if (!isServer) {
+      console.log('adding')
+      window.addEventListener('scroll', onScroll)
+    }
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [collapsed, isServer])
 
   return (
-    <header className={styles.container}>
-      <div className={styles.leftContainer}>
-        <Link href="/" passHref>
-          <a
-            onClick={() => {
-              router.push('/')
-            }}
-          >
-            <animated.img
-              onMouseOver={() => setLogoHovered(true)}
-              onMouseLeave={() => setLogoHovered(false)}
-              src={Logo}
-              alt="Culinary Canvas"
-              className={styles.logo}
-              title="Go to start"
-              style={{
-                boxShadow,
-              }}
-            />
-          </a>
-        </Link>
-        {!!router.query.type && (
-          <div className={styles.navMeta}>{getArticleTypeHeader()}</div>
-        )}
-        {!!router.query.tag && (
-          <div className={styles.navMeta}>#{router.query.tag}</div>
-        )}
-      </div>
-      <Menu />
+    <header className={classnames(s.container, { [s.collapsed]: collapsed })}>
+      <Link href="/" passHref>
+        <a
+          onClick={() => {
+            router.push('/')
+          }}
+        >
+          <img
+            src={Logo}
+            alt="Culinary Canvas"
+            className={s.logo}
+            title="Go to start"
+          />
+        </a>
+      </Link>
+      <BrowserView>
+        <Menu className={s.menu} />
+      </BrowserView>
+      <MobileView>
+        <MobileMenu className={s.menu} />
+      </MobileView>
     </header>
   )
-
-  function getArticleTypeHeader() {
-    switch (router.query.type as ArticleType) {
-      case StringUtils.toLowerKebabCase(ArticleType.DISH):
-        return 'Dishes'
-      case StringUtils.toLowerKebabCase(ArticleType.PORTRAIT):
-        return 'Portraits'
-      case StringUtils.toLowerKebabCase(ArticleType.RECIPE):
-        return 'Recipes'
-    }
-  }
 }

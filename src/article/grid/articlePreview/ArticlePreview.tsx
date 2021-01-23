@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
-import { TagsView } from '../../../tag/Tags/TagsView'
 import s from './ArticlePreview.module.scss'
 import { Button } from '../../../form/button/Button'
 import { ArticleModel } from '../../Article.model'
@@ -57,7 +56,7 @@ export const ArticlePreview = observer((props: Props) => {
         </figure>
       )}
 
-      <section className={s.text}>
+      <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         <Button
           className={s.articleType}
           unsetStyle

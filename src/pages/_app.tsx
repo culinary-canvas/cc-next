@@ -18,6 +18,7 @@ import { Header } from '../header/Header'
 import { Footer } from '../footer/Footer'
 import { useStaticRendering } from 'mobx-react'
 import { RouteTransition } from '../shared/routeTransition/RouteTransition'
+import { MenuContext, useMenuState } from '../menu2/Menu.context'
 
 export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
@@ -36,6 +37,7 @@ function App({ Component, pageProps }: Props) {
 
   const admin = useAdminState()
   const overlay = useOverlayState()
+  const menu = useMenuState()
   const imageModalValues = useImageModalState()
   const auth = useAuthState()
 
@@ -44,38 +46,40 @@ function App({ Component, pageProps }: Props) {
   }, [])
 
   return (
-    <ImageModalContext.Provider value={imageModalValues}>
-      <AuthContext.Provider value={auth}>
-        <AdminContext.Provider value={admin}>
-          <OverlayContext.Provider value={overlay}>
-            <RouteTransition />
+    <AuthContext.Provider value={auth}>
+      <MenuContext.Provider value={menu}>
+        <ImageModalContext.Provider value={imageModalValues}>
+          <AdminContext.Provider value={admin}>
+            <OverlayContext.Provider value={overlay}>
+              <RouteTransition />
 
-            {IS_PROD && <CookieBanner />}
+              {IS_PROD && <CookieBanner />}
 
-            {overlay.isVisible && (
-              <Overlay
-                text={overlay.text}
-                progress={overlay.progress}
-                children={overlay.children}
-              />
-            )}
+              {overlay.isVisible && (
+                <Overlay
+                  text={overlay.text}
+                  progress={overlay.progress}
+                  children={overlay.children}
+                />
+              )}
 
-            {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
+              {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
 
-            <div
-              id="app"
-              className={classnames({
-                'showing-sidebar': admin.sidebarOpen,
-              })}
-            >
-              <Header />
-              <Component {...pageProps} />
-              <Footer />
-            </div>
-          </OverlayContext.Provider>
-        </AdminContext.Provider>
-      </AuthContext.Provider>
-    </ImageModalContext.Provider>
+              <div
+                id="app"
+                className={classnames({
+                  'showing-sidebar': admin.sidebarOpen,
+                })}
+              >
+                <Header />
+                <Component {...pageProps} />
+                <Footer />
+              </div>
+            </OverlayContext.Provider>
+          </AdminContext.Provider>
+        </ImageModalContext.Provider>
+      </MenuContext.Provider>
+    </AuthContext.Provider>
   )
 }
 

@@ -1,0 +1,46 @@
+@import '../../styles/color';
+@import '../../styles/icon';
+@import '../../styles/animation';
+
+$gap: 8px;
+$bar-thickness: 2px;
+$bar-width: 28px;
+
+.button {
+  position: relative;
+  width: $bar-width + $gap * 2;
+  height: 2rem;
+  margin: 0;
+  background-color: $white;
+  border: none;
+  > * {
+    position: absolute;
+    left: $gap;
+    width: $bar-width;
+    height: $bar-thickness;
+    background-color: $black;
+    transition: transform $animation-medium $cubic-spring;
+  }
+
+  > :first-child {
+    top: calc(#{$gap} - #{$bar-thickness} / 2);
+  }
+  > :nth-child(2) {
+    top: calc(#{$gap}* 2 - #{$bar-thickness} / 2);
+  }
+  > :nth-child(3) {
+    top: calc(#{$gap}* 3 - #{$bar-thickness} / 2);
+  }
+
+  &.open {
+    > :first-child {
+      transform: translateY($gap) rotateZ(-45deg);
+    }
+    > :nth-child(2) {
+      opacity: 0;
+    }
+    > :nth-child(3) {
+      transform: translateY(-$gap) rotateZ(45deg);
+    }
+  }
+}

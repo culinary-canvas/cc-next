@@ -5,83 +5,71 @@
 @import '../styles/shadow';
 
 .container {
-  position: absolute;
+  position: fixed;
+  display: flex;
   z-index: 40;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+
+  transition: transform $animation-slow ease-in,
+    background-color $animation-slow $bounce-ease-out,
+    padding $animation-slow ease-in;
   pointer-events: none;
 
-  > div {
-    pointer-events: all;
-  }
-
   @include media('>phone') {
-    height: $header-height;
+    max-height: $header-height;
+    padding: 1.5rem 3rem 0;
+
+    &.collapsed {
+      background-color: $white;
+      transform: translateY(-1.5rem);
+
+      .logo {
+        box-shadow: none !important;
+      }
+    }
   }
   @include media('<=phone') {
-    height: $mobile-header-height;
+    max-height: $mobile-header-height;
+    padding: 1rem 1rem 0;
+
+    &.collapsed {
+      padding: 0.6rem 1rem;
+      background-color: $white;
+      transform: translateY(-0.5rem);
+
+      .logo {
+        box-shadow: none !important;
+        transform: translateY(0.2rem);
+      }
+    }
   }
 
-  .leftContainer {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-
-    @include media('>phone') {
-      top: 1.5rem;
-      left: 3rem;
-    }
-    @include media('<=phone') {
-      top: 1rem;
-      left: 1rem;
-    }
-
-    a:after {
+  > * {
+    pointer-events: all;
+    &:after {
       display: none;
     }
+  }
 
-    .logo {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: $white;
+  .logo {
+    display: block;
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.1);
+    background-color: $white;
+    transition: box-shadow $animation-slow $cubic-spring,
+      transform $animation-slow ease-in;
 
-      @include media('>phone') {
-        height: 3rem;
-        padding: 1rem;
-      }
-      @include media('<=phone') {
-        height: 32px;
-        padding: 0.6rem;
-      }
-      &:hover {
-        box-shadow: $centeredShadow;
-      }
+    @include media('>phone') {
+      height: 3rem;
+      padding: 1rem;
     }
-
-    .navMeta {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: fit-content;
-      box-shadow: $softCenteredShadow;
-      background-color: $white;
-      font-family: $font-family-forma;
-      @include media('>phone') {
-        height: 3rem;
-        padding: 1rem;
-        margin-top: 1rem;
-        font-size: 18px;
-      }
-      @include media('<=phone') {
-        height: 32px;
-        padding: 0.6rem;
-        margin-top: 0.6rem;
-        font-size: 14px;
-      }
+    @include media('<=phone') {
+      height: 32px;
+      padding: 0.6rem;
+    }
+    &:hover {
+      box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
     }
   }
 }
