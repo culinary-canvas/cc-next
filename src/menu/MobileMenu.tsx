@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './MobileMenu.module.scss'
 import Link from 'next/link'
 import { menuOptions } from './menuOptions'
@@ -17,6 +17,14 @@ export function MobileMenu(props: Props) {
 
   const [open, setOpen] = useState<boolean>(false)
   const [first, setFirst] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (open) {
+      document.querySelector('body').classList.add('no-scroll')
+    } else {
+      document.querySelector('body').classList.remove('no-scroll')
+    }
+  }, [open])
 
   return (
     <>

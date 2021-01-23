@@ -45,7 +45,7 @@ export const Header = () => {
         </a>
       </Link>
       <Menu className={classnames(s.menu, s.desktop)} />
-      <MobileMenu className={classnames(s.menu, s.mobile)} buttonClassName={s.mobile}/>
+      <MobileMenu className={classnames(s.menu, s.mobile)} buttonClassName={classnames(s.mobile, s.mobileButton)}/>
     </header>
   )
 }
