@@ -87,7 +87,7 @@ export function RelatedArticles({ article }: Props) {
           <a href="mailto:info@culinary-canvas.com">email</a> and tell us what
           you want to read about
         </p>
-        <ArticleGrid initialArticles={articles} />
+        <ArticleGrid initialArticles={articles} className={s.grid}/>
       </div>
     </>
   )
