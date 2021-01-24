@@ -7,9 +7,9 @@ import { classnames } from '../../../../services/importHelpers'
 import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../../../article/Article.api'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 import { initFirebase } from '../../../../services/firebase/Firebase'
 import { useTransformToModels } from '../../../../hooks/useTransformToModels'
+import { Splash } from '../../../../article/grid/splash/Splash'
 
 interface Props {
   articlesData: any[]
@@ -34,6 +34,9 @@ function Start({ articlesData }: Props) {
           load={async (lastLoaded) =>
             ArticleApi.allPagedBySortOrderDesc(PAGE_SIZE, lastLoaded.sortOrder)
           }
+          usePromoted
+          insertComponent={() => <Splash />}
+          insertComponentAtIndex={1}
         />
       </main>
     </>
