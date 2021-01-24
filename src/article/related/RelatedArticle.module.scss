@@ -24,30 +24,7 @@
     color: $black;
   }
 
-  .list {
-    display: grid;
-    flex-wrap: wrap;
-
-    a:after {
-      display: none;
-    }
-
-    @include media('<=phone') {
-      grid-auto-rows: minmax(auto, 90vh);
-      grid-template-columns: 1fr;
-      padding: 1rem;
-      gap: 2rem;
-    }
-
-    @include media('>phone') {
-      grid-auto-flow: dense;
-      grid-auto-rows: minmax(1fr, 700px);
-      grid-template-columns: 1fr 1fr 1fr;
-      padding-top: 4rem;
-      padding-bottom: 4rem;
-      gap: 4rem;
-    }
-
-    @include main-container-width();
+  .grid{
+    padding-top: 4rem;
   }
 }
