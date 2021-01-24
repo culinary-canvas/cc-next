@@ -15,6 +15,7 @@ interface Props<T extends ArticleModel | ArticleWithLabels> {
   insertComponent?: () => any
   insertComponentAtIndex?: number
   usePromoted?: boolean
+  className?: string
 }
 
 export const ArticleGrid = observer(
@@ -25,6 +26,7 @@ export const ArticleGrid = observer(
       insertComponent = false,
       insertComponentAtIndex = 0,
       usePromoted = false,
+      className
     } = props
     const endRef = useRef<HTMLDivElement>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -69,7 +71,7 @@ export const ArticleGrid = observer(
 
     return (
       <>
-        <div className={s.grid}>
+        <div className={classnames(s.grid, className)}>
           {articles.map((a, i) => {
             const article =
               a instanceof ArticleWithLabels ? a.article : (a as ArticleModel)
