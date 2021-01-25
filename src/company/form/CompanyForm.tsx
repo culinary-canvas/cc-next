@@ -166,6 +166,12 @@ export const CompanyForm = observer((props: Props) => {
             Delete
           </Button>
         )}
+
+        {!!company.id && (
+          <a className={s.link} href={`/companies/${company.slug}`} target="_blank">
+            {`/companies/${company.slug}`}
+          </a>
+        )}
       </div>
 
       <label htmlFor="name">Name*</label>

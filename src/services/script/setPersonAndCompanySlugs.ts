@@ -1,6 +1,6 @@
 import { PersonApi } from '../../person/Person.api'
 import { CompanyApi } from '../../company/Company.api'
-import StringUtils from '../utils/StringUtils'
+import slugify from 'voca/slugify'
 
 export async function setPersonAndCompanySlugs(userId: string) {
   const persons = await PersonApi.all()
@@ -8,14 +8,16 @@ export async function setPersonAndCompanySlugs(userId: string) {
 
   await Promise.all(
     persons.map((person) => {
-      person.slug = StringUtils.toLowerKebabCase(person.name)
+      person.slug = slugify(person.name)
+      console.log(`${person.name} -> ${person.slug}`)
       PersonApi.save(person, userId)
     }),
   )
 
   await Promise.all(
     companies.map((company) => {
-      company.slug = StringUtils.toLowerKebabCase(company.name)
+      company.slug = slugify(company.name)
+      console.log(`${company.name} -> ${company.slug}`)
       CompanyApi.save(company, userId)
     }),
   )

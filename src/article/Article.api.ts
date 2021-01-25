@@ -7,6 +7,7 @@ import { ArticleType } from './shared/ArticleType'
 import { ModelService } from '../services/db/Model.service'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
+import slugify from 'voca/slugify'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
@@ -237,12 +238,21 @@ export class ArticleApi {
     userId: string,
     onProgress: (progress: number, message?: string) => any = this.logProgress,
   ): Promise<string> {
+    if (!article.titleContent?.value) {
+      throw new Error('Article must have a title section')
+    }
+
     onProgress(0, '')
     const { firestore } = initFirebase()
 
     onProgress(0.1, '')
+    const original = !!article.id ? await this.byId(article.id) : null
+
     if (!article.slug) {
-      article.slug = ArticleService.createSlug(article)
+      article.slug = slugify(article.titleContent?.value)
+    } else if (!!original && original.slug !== article.slug) {
+      // In case slug has been changed — make sure it's "slugified"
+      article.slug = slugify(article.slug)
     }
     await ArticleService.setArticleTypeAsTag(article, userId)
 
