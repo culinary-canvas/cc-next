@@ -19,7 +19,7 @@ export function RelatedArticles({ article }: Props) {
     if (!!article.companyIds?.length) {
       const companyArticles = await ArticleApi.byCompanyIds(article.companyIds)
       companyArticles
-        .filter((companyArticle) => companyArticle.id !== article.id)
+        .filter((companyArticle) => companyArticle.published && companyArticle.id !== article.id)
         .forEach(
           (companyArticle) =>
             _articles.some((a) => a.article.id === companyArticle.id) &&
@@ -39,7 +39,7 @@ export function RelatedArticles({ article }: Props) {
     if (!!article.personIds?.length) {
       const personArticles = await ArticleApi.byPersonIds(article.personIds)
       personArticles
-        .filter((personArticle) => personArticle.id !== article.id)
+        .filter((personArticle) => personArticle.published && personArticle.id !== article.id)
         .forEach(
           (personArticle) =>
             !_articles.some((a) => a.article.id === personArticle.id) &&
@@ -59,7 +59,7 @@ export function RelatedArticles({ article }: Props) {
     if (!!article.tagNames?.length) {
       const tagArticles = await ArticleApi.byTagNames(article.tagNames)
       tagArticles
-        .filter((tagArticle) => tagArticle.id !== article.id)
+        .filter((tagArticle) => tagArticle.published && tagArticle.id !== article.id)
         .forEach(
           (tagArticle) =>
             !_articles.some((a) => a.article.id === tagArticle.id) &&
