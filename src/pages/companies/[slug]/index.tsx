@@ -126,7 +126,10 @@ export const getStaticProps: GetStaticProps<
     .where('slug', '==', params.slug)
     .get()
 
-  const companyData = companyResponse.docs[0].data()
+  const companyData: { [key: string]: any } = {
+    ...companyResponse.docs[0].data(),
+    id: companyResponse.docs[0].id,
+  }
 
   const articlesResponse = await firestore()
     .collection('articles')

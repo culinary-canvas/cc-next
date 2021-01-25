@@ -8,6 +8,9 @@
   &.noFile {
     height: 100%;
     padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px dashed $grey;
     border-radius: 8px;
     cursor: pointer;

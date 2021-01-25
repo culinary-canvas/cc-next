@@ -151,6 +151,12 @@ export const PersonForm = observer((props: Props) => {
             Delete
           </Button>
         )}
+
+        {!!person.id && (
+          <a className={s.link} href={`/persons/${person.slug}`} target="_blank">
+            {`/persons/${person.slug}`}
+          </a>
+        )}
       </div>
 
       <label htmlFor="name">Name*</label>
