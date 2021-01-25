@@ -1,4 +1,5 @@
 export enum CompanyType {
+  PRODUCER = 'PRODUCER',
   RESTAURANT = 'RESTAURANT',
   BAR = 'BAR',
   EDITORIAL = 'EDITORIAL',
