@@ -63,7 +63,9 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
   return (
     <>
       <PageHead
-        title={`Culinary Canvas — #${person.name} (${!isNil(articles) ? articles.length : 0} articles)`}
+        title={`Culinary Canvas — #${person.name} (${
+          !isNil(articles) ? articles.length : 0
+        } articles)`}
         image={person.image?.cropped?.url || articles[0]?.imageContent.url}
         imageWidth={
           person.image?.cropped?.width ||
@@ -126,7 +128,10 @@ export const getStaticProps: GetStaticProps<
     .where('slug', '==', params.slug)
     .get()
 
-  const personData = personResponse.docs[0].data()
+  const personData: { [key: string]: any } = {
+    ...personResponse.docs[0].data(),
+    id: personResponse.docs[0].id,
+  }
 
   const articlesResponse = await firestore()
     .collection('articles')

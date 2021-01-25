@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
 import { Button } from '../../../form/button/Button'
-import { fixSortOrders } from '../../../services/script/fixSortOrders'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
 import s from './dev.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
@@ -27,17 +26,6 @@ const AdminDevArea = observer(() => {
   return (
     <div className={s.container}>
       <div className={s.content}>
-        <Button
-          onClick={async () => {
-            setRunning('fixSortOrders')
-            await fixSortOrders(auth.userId)
-            setRunning(null)
-          }}
-          loading={running === 'fixSortOrders'}
-        >
-          Fix sort orders of Articles
-        </Button>
-
         <Button
           onClick={async () => {
             setRunning('deleteUnusedTags')
@@ -125,6 +113,7 @@ const AdminDevArea = observer(() => {
         >
           Set Person and Company slugs
         </Button>
+
       </div>
     </div>
   )

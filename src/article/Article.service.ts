@@ -59,10 +59,6 @@ export class ArticleService {
     article.sections = article.sections.filter((s) => s.uid !== section.uid)
   }
 
-  static createSlug(article: ArticleModel) {
-    return StringUtils.toLowerKebabCase(article.titleContent?.value)
-  }
-
   static async uploadNewImages(
     article: ArticleModel,
     onProgress: (progress: number, message: string) => any,

@@ -16,7 +16,8 @@ import { GridPosition } from '../grid/GridPosition'
 import { Size } from '../shared/format/Size'
 import { Transformer } from '../../services/db/Transformer'
 import { GridPositionService } from '../grid/GridPosition.service'
-import { action, toJS } from 'mobx'
+import { action } from 'mobx'
+import { ImageFit } from '../content/image/ImageFit'
 
 export class SectionService {
   static create() {
@@ -108,9 +109,14 @@ export class SectionService {
 
   private static applyFullScreenTitlePreset(section: SectionModel) {
     section.preset = SectionPreset.FULL_SCREEN_TITLE
-    const image = this.getOrCreateType(ContentType.IMAGE, section)
+
+    const image: ImageContentModel = this.getOrCreateType(
+      ContentType.IMAGE,
+      section,
+    )
     image.format.gridPosition = new GridPosition(1, 5, 1, 4)
     image.format.layer = 0
+    image.format.fit = ImageFit.COVER
 
     const title = this.getOrCreateType(ContentType.TITLE, section)
     title.format.verticalAlign = VerticalAlign.BOTTOM
@@ -142,8 +148,12 @@ export class SectionService {
   private static applyHalfScreenTitlePreset(section: SectionModel) {
     section.preset = SectionPreset.HALF_SCREEN_TITLE
 
-    const image = this.getOrCreateType(ContentType.IMAGE, section)
+    const image: ImageContentModel = this.getOrCreateType(
+      ContentType.IMAGE,
+      section,
+    )
     image.format.gridPosition = new GridPosition(1, 3, 1, 4)
+    image.format.fit = ImageFit.COVER
 
     const title = this.getOrCreateType(ContentType.TITLE, section)
     title.format.verticalAlign = VerticalAlign.BOTTOM
