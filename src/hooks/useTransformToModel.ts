@@ -15,7 +15,7 @@ export function useTransformToModel<T>(source: Source, Clazz: Class<T>): T {
   const [transformed, setTransformed] = useState<T>(transform(source))
 
   useEffect(() => {
-    transform(source)
+    setTransformed(transform(source))
   }, [source])
 
   return transformed
