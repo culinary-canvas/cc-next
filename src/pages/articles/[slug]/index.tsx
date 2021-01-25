@@ -18,14 +18,6 @@ interface Props {
 const ArticlePage = observer(({ articleData }: Props) => {
   const article = useTransformToModel(articleData, ArticleModel)
 
-  console.log(
-    articleData.sections[0].contents
-      .filter((c) => !!c.value)
-      .map((c) => c.value),
-  )
-  console.log(
-    article.sections[0].contents.filter((c) => !!c.value).map((c) => c.value),
-  )
   return (
     <>
       <PageHead
