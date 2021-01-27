@@ -51,11 +51,15 @@ export const ArticlePreview = observer((props: Props) => {
             alt={imageContent.set.alt}
             layout="fill"
             objectFit="cover"
+            objectPosition={
+              imageContent.format.verticalAlign
+                ? imageContent.format.verticalAlign.toLowerCase()
+                : 'center'
+            }
             src={imageContent.set.cropped.url}
           />
         </figure>
       )}
-
       <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         <Button
           className={s.articleType}
