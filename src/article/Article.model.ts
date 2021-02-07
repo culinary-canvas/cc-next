@@ -51,13 +51,6 @@ export class ArticleModel implements Model, Sortable {
   @field()
   type: ArticleType
 
-  /**
-   * @deprecated
-   */
-  @observable
-  @field()
-  tagIds: string[] = []
-
   @observable
   @field()
   tagNames: string[] = []
@@ -66,23 +59,9 @@ export class ArticleModel implements Model, Sortable {
   @field()
   promoted = false
 
-  /**
-   * @deprecated
-   */
-  @observable
-  @field()
-  parentId: string
-
   @observable
   @field()
   published = false
-
-  /**
-   * @deprecated
-   */
-  @observable
-  @field()
-  titleForUrl: string
 
   @observable
   @field()

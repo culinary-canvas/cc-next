@@ -71,7 +71,6 @@ interface StaticProps {
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   return {
     paths: Object.values(ArticleType)
-      .filter((t) => t !== ArticleType.HOW_TO)
       .map((type) => ({
         params: {
           type: StringUtils.toLowerKebabCase(type),

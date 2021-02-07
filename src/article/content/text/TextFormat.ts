@@ -52,11 +52,4 @@ export class TextFormat extends Format {
   @field(Padding)
   @observable
   padding = new Padding(SPACING.L)
-
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  gridColumnWidth = 1
 }
