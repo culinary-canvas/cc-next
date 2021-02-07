@@ -23,7 +23,17 @@ export class ArrayUtils {
     return Array.isArray(target) ? target : !isNil(target) ? [target] : []
   }
 
-  static distinct(a1: any[], a2: any[]) {
+  static distinct(array: any[], identifier?: string): any[] {
+    return array.reduce(
+      (distinct, o) =>
+        distinct.some((d) => ObjectUtils.equals(o, d, identifier))
+          ? distinct
+          : [...distinct, o],
+      [],
+    )
+  }
+
+  static distinctUnion(a1: any[], a2: any[]) {
     const distinct = [...a1]
 
     a2.filter(

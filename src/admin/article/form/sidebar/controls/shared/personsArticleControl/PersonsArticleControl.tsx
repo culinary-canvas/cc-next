@@ -13,7 +13,8 @@ import removeIcon from '../../../../../../../../public/assets/icons/streamline-i
 import { Button } from '../../../../../../../form/button/Button'
 import { observer } from 'mobx-react'
 import { ArticleService } from '../../../../../../../article/Article.service'
-import StringUtils from '../../../../../../../services/utils/StringUtils'
+import slugify from 'voca/slugify'
+import { useErrorModal } from '../../../../../../../shared/error/useErrorModal'
 
 interface Props {
   article: ArticleModel
@@ -22,6 +23,8 @@ interface Props {
 export const PersonsArticleControl = observer((props: Props) => {
   const { article } = props
   const auth = useAuth()
+  const { showError } = useErrorModal()
+
   const [all, setAll] = useState<PersonModel[]>([])
   const [inArticle, setInArticle] = useState<PersonModel[]>([])
   const [notSelected, setNotSelected] = useState<PersonModel[]>([])
@@ -113,20 +116,29 @@ export const PersonsArticleControl = observer((props: Props) => {
             ArticleService.addLinks(
               article,
               p.name,
-              `/persons/${StringUtils.toLowerKebabCase(p.name)}`,
+              `/persons/${slugify(p.name)}`,
             )
           })
         }
         displayField="name"
-        onInput={(v) => notSelected.filter((p) => p.name.includes(v))}
+        onInput={(v) =>
+          notSelected.filter((p) =>
+            p.name.toLowerCase().includes(v.toLowerCase()),
+          )
+        }
         onCreate={async (v) => {
-          setLoading(true)
-          const person = new PersonModel()
-          person.name = v
-          await PersonApi.save(person, auth.userId)
-
-          await load()
-          setLoading(false)
+          try {
+            setLoading(true)
+            const person = new PersonModel()
+            person.name = v
+            const personId = await PersonApi.save(person, auth.userId)
+            runInAction(() => article.personIds.push(personId))
+            await load()
+          } catch (e) {
+            showError(e)
+          } finally {
+            setLoading(false)
+          }
         }}
         disabled={loading}
       />

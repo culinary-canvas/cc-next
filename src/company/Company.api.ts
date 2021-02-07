@@ -47,6 +47,15 @@ export class CompanyApi {
       : []
   }
 
+  static async existsBySlug(slug: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .where('slug', '==', slug)
+      .get()
+    return !response.empty
+  }
+
   static async save(
     company: CompanyModel,
     userId: string,
@@ -55,12 +64,17 @@ export class CompanyApi {
     onProgress(0, '')
     const { firestore } = initFirebase()
 
-    onProgress(0.25)
+    onProgress(0.05)
     ModelService.beforeSave(company, userId)
     company.slug = slugify(company.name)
     CompanyService.ensureHttpInUrls(company)
 
-    console.log('Created:', company.created)
+    onProgress(0.1, 'Validating')
+    if (!(await CompanyService.validate(company))) {
+      throw new Error(
+        "Duplicate not allowed. There's already a company in the database with the same name/slug",
+      )
+    }
 
     if (!!company.image) {
       onProgress(0.25, 'Uploading images')
