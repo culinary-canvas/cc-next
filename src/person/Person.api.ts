@@ -70,13 +70,14 @@ export class PersonApi {
       })
   }
 
-  static async existsBySlug(slug: string) {
+  static async bySlug(slug: string): Promise<PersonModel[]> {
     const { firestore } = initFirebase()
     const response = await firestore()
       .collection(this.COLLECTION)
+      .withConverter(Transformer.firestoreConverter(PersonModel))
       .where('slug', '==', slug)
       .get()
-    return !response.empty
+    return response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async save(

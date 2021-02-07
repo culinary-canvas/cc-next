@@ -1,6 +1,7 @@
 import { addHttpIfMissing } from '../services/utils/UrlUtils'
 import { CompanyModel } from './Company.model'
 import { CompanyApi } from './Company.api'
+import { PersonApi } from '../person/Person.api'
 
 export class CompanyService {
   static ensureHttpInUrls(company: CompanyModel) {
@@ -19,8 +20,9 @@ export class CompanyService {
   }
 
   static async validate(company: CompanyModel) {
-    if (await CompanyApi.existsBySlug(company.slug)) {
-      return false
+    if (!company.id) {
+      const result = await CompanyApi.bySlug(company.slug)
+      return result.filter((c) => c.id !== company.id).length === 0
     }
     return true
   }

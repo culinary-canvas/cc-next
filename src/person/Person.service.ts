@@ -30,8 +30,9 @@ export class PersonService {
   }
 
   static async validate(person: PersonModel): Promise<boolean> {
-    if (await PersonApi.existsBySlug(person.slug)) {
-      return false
+    if (!person.id) {
+      const result = await PersonApi.bySlug(person.slug)
+      return result.filter((p) => p.id !== person.id).length === 0
     }
     return true
   }
