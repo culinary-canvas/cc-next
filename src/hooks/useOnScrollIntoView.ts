@@ -4,6 +4,7 @@ import { isNil } from '../services/importHelpers'
 export function useOnScrollIntoView(
   referenceElement: HTMLElement,
   onReached: () => any,
+  deps: any[] = [],
   options?: { relativeOffset?: number; fixedOffset?: number },
 ) {
   const [relative, setRelative] = useState<number>(1)
@@ -36,5 +37,5 @@ export function useOnScrollIntoView(
   useEffect(() => {
     window.addEventListener('scroll', evaluate, { passive: true })
     return () => window.removeEventListener('scroll', evaluate)
-  }, [reached, onReached, referenceElement, evaluate])
+  }, [reached, onReached, referenceElement, evaluate, ...deps])
 }

@@ -33,6 +33,7 @@ export const Article = observer(({ article: propArticle }: Props) => {
       }
       setShowRelated(true)
     },
+    [article],
     {
       relativeOffset: 0.9,
     },
