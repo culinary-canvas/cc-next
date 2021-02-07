@@ -24,16 +24,21 @@ class ObjectUtils {
     return !ObjectUtils.hasValue(value)
   }
 
-  static equals<T>(object1: T, object2: T): boolean {
+  static equals<T>(object1: T, object2: T, identifier?: string): boolean {
     if (isNil(object1) || isNil(object2)) {
       return isNil(object1) && isNil(object2)
     }
-    return this.hasEqualsMethod(object1)
-      ? ((object1 as unknown) as Record<
-          'equals',
-          (other: T) => boolean
-        >).equals(object2)
-      : isEqual(object1, object2)
+
+    if (!!identifier) {
+      return object1[identifier] === object2[identifier]
+    }
+
+    if (this.hasEqualsMethod(object1)) {
+      ;((object1 as unknown) as Record<'equals', (other: T) => boolean>).equals(
+        object2,
+      )
+    }
+    isEqual(object1, object2)
   }
 
   static hasEqualsMethod(object: any) {

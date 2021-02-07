@@ -21,6 +21,7 @@ import { ImageSet } from '../../article/content/image/ImageSet'
 import { ImageFormat } from '../../article/content/image/ImageFormat'
 import { isNil } from '../../services/importHelpers'
 import TextareaAutosize from 'react-textarea-autosize'
+import { useErrorModal } from '../../shared/error/useErrorModal'
 
 interface Props {
   person: PersonModel
@@ -32,6 +33,7 @@ export const PersonForm = observer((props: Props) => {
   const overlay = useOverlay()
   const router = useRouter()
   const auth = useAuth()
+  const { showError } = useErrorModal()
 
   const [formControl, person] = useFormControl(_person, [
     { field: 'name', required: true },
@@ -69,14 +71,21 @@ export const PersonForm = observer((props: Props) => {
         <Button
           disabled={formControl.isClean || !formControl.isValid || loading}
           onClick={async () => {
-            overlay.toggle()
-            const id = await PersonApi.save(person, userId, (v, t) =>
-              overlay.setProgress(v, t),
-            )
-            setTimeout(() => overlay.toggle(false), 1000)
-            router.replace(
-              !!router.query.id ? `/admin/persons` : `/admin/persons/${id}`,
-            )
+            try {
+              setLoading(true)
+              overlay.toggle()
+              const id = await PersonApi.save(person, userId, (v, t) =>
+                overlay.setProgress(v, t),
+              )
+              setTimeout(() => overlay.toggle(false), 1000)
+              router.replace(
+                !!router.query.id ? `/admin/persons` : `/admin/persons/${id}`,
+              )
+            } catch (e) {
+              showError(e)
+            } finally {
+              setLoading(false)
+            }
           }}
         >
           Save
@@ -153,7 +162,11 @@ export const PersonForm = observer((props: Props) => {
         )}
 
         {!!person.id && (
-          <a className={s.link} href={`/persons/${person.slug}`} target="_blank">
+          <a
+            className={s.link}
+            href={`/persons/${person.slug}`}
+            target="_blank"
+          >
             {`/persons/${person.slug}`}
           </a>
         )}
@@ -191,13 +204,18 @@ export const PersonForm = observer((props: Props) => {
           )
         }
         onCreate={async (v) => {
-          setLoading(true)
-          const company = new CompanyModel()
-          company.name = v
-          const id = await CompanyApi.save(company, auth.userId)
-          person.companyId = id
-          await load()
-          setLoading(false)
+          try {
+            setLoading(true)
+            const company = new CompanyModel()
+            company.name = v
+            const id = await CompanyApi.save(company, auth.userId)
+            person.companyId = id
+            await load()
+          } catch (e) {
+            showError(e)
+          } finally {
+            setLoading(false)
+          }
         }}
         disabled={loading}
       />

@@ -70,6 +70,15 @@ export class PersonApi {
       })
   }
 
+  static async existsBySlug(slug: string) {
+    const { firestore } = initFirebase()
+    const response = await firestore()
+      .collection(this.COLLECTION)
+      .where('slug', '==', slug)
+      .get()
+    return !response.empty
+  }
+
   static async save(
     person: PersonModel,
     userId: string,
@@ -78,10 +87,17 @@ export class PersonApi {
     onProgress(0, '')
     const { firestore } = initFirebase()
 
-    onProgress(0.25)
+    onProgress(0.05)
     ModelService.beforeSave(person, userId)
     person.slug = slugify(person.name)
     PersonService.ensureHttpInUrls(person)
+
+    onProgress(0.1, 'validating')
+    if (!(await PersonService.validate(person))) {
+      throw new Error(
+        "Duplicate not allowed. There's already a person in the database with the same name/slug",
+      )
+    }
 
     if (!!person.image) {
       onProgress(0.25, 'Uploading images')

@@ -23,6 +23,7 @@ import StringUtils from '../../services/utils/StringUtils'
 import { CompanyType } from '../CompanyType'
 import { isNil } from '../../services/importHelpers'
 import TextareaAutosize from 'react-textarea-autosize'
+import { useErrorModal } from '../../shared/error/useErrorModal'
 
 interface Props {
   company: CompanyModel
@@ -34,6 +35,7 @@ export const CompanyForm = observer((props: Props) => {
   const overlay = useOverlay()
   const router = useRouter()
   const auth = useAuth()
+  const { showError } = useErrorModal()
 
   const [formControl, company] = useFormControl(_company, [
     { field: 'name', required: true },
@@ -67,14 +69,23 @@ export const CompanyForm = observer((props: Props) => {
         <Button
           disabled={formControl.isClean || !formControl.isValid || loading}
           onClick={async () => {
-            overlay.toggle()
-            const id = await CompanyApi.save(company, userId, (v, t) =>
-              overlay.setProgress(v, t),
-            )
-            setTimeout(() => overlay.toggle(false), 1000)
-            router.replace(
-              !!router.query.id ? `/admin/companies` : `/admin/companies/${id}`,
-            )
+            try {
+              setLoading(true)
+              overlay.toggle()
+              const id = await CompanyApi.save(company, userId, (v, t) =>
+                overlay.setProgress(v, t),
+              )
+              setTimeout(() => overlay.toggle(false), 1000)
+              router.replace(
+                !!router.query.id
+                  ? `/admin/companies`
+                  : `/admin/companies/${id}`,
+              )
+            } catch (e) {
+              showError(e)
+            } finally {
+              setLoading(false)
+            }
           }}
         >
           Save
@@ -168,7 +179,11 @@ export const CompanyForm = observer((props: Props) => {
         )}
 
         {!!company.id && (
-          <a className={s.link} href={`/companies/${company.slug}`} target="_blank">
+          <a
+            className={s.link}
+            href={`/companies/${company.slug}`}
+            target="_blank"
+          >
             {`/companies/${company.slug}`}
           </a>
         )}

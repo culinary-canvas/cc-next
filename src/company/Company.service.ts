@@ -1,5 +1,6 @@
 import { addHttpIfMissing } from '../services/utils/UrlUtils'
 import { CompanyModel } from './Company.model'
+import { CompanyApi } from './Company.api'
 
 export class CompanyService {
   static ensureHttpInUrls(company: CompanyModel) {
@@ -15,5 +16,12 @@ export class CompanyService {
     if (!!company.twitter) {
       company.twitter = addHttpIfMissing(company.twitter)
     }
+  }
+
+  static async validate(company: CompanyModel) {
+    if (await CompanyApi.existsBySlug(company.slug)) {
+      return false
+    }
+    return true
   }
 }
