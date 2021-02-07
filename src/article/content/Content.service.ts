@@ -114,9 +114,4 @@ export class ContentService {
         content.placeholder = loremIpsum({ units: 'paragraph' })
     }
   }
-
-  static sort(contents: ContentModel[]) {
-    SortableService.fixSortOrders(contents)
-    return SortableService.getSorted(contents)
-  }
 }

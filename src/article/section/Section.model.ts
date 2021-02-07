@@ -4,7 +4,6 @@ import { transient } from '../../services/db/decorators/transient.decorator'
 import { v1 as uuid } from 'uuid'
 import { SectionFormat } from './SectionFormat'
 import { ContentModel } from '../content/ContentModel'
-import { Orientation } from '../shared/Orientation'
 import { SectionPreset } from './SectionPreset'
 import { transform } from '../../services/db/decorators/transform.decorator'
 import { ArticlePart } from '../shared/ArticlePart'
@@ -33,33 +32,6 @@ export class SectionModel implements ArticlePart {
   })
   @observable
   contents: ContentModel[] = []
-
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  sortOrder: number
-
-  /**
-   * @deprecated
-   */
-  @computed
-  get columns(): ContentModel[][] {
-    return (
-      this.contents?.reduce<ContentModel[][]>((columns, content, i) => {
-        if (i === 0) {
-          return [[content]]
-        }
-        if (content.alignToPrevious === Orientation.VERTICAL) {
-          columns[columns.length - 1].push(content)
-        } else {
-          columns.push([content])
-        }
-        return columns
-      }, []) || []
-    )
-  }
 
   @computed
   get displayName(): string {

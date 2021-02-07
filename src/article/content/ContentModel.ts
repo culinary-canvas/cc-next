@@ -17,23 +17,9 @@ export abstract class ContentModel<T extends Format = Format>
   @observable
   name: string
 
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  alignToPrevious: Orientation
-
   @field()
   @observable
   type: ContentType
-
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  sortOrder: number
 
   abstract format: T
 

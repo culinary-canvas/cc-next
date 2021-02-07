@@ -32,20 +32,6 @@ export class ImageFormat extends Format {
   @observable
   padding = new Padding(SPACING.L)
 
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  background = false
-
-  /**
-   * @deprecated
-   */
-  @field()
-  @observable
-  gridColumnWidth: number | 'min-content' | 'max-content' = 1
-
   @field()
   @observable
   circle = false
