@@ -1,0 +1,22 @@
+@import '../../styles/color';
+@import '../../styles/shadow';
+
+.container {
+  padding: 2rem;
+  background-color: $white;
+  border-radius: 1rem;
+  box-shadow: $softDownShadow;
+  width: 50vw;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    color: $red;
+    margin: 0;
+  }
+  p {
+    color: $black;
+  }
+}

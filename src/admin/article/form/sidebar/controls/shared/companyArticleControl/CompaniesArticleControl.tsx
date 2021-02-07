@@ -12,6 +12,8 @@ import { CompanyApi } from '../../../../../../../company/Company.api'
 import { observer } from 'mobx-react'
 import { ArticleService } from '../../../../../../../article/Article.service'
 import StringUtils from '../../../../../../../services/utils/StringUtils'
+import { useErrorModal } from '../../../../../../../shared/error/useErrorModal'
+import slugify from 'voca/slugify'
 
 interface Props {
   article: ArticleModel
@@ -20,6 +22,8 @@ interface Props {
 export const CompaniesArticleControl = observer((props: Props) => {
   const { article } = props
   const auth = useAuth()
+  const { showError } = useErrorModal()
+
   const [all, setAll] = useState<CompanyModel[]>([])
   const [inArticle, setInArticle] = useState<CompanyModel[]>([])
   const [notSelected, setNotSelected] = useState<CompanyModel[]>([])
@@ -90,19 +94,28 @@ export const CompaniesArticleControl = observer((props: Props) => {
           ArticleService.addLinks(
             article,
             c.name,
-            `/companies/${StringUtils.toLowerKebabCase(c.name)}`,
+            `/companies/${slugify(c.name)}`,
           )
         }}
         displayField="name"
-        onInput={(v) => notSelected.filter((c) => c.name.includes(v))}
+        onInput={(v) =>
+          notSelected.filter((c) =>
+            c.name.toLowerCase().includes(v.toLowerCase()),
+          )
+        }
         onCreate={async (v) => {
-          setLoading(true)
-          const company = new CompanyModel()
-          company.name = v
-          const companyId = await CompanyApi.save(company, auth.userId)
-          await load()
-          runInAction(() => article.companyIds.push(companyId))
-          setLoading(false)
+          try {
+            setLoading(true)
+            const company = new CompanyModel()
+            company.name = v
+            const companyId = await CompanyApi.save(company, auth.userId)
+            await load()
+            runInAction(() => article.companyIds.push(companyId))
+          } catch (e) {
+            showError(e)
+          } finally {
+            setLoading(false)
+          }
         }}
         disabled={loading}
       />
