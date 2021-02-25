@@ -27,6 +27,8 @@ export interface Admin {
   readonly setArticlePart: (v: ArticlePart) => void
   readonly article: ArticleModel
   readonly reset: () => void
+  readonly mode: 'article' | 'preview'
+  readonly setMode: (mode: 'article' | 'preview') => void
 }
 
 export function useAdminState(): Admin {
@@ -40,6 +42,7 @@ export function useAdminState(): Admin {
   const [section, _setSection] = useState<SectionModel>()
   const [content, _setContent] = useState<ContentModel>()
   const [article, setArticle] = useState<ArticleModel>()
+  const [mode, setMode] = useState<'article' | 'preview'>('article')
 
   useEffect(() => setArticle(formControl?.mutable), [formControl])
 
@@ -106,6 +109,8 @@ export function useAdminState(): Admin {
     setArticlePart,
     article,
     reset,
+    mode,
+    setMode,
   }
 }
 export const AdminContext = createContext<Admin>(null)

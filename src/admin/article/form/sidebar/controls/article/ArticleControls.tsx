@@ -5,7 +5,6 @@ import { Checkbox } from '../../../../../../form/checkbox/Checkbox'
 import { Select } from '../../../../../../form/select/Select'
 import { runInAction, toJS } from 'mobx'
 import { Button } from '../../../../../../form/button/Button'
-import { ArticleModel } from '../../../../../../article/Article.model'
 import StringUtils from '../../../../../../services/utils/StringUtils'
 import { copyTextToClipboard } from '../../../../../../services/utils/Utils'
 import { ArticleType } from '../../../../../../article/shared/ArticleType'
@@ -32,7 +31,6 @@ export const ArticleControls = observer(() => {
   const { article } = admin
 
   const [editingSlug, editSlug] = useState<boolean>(false)
-
   const [title, setTitle] = useState<string>(article.title)
   const [deleting, setDeleting] = useState<boolean>(false)
 

@@ -40,6 +40,8 @@
 }
 
 @mixin button-group {
+  display: flex;
+
   > button,
   > .button {
     margin: 0;

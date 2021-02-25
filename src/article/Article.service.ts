@@ -16,6 +16,7 @@ import { TextContentModel } from './content/text/TextContent.model'
 import { TextEditService } from '../admin/article/form/content/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
+import { ImageFile } from './content/image/ImageFile'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
@@ -64,48 +65,49 @@ export class ArticleService {
     onProgress: (progress: number, message: string) => any,
     initialProgress = 0,
   ) {
-    const newImagesCount = article.contents
-      .filter((c) => c instanceof ImageContentModel && !!c.set.original?.url)
-      .reduce((sum, content: ImageContentModel) => {
-        let newSum = sum
-        newSum += StorageService.isLocal(content.set.original.url) ? 1 : 0
-        newSum += StorageService.isLocal(content.set.cropped.url) ? 1 : 0
-        return newSum
-      }, 0)
+    const imageFilesToUpload: ImageFile[] = article.contents.flatMap(
+      (content) => {
+        const toUpload: ImageFile[] = []
 
-    const progressPerImage = 0.5 / newImagesCount
+        if (
+          content instanceof ImageContentModel &&
+          !!content.set.original?.url
+        ) {
+          if (StorageService.isLocal(content.set.original.url)) {
+            toUpload.push(content.set.original)
+          }
+          if (StorageService.isLocal(content.set.cropped.url)) {
+            toUpload.push(content.set.cropped)
+          }
+        }
+        return toUpload
+      },
+    )
 
+    if (
+      !!article.preview.image.original?.url &&
+      StorageService.isLocal(article.preview.image.original.url)
+    ) {
+      imageFilesToUpload.push(article.preview.image.original)
+      imageFilesToUpload.push(article.preview.image.cropped)
+    }
+
+    const progressPerImage = 0.5 / imageFilesToUpload.length
     let accProgress = initialProgress
 
-    const contentsWithImagesToUpload: ImageContentModel[] = article.contents.filter(
-      (content) =>
-        content instanceof ImageContentModel &&
-        !!content.set.original?.url &&
-        (StorageService.isLocal(content.set.original.url) ||
-          StorageService.isLocal(content.set.cropped.url)),
-    ) as ImageContentModel[]
-
     return Promise.all(
-      contentsWithImagesToUpload.map(async (content) => {
-        return Promise.all(
-          this.IMAGE_SET_PROPERTY_NAMES.filter((key) =>
-            StorageService.isLocal(content.set[key].url),
-          ).map(async (key) => {
-            const image = content.set[key]
-            image.url = await StorageService.storeFileFromLocalUrl(
-              image.url,
-              image.fileName,
-              `articles/${article.slug}`,
-              (uploadProgress) => {
-                const newProgress =
-                  accProgress + uploadProgress * progressPerImage
+      imageFilesToUpload.map(async (image) => {
+        image.url = await StorageService.storeFileFromLocalUrl(
+          image.url,
+          image.fileName,
+          `articles/${article.slug}`,
+          (uploadProgress) => {
+            const newProgress = accProgress + uploadProgress * progressPerImage
 
-                return onProgress(newProgress, image.fileName)
-              },
-            )
-            accProgress += progressPerImage
-          }),
+            return onProgress(newProgress, image.fileName)
+          },
         )
+        accProgress += progressPerImage
       }),
     )
   }

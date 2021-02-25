@@ -1,16 +1,68 @@
 @import 'src/styles/layout';
 
 @mixin gridContainer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    @include responsive-header-height-padding-top();
+  display: grid;
+  @include main-container-width();
+
+  @include media('<=phone') {
+    grid-auto-rows: minmax(1fr, 800px);
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 2rem;
+  }
+
+  @include media('>phone') {
+    grid-auto-flow: dense;
+    grid-auto-rows: minmax(1fr, 800px);
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-bottom: 4rem;
+    gap: 4rem;
+  }
+
+  a {
+    color: black;
+  }
+
+  .articleContainer {
+    &:after {
+      display: none;
+    }
+    @include media('>tablet') {
+      height: 100%;
+
+      &:first-child.promoted {
+        grid-column-end: span 3;
+      }
+
+      &:not(:first-child).promoted {
+        grid-column-end: span 2;
+      }
+
+      &:not(:first-child, .promoted) {
+        grid-column-end: span 1;
+      }
+    }
+
+    @include media('>phone', '<=tablet') {
+      height: 100%;
+      &.promoted {
+        grid-column-end: span 2;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
+    }
 
     @include media('<=phone') {
-      padding-top: 5rem;
-      width: 100%;
+      height: 80vh;
+      &.promoted {
+        grid-column-end: span 1;
+      }
+
+      &:not(.promoted) {
+        grid-column-end: span 1;
+      }
     }
+  }
 }
