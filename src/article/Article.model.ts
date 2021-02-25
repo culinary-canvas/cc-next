@@ -13,6 +13,7 @@ import { ArticleFormat } from './shared/ArticleFormat'
 import { transient } from '../services/db/decorators/transient.decorator'
 import { PersonModel } from '../person/Person.model'
 import { CompanyModel } from '../company/Company.model'
+import { ArticlePreviewModel } from './preview/ArticlePreview.model'
 
 export class ArticleModel implements Model, Sortable {
   @observable
@@ -38,6 +39,10 @@ export class ArticleModel implements Model, Sortable {
   @observable
   @field()
   sortOrder: number
+
+  @observable
+  @field(ArticlePreviewModel)
+  preview: ArticlePreviewModel = new ArticlePreviewModel()
 
   @observable
   @field(SectionModel)

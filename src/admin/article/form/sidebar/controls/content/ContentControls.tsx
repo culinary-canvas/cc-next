@@ -15,7 +15,6 @@ import { classnames } from '../../../../../../services/importHelpers'
 import { useAdmin } from '../../../../../Admin'
 import { GridControl } from '../shared/gridControl/GridControl'
 import { runInAction } from 'mobx'
-import { ColorPicker } from '../shared/colorPicker/ColorPicker'
 import { Modal } from '../../../../../../shared/modal/Modal'
 import { SectionService } from '../../../../../../article/section/Section.service'
 import { ControlContainer } from '../shared/controlContainer/ControlContainer'
@@ -68,9 +67,7 @@ export const ContentControls = observer(() => {
         />
       </ControlContainer>
 
-
       {content instanceof TextContentModel && <TextControls />}
-
       {content instanceof ImageContentModel && <ImageControls />}
 
       <Button

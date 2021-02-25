@@ -19,18 +19,6 @@ import { ImageFit } from '../../../../../../../article/content/image/ImageFit'
 export const ImageControls = observer(() => {
   const admin = useAdmin()
   const content = admin.content as ImageContentModel
-  const [alt, setAlt] = useState<string>(content.set.alt)
-
-  useEffect(() => {
-    if (content.alt !== alt) {
-      runInAction(() => (content.set.alt = alt))
-    }
-  }, [alt])
-
-  useReaction(
-    () => content.set.alt,
-    (t) => setAlt(t),
-  )
 
   return (
     <>
@@ -46,8 +34,10 @@ export const ImageControls = observer(() => {
         <input
           id="alt"
           type="text"
-          value={alt}
-          onChange={(v) => setAlt(v.target.value)}
+          value={content.alt}
+          onChange={(v) =>
+            runInAction(() => (content.set.alt = v.target.value))
+          }
           placeholder="Describe the image..."
         />
       </ControlContainer>
