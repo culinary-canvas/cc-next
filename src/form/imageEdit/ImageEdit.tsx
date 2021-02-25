@@ -19,6 +19,7 @@ interface Props {
   enableModal?: boolean
   onFocus?: () => any
   id?: string
+  disabled?: boolean
 }
 
 export const ImageEdit = observer((props: Props) => {
@@ -31,6 +32,7 @@ export const ImageEdit = observer((props: Props) => {
     enableModal = true,
     onFocus,
     id,
+    disabled = false,
   } = props
   const overlay = useOverlay()
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
@@ -41,18 +43,27 @@ export const ImageEdit = observer((props: Props) => {
         <div
           id={id}
           onClick={() => {
-            enableModal && setModalOpen(true)
-            onFocus && onFocus()
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
           }}
           onKeyUp={() => {
-            enableModal && setModalOpen(true)
-            onFocus && onFocus()
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
           }}
           tabIndex={0}
           role="button"
-          className={classnames([s.content, s.noFile, className])}
+          className={classnames([
+            s.content,
+            s.noFile,
+            { [s.disabled]: disabled },
+            className,
+          ])}
         >
-          No image selected
+          No image selected {isModalOpen}
         </div>
       ) : (
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
@@ -61,12 +72,16 @@ export const ImageEdit = observer((props: Props) => {
           width={format.fit === ImageFit.CONTAIN && set.cropped.width}
           height={format.fit === ImageFit.CONTAIN && set.cropped.height}
           onClick={() => {
-            enableModal && setModalOpen(true)
-            onFocus && onFocus()
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
           }}
           onKeyUp={() => {
-            enableModal && setModalOpen(true)
-            onFocus && onFocus()
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
           }}
           // @ts-ignore
           layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
@@ -74,7 +89,11 @@ export const ImageEdit = observer((props: Props) => {
           objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
           alt={set.alt}
           src={set.cropped.url}
-          className={classnames([s.content, className])}
+          className={classnames([
+            s.content,
+            { [s.disabled]: disabled },
+            className,
+          ])}
           quality={65}
         />
       )}

@@ -1,6 +1,18 @@
 @import '../../../styles/article';
+@import '../../../styles/grid';
+@import '../../../styles/layout';
 
 .content {
   position: relative;
   @include articleContent();
+}
+
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  .previewGrid {
+    @include gridContainer();
+    margin-top: $header-height;
+  }
 }
