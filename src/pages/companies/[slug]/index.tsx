@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import s from './articlesByCompany.module.scss'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../article/Article.model'
 import { PageHead } from '../../../head/PageHead'
@@ -97,28 +97,7 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
   )
 }
 
-interface StaticProps {
-  slug: string
-  [key: string]: string
-}
-
-export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
-  const { firestore } = initFirebase()
-  const response = await firestore().collection('companies').get()
-  return {
-    paths: response.docs.map((d) => ({
-      params: {
-        slug: d.data().slug,
-      },
-    })),
-    fallback: true,
-  }
-}
-
-export const getStaticProps: GetStaticProps<
-  Props & { [key: string]: any },
-  StaticProps
-> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params.slug === 'culinary-arts-academy-switzerland-caas') {
     return {
       redirect: {
@@ -156,7 +135,6 @@ export const getStaticProps: GetStaticProps<
       articlesData: JSON.parse(JSON.stringify(articlesData)),
       companyData: JSON.parse(JSON.stringify(companyData)),
     },
-    revalidate: 1,
   }
 }
 
