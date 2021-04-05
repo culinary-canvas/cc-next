@@ -11,7 +11,7 @@ import {
   PinterestShareButton,
   TwitterShareButton,
 } from 'react-share'
-import { ArticleModel } from '../../Article.model'
+import { ArticleModel } from '../../models/Article.model'
 import { useRouter } from 'next/router'
 import s from './Share.module.scss'
 import { classnames } from '../../../services/importHelpers'

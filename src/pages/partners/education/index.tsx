@@ -1,19 +1,19 @@
 import { GetStaticProps } from 'next'
-import { PageHead } from '../../../head/PageHead'
+import { PageHead } from '../../../shared/head/PageHead'
 import React, { useEffect } from 'react'
 import s from './education.module.scss'
 import { initFirebase } from '../../../services/firebase/Firebase'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
-import { ArticleModel } from '../../../article/Article.model'
+import { ArticleModel } from '../../../article/models/Article.model'
 import { useRouter } from 'next/router'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
 import { isServer } from '../../_app'
 import { useMenu } from '../../../menu/Menu.context'
-import { menuOptions } from '../../../menu/menuOptions'
+import { menuOptions } from '../../../menu/models/menuOptions'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import { CompanyModel } from '../../../company/Company.model'
-import { Company } from '../../../company/Company'
+import { CompanyModel } from '../../../company/models/Company.model'
+import { CompanyView } from '../../../company/view/CompanyView'
 
 const PAGE_SIZE = 6
 
@@ -57,7 +57,7 @@ export default function Education({ articlesData, companyData }: Props) {
         imageAlt={company.image?.alt || articles[0]?.imageContent.set.alt}
       />
       <main className={s.container}>
-        <Company company={company} className={s.presentation} />
+        <CompanyView company={company} className={s.presentation} />
 
         <h2>Articles</h2>
         <ArticleGrid

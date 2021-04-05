@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { PersonModel } from '../../../../person/Person.model'
+import { PersonModel } from '../../../../person/models/Person.model'
 import { PersonApi } from '../../../../person/Person.api'
 import { GetServerSideProps } from 'next'
 import { useTransformToModel } from '../../../../hooks/useTransformToModel'

@@ -2,7 +2,7 @@ import React from 'react'
 import s from './contact.module.scss'
 import { GetStaticProps } from 'next'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
-import { PageHead } from '../../head/PageHead'
+import { PageHead } from '../../shared/head/PageHead'
 
 export default function Contact() {
   return (

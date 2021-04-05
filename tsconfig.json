@@ -17,7 +17,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots": ["src/types"],
+    "typeRoots": [
+      "src/services/types"
+    ],
     "useDefineForClassFields": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './cookies.module.scss'
-import { PageHead } from '../../head/PageHead'
+import { PageHead } from '../../shared/head/PageHead'
 import {GetStaticProps} from 'next'
 
 export default function Cookies() {

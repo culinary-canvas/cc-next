@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
 import s from './Modal.module.scss'
-import { Button } from '../../form/button/Button'
+import { Button } from '../button/Button'
 import { classnames, isNil } from '../../services/importHelpers'
 
 interface Props {

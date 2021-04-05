@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import s from './Menu.module.scss'
 import Link from 'next/link'
-import { menuOptions } from './menuOptions'
+import { menuOptions } from './models/menuOptions'
 import { useMenu } from './Menu.context'
 import { classnames } from '../services/importHelpers'
 import { useAuth } from '../services/auth/Auth'
-import { MenuOption } from './MenuOption'
+import { MenuOption } from './models/MenuOption'
 
 interface Props {
   className?: string

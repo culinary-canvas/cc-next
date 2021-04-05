@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import s from './start.module.scss'
 import { classnames } from '../services/importHelpers'
-import { ArticleModel } from '../article/Article.model'
-import { PageHead } from '../head/PageHead'
+import { ArticleModel } from '../article/models/Article.model'
+import { PageHead } from '../shared/head/PageHead'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
@@ -10,7 +10,7 @@ import { initFirebase } from '../services/firebase/Firebase'
 import { Splash } from '../article/grid/splash/Splash'
 import { useTransformToModels } from '../hooks/useTransformToModels'
 import { useMenu } from '../menu/Menu.context'
-import { menuOptions } from '../menu/menuOptions'
+import { menuOptions } from '../menu/models/menuOptions'
 
 interface Props {
   articlesData: any[]

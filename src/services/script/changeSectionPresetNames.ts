@@ -1,8 +1,8 @@
 import { ArticleApi } from '../../article/Article.api'
 import firebase from 'firebase'
 import { Transformer } from '../db/Transformer'
-import { ArticleModel } from '../../article/Article.model'
-import { SectionPreset } from '../../article/section/SectionPreset'
+import { ArticleModel } from '../../article/models/Article.model'
+import { SectionPreset } from '../../article/models/SectionPreset'
 
 export async function changeSectionPresetNames(userId: string) {
   const articles = await ArticleApi.all()

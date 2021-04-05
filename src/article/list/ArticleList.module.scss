@@ -1,0 +1,13 @@
+@import '../../styles/layout';
+@import '../../styles/color';
+@import '../../styles/table';
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  table {
+    @include table();
+  }
+}

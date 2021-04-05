@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ArticleModel } from '../Article.model'
+import { ArticleModel } from '../models/Article.model'
 import s from './RelatedArticle.module.scss'
 import ArticleApi from '../Article.api'
 import { ArticleGrid } from '../grid/ArticleGrid'
-import { ArticleWithLabels } from '../ArticleWithLabels'
-import { ArticleLabel } from '../ArticleLabel'
+import { ArticleWithLabels } from '../models/ArticleWithLabels'
+import { ArticleLabel } from '../models/ArticleLabel'
 
 interface Props {
   article: ArticleModel

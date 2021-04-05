@@ -1,0 +1,65 @@
+@import '../../styles/animation';
+@import '../../styles/color';
+@import '../../styles/font';
+@import '../../styles/layout';
+@import '../../styles/icon';
+
+.container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  min-height: 200px;
+  padding-top: $spacing-xxl;
+  margin-top: auto;
+  margin-bottom: 0;
+  background-color: $black;
+  color: $white;
+  font-size: $font-size-s;
+  font-weight: 200;
+
+  .logo {
+    position: absolute;
+    width: 200px;
+    filter: $filter-white;
+  }
+
+  .content {
+    @include main-content-width();
+    display: flex;
+    justify-content: space-between;
+
+    .copyright {
+      @include media('<=phone') {
+        display: none;
+      }
+      @include media('>phone') {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .socialMediaContainer {
+      .socialMediaLink {
+        margin-left: 1rem;
+      }
+    }
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    a {
+      color: $white;
+      font-weight: 400;
+
+      &:after {
+        display: none;
+      }
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}

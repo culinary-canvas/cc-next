@@ -1,0 +1,16 @@
+@import '../../../../../../styles/controlButtons';
+@import '../../../../../../styles/form';
+@import '../../../../../../styles/font';
+
+.container {
+  @include control-buttons-container();
+  flex-direction: column;
+
+  label {
+    width: 4rem;
+  }
+
+  img {
+    width: $icon-size-xs;
+  }
+}
