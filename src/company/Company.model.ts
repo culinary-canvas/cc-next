@@ -65,4 +65,8 @@ export class CompanyModel implements Model {
   @observable
   @field(ImageFormat)
   imageFormat: ImageFormat
+
+  @observable
+  @field()
+  partner = false
 }

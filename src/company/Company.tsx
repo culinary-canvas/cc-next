@@ -6,29 +6,33 @@ import Image from 'next/image'
 import { classnames } from '../services/importHelpers'
 import Link from 'next/link'
 import StringUtils from '../services/utils/StringUtils'
+import ReactMarkdown from 'react-markdown'
 
 interface Props {
   company: CompanyModel
   className?: string
   card?: boolean
+  children?: any
 }
 
 export function Company(props: Props) {
-  const { company, className, card = false } = props
+  const { company, className, card = false, children } = props
   const [description, setDescription] = useState<string>('')
 
   useEffect(() => {
-    if (card) {
-      const maxLength = 50
-      let truncated = company.description.substring(0, maxLength)
-      if (company.description.length > maxLength) {
-        truncated += '...'
+    if (!children) {
+      if (card) {
+        const maxLength = 50
+        let truncated = company.description.substring(0, maxLength)
+        if (company.description.length > maxLength) {
+          truncated += '...'
+        }
+        setDescription(truncated)
+      } else {
+        setDescription(company.description)
       }
-      setDescription(truncated)
-    } else {
-      setDescription(company.description)
     }
-  }, [company])
+  }, [company, children])
 
   return (
     <div className={classnames(s.container, className, { [s.card]: card })}>
@@ -42,7 +46,7 @@ export function Company(props: Props) {
             quality={60}
             priority={!card}
             objectFit="contain"
-            objectPosition="center"
+            objectPosition="top"
             layout="fill"
             src={company.image?.cropped?.url}
             alt={company.image?.alt}
@@ -80,9 +84,24 @@ export function Company(props: Props) {
 
         <h4 className={s.title}>
           <span>{StringUtils.toDisplayText(company.type)}</span>
+          {company.partner && <span className={s.partner}>Partner</span>}
         </h4>
 
-        {!!description && <p className={s.description}>{description}</p>}
+        {!!description && (
+          <div className={s.description}>
+            <ReactMarkdown
+              renderers={{
+                link: ({ node }) => (
+                  <a href={node.url} rel="noopener" target="_blank">
+                    {node.children[0].value}
+                  </a>
+                ),
+              }}
+            >
+              {description}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   )

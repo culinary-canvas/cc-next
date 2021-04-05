@@ -1,7 +1,8 @@
 import 'firebase/auth'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { ArticleModel } from '../article/Article.model'
 import { MenuOption } from './MenuOption'
+import { menuOptions } from './menuOptions'
 
 export interface Breadcrumb {
   text: string

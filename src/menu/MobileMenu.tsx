@@ -73,17 +73,44 @@ export function MobileMenu(props: Props) {
           className,
         )}
       >
-        {Object.values(menuOptions).map((option) => (
-          <Link key={option.href} href={option.href}>
-            <a
-              className={classnames({
-                [s.active]: option.equals(activeMenuOption),
-              })}
-            >
-              {option.text}
-            </a>
-          </Link>
-        ))}
+        {Object.values(menuOptions).map((option) =>
+          !!option.subMenu ? (
+            <div className={s.optionWithSubMenu} key={option.href}>
+              <Link key={option.href} href={option.href}>
+                <a
+                  className={classnames({
+                    [s.active]: option.equals(activeMenuOption),
+                  })}
+                >
+                  {option.text}
+                </a>
+              </Link>
+              <div className={s.subMenu}>
+                {option.subMenu.map((subOption) => (
+                  <Link key={subOption.href} href={subOption.href}>
+                    <a
+                      className={classnames({
+                        [s.active]: subOption.equals(activeMenuOption),
+                      })}
+                    >
+                      {subOption.text}
+                    </a>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <Link key={option.href} href={option.href}>
+              <a
+                className={classnames({
+                  [s.active]: option.equals(activeMenuOption),
+                })}
+              >
+                {option.text}
+              </a>
+            </Link>
+          ),
+        )}
       </div>
     </>
   )
