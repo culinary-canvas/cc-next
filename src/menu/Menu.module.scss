@@ -9,6 +9,25 @@
   height: 3rem;
   padding: 0 1rem;
 
+  a {
+    position: relative;
+    cursor: pointer;
+    color: $black;
+  }
+
+  .optionWithSubMenu {
+    position: relative;
+
+    .subMenu {
+      position: absolute;
+      left: -1rem;
+      padding: 0.45rem 1rem;
+      background-color: $white;
+      font-weight: 200;
+      z-index: 10;
+    }
+  }
+
   .adminLink {
     color: $blue;
   }
@@ -16,7 +35,6 @@
   > * {
     z-index: 30;
     margin: 0 1rem;
-    color: $black;
   }
 
   .active {

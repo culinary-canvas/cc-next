@@ -1,0 +1,9 @@
+@import '../../styles/page';
+
+.container {
+  @include pageContainer();
+}
+
+.content {
+  @include pageContent();
+}

@@ -119,8 +119,16 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const { firestore } = initFirebase()
+  if (params.slug === 'culinary-arts-academy-switzerland-caas') {
+    return {
+      redirect: {
+        permanent: true,
+        destination: '/partners/education',
+      },
+    }
+  }
 
+  const { firestore } = initFirebase()
   const companyResponse = await firestore()
     .collection('companies')
     .where('slug', '==', params.slug)

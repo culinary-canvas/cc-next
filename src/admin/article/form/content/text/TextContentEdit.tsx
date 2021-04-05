@@ -74,9 +74,10 @@ export const TextContentEdit = observer((props: Props) => {
       style={{ ...gridWrapperStyle }}
     >
       <TextEditMenu
-        content={content}
+        text={content.value}
         selectionStart={selection.start}
         selectionEnd={selection.end}
+        onTextChange={(text) => runInAction(() => (content.value = text))}
       />
       <TextareaAutosize
         ref={textareaRef}

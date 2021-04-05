@@ -15,6 +15,7 @@ import { isServer } from '../_app'
 import { useTransformToModels } from '../../hooks/useTransformToModels'
 import { useMenu } from '../../menu/Menu.context'
 import { menuOptions } from '../../menu/menuOptions'
+import { AppService } from '../../services/App.service'
 
 interface Props {
   articlesData: any[]
@@ -41,10 +42,12 @@ function ArticlesPerType({ articlesData, type }: Props) {
   return (
     <>
       <PageHead
-        image={articles[0].imageContent.url}
-        imageWidth={articles[0].imageContent.set.cropped.width}
-        imageHeight={articles[0].imageContent.set.cropped.height}
-        imageAlt={articles[0].imageContent.alt}
+        image={articles[0]?.imageContent.url || AppService.DEFAULT_SHARE_IMAGE}
+        imageWidth={articles[0]?.imageContent.set.cropped.width}
+        imageHeight={articles[0]?.imageContent.set.cropped.height}
+        imageAlt={
+          articles[0]?.imageContent.alt || AppService.DEFAULT_SHARE_IMAGE_ALT
+        }
       />
       <main className={classnames(s.container)}>
         <h1>{activeMenuOption?.text}</h1>
@@ -70,12 +73,11 @@ interface StaticProps {
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   return {
-    paths: Object.values(ArticleType)
-      .map((type) => ({
-        params: {
-          type: StringUtils.toLowerKebabCase(type),
-        },
-      })),
+    paths: Object.values(ArticleType).map((type) => ({
+      params: {
+        type: StringUtils.toLowerKebabCase(type),
+      },
+    })),
     fallback: true,
   }
 }

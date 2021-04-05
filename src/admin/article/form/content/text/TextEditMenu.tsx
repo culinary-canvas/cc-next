@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import s from './TextEditMenu.module.scss'
 import { Button } from '../../../../../form/button/Button'
-import { TextContentModel } from '../../../../../article/content/text/TextContent.model'
 import { runInAction } from 'mobx'
 import { classnames } from '../../../../../services/importHelpers'
 import { TextEditService } from './TextEdit.service'
 
 interface Props {
-  content: TextContentModel
+  text: string
   selectionStart: number
   selectionEnd: number
+  onTextChange: (text: string) => any
 }
 
 export function TextEditMenu(props: Props) {
-  const { content, selectionStart: start, selectionEnd: end } = props
+  const { text, selectionStart: start, selectionEnd: end, onTextChange } = props
 
   const [existingUrl, setExistingUrl] = useState<string>('')
   const [url, setUrl] = useState<string>('')
@@ -22,7 +22,7 @@ export function TextEditMenu(props: Props) {
   useEffect(() => {
     setLinkAction(
       (existingUrl !== '' && url === '') ||
-        (existingUrl !== '' && existingUrl === url)
+      (existingUrl !== '' && existingUrl === url)
         ? 'unlink'
         : existingUrl !== '' && url !== ''
         ? 'update'
@@ -32,51 +32,35 @@ export function TextEditMenu(props: Props) {
 
   useEffect(() => {
     setUrl('')
-    if (!!content.value) {
-      setExistingUrl(
-        TextEditService.getLinkInPosition(content.value, start, end),
-      )
+    if (!!text) {
+      setExistingUrl(TextEditService.getLinkInPosition(text, start, end))
     }
-  }, [content.value, start, end])
+  }, [text, start, end])
 
   const insertLink = useCallback(
     () =>
-      runInAction(
-        () =>
-          (content.value = TextEditService.insertLinkAtPosition(
-            content.value,
-            url,
-            start,
-            end,
-          )),
+      runInAction(() =>
+        onTextChange(
+          TextEditService.insertLinkAtPosition(text, url, start, end),
+        ),
       ),
-    [content, content.value, url, start, end],
+    [text, url, start, end],
   )
 
   const updateLink = useCallback(
     () =>
-      runInAction(
-        () =>
-          (content.value = TextEditService.replaceLinkUrl(
-            content.value,
-            url,
-            existingUrl,
-          )),
+      runInAction(() =>
+        onTextChange(TextEditService.replaceLinkUrl(text, url, existingUrl)),
       ),
-    [content, content.value, url],
+    [text, url],
   )
 
   const removeLink = useCallback(
     () =>
-      runInAction(
-        () =>
-          (content.value = TextEditService.removeLinkInPosition(
-            content.value,
-            start,
-            end,
-          )),
+      runInAction(() =>
+        onTextChange(TextEditService.removeLinkInPosition(text, start, end)),
       ),
-    [content, content.value, url, start, end],
+    [text, url, start, end],
   )
 
   return (
