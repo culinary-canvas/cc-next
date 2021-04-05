@@ -60,7 +60,7 @@ export function Menu(props: Props) {
             {activeSubMenu?.equals(option) && (
               <div className={s.subMenu}>
                 {option.subMenu.map((subOption) => (
-                  <Link href={subOption.href}>
+                  <Link key={subOption.href} href={subOption.href}>
                     <a
                       className={classnames({
                         [s.active]: subOption.equals(activeMenuOption),
