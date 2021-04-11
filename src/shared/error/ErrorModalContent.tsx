@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './ErrorModalContent.module.scss'
-import { Button } from '../../form/button/Button'
+import { Button } from '../button/Button'
 
 interface Props {
   message: string

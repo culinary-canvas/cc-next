@@ -1,0 +1,8 @@
+@import '../../styles/color';
+@import '../../styles/font';
+
+.message {
+  padding-left: 1ex;
+  color: $red;
+  font-size: $font-size-s;
+}

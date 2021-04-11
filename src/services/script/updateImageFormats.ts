@@ -1,9 +1,9 @@
 import { ArticleApi } from '../../article/Article.api'
-import { Size } from '../../article/shared/format/Size'
-import { ImageContentModel } from '../../article/content/image/ImageContent.model'
-import { ImageFit } from '../../article/content/image/ImageFit'
-import { HorizontalAlign } from '../../article/shared/HorizontalAlign'
-import { VerticalAlign } from '../../article/shared/VerticalAlign'
+import { Size } from '../../article/models/Size'
+import { ImageContentModel } from '../../article/models/ImageContent.model'
+import { ImageFit } from '../../article/models/ImageFit'
+import { HorizontalAlign } from '../../article/models/HorizontalAlign'
+import { VerticalAlign } from '../../article/models/VerticalAlign'
 
 export async function updateImageFormats(userId: string) {
   const articles = await ArticleApi.all()

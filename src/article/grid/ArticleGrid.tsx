@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
-import { ArticleModel } from '../Article.model'
+import { ArticleModel } from '../models/Article.model'
 import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
 import { ArticlePreview } from '../preview/ArticlePreview'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { COLOR } from '../../styles/_color'
-import { ArticleWithLabels } from '../ArticleWithLabels'
+import { ArticleWithLabels } from '../models/ArticleWithLabels'
 
 interface Props<T extends ArticleModel | ArticleWithLabels> {
   initialArticles?: T[]

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react'
 import { GetStaticProps } from 'next'
-import { PageHead } from '../../head/PageHead'
+import { PageHead } from '../../shared/head/PageHead'
 import { AppService } from '../../services/App.service'
 import s from '../about/about.module.scss'
 import { initFirebase } from '../../services/firebase/Firebase'
-import { Company } from '../../company/Company'
+import { CompanyView } from '../../company/view/CompanyView'
 import { useTransformToModel } from '../../hooks/useTransformToModel'
-import { CompanyModel } from '../../company/Company.model'
+import { CompanyModel } from '../../company/models/Company.model'
 import { useRouter } from 'next/router'
 import { isServer } from '../_app'
 import { useMenu } from '../../menu/Menu.context'
-import { menuOptions } from '../../menu/menuOptions'
+import { menuOptions } from '../../menu/models/menuOptions'
 
 interface Props {
   companyData: any
@@ -50,7 +50,7 @@ export default function About({ companyData }: Props) {
             very proud of all or partners where we, together, can spread the
             joy of creative culinary work in all its forms.
           </p>
-          <Company company={company} card />
+          <CompanyView company={company} card />
         </article>
       </main>
     </>

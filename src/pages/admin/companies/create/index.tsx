@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { observer } from 'mobx-react'
-import { CompanyModel } from '../../../../company/Company.model'
+import { CompanyModel } from '../../../../company/models/Company.model'
 import { GetServerSideProps } from 'next'
 import { CompanyForm } from '../../../../company/form/CompanyForm'
 import { AdminMenu } from '../../../../admin/menu/AdminMenu'

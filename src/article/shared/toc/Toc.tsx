@@ -1,6 +1,6 @@
 import React from 'react'
 import s from './Toc.module.scss'
-import { ArticleModel } from '../../Article.model'
+import { ArticleModel } from '../../models/Article.model'
 import { observer } from 'mobx-react'
 
 interface Props {

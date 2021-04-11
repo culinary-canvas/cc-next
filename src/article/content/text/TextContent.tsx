@@ -1,14 +1,14 @@
 import React, { CSSProperties, useState } from 'react'
 import { observer } from 'mobx-react'
-import { TextContentModel as TextContentModel } from './TextContent.model'
+import { TextContentModel as TextContentModel } from '../../models/TextContent.model'
 import { classnames } from '../../../services/importHelpers'
-import { ContentType } from '../ContentType'
+import { ContentType } from '../../models/ContentType'
 import s from './TextContent.module.scss'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import ReactMarkdown from 'react-markdown'
 import { motion } from 'framer-motion'
-import { TextContentService } from './TextContent.service'
+import { TextContentService } from '../../services/TextContent.service'
 
 interface Props {
   content: TextContentModel

@@ -1,5 +1,5 @@
 import { addHttpIfMissing } from '../services/utils/UrlUtils'
-import { CompanyModel } from './Company.model'
+import { CompanyModel } from './models/Company.model'
 import { CompanyApi } from './Company.api'
 import { PersonApi } from '../person/Person.api'
 

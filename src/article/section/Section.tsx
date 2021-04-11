@@ -1,13 +1,13 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
-import { SectionModel } from './Section.model'
+import { SectionModel } from '../models/Section.model'
 import { observer } from 'mobx-react'
-import { ImageContentModel } from '../content/image/ImageContent.model'
+import { ImageContentModel } from '../models/ImageContent.model'
 import { classnames } from '../../services/importHelpers'
 import s from './Section.module.scss'
 import { TextContent } from '../content/text/TextContent'
 import { ImageContent } from '../content/image/ImageContent'
 import { GridPositionService } from '../grid/GridPosition.service'
-import { TextContentModel } from '../content/text/TextContent.model'
+import { TextContentModel } from '../models/TextContent.model'
 import { motion } from 'framer-motion'
 
 interface Props {

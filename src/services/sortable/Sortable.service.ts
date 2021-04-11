@@ -1,4 +1,4 @@
-import { Sortable } from '../../types/Sortable'
+import { Sortable } from '../types/Sortable'
 
 export class SortableService {
   static getSorted<T extends Sortable>(

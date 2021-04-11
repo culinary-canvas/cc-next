@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { observer } from 'mobx-react'
-import { Button } from '../../../form/button/Button'
+import { Button } from '../../../shared/button/Button'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
 import s from './dev.module.scss'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'

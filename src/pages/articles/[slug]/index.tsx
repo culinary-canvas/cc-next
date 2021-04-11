@@ -1,13 +1,13 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { ArticleModel } from '../../../article/Article.model'
+import { ArticleModel } from '../../../article/models/Article.model'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import s from './articlePage.module.scss'
-import { ContentType } from '../../../article/content/ContentType'
-import { TextContentModel } from '../../../article/content/text/TextContent.model'
-import { PageHead } from '../../../head/PageHead'
-import { Article } from '../../../article/Article'
+import { ContentType } from '../../../article/models/ContentType'
+import { TextContentModel } from '../../../article/models/TextContent.model'
+import { PageHead } from '../../../shared/head/PageHead'
+import { ArticleView } from '../../../article/view/ArticleView'
 import { ArticleApi } from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
 
@@ -33,7 +33,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
         }
       />
       <main className={s.container}>
-        <Article article={article} />
+        <ArticleView article={article} />
       </main>
     </>
   )

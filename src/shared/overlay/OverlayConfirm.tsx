@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Button } from '../../form/button/Button'
+import { Button } from '../button/Button'
 import s from './OverlayConfirm.module.scss'
 import { useOverlay } from './OverlayStore'
 import { DomUtils } from '../../services/utils/DomUtils'

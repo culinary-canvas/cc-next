@@ -1,7 +1,7 @@
 import React from 'react'
 import s from './about.module.scss'
 import { GetStaticProps } from 'next'
-import { PageHead } from '../../head/PageHead'
+import { PageHead } from '../../shared/head/PageHead'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { AppService } from '../../services/App.service'
 

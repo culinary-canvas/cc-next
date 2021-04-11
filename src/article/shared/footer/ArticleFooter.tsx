@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import s from './ArticleFooter.module.scss'
-import { TagsView } from '../../../tag/Tags/TagsView'
+import { TagsView } from '../../../tag/view/TagsView'
 import { Share } from '../share/Share'
-import { ArticleModel } from '../../Article.model'
+import { ArticleModel } from '../../models/Article.model'
 import { observer } from 'mobx-react'
-import { Person } from '../../../person/Person'
-import { Company } from '../../../company/Company'
-import { Button } from '../../../form/button/Button'
+import { PersonView } from '../../../person/view/PersonView'
+import { CompanyView } from '../../../company/view/CompanyView'
+import { Button } from '../../../shared/button/Button'
 import { useRouter } from 'next/router'
 
 interface Props {
@@ -50,7 +50,7 @@ export const ArticleFooter = observer(({ article }: Props) => {
                   onClick={() => router.push(`/persons/${person.slug}`)}
                   key={person.id}
                 >
-                  <Person person={person} card />
+                  <PersonView person={person} card />
                 </Button>
               ))}
               {article.companies.map((company) => (
@@ -59,7 +59,7 @@ export const ArticleFooter = observer(({ article }: Props) => {
                   onClick={() => router.push(`/companies/${company.slug}`)}
                   key={company.id}
                 >
-                  <Company company={company} card />
+                  <CompanyView company={company} card />
                 </Button>
               ))}
             </div>

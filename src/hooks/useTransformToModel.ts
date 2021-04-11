@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Transformer } from '../services/db/Transformer'
-import { Class } from '../types/Class'
+import { Class } from '../services/types/Class'
 
 type Source = { [key: string]: any }
 

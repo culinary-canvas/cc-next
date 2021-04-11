@@ -1,0 +1,9 @@
+@import '../../styles/form';
+
+.title {
+  font-weight: 700;
+}
+.sortOrderContainer {
+  @include button-group();
+  display: flex;
+}

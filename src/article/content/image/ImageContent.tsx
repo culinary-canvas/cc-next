@@ -1,13 +1,13 @@
 import React, { CSSProperties, useState } from 'react'
 import { observer } from 'mobx-react'
 import { useAutorun } from '../../../hooks/useAutorun'
-import { SectionModel } from '../../section/Section.model'
+import { SectionModel } from '../../models/Section.model'
 import { classnames, isNil } from '../../../services/importHelpers'
-import { ImageContentModel } from './ImageContent.model'
+import { ImageContentModel } from '../../models/ImageContent.model'
 import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import Image from 'next/image'
-import { Size } from '../../shared/format/Size'
+import { Size } from '../../models/Size'
 import { motion } from 'framer-motion'
 
 interface Props {
