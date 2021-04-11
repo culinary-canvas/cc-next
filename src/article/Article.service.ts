@@ -152,7 +152,9 @@ export class ArticleService {
         (c) =>
           c instanceof TextContentModel &&
           c.type !== ContentType.TITLE &&
-          c.value.toLowerCase().includes(linkedText.toLowerCase()),
+          !!c.value &&
+          !!linkedText &&
+          c.value.toLowerCase().includes(linkedText?.toLowerCase()),
       )
       .forEach((content: TextContentModel) => {
         const start = content.value
