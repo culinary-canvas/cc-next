@@ -1,4 +1,4 @@
-import { Class } from '../../../types/Class'
+import { Class } from '../../types/Class'
 import 'reflect-metadata'
 
 export interface FieldProperties<T> {

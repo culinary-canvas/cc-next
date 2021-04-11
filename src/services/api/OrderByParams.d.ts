@@ -1,4 +1,4 @@
-import { ArticleModel } from '../../article/Article.model'
+import { ArticleModel } from '../../article/models/Article.model'
 import { Model } from '../db/Model'
 
 export interface OrderByParams<T extends Model> {

@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import s from './articlesByCompany.module.scss'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetServerSideProps, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import { ArticleModel } from '../../../article/Article.model'
-import { PageHead } from '../../../head/PageHead'
+import { ArticleModel } from '../../../article/models/Article.model'
+import { PageHead } from '../../../shared/head/PageHead'
 import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
-import { CompanyModel } from '../../../company/Company.model'
-import { ArticleWithLabels } from '../../../article/ArticleWithLabels'
-import { ArticleLabel } from '../../../article/ArticleLabel'
-import { Company } from '../../../company/Company'
+import { CompanyModel } from '../../../company/models/Company.model'
+import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
+import { ArticleLabel } from '../../../article/models/ArticleLabel'
+import { CompanyView } from '../../../company/view/CompanyView'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
@@ -77,7 +77,7 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
       />
 
       <main className={classnames(s.container)}>
-        <Company company={company} className={s.presentation} />
+        <CompanyView company={company} className={s.presentation} />
         <h2>Articles</h2>
         <ArticleGrid
           initialArticles={articlesWithLabels}
@@ -97,30 +97,17 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
   )
 }
 
-interface StaticProps {
-  slug: string
-  [key: string]: string
-}
-
-export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
-  const { firestore } = initFirebase()
-  const response = await firestore().collection('companies').get()
-  return {
-    paths: response.docs.map((d) => ({
-      params: {
-        slug: d.data().slug,
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  if (params.slug === 'culinary-arts-academy-switzerland-caas') {
+    return {
+      redirect: {
+        permanent: true,
+        destination: '/partners/education',
       },
-    })),
-    fallback: true,
+    }
   }
-}
 
-export const getStaticProps: GetStaticProps<
-  Props & { [key: string]: any },
-  StaticProps
-> = async ({ params }) => {
   const { firestore } = initFirebase()
-
   const companyResponse = await firestore()
     .collection('companies')
     .where('slug', '==', params.slug)
@@ -148,7 +135,6 @@ export const getStaticProps: GetStaticProps<
       articlesData: JSON.parse(JSON.stringify(articlesData)),
       companyData: JSON.parse(JSON.stringify(companyData)),
     },
-    revalidate: 1,
   }
 }
 

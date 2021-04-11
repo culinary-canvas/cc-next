@@ -1,0 +1,18 @@
+@import '../../../../../../styles/color';
+@import '../../../../../../styles/font';
+@import '../../../../../../styles/controlButtons';
+@import '../../../../../../styles/form';
+
+.container {
+  @include control-buttons-container();
+  flex-wrap: wrap;
+}
+
+.button {
+  @include control-button();
+  color: $black;
+  font-size: $font-size-s;
+  margin: 0 4px 4px 0;
+  padding: 0.5rem 1rem;
+  height: auto;
+}

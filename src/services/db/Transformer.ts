@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { isArray, isNil } from 'lodash'
-import { Class } from '../../types/Class'
+import { Class } from '../types/Class'
 import { getToDb, hasToDb } from './decorators/toDb.decorator'
 import { isTransient } from './decorators/transient.decorator'
 import { getField, isField } from './decorators/field.decorator'

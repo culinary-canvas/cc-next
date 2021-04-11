@@ -1,4 +1,4 @@
-import { PersonModel } from './Person.model'
+import { PersonModel } from './models/Person.model'
 import { ArrayUtils } from '../services/utils/ArrayUtils'
 import { CompanyApi } from '../company/Company.api'
 import { addHttpIfMissing } from '../services/utils/UrlUtils'

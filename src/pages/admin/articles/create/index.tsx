@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import s from './articleEdit.module.scss'
-import { useFormControl } from '../../../../form/formControl/useFormControl'
-import { ArticleForm } from '../../../../admin/article/form/ArticleForm'
+import { useFormControl } from '../../../../services/formControl/useFormControl'
+import { ArticleForm } from '../../../../article/form/ArticleForm'
 import { ArticleService } from '../../../../article/Article.service'
-import { useAdmin } from '../../../../admin/Admin'
+import { useAdmin } from '../../../../admin/Admin.context'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 export default function ArticleEdit({ articleData }) {

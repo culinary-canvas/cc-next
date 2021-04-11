@@ -1,0 +1,22 @@
+@import '../../../../../../styles/controlButtons';
+@import '../../../../../../styles/form';
+
+.container {
+  @include control-buttons-container();
+  @include button-group();
+}
+
+.button {
+  @include control-button();
+
+  &:first-child {
+    span {
+      margin-top: -4px;
+    }
+  }
+  &:last-child {
+    span {
+      margin-bottom: -4px;
+    }
+  }
+}

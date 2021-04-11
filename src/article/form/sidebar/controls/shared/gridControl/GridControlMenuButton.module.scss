@@ -1,0 +1,68 @@
+@import '../../../../../../styles/color';
+@import '../../../../../../styles/font';
+@import '../../../../../../styles/shadow';
+@import '../../../../../../styles/animation';
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .label {
+    position: absolute;
+    top: -20px;
+    display: none;
+    padding: 2px 4px;
+    background-color: white;
+    color: $black;
+    text-transform: none;
+    font-size: $font-size-s;
+    white-space: nowrap;
+    pointer-events: none;
+
+    &.disabled {
+      color: $grey-light;
+    }
+  }
+
+  &:hover label {
+    display: initial;
+  }
+
+  .button {
+    width: 26px;
+    height: 20px;
+    padding: 0.2rem !important;
+    margin: 0 1px;
+    background-color: $white;
+    border: 1px solid $black !important;
+    object-fit: contain;
+    font-size: $font-size-s;
+
+    &.hoveringOther:not(:disabled) {
+      border-color: $grey !important;
+      color: $grey !important;
+
+      img {
+        filter: $filter-grey;
+      }
+    }
+
+    &:disabled {
+      box-shadow: none;
+      background-color: $grey-lighter;
+      border-color: $grey-light !important;
+      opacity: 1 !important;
+      color: $grey-light;
+
+      img {
+        filter: $filter-grey-light;
+      }
+    }
+
+    img {
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}

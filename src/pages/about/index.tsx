@@ -1,17 +1,17 @@
 import React from 'react'
 import s from './about.module.scss'
-import { COLOR } from '../../styles/_color'
 import { GetStaticProps } from 'next'
-import { PageHead } from '../../head/PageHead'
+import { PageHead } from '../../shared/head/PageHead'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
+import { AppService } from '../../services/App.service'
 
 export default function About() {
   return (
     <>
       <PageHead
         title="About"
-        image="https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f"
-        imageAlt="@Yves Le Lay by Johan Ståhlberg"
+        image={AppService.DEFAULT_SHARE_IMAGE}
+        imageAlt={AppService.DEFAULT_SHARE_IMAGE_ALT}
       />
 
       <main className={s.container}>

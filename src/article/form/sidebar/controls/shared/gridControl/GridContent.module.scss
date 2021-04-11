@@ -1,0 +1,46 @@
+@import '../../../../../../styles/color';
+@import '../../../../../../styles/font';
+@import '../../../../../../styles/article';
+@import '../../../../../../styles/shadow';
+@import '../../../../../../styles/controlButtons';
+@import 'gridCell';
+
+.button {
+  @include gridCell();
+  border-width: 2px;
+  cursor: pointer;
+
+  &.outlier {
+    border-style: dashed;
+  }
+
+  &:not(.outlier) {
+    border-style: solid;
+  }
+
+  &.hasPart {
+    &.inFocus {
+      background: repeating-linear-gradient(
+          45deg,
+          transparentize($blue-light, 0.3) 0,
+          transparentize($blue-light, 0.3) 1px,
+          transparentize($white, 0.3) 3px,
+          transparentize($white, 0.3) 6px
+        )
+        top;
+      border-color: $black;
+    }
+
+    &:not(.inFocus) {
+      background: repeating-linear-gradient(
+          45deg,
+          transparentize($grey-light, 0.3) 0,
+          transparentize($grey-light, 0.3) 1px,
+          transparentize($white, 0.3) 3px,
+          transparentize($white, 0.3) 6px
+        )
+        top;
+      border-color: $grey-light;
+    }
+  }
+}

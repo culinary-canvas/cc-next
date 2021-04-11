@@ -1,29 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/router'
-import { CompanyModel } from '../Company.model'
+import { CompanyModel } from '../models/Company.model'
 import { useAuth } from '../../services/auth/Auth'
 import { useOverlay } from '../../shared/overlay/OverlayStore'
-import { useFormControl } from '../../form/formControl/useFormControl'
+import { useFormControl } from '../../services/formControl/useFormControl'
 import { CompanyApi } from '../Company.api'
-import { Button } from '../../form/button/Button'
+import { Button } from '../../shared/button/Button'
 import s from './CompanyForm.module.scss'
 import { OverlayConfirm } from '../../shared/overlay/OverlayConfirm'
-import { PersonModel } from '../../person/Person.model'
-import { ArticleModel } from '../../article/Article.model'
+import { PersonModel } from '../../person/models/Person.model'
+import { ArticleModel } from '../../article/models/Article.model'
 import { PersonApi } from '../../person/Person.api'
 import ArticleApi from '../../article/Article.api'
 import { COLOR } from '../../styles/_color'
 import { runInAction } from 'mobx'
-import { ImageEdit } from '../../form/imageEdit/ImageEdit'
-import { ImageSet } from '../../article/content/image/ImageSet'
-import { ImageFormat } from '../../article/content/image/ImageFormat'
-import { Select } from '../../form/select/Select'
+import { ImageEdit } from '../../image/imageEdit/ImageEdit'
+import { ImageSet } from '../../image/models/ImageSet'
+import { ImageFormat } from '../../article/models/ImageFormat'
+import { Select } from '../../shared/select/Select'
 import StringUtils from '../../services/utils/StringUtils'
-import { CompanyType } from '../CompanyType'
+import { CompanyType } from '../models/CompanyType'
 import { isNil } from '../../services/importHelpers'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useErrorModal } from '../../shared/error/useErrorModal'
+import { TextEditMenu } from '../../article/form/text/TextEditMenu'
+import { Checkbox } from '../../shared/checkbox/Checkbox'
 
 interface Props {
   company: CompanyModel
@@ -41,9 +43,16 @@ export const CompanyForm = observer((props: Props) => {
     { field: 'name', required: true },
   ])
 
+  const textareaRef = useRef<HTMLTextAreaElement>()
+
   const [loading, setLoading] = useState<boolean>(true)
   const [persons, setPersons] = useState<PersonModel[]>([])
   const [articles, setArticles] = useState<ArticleModel[]>([])
+  const [textareaIsFocused, setTextareaIsFocused] = useState<boolean>(false)
+  const [selection, setSelection] = useState<{ start: number; end: number }>({
+    start: 0,
+    end: 0,
+  })
 
   const load = useCallback(async () => {
     if (company.id) {
@@ -200,6 +209,13 @@ export const CompanyForm = observer((props: Props) => {
         }
       />
 
+      <Checkbox
+        checked={company.partner}
+        onChange={(v) => runInAction(() => (company.partner = v))}
+        label="Partner"
+        containerClassName={s.buttonsContainer}
+      />
+
       <label htmlFor="type">Type</label>
       <Select
         value={company.type}
@@ -274,15 +290,38 @@ export const CompanyForm = observer((props: Props) => {
         onChange={(e) => runInAction(() => (company.twitter = e.target.value))}
       />
 
-      <label htmlFor="description">Description</label>
+      <label htmlFor="description" style={{ marginTop: '3rem' }}>
+        Description
+      </label>
+      <TextEditMenu
+        text={company.description}
+        selectionStart={selection.start}
+        selectionEnd={selection.end}
+        onTextChange={(text) => runInAction(() => (company.description = text))}
+      />
       <TextareaAutosize
+        ref={textareaRef}
         id="description"
-        onFocus={(e) => e.target.select()}
         onChange={(e) =>
           runInAction(() => (company.description = e.target.value))
         }
         value={company.description}
         placeholder="Write a short presentation"
+        onBlur={(e) => {
+          e.target.setSelectionRange(selection.start, selection.end)
+        }}
+        onMouseUp={() =>
+          setSelection({
+            start: textareaRef.current.selectionStart,
+            end: textareaRef.current.selectionEnd,
+          })
+        }
+        onKeyUp={() =>
+          setSelection({
+            start: textareaRef.current.selectionStart,
+            end: textareaRef.current.selectionEnd,
+          })
+        }
       />
 
       <label htmlFor="image" style={{ marginBottom: '1rem' }}>

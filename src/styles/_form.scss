@@ -4,7 +4,6 @@
 
 @mixin form-element-base {
   background-color: $white;
-  outline: none;
   color: $black;
   font-family: $font-family-filson, sans-serif;
   font-size: 14px;
@@ -27,7 +26,8 @@
     content: '';
     filter: contrast(50%);
   }
-  &:hover:not(:disabled), &:active:not(:disabled) {
+  &:hover:not(:disabled),
+  &:active:not(:disabled) {
     opacity: 1;
     &:after {
       max-width: 100%;
@@ -81,7 +81,6 @@
   margin: 0.5rem 0;
   border: 2px solid $black;
   border-radius: 6px;
-  outline: none;
 
   &.unsetStyle {
     width: unset;
@@ -150,5 +149,36 @@
 
   &:not(:disabled):not(.disabled) {
     cursor: pointer;
+  }
+}
+
+@mixin verticalForm {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: $grey-lighter;
+  position: relative;
+
+  label {
+    font-weight: 300;
+  }
+
+  input:not([type='checkbox']) {
+    margin-top: 0.5rem;
+  }
+
+  input {
+    border-bottom: none;
+    &.error{
+      outline: 2px auto $red;
+    }
+  }
+
+  button {
+    margin-top: 1rem;
+    width: fit-content !important;
+    &.error{
+      outline: 1px auto $red;
+    }
   }
 }

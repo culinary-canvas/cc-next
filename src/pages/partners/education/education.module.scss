@@ -1,0 +1,15 @@
+@import '../../../styles/listPage';
+@import '../../../styles/page';
+
+.container {
+  @include listPage();
+}
+
+.content {
+  @include pageContent();
+}
+
+.formContainer {
+  display: flex;
+  justify-content: center;
+}

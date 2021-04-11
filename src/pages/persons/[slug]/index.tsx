@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react'
 import s from './articlesByPerson.module.scss'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import { ArticleModel } from '../../../article/Article.model'
-import { PageHead } from '../../../head/PageHead'
+import { ArticleModel } from '../../../article/models/Article.model'
+import { PageHead } from '../../../shared/head/PageHead'
 import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
 import { initFirebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
-import { PersonModel } from '../../../person/Person.model'
-import { Person } from '../../../person/Person'
-import { ArticleWithLabels } from '../../../article/ArticleWithLabels'
-import { ArticleLabel } from '../../../article/ArticleLabel'
+import { PersonModel } from '../../../person/models/Person.model'
+import { PersonView } from '../../../person/view/PersonView'
+import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
+import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 
 interface Props {
@@ -79,7 +79,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
       />
 
       <main className={classnames(s.container)}>
-        <Person person={person} className={s.presentation} />
+        <PersonView person={person} className={s.presentation} />
         <h2>Articles</h2>
         <ArticleGrid
           initialArticles={articlesWithLabels}

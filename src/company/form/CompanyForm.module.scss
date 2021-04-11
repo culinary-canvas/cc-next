@@ -32,7 +32,7 @@
     }
   }
 
-  input,
+  input:not([type='checkbox']),
   select,
   textarea {
     margin-bottom: 2rem;

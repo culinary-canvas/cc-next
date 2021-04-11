@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { observer } from 'mobx-react'
-import { PersonModel } from '../../../../person/Person.model'
+import { PersonModel } from '../../../../person/models/Person.model'
 import { GetServerSideProps } from 'next'
 import { PersonForm } from '../../../../person/form/PersonForm'
 import { AdminMenu } from '../../../../admin/menu/AdminMenu'

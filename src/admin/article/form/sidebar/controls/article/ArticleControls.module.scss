@@ -1,9 +1,0 @@
-@import '../../../../../../styles/icon';
-@import '../../../../../../styles/layout';
-@import '../../../../../../styles/color';
-@import '../../../../../../styles/font';
-@import '../../../../../../styles/controls';
-
-.controls {
-  @include controls();
-}

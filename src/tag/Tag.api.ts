@@ -1,4 +1,4 @@
-import { TagModel } from './Tag.model'
+import { TagModel } from './models/Tag.model'
 import { Transformer } from '../services/db/Transformer'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'

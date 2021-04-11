@@ -1,22 +1,22 @@
-import { ArticleModel } from './Article.model'
-import { ArticleType } from './shared/ArticleType'
-import { SectionModel } from './section/Section.model'
+import { ArticleModel } from './models/Article.model'
+import { ArticleType } from './models/ArticleType'
+import { SectionModel } from './models/Section.model'
 import { action, runInAction } from 'mobx'
 import { SectionService } from './section/Section.service'
-import { SectionPreset } from './section/SectionPreset'
+import { SectionPreset } from './models/SectionPreset'
 import StringUtils from '../services/utils/StringUtils'
-import { ImageContentModel } from './content/image/ImageContent.model'
+import { ImageContentModel } from './models/ImageContent.model'
 import { StorageService } from '../services/storage/Storage.service'
 import { GridPositionService } from './grid/GridPosition.service'
 import { GridPosition } from './grid/GridPosition'
 import { TagApi } from '../tag/Tag.api'
-import { TagModel } from '../tag/Tag.model'
-import { ContentType } from './content/ContentType'
-import { TextContentModel } from './content/text/TextContent.model'
-import { TextEditService } from '../admin/article/form/content/text/TextEdit.service'
+import { TagModel } from '../tag/models/Tag.model'
+import { ContentType } from './models/ContentType'
+import { TextContentModel } from './models/TextContent.model'
+import { TextEditService } from './form/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
-import { ImageFile } from './content/image/ImageFile'
+import { ImageFile } from '../image/models/ImageFile'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
@@ -152,7 +152,9 @@ export class ArticleService {
         (c) =>
           c instanceof TextContentModel &&
           c.type !== ContentType.TITLE &&
-          c.value.toLowerCase().includes(linkedText.toLowerCase()),
+          !!c.value &&
+          !!linkedText &&
+          c.value.toLowerCase().includes(linkedText?.toLowerCase()),
       )
       .forEach((content: TextContentModel) => {
         const start = content.value
