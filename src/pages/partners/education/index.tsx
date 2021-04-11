@@ -14,6 +14,7 @@ import { menuOptions } from '../../../menu/models/menuOptions'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { CompanyModel } from '../../../company/models/Company.model'
 import { CompanyView } from '../../../company/view/CompanyView'
+import { LeadForm } from '../../../shared/leadForm/LeadForm'
 
 const PAGE_SIZE = 6
 
@@ -33,6 +34,7 @@ export default function Education({ articlesData, companyData }: Props) {
   }, [])
 
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
+
   if (router.isFallback) {
     if (isServer) {
       return null
@@ -57,8 +59,12 @@ export default function Education({ articlesData, companyData }: Props) {
         imageAlt={company.image?.alt || articles[0]?.imageContent.set.alt}
       />
       <main className={s.container}>
-        <CompanyView company={company} className={s.presentation} />
-
+        <div className={s.content}>
+          <CompanyView company={company} className={s.presentation} />
+          <div className={s.formContainer}>
+            <LeadForm />
+          </div>
+        </div>
         <h2>Articles</h2>
         <ArticleGrid
           initialArticles={articles}

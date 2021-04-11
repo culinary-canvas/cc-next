@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Model } from '../db/Model'
 import { FormControlFieldConfig } from './FormControlFieldConfig'
 import { FormControl } from './FormControl'
 import { useUnmount } from '../../hooks/useUnmount'
 
-export function useFormControl<T extends Model>(
+export function useFormControl<T extends { id: string }>(
   formObject: T,
-  fieldConfigs?: FormControlFieldConfig[],
+  fieldConfigs?: FormControlFieldConfig<T>[],
 ): [FormControl<T>, T] {
   const [formControl, setFormControl] = useState<FormControl<T>>(
     !!formObject && new FormControl(formObject, fieldConfigs),

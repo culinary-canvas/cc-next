@@ -1,14 +1,23 @@
-import React, { forwardRef, useRef } from 'react'
+import React, { forwardRef } from 'react'
 import s from './Checkbox.module.scss'
+import { isString } from 'lodash'
 import { v1 as uuid } from 'uuid'
 import { classnames } from '../../services/importHelpers'
 
-interface Props {
+interface Props
+  extends Omit<
+    React.DetailedHTMLProps<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      HTMLInputElement
+    >,
+    'onChange'
+  > {
   checked: boolean
   onChange: (value: boolean) => any
-  label?: string
+  label?: string | any
   containerClassName?: string
   disabled?: boolean
+  id?: string
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, Props>((props, ref) => {
@@ -18,8 +27,9 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>((props, ref) => {
     label,
     containerClassName,
     disabled = false,
+    id = uuid(),
+    ...restProps
   } = props
-  const id = useRef(uuid()).current
 
   return (
     <span className={classnames(s.checkbox, containerClassName)}>
@@ -30,10 +40,15 @@ export const Checkbox = forwardRef<HTMLInputElement, Props>((props, ref) => {
         checked={checked}
         onChange={() => onChange(!checked)}
         disabled={disabled}
+        {...restProps}
       />
-      <label htmlFor={id} style={{ opacity: disabled ? 0.6 : 1 }}>
-        {label}
-      </label>
+      {isString(label) ? (
+        <label htmlFor={id} style={{ opacity: disabled ? 0.6 : 1 }}>
+          {label}
+        </label>
+      ) : (
+        label
+      )}
     </span>
   )
 })
