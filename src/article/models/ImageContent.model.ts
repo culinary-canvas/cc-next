@@ -1,7 +1,6 @@
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { ImageSet } from '../../image/models/ImageSet'
-import { transient } from '../../services/db/decorators/transient.decorator'
 import { ImageFormat } from './ImageFormat'
 import { ContentModel } from './ContentModel'
 import { ContentType } from './ContentType'
@@ -20,6 +19,7 @@ export class ImageContentModel extends ContentModel<ImageFormat> {
     this.set = new ImageSet()
     this.format = new ImageFormat()
     this.type = ContentType.IMAGE
+    makeObservable(this)
   }
 
   @computed
@@ -33,7 +33,7 @@ export class ImageContentModel extends ContentModel<ImageFormat> {
   }
 
   @computed
-  get hasImage(){
+  get hasImage() {
     return !!this.url
   }
 }

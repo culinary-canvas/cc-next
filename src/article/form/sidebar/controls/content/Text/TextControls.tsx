@@ -25,20 +25,20 @@ export const TextControls = observer(() => {
             id="fontFamily"
             value={content.format.fontFamily}
             options={Object.values(FONT.FAMILY)}
-            onChange={(v) => (content.format.fontFamily = v)}
+            onChange={(v) => runInAction(() => (content.format.fontFamily = v))}
           />
           <Select
             id="fontSize"
             value={content.format.fontSize}
             options={Object.values(FONT.SIZE)}
-            onChange={(v) => (content.format.fontSize = v)}
+            onChange={(v) => runInAction(() => (content.format.fontSize = v))}
             className={s.fontProperty}
           />
           <Select
             id="fontWeight"
             value={content.format.fontWeight}
             options={FONT.WEIGHT}
-            onChange={(v) => (content.format.fontWeight = v)}
+            onChange={(v) => runInAction(() => (content.format.fontWeight = v))}
             className={s.fontProperty}
           />
         </div>
@@ -48,16 +48,18 @@ export const TextControls = observer(() => {
             italic={content.format.italic}
             uppercase={content.format.uppercase}
             onSelected={(v) => {
-              switch (v) {
-                case 'emphasize':
-                  content.format.emphasize = !content.format.emphasize
-                  break
-                case 'italic':
-                  content.format.italic = !content.format.italic
-                  break
-                case 'uppercase':
-                  content.format.uppercase = !content.format.uppercase
-              }
+              runInAction(() => {
+                switch (v) {
+                  case 'emphasize':
+                    content.format.emphasize = !content.format.emphasize
+                    break
+                  case 'italic':
+                    content.format.italic = !content.format.italic
+                    break
+                  case 'uppercase':
+                    content.format.uppercase = !content.format.uppercase
+                }
+              })
             }}
           />
           <ColorPicker
@@ -75,12 +77,16 @@ export const TextControls = observer(() => {
         <div className={s.fontProperties}>
           <HorizontalAlignButtons
             selected={content.format.horizontalAlign}
-            onSelected={(v) => (content.format.horizontalAlign = v)}
+            onSelected={(v) =>
+              runInAction(() => (content.format.horizontalAlign = v))
+            }
           />
 
           <VerticalAlignButtons
             selected={content.format.verticalAlign}
-            onSelected={(v) => (content.format.verticalAlign = v)}
+            onSelected={(v) =>
+              runInAction(() => (content.format.verticalAlign = v))
+            }
           />
         </div>
       </ControlContainer>
@@ -88,7 +94,7 @@ export const TextControls = observer(() => {
       <ControlContainer id="text-padding" label="Padding">
         <PaddingControls
           padding={content.format.padding}
-          onChange={(p) => (content.format.padding = p)}
+          onChange={(p) => runInAction(() => (content.format.padding = p))}
         />
       </ControlContainer>
     </>

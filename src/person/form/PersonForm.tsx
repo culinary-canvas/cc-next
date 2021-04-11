@@ -57,7 +57,10 @@ export const PersonForm = observer((props: Props) => {
   useEffect(() => void load(), [load])
   useEffect(() => {
     if (!!companies.length && !!person.companyId) {
-      person.company = companies.find((c) => c.id === person.companyId)
+      runInAction(
+        () =>
+          (person.company = companies.find((c) => c.id === person.companyId)),
+      )
     }
   }, [person, companies])
 
@@ -196,13 +199,7 @@ export const PersonForm = observer((props: Props) => {
         url={!!person.companyId && `/admin/companies/${person.companyId}`}
         displayField="name"
         showEmptyOption
-        onInput={(v) =>
-          companies.filter(
-            (c) =>
-              c.name.includes(v) &&
-              (!person.companyId || person.companyId !== c.id),
-          )
-        }
+        onInput={(v) => companies.filter((c) => c.name.includes(v))}
         onCreate={async (v) => {
           try {
             setLoading(true)

@@ -17,7 +17,11 @@ export const ArticlePreviewControls = observer(() => {
       <ControlContainer label="Title" id="title">
         <Checkbox
           checked={!!preview.useArticleImage}
-          onChange={() => (preview.useArticleImage = !preview.useArticleImage)}
+          onChange={() =>
+            runInAction(
+              () => (preview.useArticleImage = !preview.useArticleImage),
+            )
+          }
           label="Use article image"
         />
 
@@ -32,7 +36,9 @@ export const ArticlePreviewControls = observer(() => {
 
         <VerticalAlignButtons
           selected={preview.imageFormat.verticalAlign}
-          onSelected={(v) => (preview.imageFormat.verticalAlign = v)}
+          onSelected={(v) =>
+            runInAction(() => (preview.imageFormat.verticalAlign = v))
+          }
         />
 
         <label htmlFor="preview-alt">Alt</label>
@@ -49,7 +55,11 @@ export const ArticlePreviewControls = observer(() => {
       <ControlContainer label="Title" id="title">
         <Checkbox
           checked={!!preview.useArticleTitle}
-          onChange={() => (preview.useArticleTitle = !preview.useArticleTitle)}
+          onChange={() =>
+            runInAction(
+              () => (preview.useArticleTitle = !preview.useArticleTitle),
+            )
+          }
           label="Use article Title"
         />
 
@@ -67,7 +77,11 @@ export const ArticlePreviewControls = observer(() => {
       <ControlContainer label="Text" id="text">
         <Checkbox
           checked={!!preview.useArticleText}
-          onChange={() => (preview.useArticleText = !preview.useArticleText)}
+          onChange={() =>
+            runInAction(
+              () => (preview.useArticleText = !preview.useArticleText),
+            )
+          }
           label="Use article sub heading"
         />
 

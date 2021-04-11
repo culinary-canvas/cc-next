@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 import { field } from '../db/decorators/field.decorator'
 import DurationType from './DurationType'
@@ -15,6 +15,7 @@ class Duration {
   constructor(value?: number, durationType = DurationType.MINUTES) {
     this.value = value
     this.durationType = durationType
+    makeObservable(this)
   }
 
   toString = () => {

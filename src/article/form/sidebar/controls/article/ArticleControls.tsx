@@ -101,7 +101,9 @@ export const ArticleControls = observer(() => {
           id="url"
           placeholder="ArticleView page URL"
           value={!editingSlug ? `/${article.slug || ''}` : article.slug}
-          onChange={(event) => (article.slug = event.target.value)}
+          onChange={(event) =>
+            runInAction(() => (article.slug = event.target.value))
+          }
           onBlur={() => {
             editSlug(false)
             article.slug = StringUtils.toLowerKebabCase(article.slug)
@@ -114,7 +116,7 @@ export const ArticleControls = observer(() => {
           id="type"
           value={article.type}
           options={Object.values(ArticleType)}
-          onChange={(v) => (article.type = v)}
+          onChange={(v) => runInAction(() => (article.type = v))}
           displayFormatter={(v) => StringUtils.toDisplayText(v)}
         />
       </ControlContainer>
@@ -123,12 +125,12 @@ export const ArticleControls = observer(() => {
         <Checkbox
           label="Published"
           checked={article.published}
-          onChange={(v) => (article.published = v)}
+          onChange={(v) => runInAction(() => (article.published = v))}
         />
         <Checkbox
           label="Promoted"
           checked={article.promoted}
-          onChange={(v) => (article.promoted = v)}
+          onChange={(v) => runInAction(() => (article.promoted = v))}
         />
       </ControlContainer>
 
@@ -157,7 +159,12 @@ export const ArticleControls = observer(() => {
           selected={toJS(article.tagNames)}
           onAdd={(tag) => article.tagNames.push(tag)}
           onRemove={(tag) =>
-            (article.tagNames = article.tagNames.filter((id) => id !== tag))
+            runInAction(
+              () =>
+                (article.tagNames = article.tagNames.filter(
+                  (id) => id !== tag,
+                )),
+            )
           }
         />
       </ControlContainer>

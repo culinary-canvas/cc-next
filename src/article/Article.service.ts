@@ -1,7 +1,7 @@
 import { ArticleModel } from './models/Article.model'
 import { ArticleType } from './models/ArticleType'
 import { SectionModel } from './models/Section.model'
-import { action, runInAction } from 'mobx'
+import { runInAction } from 'mobx'
 import { SectionService } from './section/Section.service'
 import { SectionPreset } from './models/SectionPreset'
 import StringUtils from '../services/utils/StringUtils'
@@ -21,7 +21,6 @@ import { ImageFile } from '../image/models/ImageFile'
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
 
-  @action
   static create(type = ArticleType.DISH) {
     const article = new ArticleModel()
     article.type = type
@@ -32,7 +31,6 @@ export class ArticleService {
     return article
   }
 
-  @action
   static addSection(section: SectionModel, article: ArticleModel) {
     if (!section.format.gridPosition) {
       const row = GridPositionService.numberOfRows(article.sections) + 1
@@ -45,7 +43,9 @@ export class ArticleService {
       section.format.gridPosition.startRow += 1
       section.format.gridPosition.endRow += 1
     }
-    article.sections.push(section)
+    runInAction(() => {
+      article.sections.push(section)
+    })
   }
 
   static removeSection(section: SectionModel, article: ArticleModel) {
@@ -57,7 +57,9 @@ export class ArticleService {
     ) {
       GridPositionService.deleteRow(row, article.sections)
     }
-    article.sections = article.sections.filter((s) => s.uid !== section.uid)
+    runInAction(() => {
+      article.sections = article.sections.filter((s) => s.uid !== section.uid)
+    })
   }
 
   static async uploadNewImages(
@@ -97,7 +99,7 @@ export class ArticleService {
 
     return Promise.all(
       imageFilesToUpload.map(async (image) => {
-        image.url = await StorageService.storeFileFromLocalUrl(
+        const _url = await StorageService.storeFileFromLocalUrl(
           image.url,
           image.fileName,
           `articles/${article.slug}`,
@@ -107,32 +109,36 @@ export class ArticleService {
             return onProgress(newProgress, image.fileName)
           },
         )
+        runInAction(() => {
+          image.url = _url
+        })
         accProgress += progressPerImage
       }),
     )
   }
 
-  @action
   static changeSortOrderUp(target: ArticleModel, all: ArticleModel[]) {
     const other = all
       .filter((a) => a.sortOrder > target.sortOrder)
       .reduce((found, a) => (a.sortOrder < found.sortOrder ? a : found))
-    target.sortOrder++
-    other.sortOrder--
+    runInAction(() => {
+      target.sortOrder++
+      other.sortOrder--
+    })
     return [target, other]
   }
 
-  @action
   static changeSortOrderDown(target: ArticleModel, all: ArticleModel[]) {
     const other = all
       .filter((a) => a.sortOrder < target.sortOrder)
       .reduce((found, a) => (a.sortOrder > found.sortOrder ? a : found))
-    target.sortOrder--
-    other.sortOrder++
+    runInAction(() => {
+      target.sortOrder--
+      other.sortOrder++
+    })
     return [target, other]
   }
 
-  @action
   static async setArticleTypeAsTag(article: ArticleModel, userId: string) {
     const tagName = StringUtils.toDisplayText(article.type)
     if (!article.tagNames.includes(tagName)) {
@@ -142,7 +148,9 @@ export class ArticleService {
         tag.name = tagName
         await TagApi.save(tag, userId)
       }
-      article.tagNames.push(tagName)
+      runInAction(() => {
+        article.tagNames.push(tagName)
+      })
     }
   }
 

@@ -1,5 +1,5 @@
 import { Model } from '../../services/db/Model'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { SectionModel } from './Section.model'
 import { ArticleType } from './ArticleType'
 import { ContentType } from './ContentType'
@@ -91,6 +91,10 @@ export class ArticleModel implements Model, Sortable {
   @observable
   @transient()
   companies: CompanyModel[] = []
+
+  constructor() {
+    makeObservable(this)
+  }
 
   @computed
   get isPopulated(): boolean {

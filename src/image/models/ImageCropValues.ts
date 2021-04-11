@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { observable, makeObservable } from 'mobx';
 import { field } from '../../services/db/decorators/field.decorator'
 
 export class ImageCropValues {
@@ -22,6 +22,7 @@ export class ImageCropValues {
   readonly unit = '%'
 
   constructor(x: number, y: number, width: number, height: number) {
+    makeObservable(this)
     this.x = x
     this.y = y
     this.width = width

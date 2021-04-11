@@ -1,10 +1,11 @@
-import { action, computed, observable, reaction } from 'mobx'
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { GridPosition } from '../../../../../grid/GridPosition'
 import { ArticlePart } from '../../../../../models/ArticlePart'
 import { GridPositionService } from '../../../../../grid/GridPosition.service'
 
 export class GridManager {
   constructor(part: ArticlePart, parts: ArticlePart[]) {
+    makeObservable(this);
     this.part = part
     this.parts = parts
     this.updatePartOnChange()

@@ -2,10 +2,11 @@ import { cloneDeep, get, isEqual, isFinite, set } from 'lodash'
 import {
   action,
   computed,
-  IArrayChange,
+  IArrayDidChange,
   IArraySplice,
   IMapDidChange,
   IObjectDidChange,
+  makeObservable,
   observable,
   toJS,
 } from 'mobx'
@@ -18,7 +19,7 @@ import { Field } from './Field'
 
 declare type IChange =
   | IObjectDidChange
-  | IArrayChange
+  | IArrayDidChange
   | IArraySplice
   | IMapDidChange
 
@@ -86,6 +87,7 @@ export class FormControl<T> {
   }
 
   constructor(object: T, fieldConfigs: FormControlFieldConfig<T>[] = []) {
+    makeObservable(this)
     this.init(object, fieldConfigs)
   }
 

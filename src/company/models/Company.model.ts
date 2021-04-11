@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { CompanyType } from './CompanyType'
 import { Model } from '../../services/db/Model'
@@ -69,4 +69,8 @@ export class CompanyModel implements Model {
   @observable
   @field()
   partner = false
+
+  constructor() {
+    makeObservable(this)
+  }
 }
