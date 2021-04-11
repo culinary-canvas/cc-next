@@ -16,7 +16,7 @@ export function useErrorModal(): UseErrorModal {
     (error: Error | string) => {
       overlay.setChildren(
         <ErrorModalContent
-          message={error instanceof Error ? error.errorMessage : error}
+          message={error instanceof Error ? error.message : error}
           onClose={() => hide()}
         />,
       )
