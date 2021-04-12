@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './ControlContainer.module.scss'
 import { classnames } from '../../../../../../services/importHelpers'
 

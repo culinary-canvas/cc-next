@@ -16,7 +16,7 @@ import { GridPosition } from '../grid/GridPosition'
 import { Size } from '../models/Size'
 import { Transformer } from '../../services/db/Transformer'
 import { GridPositionService } from '../grid/GridPosition.service'
-import { action } from 'mobx'
+import { runInAction } from 'mobx'
 import { ImageFit } from '../models/ImageFit'
 
 export class SectionService {
@@ -44,7 +44,6 @@ export class SectionService {
     }
   }
 
-  @action
   static addContent(content: ContentModel, section: SectionModel) {
     if (!content.format.gridPosition) {
       const row = GridPositionService.numberOfRows(section.contents) + 1
@@ -57,156 +56,166 @@ export class SectionService {
       content.format.gridPosition.startRow += 1
       content.format.gridPosition.endRow += 1
     }
-    section.contents.push(content)
+    runInAction(() => {
+      section.contents.push(content)
+    })
   }
 
   private static applyProfileCardPreset(section: SectionModel) {
-    section.preset = SectionPreset.PROFILE_CARD
+    runInAction(() => {
+      section.preset = SectionPreset.PROFILE_CARD
 
-    const image = this.getOrCreateType<ImageContentModel>(
-      ContentType.IMAGE,
-      section,
-    )
-    image.format.circle = true
-    image.format.padding = new Padding(40, 16, 16, 16)
-    image.format.horizontalAlign = HorizontalAlign.CENTER
-    image.format.verticalAlign = VerticalAlign.CENTER
-    image.format.gridPosition = new GridPosition(2, 4, 1, 2)
+      const image = this.getOrCreateType<ImageContentModel>(
+        ContentType.IMAGE,
+        section,
+      )
+      image.format.circle = true
+      image.format.padding = new Padding(40, 16, 16, 16)
+      image.format.horizontalAlign = HorizontalAlign.CENTER
+      image.format.verticalAlign = VerticalAlign.CENTER
+      image.format.gridPosition = new GridPosition(2, 4, 1, 2)
 
-    const name = this.getOrCreateParagraph(section, 0)
-    name.format.fontWeight = 500
-    name.format.fontSize = FONT.SIZE.L
-    name.format.fontFamily = FONT.FAMILY.FILSON
-    name.placeholder = 'Name'
-    name.format.padding = new Padding(16, 16, 0, 16)
-    name.format.gridPosition = new GridPosition(1, 5, 2, 3)
-    name.format.horizontalAlign = HorizontalAlign.CENTER
+      const name = this.getOrCreateParagraph(section, 0)
+      name.format.fontWeight = 500
+      name.format.fontSize = FONT.SIZE.L
+      name.format.fontFamily = FONT.FAMILY.FILSON
+      name.placeholder = 'Name'
+      name.format.padding = new Padding(16, 16, 0, 16)
+      name.format.gridPosition = new GridPosition(1, 5, 2, 3)
+      name.format.horizontalAlign = HorizontalAlign.CENTER
 
-    const jobTitle = this.getOrCreateParagraph(section, 1)
-    jobTitle.format.fontFamily = FONT.FAMILY.GARAMOND
-    jobTitle.format.fontSize = FONT.SIZE.M
-    jobTitle.format.color = COLOR.GREY_DARK
-    jobTitle.format.italic = true
-    jobTitle.placeholder = 'Title'
-    jobTitle.format.padding = new Padding(0, 16, 16, 16)
-    jobTitle.format.gridPosition = new GridPosition(1, 5, 3, 4)
-    jobTitle.format.horizontalAlign = HorizontalAlign.CENTER
+      const jobTitle = this.getOrCreateParagraph(section, 1)
+      jobTitle.format.fontFamily = FONT.FAMILY.GARAMOND
+      jobTitle.format.fontSize = FONT.SIZE.M
+      jobTitle.format.color = COLOR.GREY_DARK
+      jobTitle.format.italic = true
+      jobTitle.placeholder = 'Title'
+      jobTitle.format.padding = new Padding(0, 16, 16, 16)
+      jobTitle.format.gridPosition = new GridPosition(1, 5, 3, 4)
+      jobTitle.format.horizontalAlign = HorizontalAlign.CENTER
 
-    const description = this.getOrCreateParagraph(section, 2)
-    description.format.fontSize = FONT.SIZE.M
-    description.format.fontFamily = FONT.FAMILY.GARAMOND
-    description.format.padding = new Padding(0, 16, 40, 16)
-    description.format.gridPosition = new GridPosition(1, 5, 4, 5)
-    description.format.horizontalAlign = HorizontalAlign.CENTER
+      const description = this.getOrCreateParagraph(section, 2)
+      description.format.fontSize = FONT.SIZE.M
+      description.format.fontFamily = FONT.FAMILY.GARAMOND
+      description.format.padding = new Padding(0, 16, 40, 16)
+      description.format.gridPosition = new GridPosition(1, 5, 4, 5)
+      description.format.horizontalAlign = HorizontalAlign.CENTER
 
-    section.format.height = Size.FIT_CONTENT
-    section.format.shadow = true
-    section.format.backgroundColor = COLOR.WHITE
-    section.format.gridPosition.endColumn =
-      section.format.gridPosition.startColumn + 1
-    section.contents = [image, name, jobTitle, description]
+      section.format.height = Size.FIT_CONTENT
+      section.format.shadow = true
+      section.format.backgroundColor = COLOR.WHITE
+      section.format.gridPosition.endColumn =
+        section.format.gridPosition.startColumn + 1
+      section.contents = [image, name, jobTitle, description]
+    })
   }
 
   private static applyFullScreenTitlePreset(section: SectionModel) {
-    section.preset = SectionPreset.FULL_SCREEN_TITLE
+    runInAction(() => {
+      section.preset = SectionPreset.FULL_SCREEN_TITLE
 
-    const image: ImageContentModel = this.getOrCreateType(
-      ContentType.IMAGE,
-      section,
-    )
-    image.format.gridPosition = new GridPosition(1, 5, 1, 4)
-    image.format.layer = 0
-    image.format.fit = ImageFit.COVER
+      const image: ImageContentModel = this.getOrCreateType(
+        ContentType.IMAGE,
+        section,
+      )
+      image.format.gridPosition = new GridPosition(1, 5, 1, 4)
+      image.format.layer = 0
+      image.format.fit = ImageFit.COVER
 
-    const title = this.getOrCreateType(ContentType.TITLE, section)
-    title.format.verticalAlign = VerticalAlign.BOTTOM
-    title.format.horizontalAlign = HorizontalAlign.CENTER
-    title.format.gridPosition = new GridPosition(1, 5, 1, 2)
-    title.format.layer = 1
+      const title = this.getOrCreateType(ContentType.TITLE, section)
+      title.format.verticalAlign = VerticalAlign.BOTTOM
+      title.format.horizontalAlign = HorizontalAlign.CENTER
+      title.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      title.format.layer = 1
 
-    const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
-    subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-    subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
-    subHeading.format.layer = 1
+      const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
+      subHeading.format.horizontalAlign = HorizontalAlign.CENTER
+      subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
+      subHeading.format.layer = 1
 
-    const byline = this.getOrCreateType(ContentType.BYLINE, section)
-    byline.format.horizontalAlign = HorizontalAlign.CENTER
-    byline.format.verticalAlign = VerticalAlign.BOTTOM
-    byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
-    byline.format.layer = 1
+      const byline = this.getOrCreateType(ContentType.BYLINE, section)
+      byline.format.horizontalAlign = HorizontalAlign.CENTER
+      byline.format.verticalAlign = VerticalAlign.BOTTOM
+      byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
+      byline.format.layer = 1
 
-    image.format.padding = new Padding(0)
-    title.format.padding = new Padding(16, 80, 16, 80)
-    subHeading.format.padding = new Padding(16, 80, 16, 80)
-    byline.format.padding = new Padding(16)
+      image.format.padding = new Padding(0)
+      title.format.padding = new Padding(16, 80, 16, 80)
+      subHeading.format.padding = new Padding(16, 80, 16, 80)
+      byline.format.padding = new Padding(16)
 
-    section.format.height = Size.FULL_SCREEN
-    section.format.gridPosition = new GridPosition(1, 7)
-    section.contents = [image, title, subHeading, byline]
+      section.format.height = Size.FULL_SCREEN
+      section.format.gridPosition = new GridPosition(1, 7)
+      section.contents = [image, title, subHeading, byline]
+    })
   }
 
   private static applyHalfScreenTitlePreset(section: SectionModel) {
-    section.preset = SectionPreset.HALF_SCREEN_TITLE
+    runInAction(() => {
+      section.preset = SectionPreset.HALF_SCREEN_TITLE
 
-    const image: ImageContentModel = this.getOrCreateType(
-      ContentType.IMAGE,
-      section,
-    )
-    image.format.gridPosition = new GridPosition(1, 3, 1, 4)
-    image.format.fit = ImageFit.COVER
+      const image: ImageContentModel = this.getOrCreateType(
+        ContentType.IMAGE,
+        section,
+      )
+      image.format.gridPosition = new GridPosition(1, 3, 1, 4)
+      image.format.fit = ImageFit.COVER
 
-    const title = this.getOrCreateType(ContentType.TITLE, section)
-    title.format.verticalAlign = VerticalAlign.BOTTOM
-    title.format.horizontalAlign = HorizontalAlign.CENTER
-    title.format.gridPosition = new GridPosition(3, 5, 1, 2)
+      const title = this.getOrCreateType(ContentType.TITLE, section)
+      title.format.verticalAlign = VerticalAlign.BOTTOM
+      title.format.horizontalAlign = HorizontalAlign.CENTER
+      title.format.gridPosition = new GridPosition(3, 5, 1, 2)
 
-    const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
-    subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-    subHeading.format.gridPosition = new GridPosition(3, 5, 2, 3)
+      const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
+      subHeading.format.horizontalAlign = HorizontalAlign.CENTER
+      subHeading.format.gridPosition = new GridPosition(3, 5, 2, 3)
 
-    const byline = this.getOrCreateType(ContentType.BYLINE, section)
-    byline.format.horizontalAlign = HorizontalAlign.CENTER
-    byline.format.verticalAlign = VerticalAlign.BOTTOM
-    byline.format.gridPosition = new GridPosition(3, 5, 3, 4)
+      const byline = this.getOrCreateType(ContentType.BYLINE, section)
+      byline.format.horizontalAlign = HorizontalAlign.CENTER
+      byline.format.verticalAlign = VerticalAlign.BOTTOM
+      byline.format.gridPosition = new GridPosition(3, 5, 3, 4)
 
-    image.format.padding = new Padding(0)
-    title.format.padding = new Padding(16, 40, 16, 40)
-    subHeading.format.padding = new Padding(16, 40, 16, 40)
-    byline.format.padding = new Padding(16)
+      image.format.padding = new Padding(0)
+      title.format.padding = new Padding(16, 40, 16, 40)
+      subHeading.format.padding = new Padding(16, 40, 16, 40)
+      byline.format.padding = new Padding(16)
 
-    section.format.height = Size.FULL_SCREEN
-    section.format.gridPosition = new GridPosition(1, 7)
-    section.contents = [image, title, subHeading, byline]
+      section.format.height = Size.FULL_SCREEN
+      section.format.gridPosition = new GridPosition(1, 7)
+      section.contents = [image, title, subHeading, byline]
+    })
   }
 
   private static applyInlineTitlePreset(section: SectionModel) {
-    section.preset = SectionPreset.INLINE_TITLE
+    runInAction(() => {
+      section.preset = SectionPreset.INLINE_TITLE
 
-    const title = this.getOrCreateType(ContentType.TITLE, section)
-    title.format.verticalAlign = VerticalAlign.BOTTOM
-    title.format.horizontalAlign = HorizontalAlign.CENTER
-    title.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      const title = this.getOrCreateType(ContentType.TITLE, section)
+      title.format.verticalAlign = VerticalAlign.BOTTOM
+      title.format.horizontalAlign = HorizontalAlign.CENTER
+      title.format.gridPosition = new GridPosition(1, 5, 1, 2)
 
-    const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
-    subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-    subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
+      const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
+      subHeading.format.horizontalAlign = HorizontalAlign.CENTER
+      subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
 
-    const byline = this.getOrCreateType(ContentType.BYLINE, section)
-    byline.format.horizontalAlign = HorizontalAlign.CENTER
-    byline.format.verticalAlign = VerticalAlign.BOTTOM
-    byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
+      const byline = this.getOrCreateType(ContentType.BYLINE, section)
+      byline.format.horizontalAlign = HorizontalAlign.CENTER
+      byline.format.verticalAlign = VerticalAlign.BOTTOM
+      byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
 
-    const image = this.getOrCreateType(ContentType.IMAGE, section)
-    image.format.gridPosition = new GridPosition(1, 5, 4, 5)
+      const image = this.getOrCreateType(ContentType.IMAGE, section)
+      image.format.gridPosition = new GridPosition(1, 5, 4, 5)
 
-    image.format.padding = new Padding(16)
-    title.format.padding = new Padding(120, 16, 0, 16)
-    subHeading.format.padding = new Padding(40)
-    byline.format.padding = new Padding(32)
+      image.format.padding = new Padding(16)
+      title.format.padding = new Padding(120, 16, 0, 16)
+      subHeading.format.padding = new Padding(40)
+      byline.format.padding = new Padding(32)
 
-    section.format.height = Size.FIT_CONTENT
-    section.format.gridPosition = new GridPosition(2, 6)
-    section.contents = [image, title, subHeading, byline]
+      section.format.height = Size.FIT_CONTENT
+      section.format.gridPosition = new GridPosition(2, 6)
+      section.contents = [image, title, subHeading, byline]
+    })
   }
 
   private static getOrCreateType<T extends ContentModel = TextContentModel>(
@@ -253,7 +262,12 @@ export class SectionService {
     ) {
       GridPositionService.deleteRow(row, section.contents)
     }
-    section.contents = section.contents.filter((c) => c.uid !== content.uid)
+    runInAction(
+      () =>
+        (section.contents = section.contents.filter(
+          (c) => c.uid !== content.uid,
+        )),
+    )
   }
 
   static duplicate(source: SectionModel) {

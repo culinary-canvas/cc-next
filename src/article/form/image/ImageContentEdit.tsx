@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './ImageContentEdit.module.scss'
 import { ImageContentModel } from '../../models/ImageContent.model'
 import { SectionModel } from '../../models/Section.model'

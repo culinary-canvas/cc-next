@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { v1 as uuid } from 'uuid'
 import s from './Slider.module.scss'
 import ReactSlider from 'react-slider'

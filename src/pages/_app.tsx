@@ -16,7 +16,7 @@ import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
 import ArticleFormSidebar from '../article/form/sidebar/ArticleFormSidebar'
 import { Header } from '../shared/header/Header'
 import { Footer } from '../shared/footer/Footer'
-import { useStaticRendering } from 'mobx-react'
+import { enableStaticRendering } from 'mobx-react-lite'
 import { RouteTransition } from '../shared/routeTransition/RouteTransition'
 import { MenuContext, useMenuState } from '../menu/Menu.context'
 
@@ -24,7 +24,7 @@ export const isServer = typeof window === 'undefined'
 export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
 
 Modal.setAppElement('#__next')
-useStaticRendering(isServer)
+enableStaticRendering(isServer)
 
 interface Props extends AppProps {}
 

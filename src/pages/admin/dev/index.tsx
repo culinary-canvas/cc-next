@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Button } from '../../../shared/button/Button'
 import { deleteUnusedTags } from '../../../services/script/deleteUnusedTags'
 import s from './dev.module.scss'
@@ -10,6 +10,7 @@ import { GetStaticProps } from 'next'
 import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
 import { setPersonAndCompanySlugs } from '../../../services/script/setPersonAndCompanySlugs'
+import { setShowOnStartPage } from '../../../services/script/setShowOnStartPage'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -76,6 +77,17 @@ const AdminDevArea = observer(() => {
           loading={running === 'setPersonAndCompanySlugs'}
         >
           Set Person and Company slugs
+        </Button>
+
+        <Button
+          onClick={async () => {
+            setRunning('setShowOnStartPage')
+            await setShowOnStartPage(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'setShowOnStartPage'}
+        >
+          Set show on start page
         </Button>
 
       </div>

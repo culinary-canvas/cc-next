@@ -1,4 +1,4 @@
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useAdmin } from '../../../../../../admin/Admin.context'
 import { Button } from '../../../../../../shared/button/Button'
 import s from './ArticleFormModeSelect.module.scss'

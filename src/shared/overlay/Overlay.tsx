@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './Overlay.module.scss'
 import { COLOR, ColorType } from '../../styles/_color'
 import { isNil } from '../../services/importHelpers'

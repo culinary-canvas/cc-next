@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { transient } from '../../services/db/decorators/transient.decorator'
 import { CompanyModel } from '../../company/models/Company.model'
@@ -74,4 +74,8 @@ export class PersonModel implements Model {
   @observable
   @transient()
   company: CompanyModel
+
+  constructor() {
+    makeObservable(this)
+  }
 }

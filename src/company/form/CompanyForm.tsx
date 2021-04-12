@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import { CompanyModel } from '../models/Company.model'
 import { useAuth } from '../../services/auth/Auth'

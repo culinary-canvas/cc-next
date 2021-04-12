@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './GridControlMenu.module.scss'
 import DownArrow from '../../../../../../../public/assets/icons/streamline-icon-keyboard-arrow-down@140x140.svg'
 import UpArrow from '../../../../../../../public/assets/icons/streamline-icon-keyboard-arrow-up@140x140.svg'

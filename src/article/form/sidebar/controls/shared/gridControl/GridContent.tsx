@@ -4,7 +4,7 @@ import s from './GridContent.module.scss'
 import { ArticlePart } from '../../../../../models/ArticlePart'
 import { SectionModel } from '../../../../../models/Section.model'
 import { Size } from '../../../../../models/Size'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { motion } from 'framer-motion'
 
 interface Props<T> {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { classnames } from '../../services/importHelpers'
 import { SectionEdit } from './section/SectionEdit'
 import s from './ArticleForm.module.scss'

@@ -1,5 +1,5 @@
 import { field } from '../../services/db/decorators/field.decorator'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export class GridPosition {
   @field()
@@ -28,5 +28,6 @@ export class GridPosition {
     this.endColumn = endColumn
     this.startRow = startRow
     this.endRow = endRow
+    makeObservable(this)
   }
 }

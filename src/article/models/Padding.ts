@@ -1,6 +1,6 @@
 import { field } from '../../services/db/decorators/field.decorator'
-import { action, computed, observable } from 'mobx'
-import {isNil} from '../../services/importHelpers'
+import { action, computed, makeObservable, observable } from 'mobx'
+import { isNil } from '../../services/importHelpers'
 
 export interface PaddingValues {
   top: number
@@ -11,6 +11,7 @@ export interface PaddingValues {
 
 export class Padding {
   constructor(sharedOrTop = 0, right?: number, bottom?: number, left?: number) {
+    makeObservable(this)
     this.top = sharedOrTop
     this.right = !isNil(right) ? right : sharedOrTop
     this.bottom = !isNil(bottom) ? bottom : sharedOrTop

@@ -1,5 +1,5 @@
 import React, { useCallback, useReducer, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { GridPositionService } from '../../../../../grid/GridPosition.service'
 import { GridContent } from './GridContent'
 import { ArticlePart } from '../../../../../models/ArticlePart'

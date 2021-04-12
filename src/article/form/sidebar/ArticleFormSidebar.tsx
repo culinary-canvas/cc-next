@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import classnames from 'classnames'
 import { Button } from '../../../shared/button/Button'
 import { useAuth } from '../../../services/auth/Auth'

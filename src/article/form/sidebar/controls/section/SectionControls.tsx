@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Button } from '../../../../../shared/button/Button'
 import { SectionPresetButtons } from '../shared/sectionPreset/SectionPresetButtons'
 import { runInAction } from 'mobx'

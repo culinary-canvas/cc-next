@@ -6,7 +6,7 @@ import { ArticlePart } from '../../../../../models/ArticlePart'
 import { useAdmin } from '../../../../../../admin/Admin.context'
 import { GridMap } from './GridMap'
 import { GridControlMenu } from './GridControlMenu'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { GridSelect } from './GridSelect'
 import { GridLayout } from './GridLayout'
 

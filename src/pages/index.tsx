@@ -56,6 +56,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const response = await firestore()
     .collection('articles')
     .where('published', '==', true)
+    .where('showOnStartPage', '==', true)
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()

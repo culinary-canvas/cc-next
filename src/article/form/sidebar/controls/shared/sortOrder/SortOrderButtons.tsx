@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Button } from '../../../../../../shared/button/Button'
 import { runInAction } from 'mobx'
 import s from './SortOrderButtons.module.scss'
