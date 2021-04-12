@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { PersonModel } from '../../../../person/models/Person.model'
 import { PersonApi } from '../../../../person/Person.api'
 import { GetServerSideProps } from 'next'

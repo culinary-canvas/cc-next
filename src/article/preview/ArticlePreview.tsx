@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './ArticlePreview.module.scss'
 import { Button } from '../../shared/button/Button'
 import { ArticleModel } from '../models/Article.model'

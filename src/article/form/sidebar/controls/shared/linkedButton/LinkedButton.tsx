@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '../../../../../../shared/button/Button'
 import linkIcon from '../../../../../../../public/assets/icons/streamline-icon-hyperlink@140x140.svg'
 import brokenLinkIcon from '../../../../../../../public/assets/icons/streamline-icon-link-broken@140x140.svg'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 
 interface Props {
   linked: boolean

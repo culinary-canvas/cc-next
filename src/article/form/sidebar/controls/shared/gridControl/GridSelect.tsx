@@ -5,7 +5,7 @@ import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { GridMap } from './GridMap'
 import { classnames } from '../../../../../../services/importHelpers'
 import s from './GridSelect.module.scss'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 
 interface Props<T extends ArticlePart> {
   gridMap: GridMap<T>

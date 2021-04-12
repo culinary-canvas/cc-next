@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './GridControlMenuButton.module.scss'
 import { classnames } from '../../../../../../services/importHelpers'
 import { Button } from '../../../../../../shared/button/Button'

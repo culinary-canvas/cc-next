@@ -1,7 +1,7 @@
 import React from 'react'
 import s from './Toc.module.scss'
 import { ArticleModel } from '../../models/Article.model'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 
 interface Props {
   article: ArticleModel

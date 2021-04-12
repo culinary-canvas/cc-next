@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ArticleModel } from '../../../article/models/Article.model'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'

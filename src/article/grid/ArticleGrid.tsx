@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ArticleModel } from '../models/Article.model'
 import s from './ArticleGrid.module.scss'
 import { classnames } from '../../services/importHelpers'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Select } from '../../../../../../shared/select/Select'
 import { HorizontalAlignButtons } from '../../shared/horizontalAlign/HorizontalAlignButtons'
 import { FontStyleButtons } from '../../shared/fontStyle/FontStyleButtons'

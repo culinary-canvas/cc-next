@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import { SectionModel } from '../../models/Section.model'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { ImageContentModel } from '../../models/ImageContent.model'
 import { classnames } from '../../../services/importHelpers'

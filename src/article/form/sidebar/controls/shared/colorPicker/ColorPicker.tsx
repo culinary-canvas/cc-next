@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './ColorPicker.module.scss'
 import { COLOR, ColorType } from '../../../../../../styles/_color'
 import { classnames, isNil } from '../../../../../../services/importHelpers'

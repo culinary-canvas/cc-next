@@ -22,7 +22,7 @@
     "js-cookie": "^2.2.1",
     "lorem-ipsum": "^2.0.3",
     "mobx": "^6.2.0",
-    "mobx-react": "^7.1.0",
+    "mobx-react-lite": "^3.2.0",
     "mobx-utils": "^6.0.4",
     "next": "^10.0.7",
     "next-images": "^1.7.0",

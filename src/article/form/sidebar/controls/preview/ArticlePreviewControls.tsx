@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useAdmin } from '../../../../../admin/Admin.context'
 import s from './ArticlePreviewControls.module.scss'
 import { Checkbox } from '../../../../../shared/checkbox/Checkbox'

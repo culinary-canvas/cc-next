@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import s from './LookupSelect.module.scss'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Button } from '../button/Button'
 import viewIcon from '../../../public/assets/icons/streamline-icon-view-1@140x140.svg'
 import { v4 as uuid } from 'uuid'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { Checkbox } from '../../../../../../shared/checkbox/Checkbox'
 import { ImageContentModel } from '../../../../../models/ImageContent.model'

@@ -16,7 +16,7 @@ import { CookieBanner } from '../shared/cookieBanner/CookieBanner'
 import ArticleFormSidebar from '../article/form/sidebar/ArticleFormSidebar'
 import { Header } from '../shared/header/Header'
 import { Footer } from '../shared/footer/Footer'
-import { enableStaticRendering } from 'mobx-react'
+import { enableStaticRendering } from 'mobx-react-lite'
 import { RouteTransition } from '../shared/routeTransition/RouteTransition'
 import { MenuContext, useMenuState } from '../menu/Menu.context'
 

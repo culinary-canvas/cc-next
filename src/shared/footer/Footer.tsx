@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import s from './Footer.module.scss'
 import Link from 'next/link'
 import { SocialMediaLinks } from '../socialMediaLinks/SocialMediaLinks'

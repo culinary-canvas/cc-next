@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ArticleControls } from './article/ArticleControls'
 import s from './Controls.module.scss'
 import { Tabs } from '../../../../shared/tabs/Tabs'
