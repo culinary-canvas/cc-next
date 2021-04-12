@@ -1,6 +1,6 @@
 import { field } from '../../services/db/decorators/field.decorator'
 import { Model } from '../../services/db/Model'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export class TagModel implements Model {
   @observable
@@ -26,4 +26,8 @@ export class TagModel implements Model {
   @field()
   @observable
   name: string
+
+  constructor() {
+    makeObservable(this)
+  }
 }

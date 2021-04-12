@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import s from './LookupSelect.module.scss'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { Button } from '../button/Button'
 import viewIcon from '../../../public/assets/icons/streamline-icon-view-1@140x140.svg'
 import { v4 as uuid } from 'uuid'
@@ -60,29 +60,6 @@ export const LookupSelect = observer(
       [onInput],
     )
 
-    const onArrowKeyPress = useCallback(
-      (e: any) => {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          const count = showCreate ? 1 + options.length : options.length
-          if (e.key === 'ArrowDown') {
-            if (isNil(focusedOption) || focusedOption === count - 1) {
-              setFocusedOption(0)
-            } else {
-              setFocusedOption((focusedOption as number) + 1)
-            }
-          }
-          if (e.key === 'ArrowUp') {
-            if (isNil(focusedOption) || focusedOption === 0) {
-              setFocusedOption(count - 1)
-            } else {
-              setFocusedOption((focusedOption as number) - 1)
-            }
-          }
-        }
-      },
-      [showCreate, options, focusedOption],
-    )
-
     useEffect(() => {
       setShowCreate(
         onCreate &&
@@ -111,7 +88,7 @@ export const LookupSelect = observer(
 
       window.addEventListener('mousedown', clickListener)
       return () => window.removeEventListener('mousedown', clickListener)
-    }, [])
+    }, [selected, id, optionsId])
 
     useEffect(() => {
       if (!isNil(focusedOption)) {

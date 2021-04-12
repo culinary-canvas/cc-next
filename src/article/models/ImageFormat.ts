@@ -1,5 +1,5 @@
 import { field } from '../../services/db/decorators/field.decorator'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { Padding } from './Padding'
 import { HorizontalAlign } from './HorizontalAlign'
 import { VerticalAlign } from './VerticalAlign'
@@ -10,6 +10,7 @@ import { ImageFit } from './ImageFit'
 export class ImageFormat extends Format {
   constructor(initial?: Partial<ImageFormat>) {
     super(initial)
+    makeObservable(this)
   }
 
   @field()

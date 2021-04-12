@@ -9,7 +9,7 @@ import removeIcon from '../../../../../../../public/assets/icons/streamline-icon
 import { Button } from '../../../../../../shared/button/Button'
 import { CompanyModel } from '../../../../../../company/models/Company.model'
 import { CompanyApi } from '../../../../../../company/Company.api'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ArticleService } from '../../../../../Article.service'
 import StringUtils from '../../../../../../services/utils/StringUtils'
 import { useErrorModal } from '../../../../../../shared/error/useErrorModal'

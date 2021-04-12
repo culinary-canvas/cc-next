@@ -1,4 +1,4 @@
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { transient } from '../../services/db/decorators/transient.decorator'
 import { v1 as uuid } from 'uuid'
@@ -32,6 +32,10 @@ export class SectionModel implements ArticlePart {
   })
   @observable
   contents: ContentModel[] = []
+
+  constructor() {
+    makeObservable(this)
+  }
 
   @computed
   get displayName(): string {

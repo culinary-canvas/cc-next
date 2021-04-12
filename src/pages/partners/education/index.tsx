@@ -112,5 +112,6 @@ export const getStaticProps: GetStaticProps = async () => {
       companyData: JSON.parse(JSON.stringify(companyData)),
       articlesData: JSON.parse(JSON.stringify(articlesData)),
     },
+    revalidate: 1,
   }
 }

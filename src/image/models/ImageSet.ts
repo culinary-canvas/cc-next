@@ -1,6 +1,6 @@
 import { ImageFile } from './ImageFile'
 import { field } from '../../services/db/decorators/field.decorator'
-import { computed, observable } from 'mobx'
+import { computed, makeObservable, observable } from 'mobx'
 import { ImageCropValues } from './ImageCropValues'
 
 export class ImageSet {
@@ -19,6 +19,10 @@ export class ImageSet {
   @field(ImageFile)
   @observable
   cropped: ImageFile
+
+  constructor() {
+    makeObservable(this)
+  }
 
   @computed
   get url() {

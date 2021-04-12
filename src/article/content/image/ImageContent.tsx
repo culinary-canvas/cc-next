@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../models/Section.model'
 import { classnames, isNil } from '../../../services/importHelpers'

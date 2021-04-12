@@ -3,6 +3,7 @@ import { ArrayUtils } from '../services/utils/ArrayUtils'
 import { CompanyApi } from '../company/Company.api'
 import { addHttpIfMissing } from '../services/utils/UrlUtils'
 import { PersonApi } from './Person.api'
+import { runInAction } from 'mobx'
 
 export class PersonService {
   static async populate(persons: PersonModel | PersonModel[]) {
@@ -11,7 +12,11 @@ export class PersonService {
 
     _persons
       .filter((p) => !!p.companyId)
-      .forEach((p) => (p.company = companies.find((c) => p.companyId === c.id)))
+      .forEach((p) =>
+        runInAction(() => {
+          p.company = companies.find((c) => p.companyId === c.id)
+        }),
+      )
   }
 
   static ensureHttpInUrls(person: PersonModel) {

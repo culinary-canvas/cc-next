@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import { ArticleModel } from '../models/Article.model'
 import { ArticleListRow } from './ArticleListRow'

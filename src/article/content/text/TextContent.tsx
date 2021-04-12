@@ -1,5 +1,5 @@
 import React, { CSSProperties, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { TextContentModel as TextContentModel } from '../../models/TextContent.model'
 import { classnames } from '../../../services/importHelpers'
 import { ContentType } from '../../models/ContentType'

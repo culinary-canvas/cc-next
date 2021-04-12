@@ -1,5 +1,5 @@
 import { field } from '../../services/db/decorators/field.decorator'
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export class ImageFile {
   @field()
@@ -21,4 +21,8 @@ export class ImageFile {
   @field()
   @observable
   height: number
+
+  constructor() {
+    makeObservable(this)
+  }
 }

@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 import { ImageSet } from '../../image/models/ImageSet'
 import { ImageFormat } from './ImageFormat'
@@ -35,4 +35,8 @@ export class ArticlePreviewModel {
   @observable
   @field()
   text = ''
+
+  constructor() {
+    makeObservable(this)
+  }
 }

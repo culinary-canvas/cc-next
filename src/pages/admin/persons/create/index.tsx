@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { PersonModel } from '../../../../person/models/Person.model'
 import { GetServerSideProps } from 'next'
 import { PersonForm } from '../../../../person/form/PersonForm'

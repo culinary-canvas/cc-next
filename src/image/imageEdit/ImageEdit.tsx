@@ -8,7 +8,7 @@ import { useOverlay } from '../../shared/overlay/OverlayStore'
 import Image from 'next/image'
 import { ImageFormat } from '../../article/models/ImageFormat'
 import { ImageFit } from '../../article/models/ImageFit'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 
 interface Props {
   set: ImageSet

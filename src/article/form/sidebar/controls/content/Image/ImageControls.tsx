@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
+import React from 'react'
+import { observer } from 'mobx-react-lite'
 import { PaddingControls } from '../../shared/padding/PaddingControls'
 import { Checkbox } from '../../../../../../shared/checkbox/Checkbox'
 import { ImageContentModel } from '../../../../../models/ImageContent.model'
 import { runInAction } from 'mobx'
-import { useReaction } from '../../../../../../hooks/useReaction'
 import s from './ImageControls.module.scss'
 import { ImageFitButtons } from '../../shared/imageFItButtons/ImageFitButtons'
 import { useAdmin } from '../../../../../../admin/Admin.context'
@@ -27,7 +26,7 @@ export const ImageControls = observer(() => {
           <ImageEdit
             set={content.set}
             format={content.format}
-            onChange={(set) => (content.set = set)}
+            onChange={(set) => runInAction(() => (content.set = set))}
           />
         </div>
         <label htmlFor="alt">Alt</label>
@@ -55,7 +54,7 @@ export const ImageControls = observer(() => {
         <Checkbox
           label="Circle"
           checked={content.format.circle}
-          onChange={(v) => (content.format.circle = v)}
+          onChange={(v) => runInAction(() => (content.format.circle = v))}
         />
         <ImageFitButtons
           selected={content.format.fit}
@@ -64,12 +63,16 @@ export const ImageControls = observer(() => {
         <div className={s.row}>
           <HorizontalAlignButtons
             selected={content.format.horizontalAlign}
-            onSelected={(v) => (content.format.horizontalAlign = v)}
+            onSelected={(v) =>
+              runInAction(() => (content.format.horizontalAlign = v))
+            }
           />
           {!content.format.circle && (
             <VerticalAlignButtons
               selected={content.format.verticalAlign}
-              onSelected={(v) => (content.format.verticalAlign = v)}
+              onSelected={(v) =>
+                runInAction(() => (content.format.verticalAlign = v))
+              }
             />
           )}
         </div>
@@ -89,7 +92,7 @@ export const ImageControls = observer(() => {
       <ControlContainer label="Padding">
         <PaddingControls
           padding={content.format.padding}
-          onChange={(p) => (content.format.padding = p)}
+          onChange={(p) => runInAction(() => (content.format.padding = p))}
         />
       </ControlContainer>
     </>

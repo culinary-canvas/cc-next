@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import TextareaAutosize from 'react-textarea-autosize'
 import { TextContentModel } from '../../models/TextContent.model'
 import { useAdmin } from '../../../admin/Admin.context'

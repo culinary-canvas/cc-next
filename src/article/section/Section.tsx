@@ -1,6 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
 import { SectionModel } from '../models/Section.model'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import { ImageContentModel } from '../models/ImageContent.model'
 import { classnames } from '../../services/importHelpers'
 import s from './Section.module.scss'

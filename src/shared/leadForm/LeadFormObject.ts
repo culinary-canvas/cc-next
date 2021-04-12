@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { observable } from 'mobx'
+import { observable, makeObservable } from 'mobx';
 
 export class LeadFormObject {
   readonly id = uuid()
@@ -15,4 +15,8 @@ export class LeadFormObject {
 
   @observable
   newsletter = false
+
+  constructor() {
+    makeObservable(this)
+  }
 }
