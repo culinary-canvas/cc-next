@@ -85,6 +85,10 @@ export class ArticleModel implements Model, Sortable {
   companyIds: string[] = []
 
   @observable
+  @field()
+  showOnStartPage = true
+
+  @observable
   @transient()
   persons: PersonModel[] = []
 

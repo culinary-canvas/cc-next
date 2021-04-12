@@ -128,6 +128,11 @@ export const ArticleControls = observer(() => {
           onChange={(v) => runInAction(() => (article.published = v))}
         />
         <Checkbox
+          label="Show on start page"
+          checked={article.showOnStartPage}
+          onChange={(v) => runInAction(() => (article.showOnStartPage = v))}
+        />
+        <Checkbox
           label="Promoted"
           checked={article.promoted}
           onChange={(v) => runInAction(() => (article.promoted = v))}
