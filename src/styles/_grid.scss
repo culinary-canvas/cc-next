@@ -32,6 +32,7 @@
 
       &:first-child.promoted {
         grid-column-end: span 3;
+        min-height: 85vh;
       }
 
       &:not(:first-child).promoted {
