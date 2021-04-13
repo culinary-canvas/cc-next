@@ -8,6 +8,7 @@
   align-items: center;
   height: 3rem;
   padding: 0 1rem;
+  background-color:  transparentize($white, 0.8);
 
   a {
     position: relative;
@@ -21,10 +22,10 @@
     .subMenu {
       position: absolute;
       left: -1rem;
+      z-index: 10;
       padding: 0.45rem 1rem;
       background-color: $white;
       font-weight: 200;
-      z-index: 10;
     }
   }
 
