@@ -32,6 +32,7 @@ export class StorageService {
     const result = await fetch(localUrl)
     const blob = await result.blob()
     const file = new File([blob], fileName)
+    console.log('storing file', file, path)
     return StorageService.storeFile(file, path, progressCallback)
   }
 
@@ -43,6 +44,9 @@ export class StorageService {
   }
 
   static isLocal(url: string) {
+    if (!url) {
+      return false
+    }
     return !this.isRemote(url)
   }
 }

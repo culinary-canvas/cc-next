@@ -11,9 +11,10 @@ export class FileService {
     url: string,
     mimeType = this.getMimeType(url),
   ): Promise<Blob> {
-    const result = await fetch(url, {
-      headers: new Headers({ 'content-type': mimeType }),
-    })
+    const headers = new Headers()
+    // headers.set('content-type', mimeType)
+
+    const result = await fetch(url, { headers })
     return await result.blob()
   }
 

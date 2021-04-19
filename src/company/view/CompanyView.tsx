@@ -38,17 +38,17 @@ export function CompanyView(props: Props) {
     <div className={classnames(s.container, className, { [s.card]: card })}>
       <figure
         className={classnames(s.figure, {
-          [s.noImage]: !company.image?.cropped?.url,
+          [s.noImage]: !company.image?.url,
         })}
       >
-        {!!company.image?.cropped?.url ? (
+        {!!company.image?.url ? (
           <Image
             quality={60}
             priority={!card}
             objectFit="contain"
             objectPosition="top"
             layout="fill"
-            src={company.image?.cropped?.url}
+            src={company.image?.url}
             alt={company.image?.alt}
           />
         ) : (

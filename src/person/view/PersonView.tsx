@@ -34,17 +34,17 @@ export function PersonView(props: Props) {
     <div className={classnames(s.container, className, { [s.card]: card })}>
       <figure
         className={classnames(s.figure, {
-          [s.noImage]: !person.image?.cropped?.url,
+          [s.noImage]: !person.image?.url,
         })}
       >
-        {!!person.image?.cropped?.url ? (
+        {!!person.image?.url ? (
           <Image
             quality={60}
             priority={!card}
             objectFit="cover"
             objectPosition="center"
             layout="fill"
-            src={person.image?.cropped?.url}
+            src={person.image?.url}
             alt={person.image?.alt}
           />
         ) : (

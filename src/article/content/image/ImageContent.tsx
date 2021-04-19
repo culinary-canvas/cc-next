@@ -1,4 +1,4 @@
-import React, { CSSProperties, useState } from 'react'
+import React, { CSSProperties, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../models/Section.model'
@@ -15,15 +15,34 @@ interface Props {
   section: SectionModel
   first: boolean
   index: number
+  style?: CSSProperties
 }
 
 export const ImageContent = observer((props: Props) => {
   const { content, section, first = false, index } = props
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
+  const [size, setSize] = useState<string>()
+
+  const calculateAndSetSizes = useCallback(() => {
+    const contentColumns =
+      content.format.gridPosition.endColumn -
+      content.format.gridPosition.startColumn
+    const relativeContentWidth = contentColumns / 4
+
+    const sectionColumns =
+      section.format.gridPosition.endColumn -
+      section.format.gridPosition.startColumn
+    const relativeSectionWidth = sectionColumns / 6
+
+    const relativeWidth = relativeSectionWidth * relativeContentWidth * 100
+
+    setSize(`${relativeWidth}vw`)
+  }, [section, content])
 
   useAutorun(() => {
     const { format } = content
+    calculateAndSetSizes()
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
       minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
@@ -35,7 +54,7 @@ export const ImageContent = observer((props: Props) => {
       marginLeft: `${format.padding.left}px`,
       marginRight: `${format.padding.right}px`,
     })
-  }, [content, content.format])
+  }, [content, content.format, calculateAndSetSizes])
 
   useAutorun(() => {
     const gridCss = GridPositionService.gridPositionAsCss(
@@ -62,24 +81,23 @@ export const ImageContent = observer((props: Props) => {
       transition={{ delay: index * 0.5 }}
     >
       <Image
+        sizes={size}
         width={
-          section.format.height === Size.FIT_CONTENT &&
-          content.set.cropped.width
+          section.format.height === Size.FIT_CONTENT && content.set.image.width
         }
         height={
-          section.format.height === Size.FIT_CONTENT &&
-          content.set.cropped.height
+          section.format.height === Size.FIT_CONTENT && content.set.image.height
         }
         // @ts-ignore
         layout={
           section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
         }
-        quality={50}
+        quality={75}
         objectFit="cover"
         objectPosition="center"
         priority={first}
         alt={content.set.alt}
-        src={content.set.cropped.url}
+        src={content.set.image.url}
         className={classnames(s.content, {
           [s.circle]: content.format.circle,
         })}

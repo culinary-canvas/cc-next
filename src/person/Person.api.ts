@@ -141,10 +141,10 @@ export class PersonApi {
     person: PersonModel,
     onProgress: (progress: number, message: string) => any,
   ) {
-    if (StorageService.isLocal(person.image.cropped.url)) {
-      person.image.cropped.url = await StorageService.storeFileFromLocalUrl(
-        person.image.cropped.url,
-        person.image.cropped.fileName,
+    if (StorageService.isLocal(person.image.image.url)) {
+      person.image.image.url = await StorageService.storeFileFromLocalUrl(
+        person.image.image.url,
+        person.image.image.fileName,
         `persons/${person.id}`,
         (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )

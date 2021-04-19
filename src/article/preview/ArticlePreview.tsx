@@ -83,7 +83,7 @@ export const ArticlePreview = observer((props: Props) => {
                 ? imageFormat.verticalAlign.toLowerCase()
                 : 'center'
             }
-            src={imageSet.cropped.url}
+            src={imageSet.url}
           />
         )}
       </figure>

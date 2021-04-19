@@ -55,7 +55,7 @@ export const PersonsArticleControl = observer((props: Props) => {
         <ul>
           {inArticle.map((p) => (
             <li key={p.id}>
-              <figure>{!!p.image && <img src={p.image.cropped.url} />}</figure>
+              <figure>{!!p.image && <img src={p.image.url} />}</figure>
 
               <div className={s.info}>
                 <a

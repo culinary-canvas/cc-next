@@ -120,10 +120,10 @@ export class CompanyApi {
     company: CompanyModel,
     onProgress: (progress: number, message: string) => any,
   ) {
-    if (StorageService.isLocal(company.image.cropped.url)) {
-      company.image.cropped.url = await StorageService.storeFileFromLocalUrl(
-        company.image.cropped.url,
-        company.image.cropped.fileName,
+    if (StorageService.isLocal(company.image.image.url)) {
+      company.image.image.url = await StorageService.storeFileFromLocalUrl(
+        company.image.image.url,
+        company.image.image.fileName,
         `companies/${company.id}`,
         (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )

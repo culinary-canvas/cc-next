@@ -44,7 +44,7 @@ export const ImageControls = observer(() => {
       <ControlContainer>
         <CheckboxSliderControl
           value={content.format.maxHeight}
-          max={content.set.cropped?.height}
+          max={content.set?.height}
           onChange={(v) => runInAction(() => (content.format.maxHeight = v))}
           label="Max height"
         />
