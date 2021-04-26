@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { PersonModel } from '../models/Person.model'
 import s from './PersonView.module.scss'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
-import Image from 'next/image'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
 import { TextContentService } from '../../article/services/TextContent.service'
+import { ImageService } from '../../services/Image.service'
+import { Image } from '../../shared/image/Image'
 
 interface Props {
   person: PersonModel
@@ -30,29 +31,25 @@ export function PersonView(props: Props) {
     }
   }, [person])
 
+  const figureRef = useRef()
+
   return (
     <div className={classnames(s.container, className, { [s.card]: card })}>
-      <figure
-        className={classnames(s.figure, {
-          [s.noImage]: !person.image?.url,
+      <Image
+        imageSet={person.imageSet}
+        priority={!card}
+        figureClassName={classnames(s.figure, {
+          [s.noImage]: !person.imageSet?.url,
         })}
-      >
-        {!!person.image?.url ? (
-          <Image
-            quality={60}
-            priority={!card}
-            objectFit="cover"
-            objectPosition="center"
-            layout="fill"
-            src={person.image?.url}
-            alt={person.image?.alt}
-          />
-        ) : (
+        objectFit="contain"
+        objectPosition="top"
+        layout="fill"
+        placeholder={() => (
           <div className={s.noImagePlaceholder}>
             <span>{person.name.substring(0, 1)}</span>
           </div>
         )}
-      </figure>
+      />
       <div className={s.grid}>
         <SocialMediaLinks
           size={14}
@@ -75,9 +72,7 @@ export function PersonView(props: Props) {
             </Link>
           </h2>
         ) : (
-          <h1 className={s.name}>
-            {person.name}
-          </h1>
+          <h1 className={s.name}>{person.name}</h1>
         )}
 
         {!!person.title && (

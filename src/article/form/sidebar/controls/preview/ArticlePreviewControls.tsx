@@ -27,9 +27,9 @@ export const ArticlePreviewControls = observer(() => {
 
         <div className={s.imageEdit}>
           <ImageEdit
-            set={preview.image}
+            set={preview.imageSet}
             format={preview.imageFormat}
-            onChange={(set) => runInAction(() => (preview.image = set))}
+            onChange={(set) => runInAction(() => (preview.imageSet = set))}
             disabled={preview.useArticleImage}
           />
         </div>

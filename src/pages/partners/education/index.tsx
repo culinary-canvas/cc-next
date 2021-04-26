@@ -47,16 +47,16 @@ export default function Education({ articlesData, companyData }: Props) {
     <>
       <PageHead
         title={`Culinary Canvas — Partners — Education`}
-        image={company.image?.url || articles[0]?.imageContent.url}
+        image={company.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          company.image?.width ||
+          company.imageSet?.width ||
           articles[0]?.imageContent.set.width
         }
         imageHeight={
-          company.image?.height ||
+          company.imageSet?.height ||
           articles[0]?.imageContent.set.height
         }
-        imageAlt={company.image?.alt || articles[0]?.imageContent.set.alt}
+        imageAlt={company.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
       <main className={s.container}>
         <div className={s.content}>

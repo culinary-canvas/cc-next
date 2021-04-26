@@ -4,8 +4,22 @@ import { FileService } from './file/FileService'
 import Compressor from 'compressorjs'
 import { Overlay } from '../shared/overlay/OverlayStore'
 import { ImageSet } from '../image/models/ImageSet'
+import { isNil } from './importHelpers'
 
 export class ImageService {
+  static readonly NEXTJS_DEVICE_SIZES = [
+    172,
+    248,
+    344,
+    496,
+    688,
+    992,
+    1024,
+    1312,
+    2048,
+    4096,
+  ]
+
   static async getImageElement(url: string) {
     const imageEl = new Image()
     imageEl.crossOrigin = 'anonymous'
@@ -25,7 +39,10 @@ export class ImageService {
 
   static async getWidthAndHeight(blob: Blob, image: ImageFile)
   static async getWidthAndHeight(url: string)
-  static async getWidthAndHeight(urlOrBlob: string | Blob, image?: ImageFile) {
+  static async getWidthAndHeight(
+    urlOrBlob: string | Blob,
+    image?: ImageFile,
+  ): Promise<{ width: number; height: number }> {
     let url
     if (!!image) {
       const file = new File([urlOrBlob], image.fileName, {
@@ -164,5 +181,38 @@ export class ImageService {
 
     overlay.setProgress(1, 'Done!')
     return newSet
+  }
+
+  static getImageSizeByVw(vw: number): number {
+    const pixels = (vw / 100) * window.innerWidth
+    return this.getDeviceSize(pixels)
+  }
+
+  static determineImageSizeByLargestDimension(
+    url: string,
+    wOriginal: number,
+    hOriginal: number,
+    wContainer: number,
+    hContainer: number,
+  ): number {
+    if (isNil(wContainer) || isNil(hContainer)) {
+      return null
+    }
+    const wByContainerW = this.getDeviceSize(wContainer)
+    const hByContainerW = hOriginal * (wContainer / wOriginal)
+
+    if (hByContainerW >= hContainer) {
+      return wByContainerW
+    }
+    const exactWByContainerH = wOriginal * (hContainer / hOriginal)
+    return this.getDeviceSize(exactWByContainerH)
+  }
+
+  static getDeviceSize(size: number): number {
+    for (let deviceSize of this.NEXTJS_DEVICE_SIZES) {
+      if (deviceSize >= size) {
+        return deviceSize
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useState } from 'react'
+import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../models/Section.model'
@@ -6,9 +6,9 @@ import { classnames, isNil } from '../../../services/importHelpers'
 import { ImageContentModel } from '../../models/ImageContent.model'
 import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
-import Image from 'next/image'
 import { Size } from '../../models/Size'
-import { motion } from 'framer-motion'
+import { isMobile } from 'react-device-detect'
+import { Image } from '../../../shared/image/Image'
 
 interface Props {
   content: ImageContentModel
@@ -22,27 +22,18 @@ export const ImageContent = observer((props: Props) => {
   const { content, section, first = false, index } = props
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
-  const [size, setSize] = useState<string>()
+  const [size, setSize] = useState<number>()
 
-  const calculateAndSetSizes = useCallback(() => {
-    const contentColumns =
-      content.format.gridPosition.endColumn -
-      content.format.gridPosition.startColumn
-    const relativeContentWidth = contentColumns / 4
-
-    const sectionColumns =
-      section.format.gridPosition.endColumn -
-      section.format.gridPosition.startColumn
-    const relativeSectionWidth = sectionColumns / 6
-
-    const relativeWidth = relativeSectionWidth * relativeContentWidth * 100
-
-    setSize(`${relativeWidth}vw`)
-  }, [section, content])
+  useEffect(() => {
+    if (isMobile) {
+      setSize(100)
+    } else {
+      setSize(1)
+    }
+  }, [])
 
   useAutorun(() => {
     const { format } = content
-    calculateAndSetSizes()
     setFigureFormatStyle({
       backgroundColor: format.backgroundColor,
       minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
@@ -54,7 +45,7 @@ export const ImageContent = observer((props: Props) => {
       marginLeft: `${format.padding.left}px`,
       marginRight: `${format.padding.right}px`,
     })
-  }, [content, content.format, calculateAndSetSizes])
+  }, [content, content.format])
 
   useAutorun(() => {
     const gridCss = GridPositionService.gridPositionAsCss(
@@ -64,44 +55,36 @@ export const ImageContent = observer((props: Props) => {
   }, [content, section, content.format])
 
   return (
-    <motion.figure
-      className={classnames([
+    <Image
+      imageSet={content.set}
+      initialSizeVw={size}
+      figureClassName={classnames([
         s.container,
         s[`fit-${content.format.fit}`],
         {
           [s.first]: first,
         },
       ])}
-      style={{
+      figureStyle={{
         ...gridStyle,
         ...figureFormatStyle,
       }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: index * 0.5 }}
-    >
-      <Image
-        sizes={size}
-        width={
-          section.format.height === Size.FIT_CONTENT && content.set.image.width
-        }
-        height={
-          section.format.height === Size.FIT_CONTENT && content.set.image.height
-        }
-        // @ts-ignore
-        layout={
-          section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
-        }
-        quality={75}
-        objectFit="cover"
-        objectPosition="center"
-        priority={first}
-        alt={content.set.alt}
-        src={content.set.image.url}
-        className={classnames(s.content, {
-          [s.circle]: content.format.circle,
-        })}
-      />
-    </motion.figure>
+      width={
+        section.format.height === Size.FIT_CONTENT && content.set.image.width
+      }
+      height={
+        section.format.height === Size.FIT_CONTENT && content.set.image.height
+      }
+      // @ts-ignore
+      layout={
+        section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
+      }
+      priority={first}
+      objectFit="cover"
+      objectPosition="center"
+      className={classnames(s.content, {
+        [s.circle]: content.format.circle,
+      })}
+    />
   )
 })

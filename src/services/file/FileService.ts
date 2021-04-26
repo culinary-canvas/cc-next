@@ -34,4 +34,9 @@ export class FileService {
 
     return url.substring(url.indexOf(':') + 1, url.indexOf(';'))
   }
+
+  static async getSize(url: string) {
+    const blob = await this.getBlob(url)
+    return blob?.size
+  }
 }

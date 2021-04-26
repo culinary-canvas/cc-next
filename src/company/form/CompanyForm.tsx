@@ -14,7 +14,7 @@ import { ArticleModel } from '../../article/models/Article.model'
 import { PersonApi } from '../../person/Person.api'
 import ArticleApi from '../../article/Article.api'
 import { COLOR } from '../../styles/_color'
-import { runInAction } from 'mobx'
+import { runInAction, toJS } from 'mobx'
 import { ImageEdit } from '../../image/imageEdit/ImageEdit'
 import { ImageSet } from '../../image/models/ImageSet'
 import { ImageFormat } from '../../article/models/ImageFormat'
@@ -38,7 +38,6 @@ export const CompanyForm = observer((props: Props) => {
   const router = useRouter()
   const auth = useAuth()
   const { showError } = useErrorModal()
-
   const [formControl, company] = useFormControl(_company, [
     { field: 'name', required: true },
   ])
@@ -48,7 +47,6 @@ export const CompanyForm = observer((props: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [persons, setPersons] = useState<PersonModel[]>([])
   const [articles, setArticles] = useState<ArticleModel[]>([])
-  const [textareaIsFocused, setTextareaIsFocused] = useState<boolean>(false)
   const [selection, setSelection] = useState<{ start: number; end: number }>({
     start: 0,
     end: 0,
@@ -328,13 +326,13 @@ export const CompanyForm = observer((props: Props) => {
         Image
       </label>
       <ImageEdit
-        set={company.image}
+        set={company.imageSet}
         format={company.imageFormat}
         onFocus={() => {
-          company.image = new ImageSet()
+          company.imageSet = new ImageSet()
           company.imageFormat = new ImageFormat()
         }}
-        onChange={(imageSet) => runInAction(() => (company.image = imageSet))}
+        onChange={(imageSet) => runInAction(() => (company.imageSet = imageSet))}
       />
     </article>
   )

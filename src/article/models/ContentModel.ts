@@ -22,8 +22,9 @@ export abstract class ContentModel<T extends Format = Format>
 
   public abstract format: T
 
-  protected constructor() {
+  protected constructor(type: ContentType) {
     this.uid = uuid()
+    this.type = type
   }
 
   @computed

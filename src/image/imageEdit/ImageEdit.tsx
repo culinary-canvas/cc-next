@@ -5,10 +5,10 @@ import { ImageSet } from '../models/ImageSet'
 import { classnames } from '../../services/importHelpers'
 import { ImageService } from '../../services/Image.service'
 import { useOverlay } from '../../shared/overlay/OverlayStore'
-import Image from 'next/image'
 import { ImageFormat } from '../../article/models/ImageFormat'
 import { ImageFit } from '../../article/models/ImageFit'
 import { observer } from 'mobx-react-lite'
+import { Image } from '../../shared/image/Image'
 
 interface Props {
   set: ImageSet
@@ -67,38 +67,33 @@ export const ImageEdit = observer((props: Props) => {
         </div>
       ) : (
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-        <>
-          <pre>{set.url}</pre>
-          <Image
-            id={id}
-            width={format.fit === ImageFit.CONTAIN && set.width}
-            height={format.fit === ImageFit.CONTAIN && set.height}
-            onClick={() => {
-              if (!disabled) {
-                enableModal && setModalOpen(true)
-                onFocus && onFocus()
-              }
-            }}
-            onKeyUp={() => {
-              if (!disabled) {
-                enableModal && setModalOpen(true)
-                onFocus && onFocus()
-              }
-            }}
-            // @ts-ignore
-            layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
-            objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
-            objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
-            alt={set.alt}
-            src={set.url}
-            className={classnames([
-              s.content,
-              { [s.disabled]: disabled },
-              className,
-            ])}
-            quality={65}
-          />
-        </>
+        <Image
+          imageSet={set}
+          id={id}
+          width={format.fit === ImageFit.CONTAIN && set.width}
+          height={format.fit === ImageFit.CONTAIN && set.height}
+          onClick={() => {
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
+          }}
+          onKeyUp={() => {
+            if (!disabled) {
+              enableModal && setModalOpen(true)
+              onFocus && onFocus()
+            }
+          }}
+          // @ts-ignore
+          layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
+          objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
+          objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
+          className={classnames([
+            s.content,
+            { [s.disabled]: disabled },
+            className,
+          ])}
+        />
       )}
 
       {!!set && (

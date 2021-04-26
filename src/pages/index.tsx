@@ -44,6 +44,8 @@ function Start({ articlesData }: Props) {
               lastLoaded.sortOrder,
             )
           }
+          preloadImages
+          preloadLimit={4}
         />
       </main>
     </>

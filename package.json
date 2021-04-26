@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^10.0.7",
-    "compressorjs": "^1.0.6",
     "classnames": "^2.2.6",
+    "compressorjs": "^1.0.6",
     "firebase": "^8.2.9",
     "framer-motion": "^3.7.0",
     "include-media": "^1.4.9",
@@ -38,6 +38,7 @@
     "react-image-crop": "^8.6.5",
     "react-markdown": "^5.0.3",
     "react-modal": "^3.12.1",
+    "react-resize-detector": "^6.7.0-rc.0",
     "react-share": "^4.3.0",
     "react-slider": "^1.1.4",
     "react-spring": "^8.0.27",

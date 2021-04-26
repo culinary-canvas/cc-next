@@ -8,17 +8,14 @@ import { ContentType } from './ContentType'
 export class ImageContentModel extends ContentModel<ImageFormat> {
   @field(ImageSet)
   @observable
-  set: ImageSet
+  set = new ImageSet()
 
   @field(ImageFormat)
   @observable
-  format: ImageFormat
+  format = new ImageFormat()
 
   constructor() {
-    super()
-    this.set = new ImageSet()
-    this.format = new ImageFormat()
-    this.type = ContentType.IMAGE
+    super(ContentType.IMAGE)
     makeObservable(this)
   }
 

@@ -10,7 +10,8 @@ import { GetStaticProps } from 'next'
 import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
 import { setPersonAndCompanySlugs } from '../../../services/script/setPersonAndCompanySlugs'
-import { setShowOnStartPage } from '../../../services/script/setShowOnStartPage'
+import { refactorImageSetFromCroppedToImage } from '../../../services/script/refactorImageSetFromCroppedToImage'
+import { removeNoLongerDefaultInitializedImageSetProperties } from '../../../services/script/removeNoLongerDefaultInitializedImageSetProperties'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
@@ -81,15 +82,29 @@ const AdminDevArea = observer(() => {
 
         <Button
           onClick={async () => {
-            setRunning('setShowOnStartPage')
-            await setShowOnStartPage(auth.userId)
+            setRunning('removeNoLongerDefaultInitializedImageSetProperties')
+            await removeNoLongerDefaultInitializedImageSetProperties(
+              auth.userId,
+            )
             setRunning(null)
           }}
-          loading={running === 'setShowOnStartPage'}
+          loading={
+            running === 'removeNoLongerDefaultInitializedImageSetProperties'
+          }
         >
-          Set show on start page
+          Remove no longer default initialized image set properties
         </Button>
 
+        <Button
+          onClick={async () => {
+            setRunning('refactorImageSetFromCroppedToImage')
+            await refactorImageSetFromCroppedToImage(auth.userId)
+            setRunning(null)
+          }}
+          loading={running === 'refactorImageSetFromCroppedToImage'}
+        >
+          Refactor ImageSet from 'cropped' to 'image'
+        </Button>
       </div>
     </div>
   )

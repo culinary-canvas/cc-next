@@ -53,7 +53,7 @@ export const CompaniesArticleControl = observer((props: Props) => {
         <ul>
           {inArticle.map((c) => (
             <li key={c.id}>
-              <figure>{!!c.image && <img src={c.image.url} />}</figure>
+              <figure>{!!c.imageSet && <img src={c.imageSet.url} />}</figure>
 
               <a
                 className={s.companyLink}

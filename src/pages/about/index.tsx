@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import s from './about.module.scss'
 import { GetStaticProps } from 'next'
 import { PageHead } from '../../shared/head/PageHead'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { AppService } from '../../services/App.service'
+import Image from 'next/image'
+import { ImageService } from '../../services/Image.service'
 
 export default function About() {
+  const url = useRef(
+    'https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f',
+  ).current
+
+  const [imageSize, setImageSize] = useState<{
+    width: number
+    height: number
+  }>()
+
+  useEffect(
+    () => ImageService.getWidthAndHeight(url).then((s) => setImageSize(s)),
+    [],
+  )
+
   return (
     <>
       <PageHead
@@ -39,11 +55,18 @@ export default function About() {
               linkClassName={s.socialMediaLink}
             />
 
-            <img
-              className={s.image}
-              alt="@Yves Le Lay by Johan Ståhlberg"
-              src="https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/about%2F_DSC9450.jpg?alt=media&token=f95882a3-eb5a-4f83-8f4e-c4476e2e422f"
-            />
+            {!!imageSize && (
+              <Image
+                width={imageSize?.width}
+                height={imageSize?.height}
+                layout="responsive"
+                priority={true}
+                quality={70}
+                className={s.image}
+                alt="@Yves Le Lay by Johan Ståhlberg"
+                src={url}
+              />
+            )}
           </section>
         </article>
       </main>

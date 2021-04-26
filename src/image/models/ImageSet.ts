@@ -10,7 +10,7 @@ export class ImageSet {
 
   @field(ImageFile)
   @observable
-  original: ImageFile = new ImageFile()
+  original: ImageFile
 
   @field(ImageCropValues)
   @observable
