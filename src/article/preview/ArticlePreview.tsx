@@ -23,7 +23,7 @@ interface Props {
   className?: string
   labels?: ArticleLabel[]
   usePromoted?: boolean
-  preloadImage: boolean
+  preloadImage?: boolean
 }
 
 export const ArticlePreview = observer((props: Props) => {
@@ -33,7 +33,7 @@ export const ArticlePreview = observer((props: Props) => {
     first = false,
     className,
     usePromoted = false,
-    preloadImage,
+    preloadImage = false,
   } = props
   const router = useRouter()
   const [imageSet, setImageSet] = useState<ImageSet>()
