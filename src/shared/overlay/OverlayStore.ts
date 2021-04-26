@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useState } from 'react'
 export interface Overlay {
   readonly isVisible: boolean
   readonly text: string
+  readonly setText: (v:string) => void
   readonly progress: number
   readonly setProgress: (value: number, text?: string) => void
   readonly addProgress: (v: number) => void
@@ -55,6 +56,7 @@ export function useOverlayState(): Overlay {
   return {
     isVisible,
     text,
+    setText,
     progress,
     setProgress,
     addProgress,

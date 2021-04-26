@@ -301,13 +301,13 @@ export const PersonForm = observer((props: Props) => {
         Image
       </label>
       <ImageEdit
-        set={person.image}
+        set={person.imageSet}
         format={person.imageFormat}
         onFocus={() => {
-          person.image = new ImageSet()
+          person.imageSet = new ImageSet()
           person.imageFormat = new ImageFormat()
         }}
-        onChange={(imageSet) => runInAction(() => (person.image = imageSet))}
+        onChange={(imageSet) => runInAction(() => (person.imageSet = imageSet))}
       />
     </article>
   )

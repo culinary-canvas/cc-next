@@ -28,8 +28,8 @@ function Start({ articlesData }: Props) {
     <>
       <PageHead
         image={articles[0].imageContent.url}
-        imageWidth={articles[0].imageContent.set.cropped.width}
-        imageHeight={articles[0].imageContent.set.cropped.height}
+        imageWidth={articles[0].imageContent.set.width}
+        imageHeight={articles[0].imageContent.set.height}
         imageAlt={articles[0].imageContent.alt}
       />
       <main className={classnames(s.container)}>
@@ -44,6 +44,8 @@ function Start({ articlesData }: Props) {
               lastLoaded.sortOrder,
             )
           }
+          preloadImages
+          preloadLimit={4}
         />
       </main>
     </>

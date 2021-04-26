@@ -10,22 +10,39 @@ export class ImageSet {
 
   @field(ImageFile)
   @observable
-  original: ImageFile = new ImageFile()
+  original: ImageFile
 
   @field(ImageCropValues)
   @observable
   cropValues: ImageCropValues
 
+  /**
+   * @deprecated
+   */
   @field(ImageFile)
   @observable
   cropped: ImageFile
+
+  @field(ImageFile)
+  @observable
+  image: ImageFile
 
   constructor() {
     makeObservable(this)
   }
 
   @computed
-  get url() {
-    return this.cropped?.url || this.original.url
+  get url(): string {
+    return this.image?.url
+  }
+
+  @computed
+  get width(): number {
+    return this.image?.width
+  }
+
+  @computed
+  get height(): number {
+    return this.image?.height
   }
 }

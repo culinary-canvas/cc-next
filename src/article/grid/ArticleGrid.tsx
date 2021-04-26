@@ -16,6 +16,8 @@ interface Props<T extends ArticleModel | ArticleWithLabels> {
   insertComponentAtIndex?: number
   usePromoted?: boolean
   className?: string
+  preloadImages?: boolean
+  preloadLimit?: number
 }
 
 export const ArticleGrid = observer(
@@ -26,7 +28,9 @@ export const ArticleGrid = observer(
       insertComponent = false,
       insertComponentAtIndex = 0,
       usePromoted = false,
-      className
+      className,
+      preloadImages = false,
+      preloadLimit,
     } = props
     const endRef = useRef<HTMLDivElement>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -91,8 +95,14 @@ export const ArticleGrid = observer(
                   >
                     <ArticlePreview
                       article={article}
-                      priority={i === 0}
+                      first={i === 0}
                       labels={labels}
+                      usePromoted={usePromoted}
+                      preloadImage={
+                        preloadImages && !!preloadLimit
+                          ? i < preloadLimit
+                          : true
+                      }
                     />
                   </a>
                 </Link>

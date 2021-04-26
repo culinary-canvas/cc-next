@@ -112,6 +112,12 @@ export class ArticleModel implements Model, Sortable {
     return this.sections.flatMap((s) => s.contents)
   }
 
+  @computed get imageContents(): ImageContentModel[] {
+    return this.contents.filter(
+      (c) => c instanceof ImageContentModel,
+    ) as ImageContentModel[]
+  }
+
   @computed get titleSection(): SectionModel {
     return this.sections[0]
   }

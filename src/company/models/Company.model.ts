@@ -60,6 +60,13 @@ export class CompanyModel implements Model {
 
   @observable
   @field(ImageSet)
+  imageSet: ImageSet
+
+
+  /**
+   * @deprecated
+   */  @observable
+  @field(ImageSet)
   image: ImageSet
 
   @observable

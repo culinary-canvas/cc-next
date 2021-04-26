@@ -100,7 +100,7 @@ export class PersonApi {
       )
     }
 
-    if (!!person.image) {
+    if (!!person.imageSet) {
       onProgress(0.25, 'Uploading images')
       await this.uploadNewImages(person, onProgress)
     }
@@ -141,19 +141,19 @@ export class PersonApi {
     person: PersonModel,
     onProgress: (progress: number, message: string) => any,
   ) {
-    if (StorageService.isLocal(person.image.cropped.url)) {
-      person.image.cropped.url = await StorageService.storeFileFromLocalUrl(
-        person.image.cropped.url,
-        person.image.cropped.fileName,
+    if (StorageService.isLocal(person.imageSet.image.url)) {
+      person.imageSet.image.url = await StorageService.storeFileFromLocalUrl(
+        person.imageSet.image.url,
+        person.imageSet.image.fileName,
         `persons/${person.id}`,
         (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )
     }
 
-    if (StorageService.isLocal(person.image.original.url)) {
-      person.image.original.url = await StorageService.storeFileFromLocalUrl(
-        person.image.original.url,
-        person.image.original.fileName,
+    if (StorageService.isLocal(person.imageSet.original.url)) {
+      person.imageSet.original.url = await StorageService.storeFileFromLocalUrl(
+        person.imageSet.original.url,
+        person.imageSet.original.fileName,
         `persons/${person.id}`,
         (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
       )

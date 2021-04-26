@@ -8,9 +8,16 @@ export class ArticlePreviewModel {
   @field()
   useArticleImage = true
 
+  /**
+   * @deprecated
+   */
   @observable
   @field(ImageSet)
-  image = new ImageSet()
+  image: ImageSet
+
+  @observable
+  @field(ImageSet)
+  imageSet: ImageSet
 
   @observable
   @field(ImageFormat)

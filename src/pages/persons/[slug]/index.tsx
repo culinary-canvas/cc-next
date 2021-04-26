@@ -66,16 +66,16 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
         title={`Culinary Canvas — #${person.name} (${
           !isNil(articles) ? articles.length : 0
         } articles)`}
-        image={person.image?.cropped?.url || articles[0]?.imageContent.url}
+        image={person.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          person.image?.cropped?.width ||
-          articles[0]?.imageContent.set.cropped.width
+          person.imageSet?.width ||
+          articles[0]?.imageContent.set.width
         }
         imageHeight={
-          person.image?.cropped?.height ||
-          articles[0]?.imageContent.set.cropped.height
+          person.imageSet?.height ||
+          articles[0]?.imageContent.set.height
         }
-        imageAlt={person.image?.alt || articles[0]?.imageContent.set.alt}
+        imageAlt={person.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
 
       <main className={classnames(s.container)}>

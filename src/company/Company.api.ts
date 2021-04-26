@@ -77,7 +77,7 @@ export class CompanyApi {
       )
     }
 
-    if (!!company.image) {
+    if (!!company.imageSet) {
       onProgress(0.25, 'Uploading images')
       await this.uploadNewImages(company, onProgress)
     }
@@ -120,19 +120,19 @@ export class CompanyApi {
     company: CompanyModel,
     onProgress: (progress: number, message: string) => any,
   ) {
-    if (StorageService.isLocal(company.image.cropped.url)) {
-      company.image.cropped.url = await StorageService.storeFileFromLocalUrl(
-        company.image.cropped.url,
-        company.image.cropped.fileName,
+    if (StorageService.isLocal(company.imageSet.image.url)) {
+      company.imageSet.image.url = await StorageService.storeFileFromLocalUrl(
+        company.imageSet.image.url,
+        company.imageSet.image.fileName,
         `companies/${company.id}`,
         (p) => onProgress(0.25 + p * 0.25, 'Uploading cropped image'),
       )
     }
 
-    if (StorageService.isLocal(company.image.original.url)) {
-      company.image.original.url = await StorageService.storeFileFromLocalUrl(
-        company.image.original.url,
-        company.image.original.fileName,
+    if (StorageService.isLocal(company.imageSet.original.url)) {
+      company.imageSet.original.url = await StorageService.storeFileFromLocalUrl(
+        company.imageSet.original.url,
+        company.imageSet.original.fileName,
         `companies/${company.id}`,
         (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
       )
