@@ -28,7 +28,7 @@ export const Image = observer((props: Props) => {
     figureStyle,
     width,
     height,
-    quality = 80,
+    quality = 70,
     layout = 'fill',
     ...restNextImageProps
   } = props
