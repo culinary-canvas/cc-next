@@ -54,6 +54,10 @@ export const ImageContent = observer((props: Props) => {
     setGridStyle(gridCss)
   }, [content, section, content.format])
 
+  if (!content.set.image) {
+    return null
+  }
+
   return (
     <Image
       imageSet={content.set}

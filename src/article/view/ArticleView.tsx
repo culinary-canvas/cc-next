@@ -45,7 +45,7 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
       >
         {article.sections.map((section) => (
           <Section
-            first={section.format.gridPosition.startRow === 1}
+            first={section.format.gridPosition?.startRow === 1}
             key={section.uid}
             section={section}
           />
