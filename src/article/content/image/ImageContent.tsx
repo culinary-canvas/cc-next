@@ -24,6 +24,12 @@ export const ImageContent = observer((props: Props) => {
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
 
   const calculatedSizes = useMemo<string>(() => {
+    if (
+      !section.format.gridPosition?.startColumn ||
+      content.format.gridPosition?.startColumn
+    ) {
+      return '100vw'
+    }
     const sectionStartColumn = section.format.gridPosition.startColumn
     const sectionEndColumn = section.format.gridPosition.endColumn
     const startColumn = content.format.gridPosition.startColumn
