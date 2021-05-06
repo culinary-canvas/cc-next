@@ -39,6 +39,7 @@ export const CompanyView = observer((props: Props) => {
     <div className={classnames(s.container, className, { [s.card]: card })}>
       <Image
         imageSet={company.imageSet}
+        sizes="200px"
         priority={!card}
         objectFit="contain"
         objectPosition="top"

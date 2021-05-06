@@ -31,11 +31,10 @@ export function PersonView(props: Props) {
     }
   }, [person])
 
-  const figureRef = useRef()
-
   return (
     <div className={classnames(s.container, className, { [s.card]: card })}>
       <Image
+        sizes="200px"
         imageSet={person.imageSet}
         priority={!card}
         figureClassName={classnames(s.figure, {
