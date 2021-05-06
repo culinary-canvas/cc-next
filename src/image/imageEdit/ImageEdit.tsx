@@ -66,7 +66,6 @@ export const ImageEdit = observer((props: Props) => {
           No image selected {isModalOpen}
         </div>
       ) : (
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <Image
           imageSet={set}
           id={id}

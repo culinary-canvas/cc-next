@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
+import React, { CSSProperties, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { SectionModel } from '../../models/Section.model'
@@ -7,8 +7,8 @@ import { ImageContentModel } from '../../models/ImageContent.model'
 import s from './ImageContent.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
 import { Size } from '../../models/Size'
-import { isMobile } from 'react-device-detect'
 import { Image } from '../../../shared/image/Image'
+import { BREAKPOINT } from '../../../styles/layout'
 
 interface Props {
   content: ImageContentModel
@@ -22,15 +22,25 @@ export const ImageContent = observer((props: Props) => {
   const { content, section, first = false, index } = props
   const [figureFormatStyle, setFigureFormatStyle] = useState<CSSProperties>({})
   const [gridStyle, setGridStyle] = useState<CSSProperties>({})
-  const [size, setSize] = useState<number>()
 
-  useEffect(() => {
-    if (isMobile) {
-      setSize(100)
-    } else {
-      setSize(1)
-    }
-  }, [])
+  const calculatedSizes = useMemo<string>(() => {
+    const sectionStartColumn = section.format.gridPosition.startColumn
+    const sectionEndColumn = section.format.gridPosition.endColumn
+    const startColumn = content.format.gridPosition.startColumn
+    const endColumn = content.format.gridPosition.endColumn
+    const gridColumns = endColumn - startColumn
+    const columnVw = 25
+    const columnWidth = 240
+    const gapWidth = 32
+
+    const mobile = first ? `100vw` : `calc(100vw - 2rem)`
+    const desktop =
+      sectionStartColumn === 1 && sectionEndColumn === 7
+        ? `${columnVw * gridColumns}vw`
+        : `${(columnWidth + gapWidth) * gridColumns}px`
+
+    return `(max-width: ${BREAKPOINT.PHONE}px) ${mobile}, ${desktop}`
+  }, [content, section])
 
   useAutorun(() => {
     const { format } = content
@@ -59,36 +69,38 @@ export const ImageContent = observer((props: Props) => {
   }
 
   return (
-    <Image
-      imageSet={content.set}
-      initialSizeVw={size}
-      figureClassName={classnames([
-        s.container,
-        s[`fit-${content.format.fit}`],
-        {
-          [s.first]: first,
-        },
-      ])}
-      figureStyle={{
-        ...gridStyle,
-        ...figureFormatStyle,
-      }}
-      width={
-        section.format.height === Size.FIT_CONTENT && content.set.image.width
-      }
-      height={
-        section.format.height === Size.FIT_CONTENT && content.set.image.height
-      }
-      // @ts-ignore
-      layout={
-        section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
-      }
-      priority={first}
-      objectFit="cover"
-      objectPosition="center"
-      className={classnames(s.content, {
-        [s.circle]: content.format.circle,
-      })}
-    />
+    <>
+      <Image
+        imageSet={content.set}
+        sizes={calculatedSizes}
+        figureClassName={classnames([
+          s.container,
+          s[`fit-${content.format.fit}`],
+          {
+            [s.first]: first,
+          },
+        ])}
+        figureStyle={{
+          ...gridStyle,
+          ...figureFormatStyle,
+        }}
+        width={
+          section.format.height === Size.FIT_CONTENT && content.set.image.width
+        }
+        height={
+          section.format.height === Size.FIT_CONTENT && content.set.image.height
+        }
+        // @ts-ignore
+        layout={
+          section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
+        }
+        priority={first}
+        objectFit="cover"
+        objectPosition="center"
+        className={classnames(s.content, {
+          [s.circle]: content.format.circle,
+        })}
+      />
+    </>
   )
 })

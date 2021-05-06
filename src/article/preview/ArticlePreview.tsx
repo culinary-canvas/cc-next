@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import s from './ArticlePreview.module.scss'
 import { Button } from '../../shared/button/Button'
@@ -14,8 +14,8 @@ import ReactMarkdown from 'react-markdown'
 import { ArticleLabel } from '../models/ArticleLabel'
 import { ImageSet } from '../../image/models/ImageSet'
 import { ImageFormat } from '../models/ImageFormat'
-import { isMobile } from 'react-device-detect'
 import { Image } from '../../shared/image/Image'
+import { BREAKPOINT, CONTAINER_MAX_WIDTHS } from '../../styles/layout'
 
 interface Props {
   article: ArticleModel
@@ -40,14 +40,35 @@ export const ArticlePreview = observer((props: Props) => {
   const [imageFormat, setImageFormat] = useState<ImageFormat>()
   const [title, setTitle] = useState<string>()
   const [subHeading, setSubHeading] = useState<string>()
-  const [initialImageVw, setInitialImageVw] = useState<number>()
 
-  useEffect(() => {
-    if (isMobile) {
-      setInitialImageVw(100)
-    } else {
-      setInitialImageVw(1)
-    }
+  const calculateSize = useCallback(
+    (containerMaxWidth: number) => {
+      return Math.round(
+        first
+          ? containerMaxWidth
+          : article.promoted
+          ? containerMaxWidth * 0.66
+          : containerMaxWidth * 0.33,
+      )
+    },
+    [article.promoted],
+  )
+
+  const calculatedSizes = useMemo<string>(() => {
+    const mobile = `(max-width: ${BREAKPOINT.PHONE}px) calc(100vw - 2rem)`
+    const tablet = `(max-width: ${BREAKPOINT.TABLET}px) ${calculateSize(
+      CONTAINER_MAX_WIDTHS.TABLET,
+    )}px`
+    const desktopS = `(max-width: ${BREAKPOINT.DESKTOP_S}px) ${calculateSize(
+      CONTAINER_MAX_WIDTHS.DESKTOP_S,
+    )}px`
+    const desktopL = `(max-width: ${BREAKPOINT.DESKTOP_L}px) ${calculateSize(
+      CONTAINER_MAX_WIDTHS.DESKTOP_L,
+    )}px`
+    const desktopXL = `${calculateSize(
+      CONTAINER_MAX_WIDTHS.DESKTOP_L_EXCESS,
+    )}px`
+    return `${mobile}, ${tablet}, ${desktopS}, ${desktopL}, ${desktopXL}`
   }, [first, article.promoted])
 
   useEffect(() => {
@@ -89,11 +110,11 @@ export const ArticlePreview = observer((props: Props) => {
   return (
     <article className={classnames(s.article, className)}>
       <Image
+        sizes={calculatedSizes}
         priority={preloadImage}
         imageSet={imageSet}
         layout="fill"
         objectFit="cover"
-        initialSizeVw={initialImageVw}
         objectPosition={
           imageFormat?.verticalAlign
             ? imageFormat.verticalAlign.toLowerCase()
