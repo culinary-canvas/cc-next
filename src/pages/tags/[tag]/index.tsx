@@ -52,8 +52,8 @@ function ArticlesByTag({ articlesData, tag }: Props) {
       <PageHead
         title={`Culinary Canvas — #${tag} (${articles.length} articles)`}
         image={articles[0]?.imageContent.url}
-        imageWidth={articles[0]?.imageContent.set.cropped.width}
-        imageHeight={articles[0]?.imageContent.set.cropped.height}
+        imageWidth={articles[0]?.imageContent.set.width}
+        imageHeight={articles[0]?.imageContent.set.height}
         imageAlt={articles[0]?.imageContent.alt}
       />
       <main className={classnames(s.container)}>

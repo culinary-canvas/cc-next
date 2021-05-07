@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import s from './contact.module.scss'
 import { GetStaticProps } from 'next'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { PageHead } from '../../shared/head/PageHead'
+import Image from 'next/image'
+import { ImageService } from '../../services/Image.service'
 
 export default function Contact() {
+  const url = useRef(
+    'https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/contact%2F_DSC9508.jpg?alt=media&token=aebc373c-b3b2-40be-8f56-dbab72a71ee2',
+  ).current
+  const [imageSize, setImageSize] = useState<{
+    width: number
+    height: number
+  }>()
+
+  useEffect(
+    () => ImageService.getWidthAndHeight(url).then((s) => setImageSize(s)),
+    [],
+  )
+
   return (
     <>
       <PageHead
@@ -29,10 +44,18 @@ export default function Contact() {
               linkClassName={s.socialMediaLink}
             />
           </section>
-          <img
-            alt="@Högtorps gård by Johan Ståhlberg"
-            src="https://firebasestorage.googleapis.com/v0/b/culinary-canvas.appspot.com/o/contact%2F_DSC9508.jpg?alt=media&token=aebc373c-b3b2-40be-8f56-dbab72a71ee2"
-          />
+          {!!imageSize && (
+            <Image
+              width={imageSize?.width}
+              height={imageSize?.height}
+              layout="responsive"
+              priority={true}
+              quality={70}
+              className={s.image}
+              alt="@Högtorps gård by Johan Ståhlberg"
+              src={url}
+            />
+          )}
         </article>
       </main>
     </>

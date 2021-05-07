@@ -64,16 +64,16 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
         title={`Culinary Canvas — #${company.name} (${
           !isNil(articles) ? articles.length : 0
         } articles)`}
-        image={company.image?.cropped?.url || articles[0]?.imageContent.url}
+        image={company.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          company.image?.cropped?.width ||
-          articles[0]?.imageContent.set.cropped.width
+          company.imageSet?.width ||
+          articles[0]?.imageContent.set.width
         }
         imageHeight={
-          company.image?.cropped?.height ||
-          articles[0]?.imageContent.set.cropped.height
+          company.imageSet?.height ||
+          articles[0]?.imageContent.set.height
         }
-        imageAlt={company.image?.alt || articles[0]?.imageContent.set.alt}
+        imageAlt={company.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
 
       <main className={classnames(s.container)}>

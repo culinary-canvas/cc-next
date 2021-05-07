@@ -5,10 +5,10 @@ import { ImageSet } from '../models/ImageSet'
 import { classnames } from '../../services/importHelpers'
 import { ImageService } from '../../services/Image.service'
 import { useOverlay } from '../../shared/overlay/OverlayStore'
-import Image from 'next/image'
 import { ImageFormat } from '../../article/models/ImageFormat'
 import { ImageFit } from '../../article/models/ImageFit'
 import { observer } from 'mobx-react-lite'
+import { Image } from '../../shared/image/Image'
 
 interface Props {
   set: ImageSet
@@ -39,7 +39,7 @@ export const ImageEdit = observer((props: Props) => {
 
   return (
     <>
-      {!set?.cropped?.fileName ? (
+      {!set?.url ? (
         <div
           id={id}
           onClick={() => {
@@ -66,11 +66,11 @@ export const ImageEdit = observer((props: Props) => {
           No image selected {isModalOpen}
         </div>
       ) : (
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <Image
+          imageSet={set}
           id={id}
-          width={format.fit === ImageFit.CONTAIN && set.cropped.width}
-          height={format.fit === ImageFit.CONTAIN && set.cropped.height}
+          width={format.fit === ImageFit.CONTAIN && set.width}
+          height={format.fit === ImageFit.CONTAIN && set.height}
           onClick={() => {
             if (!disabled) {
               enableModal && setModalOpen(true)
@@ -87,14 +87,11 @@ export const ImageEdit = observer((props: Props) => {
           layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
           objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
           objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
-          alt={set.alt}
-          src={set.cropped.url}
           className={classnames([
             s.content,
             { [s.disabled]: disabled },
             className,
           ])}
-          quality={65}
         />
       )}
 
@@ -104,24 +101,17 @@ export const ImageEdit = observer((props: Props) => {
           cropValues={set.cropValues}
           isOpen={isModalOpen}
           onOk={async (newImage, newCropValues) => {
-            const original = newImage || set.original
-            const cropValues = newCropValues || set.cropValues
-
             setModalOpen(false)
 
             if (!!newImage || !!newCropValues) {
-              overlay.setProgress(0, 'Crunching image sizes...')
               overlay.toggle()
 
-              const newSet = new ImageSet()
-              newSet.alt = set.alt
-
-              newSet.original = original
-              newSet.cropValues = cropValues
-
-              overlay.setProgress(0.5, 'Generating cropped image...')
-              newSet.cropped = await ImageService.crop(original, cropValues)
-              overlay.setProgress(1, 'Done!')
+              const newSet = await ImageService.createNewSet(
+                overlay,
+                set.alt,
+                newImage || set.original,
+                newCropValues || set.cropValues,
+              )
 
               setTimeout(() => overlay.toggle(false), 500)
               onChange(newSet)

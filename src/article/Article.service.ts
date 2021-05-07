@@ -19,7 +19,7 @@ import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
 
 export class ArticleService {
-  private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'cropped']
+  private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
 
   static create(type = ArticleType.DISH) {
     const article = new ArticleModel()
@@ -62,59 +62,98 @@ export class ArticleService {
     })
   }
 
-  static async uploadNewImages(
+  static async uploadNewArticleImages(
     article: ArticleModel,
-    onProgress: (progress: number, message: string) => any,
+    onProgress?: (progress: number, message: string) => any,
     initialProgress = 0,
   ) {
-    const imageFilesToUpload: ImageFile[] = article.contents.flatMap(
-      (content) => {
-        const toUpload: ImageFile[] = []
-
-        if (
-          content instanceof ImageContentModel &&
-          !!content.set.original?.url
-        ) {
-          if (StorageService.isLocal(content.set.original.url)) {
-            toUpload.push(content.set.original)
-          }
-          if (StorageService.isLocal(content.set.cropped.url)) {
-            toUpload.push(content.set.cropped)
-          }
-        }
-        return toUpload
-      },
-    )
-
-    if (
-      !!article.preview.image.original?.url &&
-      StorageService.isLocal(article.preview.image.original.url)
-    ) {
-      imageFilesToUpload.push(article.preview.image.original)
-      imageFilesToUpload.push(article.preview.image.cropped)
-    }
-
-    const progressPerImage = 0.5 / imageFilesToUpload.length
+    const progressPerImage = 0.5 / this.countImagesToUpload(article)
     let accProgress = initialProgress
 
-    return Promise.all(
-      imageFilesToUpload.map(async (image) => {
-        const _url = await StorageService.storeFileFromLocalUrl(
-          image.url,
-          image.fileName,
-          `articles/${article.slug}`,
-          (uploadProgress) => {
-            const newProgress = accProgress + uploadProgress * progressPerImage
+    const contentsWithImagesToUpload = this.getContentsWithImagesToUpload(
+      article,
+    )
 
-            return onProgress(newProgress, image.fileName)
-          },
+    return Promise.all(
+      contentsWithImagesToUpload.map(async (content) =>
+        this.uploadNewContentImages(
+          content,
+          article,
+          accProgress,
+          progressPerImage,
+          onProgress,
+        ),
+      ),
+    )
+  }
+
+  private static uploadNewContentImages(
+    content: ImageContentModel,
+    article: ArticleModel,
+    accProgress: number,
+    progressPerImage: number,
+    onProgress: (progress: number, message: string) => any,
+  ) {
+    return Promise.all(
+      this.localImagesByProperty(content).map(async (key) => {
+        await this.uploadImage(
+          content.set[key],
+          article,
+          accProgress,
+          progressPerImage,
+          onProgress,
         )
-        runInAction(() => {
-          image.url = _url
-        })
         accProgress += progressPerImage
       }),
     )
+  }
+
+  private static async uploadImage(
+    image: ImageFile,
+    article: ArticleModel,
+    accProgress: number,
+    progressPerImage: number,
+    onProgress: (progress: number, message: string) => any,
+  ) {
+    image.url = await StorageService.storeFileFromLocalUrl(
+      image.url,
+      image.fileName,
+      `articles/${article.slug}`,
+      (uploadProgress) => {
+        const newProgress = accProgress + uploadProgress * progressPerImage
+        !!onProgress && onProgress(newProgress, image.fileName)
+      },
+    )
+  }
+
+  private static localImagesByProperty(content: ImageContentModel) {
+    return this.IMAGE_SET_PROPERTY_NAMES.filter((key) =>
+      StorageService.isLocal(content.set[key]?.url),
+    )
+  }
+
+  private static getContentsWithImagesToUpload(article: ArticleModel) {
+    return article.contents.filter(
+      (content) =>
+        content instanceof ImageContentModel &&
+        !!content.set.original?.url &&
+        (StorageService.isLocal(content.set.original.url) ||
+          StorageService.isLocal(content.set.image?.url)),
+    ) as ImageContentModel[]
+  }
+
+  private static countImagesToUpload(article: ArticleModel) {
+    return article.contents
+      .filter(
+        (content) =>
+          content instanceof ImageContentModel && !!content.set.original?.url,
+      )
+      .reduce((sum, content: ImageContentModel) => {
+        let newSum = sum
+        newSum += StorageService.isLocal(content.set.original.url) ? 1 : 0
+        newSum += StorageService.isLocal(content.set.image?.url) ? 1 : 0
+        return newSum
+      }, 0)
   }
 
   static changeSortOrderUp(target: ArticleModel, all: ArticleModel[]) {

@@ -140,7 +140,10 @@ export class Transformer {
   }
 
   private static validateDecorators(transformable: any) {
-    if (hasToDb(transformable) && hasToModel(transformable.constructor)) {
+    if (
+      !transformable ||
+      (hasToDb(transformable) && hasToModel(transformable.constructor))
+    ) {
       return
     }
     Object.keys(toJS(transformable)).forEach((key) => {

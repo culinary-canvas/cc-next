@@ -8,6 +8,8 @@ import { ModelService } from '../services/db/Model.service'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import slugify from 'voca/slugify'
+import { toJS } from 'mobx'
+import { ImageContentModel } from './models/ImageContent.model'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'
@@ -236,16 +238,16 @@ export class ArticleApi {
   static async save(
     article: ArticleModel,
     userId: string,
-    onProgress: (progress: number, message?: string) => any = this.logProgress,
+    onProgress?: (progress: number, message?: string) => any,
   ): Promise<string> {
     if (!article.titleContent?.value) {
       throw new Error('Article must have a title section')
     }
 
-    onProgress(0, '')
+    !!onProgress && onProgress(0, '')
     const { firestore } = initFirebase()
 
-    onProgress(0.1, '')
+    !!onProgress && onProgress(0.1, '')
     const original = !!article.id ? await this.byId(article.id) : null
 
     if (!article.slug) {
@@ -256,20 +258,18 @@ export class ArticleApi {
     }
     await ArticleService.setArticleTypeAsTag(article, userId)
 
-    onProgress(0.2, 'Uploading images...')
-    await ArticleService.uploadNewImages(article, onProgress, 0.2)
+    !!onProgress && onProgress(0.2, 'Uploading images...')
+    await ArticleService.uploadNewArticleImages(article, onProgress, 0.2)
 
-    //TODO: Move to functions
-    onProgress(0.7, 'Sorting...')
+    !!onProgress && onProgress(0.7, 'Sorting...')
     if (isNil(article.sortOrder)) {
       article.sortOrder = (await this.all()).length
     }
 
-    //TODO: Move to functions
-    onProgress(0.9)
+    !!onProgress && onProgress(0.9)
     ModelService.beforeSave(article, userId)
 
-    onProgress(0.95)
+    !!onProgress && onProgress(0.95)
     let collectionRef = firestore()
       .collection(this.COLLECTION)
       .withConverter(Transformer.firestoreConverter(ArticleModel))
@@ -278,7 +278,7 @@ export class ArticleApi {
       : collectionRef.doc()
     await doc.set(article)
 
-    onProgress(1, 'Done!')
+    !!onProgress && onProgress(1, 'Done!')
     return doc.id
   }
 

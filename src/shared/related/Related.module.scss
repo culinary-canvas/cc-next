@@ -1,0 +1,11 @@
+@import '../../styles/color';
+
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  background-color: $grey-lighter;
+
+  .spinner {
+    margin: 1rem 0 2rem;
+  }
+}

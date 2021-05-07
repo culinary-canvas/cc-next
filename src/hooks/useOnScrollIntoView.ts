@@ -12,16 +12,14 @@ export function useOnScrollIntoView(
   const [reached, setReached] = useState<boolean>(false)
 
   const evaluate = useCallback(() => {
-    if (
-      !!referenceElement &&
-      !reached &&
-      window.pageYOffset >
-        (!isNil(relative)
-          ? referenceElement.offsetTop * relative
-          : referenceElement.offsetTop - fixed)
-    ) {
-      setReached(true)
-      onReached()
+    if (!!referenceElement && !reached) {
+      const threshold = !isNil(relative)
+        ? referenceElement.offsetTop * relative
+        : referenceElement.offsetTop - fixed
+      if (window.pageYOffset > threshold) {
+        setReached(true)
+        onReached()
+      }
     }
   }, [reached, referenceElement, onReached])
 

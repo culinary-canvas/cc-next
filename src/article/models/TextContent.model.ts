@@ -12,17 +12,14 @@ export class TextContentModel extends ContentModel<TextFormat> {
 
   @field()
   @observable
-  placeholder: string
+  placeholder = loremIpsum({ units: 'paragraph', count: 1 })
 
   @field(TextFormat)
   @observable
-  format: TextFormat
+  format = new TextFormat()
 
   constructor() {
-    super()
-    this.type = ContentType.PARAGRAPH
-    this.format = new TextFormat()
-    this.placeholder = loremIpsum({ units: 'paragraph', count: 1 })
+    super(ContentType.PARAGRAPH)
     makeObservable(this)
   }
 }

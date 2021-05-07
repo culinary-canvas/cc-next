@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { CompanyModel } from '../models/Company.model'
 import s from './CompanyView.module.scss'
 import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
-import Image from 'next/image'
 import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
 import StringUtils from '../../services/utils/StringUtils'
 import ReactMarkdown from 'react-markdown'
+import { Image } from '../../shared/image/Image'
+import { observer } from 'mobx-react-lite'
 
 interface Props {
   company: CompanyModel
@@ -15,7 +16,7 @@ interface Props {
   children?: any
 }
 
-export function CompanyView(props: Props) {
+export const CompanyView = observer((props: Props) => {
   const { company, className, card = false, children } = props
   const [description, setDescription] = useState<string>('')
 
@@ -36,27 +37,22 @@ export function CompanyView(props: Props) {
 
   return (
     <div className={classnames(s.container, className, { [s.card]: card })}>
-      <figure
-        className={classnames(s.figure, {
-          [s.noImage]: !company.image?.cropped?.url,
-        })}
-      >
-        {!!company.image?.cropped?.url ? (
-          <Image
-            quality={60}
-            priority={!card}
-            objectFit="contain"
-            objectPosition="top"
-            layout="fill"
-            src={company.image?.cropped?.url}
-            alt={company.image?.alt}
-          />
-        ) : (
+      <Image
+        imageSet={company.imageSet}
+        sizes="200px"
+        priority={!card}
+        objectFit="contain"
+        objectPosition="top"
+        layout="fill"
+        placeholder={() => (
           <div className={s.noImagePlaceholder}>
             <span>{company.name.substring(0, 1)}</span>
           </div>
         )}
-      </figure>
+        figureClassName={classnames(s.figure, {
+          [s.noImage]: !company.imageSet?.url,
+        })}
+      />
       <div className={s.grid}>
         <SocialMediaLinks
           size={14}
@@ -105,4 +101,4 @@ export function CompanyView(props: Props) {
       </div>
     </div>
   )
-}
+})

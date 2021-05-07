@@ -65,6 +65,13 @@ export class PersonModel implements Model {
 
   @observable
   @field(ImageSet)
+  imageSet: ImageSet
+
+  /**
+   * @deprecated
+   */
+  @observable
+  @field(ImageSet)
   image: ImageSet
 
   @observable

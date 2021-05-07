@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Button } from '../../shared/button/Button'
 import { useRouter } from 'next/router'
@@ -8,9 +8,8 @@ import s from './ArticleView.module.scss'
 import { Section } from '../section/Section'
 import { ArticleFooter } from '../shared/footer/ArticleFooter'
 import { RelatedArticles } from '../related/RelatedArticles'
-import { useOnScrollIntoView } from '../../hooks/useOnScrollIntoView'
-import { Spinner } from '../../shared/spinner/Spinner'
 import { ArticleService } from '../Article.service'
+import { Related } from '../../shared/related/Related'
 
 interface Props {
   article: ArticleModel
@@ -19,27 +18,16 @@ interface Props {
 export const ArticleView = observer(({ article: propArticle }: Props) => {
   const router = useRouter()
   const auth = useAuth()
-
-  const relatedRef = useRef<HTMLElement>()
-  const [showRelated, setShowRelated] = useState<boolean>(false)
   const [article, setArticle] = useState<ArticleModel>(propArticle)
 
-  useOnScrollIntoView(
-    relatedRef.current,
-    async () => {
-      if (!article.isPopulated) {
-        await ArticleService.populate(article)
-        setArticle(article)
-      }
-      setShowRelated(true)
-    },
-    [article],
-    {
-      relativeOffset: 0.9,
-    },
-  )
-
   useEffect(() => setArticle(propArticle), [propArticle])
+
+  const loadRelated = useCallback(async () => {
+    if (!article.isPopulated) {
+      await ArticleService.populate(article)
+      setArticle(article)
+    }
+  }, [article])
 
   return (
     <>
@@ -57,7 +45,7 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
       >
         {article.sections.map((section) => (
           <Section
-            first={section.format.gridPosition.startRow === 1}
+            first={section.format.gridPosition?.startRow === 1}
             key={section.uid}
             section={section}
           />
@@ -65,9 +53,9 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
         <ArticleFooter article={article} />
       </article>
 
-      <section ref={relatedRef}>
-        {showRelated ? <RelatedArticles article={article} /> : <Spinner />}
-      </section>
+      <Related onInView={() => loadRelated()}>
+        <RelatedArticles article={article} />
+      </Related>
     </>
   )
 })

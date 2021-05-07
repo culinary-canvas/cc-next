@@ -43,6 +43,9 @@ export class StorageService {
   }
 
   static isLocal(url: string) {
+    if (!url) {
+      return false
+    }
     return !this.isRemote(url)
   }
 }

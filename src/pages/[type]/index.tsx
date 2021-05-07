@@ -42,11 +42,11 @@ function ArticlesPerType({ articlesData, type }: Props) {
   return (
     <>
       <PageHead
-        image={articles[0]?.imageContent.url || AppService.DEFAULT_SHARE_IMAGE}
-        imageWidth={articles[0]?.imageContent.set.cropped.width}
-        imageHeight={articles[0]?.imageContent.set.cropped.height}
+        image={articles[0]?.imageContent?.url || AppService.DEFAULT_SHARE_IMAGE}
+        imageWidth={articles[0]?.imageContent.set?.width}
+        imageHeight={articles[0]?.imageContent.set?.height}
         imageAlt={
-          articles[0]?.imageContent.alt || AppService.DEFAULT_SHARE_IMAGE_ALT
+          articles[0]?.imageContent?.alt || AppService.DEFAULT_SHARE_IMAGE_ALT
         }
       />
       <main className={classnames(s.container)}>
