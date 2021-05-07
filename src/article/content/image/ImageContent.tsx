@@ -26,7 +26,7 @@ export const ImageContent = observer((props: Props) => {
   const calculatedSizes = useMemo<string>(() => {
     if (
       !section.format.gridPosition?.startColumn ||
-      content.format.gridPosition?.startColumn
+      !content.format.gridPosition?.startColumn
     ) {
       return '100vw'
     }
