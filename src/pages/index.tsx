@@ -16,7 +16,7 @@ interface Props {
   articlesData: any[]
 }
 
-const PAGE_SIZE = 6
+const PAGE_SIZE = 12
 
 function Start({ articlesData }: Props) {
   const articles = useTransformToModels(articlesData, ArticleModel)
@@ -45,7 +45,7 @@ function Start({ articlesData }: Props) {
             )
           }
           preloadImages
-          preloadLimit={4}
+          preloadLimit={PAGE_SIZE}
         />
       </main>
     </>
