@@ -67,8 +67,41 @@ export class ArticleService {
     onProgress?: (progress: number, message: string) => any,
     initialProgress = 0,
   ) {
-    const progressPerImage = 0.5 / this.countImagesToUpload(article)
     let accProgress = initialProgress
+
+    if (
+      !!article.preview.imageSet.original?.url &&
+      StorageService.isLocal(article.preview.imageSet.original.url)
+    ) {
+      await this.uploadImage(
+        article.preview.imageSet.original,
+        article,
+        accProgress,
+        0.05,
+        (progress, message) => {
+          accProgress += progress
+          onProgress(progress, message)
+        },
+      )
+    }
+
+    if (
+      !!article.preview.imageSet.image?.url &&
+      StorageService.isLocal(article.preview.imageSet.image.url)
+    ) {
+      await this.uploadImage(
+        article.preview.imageSet.image,
+        article,
+        accProgress,
+        0.05,
+        (progress, message) => {
+          accProgress += progress
+          onProgress(progress, message)
+        },
+      )
+    }
+
+    const progressPerImage = 0.5 / this.countImagesToUpload(article)
 
     const contentsWithImagesToUpload = this.getContentsWithImagesToUpload(
       article,
