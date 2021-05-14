@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ImageModal } from '../imageModal/ImageModal'
 import s from './ImageEdit.module.scss'
 import { ImageSet } from '../models/ImageSet'
@@ -95,10 +95,9 @@ export const ImageEdit = observer((props: Props) => {
         />
       )}
 
-      {!!set && (
         <ImageModal
-          image={set.original}
-          cropValues={set.cropValues}
+          image={set?.original}
+          cropValues={set?.cropValues}
           isOpen={isModalOpen}
           onOk={async (newImage, newCropValues) => {
             setModalOpen(false)
@@ -108,7 +107,7 @@ export const ImageEdit = observer((props: Props) => {
 
               const newSet = await ImageService.createNewSet(
                 overlay,
-                set.alt,
+                set?.alt,
                 newImage || set.original,
                 newCropValues || set.cropValues,
               )
@@ -122,7 +121,6 @@ export const ImageEdit = observer((props: Props) => {
             onCancel && onCancel()
           }}
         />
-      )}
     </>
   )
 })
