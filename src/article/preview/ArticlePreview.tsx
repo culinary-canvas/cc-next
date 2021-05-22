@@ -138,7 +138,7 @@ export const ArticlePreview = observer((props: Props) => {
 
         <ReactMarkdown
           className={s.subHeading}
-          renderers={{
+          components={{
             link: ({ node }) => node.children[0].value,
           }}
         >
