@@ -20,11 +20,7 @@ interface Props {
 const PAGE_SIZE = 8
 
 function Start({ articlesData }: Props) {
-  const articles = useTransformToModels(
-    articlesData,
-    ArticleModel,
-    ArticleService.isPublished,
-  )
+  const articles = useTransformToModels(articlesData, ArticleModel)
 
   const { setActiveMenuOption } = useMenu()
   useEffect(() => setActiveMenuOption(menuOptions.ALL), [])
@@ -67,7 +63,11 @@ export const getStaticProps: GetStaticProps = async () => {
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
-  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+  let articlesData = !!response.size
+    ? response.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
+    : []
 
   return {
     props: {

@@ -16,6 +16,7 @@ import { useTransformToModels } from '../../hooks/useTransformToModels'
 import { useMenu } from '../../menu/Menu.context'
 import { menuOptions } from '../../menu/models/menuOptions'
 import { AppService } from '../../services/App.service'
+import { ArticleService } from '../../article/Article.service'
 
 interface Props {
   articlesData: any[]
@@ -96,7 +97,11 @@ export const getStaticProps: GetStaticProps<
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
-  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+  const articlesData = !!response.size
+    ? response.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
+    : []
 
   return {
     props: {

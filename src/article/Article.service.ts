@@ -17,6 +17,7 @@ import { TextEditService } from './form/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
+import firebase from 'firebase/app'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -292,5 +293,21 @@ export class ArticleService {
     return (
       article.published && (!article.publishDate || article.publishDate <= now)
     )
+  }
+
+  static rawArticleIsPublished(rawArticle: firebase.firestore.DocumentData) {
+    if (!rawArticle.published) {
+      return false
+    }
+
+    if (!rawArticle.publishDate) {
+      return true
+    }
+
+    const publishDate = new firebase.firestore.Timestamp(
+      rawArticle.publishDate.seconds,
+      rawArticle.publishDate.nanoseconds,
+    ).toDate()
+    return publishDate < new Date()
   }
 }

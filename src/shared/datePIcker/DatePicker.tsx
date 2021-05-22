@@ -28,6 +28,7 @@ export function DatePicker(props: Props) {
   return (
     <ReactDatePicker
       showTimeSelect
+      dateFormat="HH:mm EEEE d MMMM yyyy"
       wrapperClassName={containerClassName}
       className={className}
       locale="sv"

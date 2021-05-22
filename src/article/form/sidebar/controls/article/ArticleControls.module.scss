@@ -11,15 +11,19 @@
     display: flex;
 
     .publishCheckbox {
+      flex-grow: 1;
       flex-shrink: 2;
     }
 
     .datePickerContainer {
       flex-grow: 2;
+      flex-shrink: 1;
+      width: 100%;
     }
 
     .datePickerInput {
       text-align: center;
+      cursor: pointer;
     }
   }
 }

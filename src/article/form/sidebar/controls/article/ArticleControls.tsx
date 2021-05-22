@@ -126,13 +126,12 @@ export const ArticleControls = observer(() => {
       </ControlContainer>
 
       <ControlContainer label="Publish settings">
+        <Checkbox
+          label="Published"
+          checked={article.published}
+          onChange={(v) => runInAction(() => (article.published = v))}
+        />
         <div className={s.publish}>
-          <Checkbox
-            label="Published"
-            checked={article.published}
-            onChange={(v) => runInAction(() => (article.published = v))}
-            containerClassName={s.publishCheckbox}
-          />
           <Checkbox
             disabled={!article.published}
             label="Scheduled"
@@ -145,7 +144,7 @@ export const ArticleControls = observer(() => {
             onChange={(d) => runInAction(() => (article.publishDate = d))}
             className={s.datePickerInput}
             containerClassName={s.datePickerContainer}
-            disabled={!isScheduledPublish}
+            disabled={!article.published || !isScheduledPublish}
           />
         </div>
         <Checkbox
