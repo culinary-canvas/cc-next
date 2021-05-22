@@ -69,6 +69,10 @@ export class ArticleModel implements Model, Sortable {
   published = false
 
   @observable
+  @field(Date)
+  publishDate: Date
+
+  @observable
   @field()
   slug: string
 

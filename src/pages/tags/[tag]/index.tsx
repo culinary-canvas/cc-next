@@ -12,6 +12,7 @@ import { isServer } from '../../_app'
 import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
 import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { ArticleService } from '../../../article/Article.service'
 
 interface Props {
   articlesData: any[]
@@ -108,7 +109,11 @@ export const getStaticProps: GetStaticProps<
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
-  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+  const articlesData = !!response.size
+    ? response.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
+    : []
 
   return {
     props: {

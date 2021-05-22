@@ -17,6 +17,7 @@ import { TextEditService } from './form/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
+import firebase from 'firebase/app'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -70,7 +71,7 @@ export class ArticleService {
     let accProgress = initialProgress
 
     if (
-      !!article.preview.imageSet.original?.url &&
+      !!article.preview.imageSet?.original?.url &&
       StorageService.isLocal(article.preview.imageSet.original.url)
     ) {
       await this.uploadImage(
@@ -86,7 +87,7 @@ export class ArticleService {
     }
 
     if (
-      !!article.preview.imageSet.image?.url &&
+      !!article.preview.imageSet?.image?.url &&
       StorageService.isLocal(article.preview.imageSet.image.url)
     ) {
       await this.uploadImage(
@@ -285,5 +286,28 @@ export class ArticleService {
       const companies = await CompanyApi.byIds(article.companyIds)
       runInAction(() => (article.companies = companies))
     }
+  }
+
+  static isPublished(article: ArticleModel) {
+    const now = new Date()
+    return (
+      article.published && (!article.publishDate || article.publishDate <= now)
+    )
+  }
+
+  static rawArticleIsPublished(rawArticle: firebase.firestore.DocumentData) {
+    if (!rawArticle.published) {
+      return false
+    }
+
+    if (!rawArticle.publishDate) {
+      return true
+    }
+
+    const publishDate = new firebase.firestore.Timestamp(
+      rawArticle.publishDate.seconds,
+      rawArticle.publishDate.nanoseconds,
+    ).toDate()
+    return publishDate < new Date()
   }
 }

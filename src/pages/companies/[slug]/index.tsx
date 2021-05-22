@@ -15,6 +15,7 @@ import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
 import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { CompanyView } from '../../../company/view/CompanyView'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { ArticleService } from '../../../article/Article.service'
 
 interface Props {
   articlesData: any[]
@@ -66,12 +67,10 @@ function ArticlesByCompany({ articlesData, companyData }: Props) {
         } articles)`}
         image={company.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          company.imageSet?.width ||
-          articles[0]?.imageContent.set.width
+          company.imageSet?.width || articles[0]?.imageContent.set.width
         }
         imageHeight={
-          company.imageSet?.height ||
-          articles[0]?.imageContent.set.height
+          company.imageSet?.height || articles[0]?.imageContent.set.height
         }
         imageAlt={company.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
@@ -127,7 +126,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     .get()
 
   const articlesData = !!articlesResponse.size
-    ? articlesResponse.docs.map((d) => d.data())
+    ? articlesResponse.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
     : []
 
   return {
