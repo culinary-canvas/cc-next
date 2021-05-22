@@ -8,8 +8,6 @@ import { ModelService } from '../services/db/Model.service'
 import { initFirebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import slugify from 'voca/slugify'
-import { toJS } from 'mobx'
-import { ImageContentModel } from './models/ImageContent.model'
 
 export class ArticleApi {
   private static readonly COLLECTION = 'articles'

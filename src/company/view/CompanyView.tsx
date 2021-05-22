@@ -86,9 +86,9 @@ export const CompanyView = observer((props: Props) => {
         {!!description && (
           <div className={s.description}>
             <ReactMarkdown
-              renderers={{
+              components={{
                 link: ({ node }) => (
-                  <a href={node.url} rel="noopener" target="_blank">
+                  <a href={node.url as string} rel="noopener" target="_blank">
                     {node.children[0].value}
                   </a>
                 ),

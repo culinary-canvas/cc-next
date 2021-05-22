@@ -47,7 +47,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
     () =>
       !!person &&
       setLabel(
-        new ArticleLabel(person.name, `/articles/persons/${person.slug}`),
+        new ArticleLabel(person.name, `/persons/${person.slug}`),
       ),
     [person],
   )
