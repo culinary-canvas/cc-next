@@ -15,6 +15,7 @@ import { PersonView } from '../../../person/view/PersonView'
 import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
 import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { ArticleService } from '../../../article/Article.service'
 
 interface Props {
   articlesData: any[]
@@ -46,9 +47,7 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
   useEffect(
     () =>
       !!person &&
-      setLabel(
-        new ArticleLabel(person.name, `/persons/${person.slug}`),
-      ),
+      setLabel(new ArticleLabel(person.name, `/persons/${person.slug}`)),
     [person],
   )
 
@@ -68,12 +67,10 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
         } articles)`}
         image={person.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          person.imageSet?.width ||
-          articles[0]?.imageContent.set.width
+          person.imageSet?.width || articles[0]?.imageContent.set.width
         }
         imageHeight={
-          person.imageSet?.height ||
-          articles[0]?.imageContent.set.height
+          person.imageSet?.height || articles[0]?.imageContent.set.height
         }
         imageAlt={person.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
@@ -141,7 +138,9 @@ export const getStaticProps: GetStaticProps<
     .limit(PAGE_SIZE)
     .get()
   const articlesData = !!articlesResponse.size
-    ? articlesResponse.docs.map((d) => d.data())
+    ? articlesResponse.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
     : []
 
   return {

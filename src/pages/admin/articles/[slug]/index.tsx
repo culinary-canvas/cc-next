@@ -9,6 +9,7 @@ import { useAdmin } from '../../../../admin/Admin.context'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 import { ArticleApi } from '../../../../article/Article.api'
+import { initFirebase } from '../../../../services/firebase/Firebase'
 
 interface Props {
   articleData: any
@@ -51,7 +52,13 @@ export const getServerSideProps: GetServerSideProps<
   Props,
   { slug: string }
 > = async ({ params }) => {
-  const articleData = await ArticleApi.bySlug(params.slug)
+  const { firestore } = initFirebase()
+
+  const response = await firestore()
+    .collection('articles')
+    .where('slug', '==', params.slug)
+    .get()
+  const articleData = !!response.size ? response.docs[0].data() : []
 
   return {
     props: {

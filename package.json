@@ -1,6 +1,6 @@
 {
   "name": "cc-next",
-  "version": "1.5.4",
+  "version": "1.6.0-beta.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,6 +17,7 @@
     "@next/bundle-analyzer": "^10.2.2",
     "classnames": "^2.3.1",
     "compressorjs": "^1.0.6",
+    "date-fns": "^2.21.3",
     "firebase": "^8.6.2",
     "framer-motion": "^4.1.17",
     "include-media": "^1.4.10",
@@ -31,6 +32,7 @@
     "react": "^17.0.2",
     "react-color": "^2.19.3",
     "react-cookie-consent": "^6.2.3",
+    "react-datepicker": "^3.8.0",
     "react-device-detect": "^1.17.0",
     "react-dom": "^17.0.2",
     "react-file-drop": "^3.1.2",
@@ -56,6 +58,7 @@
     "@types/node": "^15.6.0",
     "@types/react": "^17.0.6",
     "@types/react-color": "^3.0.4",
+    "@types/react-datepicker": "^3.1.8",
     "@types/react-dom": "^17.0.5",
     "@types/react-image-crop": "^8.1.2",
     "@types/react-modal": "^3.12.0",

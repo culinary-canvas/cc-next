@@ -22,7 +22,6 @@ interface Props {
   first?: boolean
   className?: string
   labels?: ArticleLabel[]
-  usePromoted?: boolean
   preloadImage?: boolean
 }
 
@@ -32,7 +31,6 @@ export const ArticlePreview = observer((props: Props) => {
     labels,
     first = false,
     className,
-    usePromoted = false,
     preloadImage = false,
   } = props
   const router = useRouter()
@@ -138,6 +136,8 @@ export const ArticlePreview = observer((props: Props) => {
 
         <ReactMarkdown
           className={s.subHeading}
+          disallowedElements={['a']}
+          unwrapDisallowed={true}
           components={{
             link: ({ node }) => node.children[0].value,
           }}

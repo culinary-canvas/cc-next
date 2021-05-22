@@ -65,12 +65,7 @@ export class Transformer {
         throw e
       }
     })
-
     return transformed
-  }
-
-  static dbToModels<T>(dbObjects: any[], Clazz: Class<T>): T[] {
-    return dbObjects.map((d) => this.dbToModel(d, Clazz))
   }
 
   static dbToModel<T>(
@@ -112,10 +107,13 @@ export class Transformer {
   }
 
   private static toDbValue(fieldValue: any, isRelated: boolean) {
+    if (!isNil(fieldValue) && fieldValue instanceof Date) {
+      return firebase.firestore.Timestamp.fromDate(fieldValue)
+    }
+
     if (isRelated) {
       return Transformer.modelToDb(fieldValue)
     }
-
     if (!isNil(fieldValue) && typeof fieldValue === 'object') {
       const returnValue = {}
       Object.keys(fieldValue)

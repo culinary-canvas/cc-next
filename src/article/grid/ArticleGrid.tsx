@@ -97,7 +97,6 @@ export const ArticleGrid = observer(
                       article={article}
                       first={i === 0}
                       labels={labels}
-                      usePromoted={usePromoted}
                       preloadImage={
                         preloadImages && !!preloadLimit
                           ? i < preloadLimit

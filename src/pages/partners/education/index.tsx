@@ -15,6 +15,7 @@ import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { CompanyModel } from '../../../company/models/Company.model'
 import { CompanyView } from '../../../company/view/CompanyView'
 import { LeadForm } from '../../../shared/leadForm/LeadForm'
+import { ArticleService } from '../../../article/Article.service'
 
 const PAGE_SIZE = 6
 
@@ -49,12 +50,10 @@ export default function Education({ articlesData, companyData }: Props) {
         title={`Culinary Canvas — Partners — Education`}
         image={company.imageSet?.url || articles[0]?.imageContent.url}
         imageWidth={
-          company.imageSet?.width ||
-          articles[0]?.imageContent.set.width
+          company.imageSet?.width || articles[0]?.imageContent.set.width
         }
         imageHeight={
-          company.imageSet?.height ||
-          articles[0]?.imageContent.set.height
+          company.imageSet?.height || articles[0]?.imageContent.set.height
         }
         imageAlt={company.imageSet?.alt || articles[0]?.imageContent.set.alt}
       />
@@ -104,7 +103,9 @@ export const getStaticProps: GetStaticProps = async () => {
     .get()
 
   const articlesData = !!articlesResponse.size
-    ? articlesResponse.docs.map((d) => d.data())
+    ? articlesResponse.docs
+        .map((d) => d.data())
+        .filter((a) => ArticleService.rawArticleIsPublished(a))
     : []
 
   return {

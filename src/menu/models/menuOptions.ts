@@ -16,6 +16,10 @@ export const menuOptions = {
     'Recipes',
     `/${StringUtils.toLowerKebabCase(ArticleType.RECIPE)}`,
   ),
+  [ArticleType.TIDBITS]: new MenuOption(
+    'Tidbits',
+    `/${StringUtils.toLowerKebabCase(ArticleType.TIDBITS)}`,
+  ),
   PARTNERS: new MenuOption('Partners', '/partners', [
     new MenuOption('Education', '/education'),
   ]),
