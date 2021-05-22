@@ -22,6 +22,7 @@ import { TagsForm } from '../../../../../tag/form/TagsForm'
 import { PersonsArticleControl } from '../shared/personsArticleControl/PersonsArticleControl'
 import { ControlContainer } from '../shared/controlContainer/ControlContainer'
 import { CompaniesArticleControl } from '../shared/companyArticleControl/CompaniesArticleControl'
+import { DatePicker } from '../../../../../shared/datePIcker/DatePicker'
 
 export const ArticleControls = observer(() => {
   const auth = useAuth()
@@ -33,6 +34,9 @@ export const ArticleControls = observer(() => {
   const [editingSlug, editSlug] = useState<boolean>(false)
   const [title, setTitle] = useState<string>(article.title)
   const [deleting, setDeleting] = useState<boolean>(false)
+  const [isScheduledPublish, setScheduledPublish] = useState<boolean>(
+    !!article.publishDate,
+  )
 
   useEffect(() => {
     if (article.title !== title) {
@@ -121,12 +125,29 @@ export const ArticleControls = observer(() => {
         />
       </ControlContainer>
 
-      <ControlContainer label="Publish settings" direction="row">
-        <Checkbox
-          label="Published"
-          checked={article.published}
-          onChange={(v) => runInAction(() => (article.published = v))}
-        />
+      <ControlContainer label="Publish settings">
+        <div className={s.publish}>
+          <Checkbox
+            label="Published"
+            checked={article.published}
+            onChange={(v) => runInAction(() => (article.published = v))}
+            containerClassName={s.publishCheckbox}
+          />
+          <Checkbox
+            disabled={!article.published}
+            label="Scheduled"
+            checked={isScheduledPublish}
+            onChange={(v) => setScheduledPublish(v)}
+            containerClassName={s.publishCheckbox}
+          />
+          <DatePicker
+            selected={article.publishDate}
+            onChange={(d) => runInAction(() => (article.publishDate = d))}
+            className={s.datePickerInput}
+            containerClassName={s.datePickerContainer}
+            disabled={!isScheduledPublish}
+          />
+        </div>
         <Checkbox
           label="Show on start page"
           checked={article.showOnStartPage}

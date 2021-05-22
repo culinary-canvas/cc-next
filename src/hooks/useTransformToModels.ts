@@ -7,6 +7,7 @@ type Source = { [key: string]: any }
 export function useTransformToModels<T>(
   source: Source[],
   Clazz: Class<T>,
+  modifier?: (o: T) => boolean,
 ): T[] {
   const transform = useCallback(
     (source: Source[]) => {
@@ -14,6 +15,7 @@ export function useTransformToModels<T>(
         return source
           .filter((o) => !!o)
           .map((o) => Transformer.dbToModel(o, Clazz))
+          .filter((o) => !modifier || modifier(o))
       } else {
         return []
       }

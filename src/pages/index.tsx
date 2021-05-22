@@ -11,6 +11,7 @@ import { Splash } from '../article/grid/splash/Splash'
 import { useTransformToModels } from '../hooks/useTransformToModels'
 import { useMenu } from '../menu/Menu.context'
 import { menuOptions } from '../menu/models/menuOptions'
+import { ArticleService } from '../article/Article.service'
 
 interface Props {
   articlesData: any[]
@@ -19,7 +20,11 @@ interface Props {
 const PAGE_SIZE = 8
 
 function Start({ articlesData }: Props) {
-  const articles = useTransformToModels(articlesData, ArticleModel)
+  const articles = useTransformToModels(
+    articlesData,
+    ArticleModel,
+    ArticleService.isPublished,
+  )
 
   const { setActiveMenuOption } = useMenu()
   useEffect(() => setActiveMenuOption(menuOptions.ALL), [])

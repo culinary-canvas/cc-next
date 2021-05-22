@@ -70,7 +70,7 @@ export class ArticleService {
     let accProgress = initialProgress
 
     if (
-      !!article.preview.imageSet.original?.url &&
+      !!article.preview.imageSet?.original?.url &&
       StorageService.isLocal(article.preview.imageSet.original.url)
     ) {
       await this.uploadImage(
@@ -86,7 +86,7 @@ export class ArticleService {
     }
 
     if (
-      !!article.preview.imageSet.image?.url &&
+      !!article.preview.imageSet?.image?.url &&
       StorageService.isLocal(article.preview.imageSet.image.url)
     ) {
       await this.uploadImage(
@@ -285,5 +285,12 @@ export class ArticleService {
       const companies = await CompanyApi.byIds(article.companyIds)
       runInAction(() => (article.companies = companies))
     }
+  }
+
+  static isPublished(article: ArticleModel) {
+    const now = new Date()
+    return (
+      article.published && (!article.publishDate || article.publishDate <= now)
+    )
   }
 }

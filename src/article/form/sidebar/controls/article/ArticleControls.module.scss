@@ -6,4 +6,20 @@
 
 .controls {
   @include controls();
+
+  .publish {
+    display: flex;
+
+    .publishCheckbox {
+      flex-shrink: 2;
+    }
+
+    .datePickerContainer {
+      flex-grow: 2;
+    }
+
+    .datePickerInput {
+      text-align: center;
+    }
+  }
 }
