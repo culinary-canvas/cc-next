@@ -74,6 +74,14 @@ export const ArticleList = observer(({ articles }: Props) => {
               />
             </th>
 
+            <th role="button" onClick={() => setSortOrder('promoted')}>
+              <span>Promoted</span>
+              <SortOrderIcon
+                order={sortOrder.order}
+                visible={sortOrder.key === 'promoted'}
+              />
+            </th>
+
             <th role="button" onClick={() => setSortOrder('created')}>
               <span>Created</span>
               <SortOrderIcon

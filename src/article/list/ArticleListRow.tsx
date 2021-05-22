@@ -71,6 +71,7 @@ export const ArticleListRow = (props: Props) => {
       </td>
       <td>{StringUtils.toDisplayText(article.type)}</td>
       <td>{article.published ? 'Published' : 'WIP'}</td>
+      <td>{article.promoted ? 'Promoted' : 'No'}</td>
       <td>{article.created.toLocaleDateString()}</td>
       <td>{article.modified.toLocaleDateString()}</td>
     </tr>

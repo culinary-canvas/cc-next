@@ -79,9 +79,9 @@ export const TextContent = observer((props: Props) => {
       onClick={() => !!onClick && onClick()}
     >
       <ReactMarkdown
-        renderers={{
+        components={{
           link: ({ node }) => (
-            <a href={node.url} rel="noopener" target="_blank">
+            <a href={node.url as string} rel="noopener" target="_blank">
               {node.children[0].value}
             </a>
           ),

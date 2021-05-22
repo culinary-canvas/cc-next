@@ -16,7 +16,7 @@ interface Props {
   articlesData: any[]
 }
 
-const PAGE_SIZE = 12
+const PAGE_SIZE = 8
 
 function Start({ articlesData }: Props) {
   const articles = useTransformToModels(articlesData, ArticleModel)

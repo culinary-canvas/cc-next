@@ -10,13 +10,14 @@ import { GetStaticProps } from 'next'
 import { updateImageFormats } from '../../../services/script/updateImageFormats'
 import { setArticleTypeAsTag } from '../../../services/script/setArticleTypeAsTag'
 import { setPersonAndCompanySlugs } from '../../../services/script/setPersonAndCompanySlugs'
-import { refactorImageSetFromCroppedToImage } from '../../../services/script/refactorImageSetFromCroppedToImage'
-import { removeNoLongerDefaultInitializedImageSetProperties } from '../../../services/script/removeNoLongerDefaultInitializedImageSetProperties'
+import { updateImagesContentType } from '../../../services/script/updateImagesContentType'
 
 const AdminDevArea = observer(() => {
   const [running, setRunning] = useState<string>()
   const auth = useAuth()
   const allowed = useAuthGuard()
+
+  console.log('process.env', process.env.NEXT_PUBLIC_ENVIRONMENT)
 
   if (!allowed) {
     return null
@@ -82,28 +83,13 @@ const AdminDevArea = observer(() => {
 
         <Button
           onClick={async () => {
-            setRunning('removeNoLongerDefaultInitializedImageSetProperties')
-            await removeNoLongerDefaultInitializedImageSetProperties(
-              auth.userId,
-            )
+            setRunning('updateImagesContentType')
+            await updateImagesContentType(auth.userId)
             setRunning(null)
           }}
-          loading={
-            running === 'removeNoLongerDefaultInitializedImageSetProperties'
-          }
+          loading={running === 'updateImagesContentType'}
         >
-          Remove no longer default initialized image set properties
-        </Button>
-
-        <Button
-          onClick={async () => {
-            setRunning('refactorImageSetFromCroppedToImage')
-            await refactorImageSetFromCroppedToImage(auth.userId)
-            setRunning(null)
-          }}
-          loading={running === 'refactorImageSetFromCroppedToImage'}
-        >
-          Refactor ImageSet from 'cropped' to 'image'
+          Update Images contentType
         </Button>
       </div>
     </div>
