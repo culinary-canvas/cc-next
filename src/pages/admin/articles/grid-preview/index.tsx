@@ -51,7 +51,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     .orderBy('sortOrder', 'desc')
     .limit(PAGE_SIZE)
     .get()
-  const articlesData = !!response.size ? response.docs.map((d) => d.data()) : []
+  const articlesData = !!response.size
+    ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
+    : []
 
   return {
     props: {

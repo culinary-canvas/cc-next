@@ -99,7 +99,7 @@ export const getStaticProps: GetStaticProps<
     .get()
   const articlesData = !!response.size
     ? response.docs
-        .map((d) => d.data())
+        .map((d) => ({ id: d.id, ...d.data() }))
         .filter((a) => ArticleService.rawArticleIsPublished(a))
     : []
 

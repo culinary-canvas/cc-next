@@ -127,7 +127,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   const articlesData = !!articlesResponse.size
     ? articlesResponse.docs
-        .map((d) => d.data())
+        .map((d) => ({ id: d.id, ...d.data() }))
         .filter((a) => ArticleService.rawArticleIsPublished(a))
     : []
 
