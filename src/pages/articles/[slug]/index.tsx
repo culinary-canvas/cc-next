@@ -66,7 +66,9 @@ export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
     .collection('articles')
     .where('slug', '==', params.slug)
     .get()
-  const articleData = !!response.size ? response.docs[0].data() : []
+  const articleData = !!response.size
+    ? { id: response.docs[0].id, ...response.docs[0].data() }
+    : []
 
   return {
     props: {
