@@ -8,7 +8,6 @@ import { ArticleForm } from '../../../../article/form/ArticleForm'
 import { useAdmin } from '../../../../admin/Admin.context'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { ArticleApi } from '../../../../article/Article.api'
 import { initFirebase } from '../../../../services/firebase/Firebase'
 
 interface Props {
@@ -58,7 +57,9 @@ export const getServerSideProps: GetServerSideProps<
     .collection('articles')
     .where('slug', '==', params.slug)
     .get()
-  const articleData = !!response.size ? response.docs[0].data() : []
+  const articleData = !!response.size
+    ? { id: response.docs[0].id, ...response.docs[0].data() }
+    : []
 
   return {
     props: {
