@@ -93,7 +93,7 @@ export class ContentService {
         break
       default:
         content.format.fontFamily = FONT.FAMILY.GARAMOND
-        content.format.fontSize = FONT.SIZE.M
+        content.format.fontSize = FONT.SIZE.L
     }
   }
 
