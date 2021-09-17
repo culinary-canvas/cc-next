@@ -6,7 +6,6 @@ import { PageHead } from '../shared/head/PageHead'
 import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
-import { initFirebase } from '../services/firebase/Firebase'
 import { Splash } from '../article/grid/splash/Splash'
 import { useTransformToModels } from '../hooks/useTransformToModels'
 import { useMenu } from '../menu/Menu.context'
@@ -54,20 +53,16 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { firestore } = initFirebase()
+  const promotedArticlesData = await ArticleService.fetchRawArticles(
+    PAGE_SIZE / 2,
+    true,
+  )
+  const nonPromotedArticlesData = await ArticleService.fetchRawArticles(
+    PAGE_SIZE / 2,
+    false,
+  )
 
-  const response = await firestore()
-    .collection('articles')
-    .where('published', '==', true)
-    .where('showOnStartPage', '==', true)
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
-  let articlesData = !!response.size
-    ? response.docs
-        .map((d) => ({ id: d.id, ...d.data() }))
-        .filter((a) => ArticleService.rawArticleIsPublished(a))
-    : []
+  const articlesData = [...promotedArticlesData, ...nonPromotedArticlesData]
 
   return {
     props: {

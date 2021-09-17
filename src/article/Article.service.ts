@@ -18,6 +18,7 @@ import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
 import firebase from 'firebase/app'
+import { initFirebase } from '../services/firebase/Firebase'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -104,9 +105,8 @@ export class ArticleService {
 
     const progressPerImage = 0.5 / this.countImagesToUpload(article)
 
-    const contentsWithImagesToUpload = this.getContentsWithImagesToUpload(
-      article,
-    )
+    const contentsWithImagesToUpload =
+      this.getContentsWithImagesToUpload(article)
 
     return Promise.all(
       contentsWithImagesToUpload.map(async (content) =>
@@ -309,5 +309,23 @@ export class ArticleService {
       rawArticle.publishDate.nanoseconds,
     ).toDate()
     return publishDate < new Date()
+  }
+
+  static async fetchRawArticles(pageSize: number, promoted: boolean) {
+    const { firestore } = initFirebase()
+
+    const response = await firestore()
+      .collection('articles')
+      .where('published', '==', true)
+      .where('showOnStartPage', '==', true)
+      .where('promoted', '==', promoted)
+      .orderBy('sortOrder', 'desc')
+      .limit(pageSize)
+      .get()
+    return !!response.size
+      ? response.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .filter((a) => this.rawArticleIsPublished(a))
+      : []
   }
 }
