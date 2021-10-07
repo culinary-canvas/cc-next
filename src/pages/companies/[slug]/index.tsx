@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import s from './articlesByCompany.module.scss'
-import { GetServerSideProps, GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { ArticleModel } from '../../../article/models/Article.model'
 import { PageHead } from '../../../shared/head/PageHead'
 import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
-import { initFirebase } from '../../../services/firebase/Firebase'
+import { firebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
 import { CompanyModel } from '../../../company/models/Company.model'
@@ -16,6 +16,14 @@ import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { CompanyView } from '../../../company/view/CompanyView'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 import { ArticleService } from '../../../article/Article.service'
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 
 interface Props {
   articlesData: any[]
@@ -106,24 +114,25 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 
-  const { firestore } = initFirebase()
-  const companyResponse = await firestore()
-    .collection('companies')
-    .where('slug', '==', params.slug)
-    .get()
+  const { db } = firebase()
+  const companyResponse = await getDocs(
+    query(collection(db, 'companies'), where('slug', '==', params.slug)),
+  )
 
   const companyData: { [key: string]: any } = {
     ...companyResponse.docs[0].data(),
     id: companyResponse.docs[0].id,
   }
 
-  const articlesResponse = await firestore()
-    .collection('articles')
-    .where('published', '==', true)
-    .where('companyIds', 'array-contains', companyData.id)
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
+  const articlesResponse = await getDocs(
+    query(
+      collection(db, 'articles'),
+      where('published', '==', true),
+      where('companyIds', 'array-contains', companyData.id),
+      orderBy('sortOrder', 'desc'),
+      limit(PAGE_SIZE),
+    ),
+  )
 
   const articlesData = !!articlesResponse.size
     ? articlesResponse.docs

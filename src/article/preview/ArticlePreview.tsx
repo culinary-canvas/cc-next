@@ -89,9 +89,11 @@ export const ArticlePreview = observer((props: Props) => {
     )
     setSubHeading(
       article.preview.useArticleText
-        ? (article.contents.find(
-            (c) => c.type === ContentType.SUB_HEADING,
-          ) as TextContentModel)?.value
+        ? (
+            article.contents.find(
+              (c) => c.type === ContentType.SUB_HEADING,
+            ) as TextContentModel
+          )?.value
         : article.preview.text,
     )
   }, [
@@ -119,6 +121,7 @@ export const ArticlePreview = observer((props: Props) => {
             : 'center'
         }
         figureClassName={s.image}
+        quality={50}
       />
       <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         <Button
@@ -139,6 +142,7 @@ export const ArticlePreview = observer((props: Props) => {
           disallowedElements={['a']}
           unwrapDisallowed={true}
           components={{
+            // @ts-ignore
             link: ({ node }) => node.children[0].value,
           }}
         >

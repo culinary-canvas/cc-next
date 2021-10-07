@@ -17,8 +17,7 @@ import { TextEditService } from './form/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
-import firebase from 'firebase/app'
-import { initFirebase } from '../services/firebase/Firebase'
+import { DocumentData, Timestamp } from 'firebase/firestore'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -295,7 +294,7 @@ export class ArticleService {
     )
   }
 
-  static rawArticleIsPublished(rawArticle: firebase.firestore.DocumentData) {
+  static rawArticleIsPublished(rawArticle: DocumentData) {
     if (!rawArticle.published) {
       return false
     }
@@ -304,28 +303,10 @@ export class ArticleService {
       return true
     }
 
-    const publishDate = new firebase.firestore.Timestamp(
+    const publishDate = new Timestamp(
       rawArticle.publishDate.seconds,
       rawArticle.publishDate.nanoseconds,
     ).toDate()
     return publishDate < new Date()
-  }
-
-  static async fetchRawArticles(pageSize: number, promoted: boolean) {
-    const { firestore } = initFirebase()
-
-    const response = await firestore()
-      .collection('articles')
-      .where('published', '==', true)
-      .where('showOnStartPage', '==', true)
-      .where('promoted', '==', promoted)
-      .orderBy('sortOrder', 'desc')
-      .limit(pageSize)
-      .get()
-    return !!response.size
-      ? response.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .filter((a) => this.rawArticleIsPublished(a))
-      : []
   }
 }

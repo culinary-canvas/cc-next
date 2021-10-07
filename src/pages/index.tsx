@@ -53,11 +53,11 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const promotedArticlesData = await ArticleService.fetchRawArticles(
+  const promotedArticlesData = await ArticleApi.fetchRawArticles(
     PAGE_SIZE / 2,
     true,
   )
-  const nonPromotedArticlesData = await ArticleService.fetchRawArticles(
+  const nonPromotedArticlesData = await ArticleApi.fetchRawArticles(
     PAGE_SIZE / 2,
     false,
   )

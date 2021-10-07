@@ -1,7 +1,9 @@
-import { initFirebase } from '../firebase/Firebase'
+import { firebase } from '../firebase/Firebase'
+import { httpsCallable } from 'firebase/functions'
 
 export class EmailService {
-  static VALIDATION_PATTERN = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  static VALIDATION_PATTERN =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   static async addEducationLeadContact(
     email: string,
@@ -10,8 +12,9 @@ export class EmailService {
     newsletter: boolean,
   ) {
     try {
-      const { functions } = initFirebase()
-      const addContact = functions().httpsCallable(
+      const { functions } = firebase()
+      const addContact = httpsCallable(
+        functions,
         'mailchimp-addEducationLeadContact',
       )
       await addContact({

@@ -7,9 +7,10 @@ import { classnames } from '../../../../services/importHelpers'
 import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../../../article/Article.api'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { initFirebase } from '../../../../services/firebase/Firebase'
+import { firebase } from '../../../../services/firebase/Firebase'
 import { useTransformToModels } from '../../../../hooks/useTransformToModels'
 import { Splash } from '../../../../article/grid/splash/Splash'
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 
 interface Props {
   articlesData: any[]
@@ -44,13 +45,15 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { firestore } = initFirebase()
+  const { db } = firebase()
 
-  const response = await firestore()
-    .collection('articles')
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
+  const response = await getDocs(
+    query(
+      collection(db, 'articles'),
+      orderBy('sortOrder', 'desc'),
+      limit(PAGE_SIZE),
+    ),
+  )
   const articlesData = !!response.size
     ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
     : []

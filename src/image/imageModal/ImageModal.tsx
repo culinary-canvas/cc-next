@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import s from './ImageModal.module.scss'
-import ReactCrop, { PercentCrop } from 'react-image-crop'
+import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { FileInput } from '../../shared/fileInput/FileInput'
 import { observer } from 'mobx-react-lite'
@@ -51,8 +51,10 @@ export const ImageModal = observer((props: ImageModalProps) => {
                   className={s.imageCrop}
                   src={store.image.url}
                   crossorigin="anonymous"
-                  onImageLoaded={(image) => (imageRef.current = image)}
-                  crop={store.cropValues as PercentCrop}
+                  onImageLoaded={(image) => {
+                    imageRef.current = image
+                  }}
+                  crop={store.cropValues}
                   onChange={(_cropPx, percentCrop) =>
                     store.setNewCropValues(
                       new ImageCropValues(
