@@ -9,7 +9,8 @@ import { TextContentModel } from '../../../article/models/TextContent.model'
 import { PageHead } from '../../../shared/head/PageHead'
 import { ArticleView } from '../../../article/view/ArticleView'
 import { ArticleApi } from '../../../article/Article.api'
-import { initFirebase } from '../../../services/firebase/Firebase'
+import { firebase } from '../../../services/firebase/Firebase'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 
 interface Props {
   articleData: any
@@ -27,9 +28,11 @@ const ArticlePage = observer(({ articleData }: Props) => {
         imageAlt={article.imageContent.alt}
         title={article.title}
         description={
-          (article.titleSection.contents.find(
-            (c) => c.type === ContentType.SUB_HEADING,
-          ) as TextContentModel)?.value
+          (
+            article.titleSection.contents.find(
+              (c) => c.type === ContentType.SUB_HEADING,
+            ) as TextContentModel
+          )?.value
         }
       />
       <main className={s.container}>
@@ -60,12 +63,11 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
 export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
   params,
 }) => {
-  const { firestore } = initFirebase()
+  const { db } = firebase()
 
-  const response = await firestore()
-    .collection('articles')
-    .where('slug', '==', params.slug)
-    .get()
+  const response = await getDocs(
+    query(collection(db, 'articles'), where('slug', '==', params.slug)),
+  )
   const articleData = !!response.size
     ? { id: response.docs[0].id, ...response.docs[0].data() }
     : []

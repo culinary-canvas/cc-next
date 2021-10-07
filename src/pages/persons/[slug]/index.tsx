@@ -7,7 +7,7 @@ import { PageHead } from '../../../shared/head/PageHead'
 import { classnames, isNil } from '../../../services/importHelpers'
 import { ArticleGrid } from '../../../article/grid/ArticleGrid'
 import ArticleApi from '../../../article/Article.api'
-import { initFirebase } from '../../../services/firebase/Firebase'
+import { firebase } from '../../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../../_app'
 import { PersonModel } from '../../../person/models/Person.model'
@@ -16,6 +16,14 @@ import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
 import { ArticleLabel } from '../../../article/models/ArticleLabel'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 import { ArticleService } from '../../../article/Article.service'
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 
 interface Props {
   articlesData: any[]
@@ -102,8 +110,8 @@ interface StaticProps {
 }
 
 export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
-  const { firestore } = initFirebase()
-  const response = await firestore().collection('persons').get()
+  const { db } = firebase()
+  const response = await getDocs(collection(db, 'persons'))
   return {
     paths: response.docs.map((d) => ({
       params: {
@@ -118,25 +126,26 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const { firestore } = initFirebase()
+  const { db } = firebase()
 
-  const personResponse = await firestore()
-    .collection('persons')
-    .where('slug', '==', params.slug)
-    .get()
+  const personResponse = await getDocs(
+    query(collection(db, 'persons'), where('slug', '==', params.slug)),
+  )
 
   const personData: { [key: string]: any } = {
     ...personResponse.docs[0].data(),
     id: personResponse.docs[0].id,
   }
 
-  const articlesResponse = await firestore()
-    .collection('articles')
-    .where('published', '==', true)
-    .where('personIds', 'array-contains', personData.id)
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
+  const articlesResponse = await getDocs(
+    query(
+      collection(db, 'articles'),
+      where('published', '==', true),
+      where('personIds', 'array-contains', personData.id),
+      orderBy('sortOrder', 'desc'),
+      limit(PAGE_SIZE),
+    ),
+  )
   const articlesData = !!articlesResponse.size
     ? articlesResponse.docs
         .map((d) => ({ id: d.id, ...d.data() }))

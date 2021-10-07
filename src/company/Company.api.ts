@@ -1,22 +1,32 @@
 import { Transformer } from '../services/db/Transformer'
 import { ModelService } from '../services/db/Model.service'
-import { initFirebase } from '../services/firebase/Firebase'
+import { firebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { CompanyModel } from './models/Company.model'
 import { StorageService } from '../services/storage/Storage.service'
 import { CompanyService } from './Company.service'
 import slugify from 'voca/slugify'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore'
 
 export class CompanyApi {
-  private static readonly COLLECTION = 'companies'
+  static readonly COLLECTION = 'companies'
 
   static async byId(id: string): Promise<CompanyModel> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(CompanyModel))
-      .doc(id)
-      .get()
+    const { db } = firebase()
+    const response = await getDoc(
+      doc(db, this.COLLECTION, id).withConverter(
+        Transformer.firestoreConverter(CompanyModel),
+      ),
+    )
     return response.exists ? response.data() : null
   }
 
@@ -27,33 +37,33 @@ export class CompanyApi {
   }
 
   static async all(): Promise<CompanyModel[]> {
-    const { firestore } = initFirebase()
-
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(CompanyModel))
-      .get()
-
+    const { db } = firebase()
+    const response = await getDocs(
+      collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(CompanyModel),
+      ),
+    )
     return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async allNoTransform(): Promise<{ [key: string]: any }[]> {
-    const { firestore } = initFirebase()
-
-    const response = await firestore().collection(this.COLLECTION).get()
-
+    const { db } = firebase()
+    const response = await getDocs(collection(db, this.COLLECTION))
     return !!response.size
       ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
       : []
   }
 
   static async bySlug(slug: string): Promise<CompanyModel[]> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(CompanyModel))
-      .where('slug', '==', slug)
-      .get()
+    const { db } = firebase()
+    const response = await getDocs(
+      query(
+        collection(db, this.COLLECTION).withConverter(
+          Transformer.firestoreConverter(CompanyModel),
+        ),
+        where('slug', '==', slug),
+      ),
+    )
     return response.size ? response.docs.map((d) => d.data()) : []
   }
 
@@ -63,7 +73,7 @@ export class CompanyApi {
     onProgress: (progress: number, message?: string) => any = this.logProgress,
   ): Promise<string> {
     onProgress(0, '')
-    const { firestore } = initFirebase()
+    const { db } = firebase()
 
     onProgress(0.05)
     ModelService.beforeSave(company, userId)
@@ -83,17 +93,12 @@ export class CompanyApi {
     }
 
     onProgress(0.8)
-    let collectionRef = firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(CompanyModel))
-
-    const doc = !!company.id
-      ? collectionRef.doc(company.id)
-      : collectionRef.doc()
-    await doc.set(company)
-
+    const ref = doc(db, this.COLLECTION, company?.id).withConverter(
+      Transformer.firestoreConverter(CompanyModel),
+    )
+    await setDoc(ref, company)
     onProgress(1, 'Done!')
-    return doc.id
+    return ref.id
   }
 
   static async delete(
@@ -106,9 +111,9 @@ export class CompanyApi {
       initialProgress,
       `Deleting ${company.name || 'company with no name'}`,
     )
-    const { firestore } = initFirebase()
+    const { db } = firebase()
     onProgress(0.5, '')
-    await firestore().collection(this.COLLECTION).doc(company.id).delete()
+    await deleteDoc(doc(db, this.COLLECTION, company.id))
     onProgress(1, 'Done!')
   }
 
@@ -130,12 +135,13 @@ export class CompanyApi {
     }
 
     if (StorageService.isLocal(company.imageSet.original.url)) {
-      company.imageSet.original.url = await StorageService.storeFileFromLocalUrl(
-        company.imageSet.original.url,
-        company.imageSet.original.fileName,
-        `companies/${company.id}`,
-        (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
-      )
+      company.imageSet.original.url =
+        await StorageService.storeFileFromLocalUrl(
+          company.imageSet.original.url,
+          company.imageSet.original.fileName,
+          `companies/${company.id}`,
+          (p) => onProgress(0.5 + p * 0.25, 'Uploading original image'),
+        )
     }
   }
 }

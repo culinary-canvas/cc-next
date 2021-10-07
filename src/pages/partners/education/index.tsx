@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next'
 import { PageHead } from '../../../shared/head/PageHead'
 import React, { useEffect } from 'react'
 import s from './education.module.scss'
-import { initFirebase } from '../../../services/firebase/Firebase'
+import { firebase } from '../../../services/firebase/Firebase'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 import { ArticleModel } from '../../../article/models/Article.model'
 import { useRouter } from 'next/router'
@@ -16,6 +16,15 @@ import { CompanyModel } from '../../../company/models/Company.model'
 import { CompanyView } from '../../../company/view/CompanyView'
 import { LeadForm } from '../../../shared/leadForm/LeadForm'
 import { ArticleService } from '../../../article/Article.service'
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
+import { CompanyApi } from '../../../company/Company.api'
 
 const PAGE_SIZE = 6
 
@@ -82,25 +91,29 @@ export default function Education({ articlesData, companyData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { firestore } = initFirebase()
+  const { db } = firebase()
 
-  const companyResponse = await firestore()
-    .collection('companies')
-    .where('slug', '==', 'culinary-arts-academy-switzerland-caas')
-    .get()
+  const companyResponse = await getDocs(
+    query(
+      collection(db, CompanyApi.COLLECTION),
+      where('slug', '==', 'culinary-arts-academy-switzerland-caas'),
+    ),
+  )
 
   const companyData: { [key: string]: any } = {
     ...companyResponse.docs[0].data(),
     id: companyResponse.docs[0].id,
   }
 
-  const articlesResponse = await firestore()
-    .collection('articles')
-    .where('published', '==', true)
-    .where('companyIds', 'array-contains', companyData.id)
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
+  const articlesResponse = await getDocs(
+    query(
+      collection(db, ArticleApi.COLLECTION),
+      where('published', '==', true),
+      where('companyIds', 'array-contains', companyData.id),
+      orderBy('sortOrder', 'desc'),
+      limit(PAGE_SIZE),
+    ),
+  )
 
   const articlesData = !!articlesResponse.size
     ? articlesResponse.docs

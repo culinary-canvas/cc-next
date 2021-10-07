@@ -1,3 +1,4 @@
+@use "sass:math";
 $animation-duration: 700;
 
 @keyframes scale {
@@ -23,7 +24,7 @@ $animation-duration: 700;
   }
 
   .dot:nth-child(2) {
-    animation-delay: #{$animation-duration/2}ms;
+    animation-delay: math.div($animation-duration, 2)ms;
   }
   .dot:nth-child(3) {
     animation-delay: #{$animation-duration}ms;

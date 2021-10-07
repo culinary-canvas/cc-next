@@ -11,16 +11,17 @@ import {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
-} from '@firebase/firestore-types'
-import firebase from 'firebase/app'
+  Timestamp,
+  WithFieldValue,
+} from 'firebase/firestore'
 
 export class Transformer {
   static firestoreConverter<T>(clazz: Class<T>): FirestoreDataConverter<T> {
     return {
-      toFirestore(modelObject: T): DocumentData {
+      toFirestore(modelObject: WithFieldValue<T>): DocumentData {
         return Transformer.modelToDb(modelObject)
       },
-      fromFirestore(snapshot: QueryDocumentSnapshot): T {
+      fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): T {
         return Transformer.dbToModel(snapshot, clazz)
       },
     }
@@ -108,7 +109,7 @@ export class Transformer {
 
   private static toDbValue(fieldValue: any, isRelated: boolean) {
     if (!isNil(fieldValue) && fieldValue instanceof Date) {
-      return firebase.firestore.Timestamp.fromDate(fieldValue)
+      return Timestamp.fromDate(fieldValue)
     }
 
     if (isRelated) {
@@ -128,10 +129,7 @@ export class Transformer {
   private static toModelValue(fieldValue: any, type: Class) {
     if (!!type) {
       return type === Date && !!fieldValue.seconds
-        ? new firebase.firestore.Timestamp(
-            fieldValue.seconds,
-            fieldValue.nanoseconds,
-          ).toDate()
+        ? new Timestamp(fieldValue.seconds, fieldValue.nanoseconds).toDate()
         : Transformer.dbToModel(fieldValue, type)
     }
     return fieldValue

@@ -1,23 +1,32 @@
 import { Transformer } from '../services/db/Transformer'
 import { ModelService } from '../services/db/Model.service'
-import { initFirebase } from '../services/firebase/Firebase'
+import { firebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import { PersonModel } from './models/Person.model'
 import { StorageService } from '../services/storage/Storage.service'
-import { DocumentChange } from '@firebase/firestore-types'
 import { PersonService } from './Person.service'
 import slugify from 'voca/slugify'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore'
 
 export class PersonApi {
   private static readonly COLLECTION = 'persons'
 
-  static async byId(id: string): Promise<PersonModel> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .doc(id)
-      .get()
+  static async byId(id: PersonModel['id']): Promise<PersonModel> {
+    const { db } = firebase()
+    const response = await getDoc(
+      doc(db, this.COLLECTION, id).withConverter(
+        Transformer.firestoreConverter(PersonModel),
+      ),
+    )
     return response.exists ? response.data() : null
   }
 
@@ -27,56 +36,49 @@ export class PersonApi {
     )
   }
 
-  static async byCompanyId(companyId: string) {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .where('companyId', '==', companyId)
-      .get()
+  static async byCompanyId(companyId: PersonModel['companyId']) {
+    const { db } = firebase()
+    const response = await getDocs(
+      query(
+        collection(db, this.COLLECTION).withConverter(
+          Transformer.firestoreConverter(PersonModel),
+        ),
+        where('companyId', '==', companyId),
+      ),
+    )
     return response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async all(): Promise<PersonModel[]> {
-    const { firestore } = initFirebase()
-
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .get()
+    const { db } = firebase()
+    const response = await getDocs(
+      collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(PersonModel),
+      ),
+    )
 
     return !!response.size ? response.docs.map((d) => d.data()) : []
   }
 
   static async allNoTransform(): Promise<{ [key: string]: any }[]> {
-    const { firestore } = initFirebase()
-
-    const response = await firestore().collection(this.COLLECTION).get()
+    const { db } = firebase()
+    const response = await getDocs(collection(db, this.COLLECTION))
 
     return !!response.size
       ? response.docs.map((d) => ({ id: d.id, ...d.data() }))
       : []
   }
 
-  static subscribeAll(
-    onChange: (changes: DocumentChange<PersonModel>[]) => any,
-  ): () => void {
-    const { firestore } = initFirebase()
-    return firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .onSnapshot((querySnapshot) => {
-        onChange(querySnapshot.docChanges())
-      })
-  }
-
   static async bySlug(slug: string): Promise<PersonModel[]> {
-    const { firestore } = initFirebase()
-    const response = await firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-      .where('slug', '==', slug)
-      .get()
+    const { db } = firebase()
+    const response = await getDocs(
+      query(
+        collection(db, this.COLLECTION).withConverter(
+          Transformer.firestoreConverter(PersonModel),
+        ),
+        where('slug', '==', slug),
+      ),
+    )
     return response.size ? response.docs.map((d) => d.data()) : []
   }
 
@@ -86,7 +88,7 @@ export class PersonApi {
     onProgress: (progress: number, message?: string) => any = this.logProgress,
   ): Promise<string> {
     onProgress(0, '')
-    const { firestore } = initFirebase()
+    const { db } = firebase()
 
     onProgress(0.05)
     ModelService.beforeSave(person, userId)
@@ -106,15 +108,12 @@ export class PersonApi {
     }
 
     onProgress(0.8)
-    let collectionRef = firestore()
-      .collection(this.COLLECTION)
-      .withConverter(Transformer.firestoreConverter(PersonModel))
-
-    const doc = !!person.id ? collectionRef.doc(person.id) : collectionRef.doc()
-    await doc.set(person)
-
+    const ref = doc(db, this.COLLECTION, person?.id).withConverter(
+      Transformer.firestoreConverter(PersonModel),
+    )
+    await setDoc(ref, person)
     onProgress(1, 'Done!')
-    return doc.id
+    return ref.id
   }
 
   static async delete(
@@ -127,9 +126,9 @@ export class PersonApi {
       initialProgress,
       `Deleting ${person.name || 'person with no name'}`,
     )
-    const { firestore } = initFirebase()
+    const { db } = firebase()
     onProgress(0.5, '')
-    await firestore().collection(this.COLLECTION).doc(person.id).delete()
+    await deleteDoc(doc(db, this.COLLECTION, person.id))
     onProgress(1, 'Done!')
   }
 

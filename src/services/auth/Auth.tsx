@@ -1,5 +1,10 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut as authSignOut,
+  User,
+} from 'firebase/auth'
 import {
   createContext,
   useCallback,
@@ -7,7 +12,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { initFirebase } from '../firebase/Firebase'
+import { firebase } from '../firebase/Firebase'
 
 export interface Auth {
   readonly userId: string
@@ -18,25 +23,29 @@ export interface Auth {
 }
 
 export function useAuthState(): Auth {
-  const [user, setUser] = useState<firebase.User>()
+  const [user, setUser] = useState<User>()
   const [userId, setUserId] = useState<string>()
   const isSignedIn = useMemo(() => !!user, [user])
 
   const init = () => {
-    initFirebase()
-    firebase.auth().onAuthStateChanged((user) => authStateChanged(user))
+    const { firebase: firebaseApp } = firebase()
+    const auth = getAuth(firebaseApp)
+    onAuthStateChanged(auth, (user) => authStateChanged(user))
   }
   const signIn = async (email: string, password: string) => {
-    initFirebase()
-    await firebase.auth().signInWithEmailAndPassword(email, password)
+    const { firebase: firebaseApp } = firebase()
+    const auth = getAuth(firebaseApp)
+    await signInWithEmailAndPassword(auth, email, password)
   }
 
   const signOut = useCallback(async () => {
-    await firebase.auth().signOut()
+    const { firebase: firebaseApp } = firebase()
+    const auth = getAuth(firebaseApp)
+    await authSignOut(auth)
     setUser(null)
   }, [])
 
-  function authStateChanged(user: firebase.User) {
+  function authStateChanged(user: User) {
     setUser(user)
     setUserId(user?.uid)
   }

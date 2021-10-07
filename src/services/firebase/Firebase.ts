@@ -1,10 +1,20 @@
-import firebase from 'firebase/app'
-// import 'firebase/storage'
-import 'firebase/functions'
+import { FirebaseApp, initializeApp } from 'firebase/app'
+import { Firestore, getFirestore } from 'firebase/firestore'
+import { FirebaseStorage, getStorage } from 'firebase/storage'
+import {
+  connectFunctionsEmulator,
+  Functions,
+  getFunctions,
+} from 'firebase/functions'
 
-export const initFirebase = () => {
+export function firebase(): {
+  firebase: FirebaseApp
+  db: Firestore
+  storage: FirebaseStorage
+  functions: Functions
+} {
   try {
-    firebase.initializeApp({
+    const firebase = initializeApp({
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DB_URL,
@@ -14,14 +24,17 @@ export const initFirebase = () => {
       appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     })
 
+    const functions = getFunctions(firebase)
     if (process.env.NODE_ENV === 'development') {
-      firebase.functions().useEmulator('localhost', 5001)
+      connectFunctionsEmulator(functions, 'localhost', 5001)
     }
+    const db = getFirestore(firebase)
+    const storage = getStorage(firebase)
+
+    return { firebase, db, storage, functions }
   } catch (err) {
     if (!/already exists/.test(err.message)) {
       console.error('Firebase initialization error', err.stack)
     }
   }
-
-  return firebase
 }

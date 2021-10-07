@@ -17,7 +17,7 @@ import { TextEditService } from './form/text/TextEdit.service'
 import { PersonApi } from '../person/Person.api'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
-import firebase from 'firebase/app'
+import { DocumentData, Timestamp } from 'firebase/firestore'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -104,9 +104,8 @@ export class ArticleService {
 
     const progressPerImage = 0.5 / this.countImagesToUpload(article)
 
-    const contentsWithImagesToUpload = this.getContentsWithImagesToUpload(
-      article,
-    )
+    const contentsWithImagesToUpload =
+      this.getContentsWithImagesToUpload(article)
 
     return Promise.all(
       contentsWithImagesToUpload.map(async (content) =>
@@ -295,7 +294,7 @@ export class ArticleService {
     )
   }
 
-  static rawArticleIsPublished(rawArticle: firebase.firestore.DocumentData) {
+  static rawArticleIsPublished(rawArticle: DocumentData) {
     if (!rawArticle.published) {
       return false
     }
@@ -304,7 +303,7 @@ export class ArticleService {
       return true
     }
 
-    const publishDate = new firebase.firestore.Timestamp(
+    const publishDate = new Timestamp(
       rawArticle.publishDate.seconds,
       rawArticle.publishDate.nanoseconds,
     ).toDate()

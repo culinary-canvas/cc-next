@@ -1,3 +1,4 @@
+@use "sass:math";
 @import '../../../styles/icon';
 @import '../../../styles/color';
 @import '../../../styles/font';
@@ -21,7 +22,7 @@
   overflow: hidden;
 
   &.open {
-    left: -$icon-size-l/2;
+    left: math.div(-$icon-size-l, 2);
 
     @include media('<phone') {
       transform: translateX($sidebar-width-phone);
@@ -39,7 +40,7 @@
 }
 
 .menuButton {
-  transform: scale(0.8)
+  transform: scale(0.8);
 }
 
 .container {

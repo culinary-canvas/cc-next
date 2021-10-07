@@ -6,7 +6,7 @@ export function useReaction<T = any>(
   predicate: () => T,
   action: (arg: T) => any,
   deps = [],
-  options?: IReactionOptions,
+  options?: IReactionOptions<T>,
 ) {
   const disposer = useRef<IReactionDisposer>()
 
