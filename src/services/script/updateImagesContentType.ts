@@ -1,15 +1,19 @@
 import { ArticleApi } from '../../article/Article.api'
-import { initFirebase } from '../firebase/Firebase'
 import { ImageFile } from '../../image/models/ImageFile'
-import firebase from 'firebase/app'
 import { StorageService } from '../storage/Storage.service'
-import { ArticleModel } from '../../article/models/Article.model'
+import {
+  FirebaseStorage,
+  getMetadata,
+  ref,
+  updateMetadata,
+} from 'firebase/storage'
 import { FileService } from '../file/FileService'
 import { PersonApi } from '../../person/Person.api'
 import { CompanyApi } from '../../company/Company.api'
+import { firebase } from '../firebase/Firebase'
 
 export async function updateImagesContentType(userId: string) {
-  const storage = initFirebase().storage()
+  const { storage } = firebase()
   const articles = await ArticleApi.all()
   for (let article of articles) {
     for (let imageContent of article.imageContents) {
@@ -44,48 +48,45 @@ export async function updateImagesContentType(userId: string) {
 
   const persons = await PersonApi.all()
   for (let person of persons) {
-      if (
-        !!person.imageSet.original?.fileName &&
-        StorageService.isThisStorage(person.imageSet.original?.url)
-      ) {
-        await update(person.imageSet.original, storage)
-      }
-      if (
-        !!person.imageSet.image?.fileName &&
-        StorageService.isThisStorage(person.imageSet.image?.url)
-      ) {
-        await update(person.imageSet.image, storage)
-      }
+    if (
+      !!person.imageSet.original?.fileName &&
+      StorageService.isThisStorage(person.imageSet.original?.url)
+    ) {
+      await update(person.imageSet.original, storage)
+    }
+    if (
+      !!person.imageSet.image?.fileName &&
+      StorageService.isThisStorage(person.imageSet.image?.url)
+    ) {
+      await update(person.imageSet.image, storage)
+    }
   }
 
   const companies = await CompanyApi.all()
   for (let company of companies) {
-      if (
-        !!company.imageSet.original?.fileName &&
-        StorageService.isThisStorage(company.imageSet.original?.url)
-      ) {
-        await update(company.imageSet.original, storage)
-      }
-      if (
-        !!company.imageSet.image?.fileName &&
-        StorageService.isThisStorage(company.imageSet.image?.url)
-      ) {
-        await update(company.imageSet.image, storage)
-      }
+    if (
+      !!company.imageSet.original?.fileName &&
+      StorageService.isThisStorage(company.imageSet.original?.url)
+    ) {
+      await update(company.imageSet.original, storage)
+    }
+    if (
+      !!company.imageSet.image?.fileName &&
+      StorageService.isThisStorage(company.imageSet.image?.url)
+    ) {
+      await update(company.imageSet.image, storage)
+    }
   }
   console.log('Done!')
 }
 
-async function update(
-  image: ImageFile,
-  storage: firebase.storage.Storage,
-) {
+async function update(image: ImageFile, storage: FirebaseStorage) {
   try {
     const contentType = FileService.getContentType(image.url)
     if (!!contentType) {
-      const imageRef = storage.refFromURL(image.url)
+      const imageRef = ref(storage, image.url)
 
-      const currentContentType = (await imageRef.getMetadata()).contentType
+      const currentContentType = (await getMetadata(imageRef)).contentType
       const alreadySet = Object.values(FileService.CONTENT_TYPES).includes(
         currentContentType,
       )
@@ -97,7 +98,7 @@ async function update(
       console.log(
         `setting contentType ${contentType} for image ${image.url} (had ${currentContentType}`,
       )
-      await imageRef.updateMetadata({ contentType })
+      await updateMetadata(imageRef, { contentType })
     } else {
       console.warn("couldn't figure this one out...", image.url)
     }

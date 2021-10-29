@@ -9,7 +9,7 @@ import { ArticleGrid } from '../../article/grid/ArticleGrid'
 import { ArticleApi } from '../../article/Article.api'
 import { ArticleTypeService } from '../../article/services/ArticleType.service'
 import StringUtils from '../../services/utils/StringUtils'
-import { initFirebase } from '../../services/firebase/Firebase'
+import { firebase } from '../../services/firebase/Firebase'
 import { useRouter } from 'next/router'
 import { isServer } from '../_app'
 import { useTransformToModels } from '../../hooks/useTransformToModels'
@@ -17,6 +17,14 @@ import { useMenu } from '../../menu/Menu.context'
 import { menuOptions } from '../../menu/models/menuOptions'
 import { AppService } from '../../services/App.service'
 import { ArticleService } from '../../article/Article.service'
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 
 interface Props {
   articlesData: any[]
@@ -87,16 +95,18 @@ export const getStaticProps: GetStaticProps<
   Props & { [key: string]: any },
   StaticProps
 > = async ({ params }) => {
-  const { firestore } = initFirebase()
+  const { db } = firebase()
   const type = ArticleTypeService.findByKebabCase(params.type)
 
-  const response = await firestore()
-    .collection('articles')
-    .where('published', '==', true)
-    .where('type', '==', type)
-    .orderBy('sortOrder', 'desc')
-    .limit(PAGE_SIZE)
-    .get()
+  const response = await getDocs(
+    query(
+      collection(db, 'articles'),
+      where('published', '==', true),
+      where('type', '==', type),
+      orderBy('sortOrder', 'desc'),
+      limit(PAGE_SIZE),
+    ),
+  )
   const articlesData = !!response.size
     ? response.docs
         .map((d) => ({ id: d.id, ...d.data() }))

@@ -1,5 +1,5 @@
-import 'firebase/storage'
-import { initFirebase } from '../firebase/Firebase'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
+import { firebase } from '../firebase/Firebase'
 
 export class StorageService {
   static async storeFile(
@@ -8,21 +8,18 @@ export class StorageService {
     path?: string,
     progressCallback?: (progress: number) => any,
   ): Promise<string> {
-    const { storage } = initFirebase()
-
-    const uploadTask = storage()
-      .ref()
-      .child(`${path}/${file.name}`)
-      .put(file, { contentType })
+    const { storage } = firebase()
+    const storageRef = ref(storage, `${path}/${file.name}`)
+    const uploadTask = uploadBytesResumable(storageRef, file, { contentType })
 
     return new Promise<string>((resolve, reject) => {
       uploadTask.on(
-        storage.TaskEvent.STATE_CHANGED,
+        'state_changed',
         (snapshot) =>
           !!progressCallback &&
           progressCallback(snapshot.bytesTransferred / snapshot.totalBytes),
         (error) => reject(error),
-        async () => resolve(await uploadTask.snapshot.ref.getDownloadURL()),
+        async () => resolve(await getDownloadURL(uploadTask.snapshot.ref)),
       )
     })
   }
@@ -36,7 +33,7 @@ export class StorageService {
     const result = await fetch(localUrl)
     const blob = await result.blob()
     const file = new File([blob], fileName)
-    return StorageService.storeFile(file, blob.type, path, progressCallback)
+    return this.storeFile(file, blob.type, path, progressCallback)
   }
 
   static isRemote(url: string) {

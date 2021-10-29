@@ -8,7 +8,20 @@ import { ArticleForm } from '../../../../article/form/ArticleForm'
 import { useAdmin } from '../../../../admin/Admin.context'
 import { useUnmount } from '../../../../hooks/useUnmount'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { initFirebase } from '../../../../services/firebase/Firebase'
+import { firebase } from '../../../../services/firebase/Firebase'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  setDoc,
+  startAfter,
+  where,
+} from 'firebase/firestore'
 
 interface Props {
   articleData: any
@@ -47,23 +60,21 @@ export default function ArticleEdit({ articleData }) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<
-  Props,
-  { slug: string }
-> = async ({ params }) => {
-  const { firestore } = initFirebase()
+export const getServerSideProps: GetServerSideProps<Props, { slug: string }> =
+  async ({ params }) => {
+    const { db } = firebase()
 
-  const response = await firestore()
-    .collection('articles')
-    .where('slug', '==', params.slug)
-    .get()
-  const articleData = !!response.size
-    ? { id: response.docs[0].id, ...response.docs[0].data() }
-    : []
+    const response = await getDocs(
+      query(collection(db, 'articles'), where('slug', '==', params.slug)),
+    )
 
-  return {
-    props: {
-      articleData: JSON.parse(JSON.stringify(articleData)),
-    },
+    const articleData = !!response.size
+      ? { id: response.docs[0].id, ...response.docs[0].data() }
+      : []
+
+    return {
+      props: {
+        articleData: JSON.parse(JSON.stringify(articleData)),
+      },
+    }
   }
-}
