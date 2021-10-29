@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3-beta.3](https://github.com/culinary-canvas/cc-next/compare/v1.6.3-beta.2...v1.6.3-beta.3) (2021-10-29)
+
 ### [1.6.3-beta.2](https://github.com/culinary-canvas/cc-next/compare/v1.6.3-beta.1...v1.6.3-beta.2) (2021-10-29)
 
 ### [1.6.3-beta.1](https://github.com/culinary-canvas/cc-next/compare/v1.6.3-beta.0...v1.6.3-beta.1) (2021-10-07)
