@@ -1,16 +1,18 @@
-import React from 'react'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { observer } from 'mobx-react-lite'
-import { ArticleModel } from '../../../article/models/Article.model'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import s from './articlePage.module.scss'
+import React, { useEffect } from 'react'
+import { ArticleApi } from '../../../article/Article.api'
+import { ArticleModel } from '../../../article/models/Article.model'
 import { ContentType } from '../../../article/models/ContentType'
 import { TextContentModel } from '../../../article/models/TextContent.model'
-import { PageHead } from '../../../shared/head/PageHead'
 import { ArticleView } from '../../../article/view/ArticleView'
-import { ArticleApi } from '../../../article/Article.api'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { firebase } from '../../../services/firebase/Firebase'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { PageHead } from '../../../shared/head/PageHead'
+import s from './articlePage.module.scss'
+import { SectionModel } from '../../../article/models/Section.model'
+import { runInAction, toJS } from 'mobx'
 
 interface Props {
   articleData: any
@@ -18,6 +20,16 @@ interface Props {
 
 const ArticlePage = observer(({ articleData }: Props) => {
   const article = useTransformToModel(articleData, ArticleModel)
+
+  useEffect(() => {
+    if (!!article) {
+      runInAction(() =>
+        article.sections.sort(
+          (s1, s2) => getSectionSortValue(s1) - getSectionSortValue(s2),
+        ),
+      )
+    }
+  }, [article])
 
   return (
     <>
@@ -60,6 +72,12 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
   }
 }
 
+function getSectionSortValue(s: SectionModel) {
+  return (
+    s.format.gridPosition.startRow + s.format.gridPosition.startColumn / 1000
+  )
+}
+
 export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
   params,
 }) => {
@@ -70,7 +88,7 @@ export const getStaticProps: GetStaticProps<Props, StaticProps> = async ({
   )
   const articleData = !!response.size
     ? { id: response.docs[0].id, ...response.docs[0].data() }
-    : []
+    : null
 
   return {
     props: {
