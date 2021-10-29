@@ -96,6 +96,7 @@ export const ImageContent = observer((props: Props) => {
         height={
           section.format.height === Size.FIT_CONTENT && content.set.image.height
         }
+        quality={60}
         // @ts-ignore
         layout={
           section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
