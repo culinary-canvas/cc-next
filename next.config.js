@@ -11,6 +11,7 @@ module.exports = withBundleAnalyzer(
       domains: ['firebasestorage.googleapis.com'],
       // device sizes correspond (roughly) to 0.25 and 0.5 x BREAKPOINT
       deviceSizes: [172, 248, 344, 496, 688, 992, 1024, 1312, 2048, 4096],
+      minimumCacheTTL: 31536000,
     },
   }),
 )
