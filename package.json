@@ -1,6 +1,6 @@
 {
   "name": "cc-next",
-  "version": "1.7.0",
+  "version": "1.7.1-beta.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -49,6 +49,7 @@
     "remark-external-links": "^9.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.41.1",
+    "sharp": "^0.29.3",
     "uuid": "^8.3.2",
     "voca": "^1.4.0"
   },
