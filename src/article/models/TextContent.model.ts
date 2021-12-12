@@ -8,7 +8,7 @@ import { loremIpsum } from 'lorem-ipsum'
 export class TextContentModel extends ContentModel<TextFormat> {
   @field()
   @observable
-  value: string
+  value = ''
 
   @field()
   @observable
