@@ -1,14 +1,9 @@
-import { ArticleModel } from './models/Article.model'
-import { Transformer } from '../services/db/Transformer'
-import { ArticleService } from './Article.service'
-import { SortableService } from '../services/sortable/Sortable.service'
-import { isNil } from '../services/importHelpers'
-import { ModelService } from '../services/db/Model.service'
-import { firebase } from '../services/firebase/Firebase'
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
+  DocumentReference,
   getDoc,
   getDocs,
   limit,
@@ -19,7 +14,14 @@ import {
   where,
 } from 'firebase/firestore'
 import slugify from 'voca/slugify'
+import { ModelService } from '../services/db/Model.service'
+import { Transformer } from '../services/db/Transformer'
+import { firebase } from '../services/firebase/Firebase'
+import { isNil } from '../services/importHelpers'
+import { SortableService } from '../services/sortable/Sortable.service'
 import { ExtractGeneric } from '../services/types/ExtractGeneric'
+import { ArticleService } from './Article.service'
+import { ArticleModel } from './models/Article.model'
 
 export class ArticleApi {
   static readonly COLLECTION = 'articles'
@@ -325,10 +327,18 @@ export class ArticleApi {
     ModelService.beforeSave(article, userId)
 
     !!onProgress && onProgress(0.95)
-    const ref = doc(db, this.COLLECTION, article?.id).withConverter(
-      Transformer.firestoreConverter(ArticleModel),
-    )
-    await setDoc(ref, article)
+    let ref: DocumentReference
+    if (!!article?.id) {
+      ref = doc(db, this.COLLECTION, article.id).withConverter(
+        Transformer.firestoreConverter(ArticleModel),
+      )
+      await setDoc(ref, article)
+    } else {
+      const collRef = collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(ArticleModel),
+      )
+      ref = await addDoc(collRef, article)
+    }
 
     !!onProgress && onProgress(1, 'Done!')
     return ref.id
