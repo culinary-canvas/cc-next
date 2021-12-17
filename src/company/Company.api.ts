@@ -1,21 +1,23 @@
-import { Transformer } from '../services/db/Transformer'
-import { ModelService } from '../services/db/Model.service'
-import { firebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
-import { CompanyModel } from './models/Company.model'
-import { StorageService } from '../services/storage/Storage.service'
-import { CompanyService } from './Company.service'
-import slugify from 'voca/slugify'
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
+  DocumentReference,
   getDoc,
   getDocs,
   query,
   setDoc,
   where,
 } from 'firebase/firestore'
+import slugify from 'voca/slugify'
+import { ModelService } from '../services/db/Model.service'
+import { Transformer } from '../services/db/Transformer'
+import { firebase } from '../services/firebase/Firebase'
+import { StorageService } from '../services/storage/Storage.service'
+import { CompanyService } from './Company.service'
+import { CompanyModel } from './models/Company.model'
 
 export class CompanyApi {
   static readonly COLLECTION = 'companies'
@@ -93,10 +95,19 @@ export class CompanyApi {
     }
 
     onProgress(0.8)
-    const ref = doc(db, this.COLLECTION, company?.id).withConverter(
-      Transformer.firestoreConverter(CompanyModel),
-    )
-    await setDoc(ref, company)
+    let ref: DocumentReference
+    if (!!company.id) {
+      ref = doc(db, this.COLLECTION, company.id).withConverter(
+        Transformer.firestoreConverter(CompanyModel),
+      )
+      await setDoc(ref, company)
+    } else {
+      const collRef = collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(CompanyModel),
+      )
+      ref = await addDoc(collRef, company)
+    }
+
     onProgress(1, 'Done!')
     return ref.id
   }

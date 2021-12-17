@@ -90,6 +90,7 @@ export const CompanyForm = observer((props: Props) => {
               )
             } catch (e) {
               showError(e)
+              console.error(e)
             } finally {
               setLoading(false)
             }
