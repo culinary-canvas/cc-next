@@ -1,21 +1,23 @@
-import { Transformer } from '../services/db/Transformer'
-import { ModelService } from '../services/db/Model.service'
-import { firebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
-import { PersonModel } from './models/Person.model'
-import { StorageService } from '../services/storage/Storage.service'
-import { PersonService } from './Person.service'
-import slugify from 'voca/slugify'
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
+  DocumentReference,
   getDoc,
   getDocs,
   query,
   setDoc,
   where,
 } from 'firebase/firestore'
+import slugify from 'voca/slugify'
+import { ModelService } from '../services/db/Model.service'
+import { Transformer } from '../services/db/Transformer'
+import { firebase } from '../services/firebase/Firebase'
+import { StorageService } from '../services/storage/Storage.service'
+import { PersonModel } from './models/Person.model'
+import { PersonService } from './Person.service'
 
 export class PersonApi {
   private static readonly COLLECTION = 'persons'
@@ -108,10 +110,19 @@ export class PersonApi {
     }
 
     onProgress(0.8)
-    const ref = doc(db, this.COLLECTION, person?.id).withConverter(
-      Transformer.firestoreConverter(PersonModel),
-    )
-    await setDoc(ref, person)
+    let ref: DocumentReference
+    if (!!person.id) {
+      ref = doc(db, this.COLLECTION, person.id).withConverter(
+        Transformer.firestoreConverter(PersonModel),
+      )
+      await setDoc(ref, person)
+    } else {
+      const collRef = collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(PersonModel),
+      )
+      ref = await addDoc(collRef, person)
+    }
+
     onProgress(1, 'Done!')
     return ref.id
   }
