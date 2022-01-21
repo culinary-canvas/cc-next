@@ -21,7 +21,7 @@ interface Props {
 
 export const SectionEdit = observer((props: Props) => {
   const admin = useAdmin()
-  const { section, first } = props
+  const { section, first, article } = props
 
   const [style, setStyle] = useState<CSSProperties>()
   const ref = useRef<HTMLElement>()
@@ -55,7 +55,7 @@ export const SectionEdit = observer((props: Props) => {
         ])}
         style={{ ...style }}
       >
-        {section.contents.map((content,i) =>
+        {section.contents.map((content, i) =>
           content instanceof TextContentModel ? (
             admin.content?.uid === content.uid ? (
               <TextContentEdit key={content.uid} content={content} />
