@@ -31,9 +31,30 @@ $article-border-radius: 1rem;
 }
 
 @mixin articleContent {
+  position: relative;
   @include media('>phone') {
     gap: 2rem;
     @include articleGrid();
+  }
+
+  &.sponsored {
+    &:before,
+    &:after {
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      width: 8px;
+      height: 100%;
+      background-color: $green-light;
+      content: '';
+    }
+
+    &:before {
+      left: 0;
+    }
+    &:after {
+      right: 0;
+    }
   }
 }
 
@@ -56,4 +77,25 @@ $article-border-radius: 1rem;
   right: 3rem;
   z-index: 200;
   background-color: $white !important;
+}
+
+@mixin sponsoredFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 4px;
+  height: 100%;
+  background-color: $green-light;
+
+  &:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 4px;
+    height: 100%;
+    background-color: $green-light;
+    content: '';
+  }
 }

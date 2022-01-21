@@ -35,7 +35,11 @@ export const ArticleForm = observer((props: Props) => {
         </div>
       ) : (
         <article
-          className={classnames(s.content, `type-${article?.type}`)}
+          className={classnames(
+            s.content,
+            `type-${article?.type}`,
+            article.sponsored && s.sponsored,
+          )}
           style={{ backgroundColor: article.format.backgroundColor }}
         >
           {article.sections.map((section, i) => (

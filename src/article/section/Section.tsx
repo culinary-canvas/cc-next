@@ -1,4 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
+import { ArticleModel } from '../models/Article.model'
 import { SectionModel } from '../models/Section.model'
 import { observer } from 'mobx-react-lite'
 import { ImageContentModel } from '../models/ImageContent.model'
@@ -11,12 +12,13 @@ import { TextContentModel } from '../models/TextContent.model'
 import { motion } from 'framer-motion'
 
 interface Props {
+  article: ArticleModel
   section: SectionModel
   first: boolean
 }
 
 export const Section = observer((props: Props) => {
-  const { section, first } = props
+  const { article, section, first } = props
   const [style, setStyle] = useState<CSSProperties>()
 
   useEffect(() => {
@@ -45,7 +47,12 @@ export const Section = observer((props: Props) => {
       >
         {section.contents.map((content, i) =>
           content instanceof TextContentModel ? (
-            <TextContent key={content.uid} content={content} index={i} />
+            <TextContent
+              key={content.uid}
+              article={article}
+              content={content}
+              index={i}
+            />
           ) : (
             <ImageContent
               key={content.uid}

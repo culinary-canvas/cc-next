@@ -1,15 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import classNames from 'classnames'
 import { observer } from 'mobx-react-lite'
-import { Button } from '../../shared/button/Button'
 import { useRouter } from 'next/router'
-import { ArticleModel } from '../models/Article.model'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '../../services/auth/Auth'
-import s from './ArticleView.module.scss'
+import { Button } from '../../shared/button/Button'
+import { Related } from '../../shared/related/Related'
+import { ArticleService } from '../Article.service'
+import { ArticleModel } from '../models/Article.model'
+import { RelatedArticles } from '../related/RelatedArticles'
 import { Section } from '../section/Section'
 import { ArticleFooter } from '../shared/footer/ArticleFooter'
-import { RelatedArticles } from '../related/RelatedArticles'
-import { ArticleService } from '../Article.service'
-import { Related } from '../../shared/related/Related'
+import s from './ArticleView.module.scss'
 
 interface Props {
   article: ArticleModel
@@ -40,11 +41,12 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
         </Button>
       )}
       <article
-        className={s.content}
+        className={classNames(s.content, article.sponsored && s.sponsored)}
         style={{ backgroundColor: article.format.backgroundColor }}
       >
         {article.sections.map((section) => (
           <Section
+            article={article}
             first={section.format.gridPosition?.startRow === 1}
             key={section.uid}
             section={section}
