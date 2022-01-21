@@ -123,6 +123,11 @@ export const ArticleControls = observer(() => {
           onChange={(v) => runInAction(() => (article.type = v))}
           displayFormatter={(v) => StringUtils.toDisplayText(v)}
         />
+        <Checkbox
+          label="Sponsored"
+          checked={article.sponsored}
+          onChange={(v) => runInAction(() => (article.sponsored = v))}
+        />
       </ControlContainer>
 
       <ControlContainer label="Publish settings">

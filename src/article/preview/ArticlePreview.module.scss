@@ -3,6 +3,19 @@
 @import '../../styles/color';
 @import '../../styles/shadow';
 
+.sponsoredTag {
+  position: absolute;
+  top: -30px;
+  left: -10px;
+  z-index: 2;
+  background-color: $green-light;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  padding: 3px 20px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
 .article {
   position: relative;
   display: grid;
@@ -15,6 +28,13 @@
   transition: box-shadow $animation-medium $cubic-spring-more,
     transform $animation-fast linear;
   overflow-anchor: none;
+
+  &.sponsored {
+    border: 10px solid $green-light;
+    margin-top: 10px;
+    border-radius: 2px;
+    height: calc(100% - 10px);
+  }
 
   &:after {
     position: absolute;

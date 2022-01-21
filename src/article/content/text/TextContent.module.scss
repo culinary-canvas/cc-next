@@ -11,3 +11,22 @@
 @include textHorizontalAlign();
 @include verticalAlign();
 
+.h1 {
+  overflow: visible;
+  position: relative;
+}
+
+.sponsoredTag {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 400;
+  padding: 3px 20px;
+  background-color: $green-light;
+  cursor: default;
+  @include media('>phone') {
+    top: -40px;
+  }
+}
