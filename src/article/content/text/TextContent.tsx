@@ -1,16 +1,19 @@
-import React, { CSSProperties, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { TextContentModel as TextContentModel } from '../../models/TextContent.model'
-import { classnames } from '../../../services/importHelpers'
-import { ContentType } from '../../models/ContentType'
-import s from './TextContent.module.scss'
-import { useAutorun } from '../../../hooks/useAutorun'
-import { GridPositionService } from '../../grid/GridPosition.service'
-import ReactMarkdown from 'react-markdown'
+import classNames from 'classnames'
 import { motion } from 'framer-motion'
+import { observer } from 'mobx-react-lite'
+import React, { CSSProperties, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import { useAutorun } from '../../../hooks/useAutorun'
+import { classnames } from '../../../services/importHelpers'
+import { GridPositionService } from '../../grid/GridPosition.service'
+import { ArticleModel } from '../../models/Article.model'
+import { ContentType } from '../../models/ContentType'
+import { TextContentModel as TextContentModel } from '../../models/TextContent.model'
 import { TextContentService } from '../../services/TextContent.service'
+import s from './TextContent.module.scss'
 
 interface Props {
+  article: ArticleModel
   content: TextContentModel
   index: number
   onClick?: () => any
@@ -18,7 +21,7 @@ interface Props {
 }
 
 export const TextContent = observer((props: Props) => {
-  const { content, index, style, onClick } = props
+  const { article, content, index, style, onClick } = props
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
   const [formatClassNames, setFormatClassNames] = useState<string>('')
 
@@ -60,7 +63,7 @@ export const TextContent = observer((props: Props) => {
 
   return content.type === ContentType.TITLE ? (
     <motion.h1
-      className={formatClassNames}
+      className={classNames(s.h1, formatClassNames)}
       style={{ ...formatStyle, ...style }}
       onClick={() => !!onClick && onClick()}
       initial={{ opacity: 0 }}
@@ -68,6 +71,14 @@ export const TextContent = observer((props: Props) => {
       transition={{ delay: index * 0.5 }}
     >
       {content.value}
+      {article?.sponsored && (
+        <div
+          className={s.sponsoredTag}
+          title="This content is from one of our sponsors"
+        >
+          Sponsored content
+        </div>
+      )}
     </motion.h1>
   ) : (
     <motion.div
@@ -81,7 +92,7 @@ export const TextContent = observer((props: Props) => {
       <ReactMarkdown
         components={{
           link: ({ node }) => (
-            <a href={node.url as string} rel="noopener" target="_blank">
+            <a href={node.url as string} rel="noreferrer" target="_blank">
               {node.children[0].value}
             </a>
           ),

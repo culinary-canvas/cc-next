@@ -1,4 +1,5 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react'
+import { ArticleModel } from '../../models/Article.model'
 import { SectionModel } from '../../models/Section.model'
 import { observer } from 'mobx-react-lite'
 import { useAutorun } from '../../../hooks/useAutorun'
@@ -13,6 +14,7 @@ import { TextContentModel } from '../../models/TextContent.model'
 import { TextContent } from '../../content/text/TextContent'
 
 interface Props {
+  article: ArticleModel
   section: SectionModel
   first: boolean
 }
@@ -59,6 +61,7 @@ export const SectionEdit = observer((props: Props) => {
               <TextContentEdit key={content.uid} content={content} />
             ) : (
               <TextContent
+                article={article}
                 key={content.uid}
                 content={content}
                 onClick={() => admin.setContent(content)}

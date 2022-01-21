@@ -93,6 +93,10 @@ export class ArticleModel implements Model, Sortable {
   showOnStartPage = true
 
   @observable
+  @field()
+  sponsored = false
+
+  @observable
   @transient()
   persons: PersonModel[] = []
 
@@ -127,9 +131,9 @@ export class ArticleModel implements Model, Sortable {
   }
 
   @computed get titleContent(): TextContentModel {
-    return (this.titleSection.contents.find(
+    return this.titleSection.contents.find(
       (c) => c instanceof TextContentModel && c.type === ContentType.TITLE,
-    ) as unknown) as TextContentModel
+    ) as unknown as TextContentModel
   }
 
   @computed get title(): string {
@@ -137,9 +141,11 @@ export class ArticleModel implements Model, Sortable {
   }
 
   @computed get subHeading(): string {
-    return (this.titleSection.contents.find(
-      (c) => c.type === ContentType.SUB_HEADING,
-    ) as TextContentModel)?.value
+    return (
+      this.titleSection.contents.find(
+        (c) => c.type === ContentType.SUB_HEADING,
+      ) as TextContentModel
+    )?.value
   }
 
   @computed get imageContent(): ImageContentModel {

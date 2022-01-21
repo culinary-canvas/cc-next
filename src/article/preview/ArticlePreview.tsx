@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import s from './ArticlePreview.module.scss'
+import { useRouter } from 'next/router'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import { ImageSet } from '../../image/models/ImageSet'
+import { classnames } from '../../services/importHelpers'
+import StringUtils from '../../services/utils/StringUtils'
 import { Button } from '../../shared/button/Button'
+import { Image } from '../../shared/image/Image'
+import { COLOR } from '../../styles/_color'
+import { BREAKPOINT, CONTAINER_MAX_WIDTHS } from '../../styles/layout'
 import { ArticleModel } from '../models/Article.model'
+import { ArticleLabel } from '../models/ArticleLabel'
 import { ContentType } from '../models/ContentType'
 import { ImageContentModel } from '../models/ImageContent.model'
-import { TextContentModel } from '../models/TextContent.model'
-import StringUtils from '../../services/utils/StringUtils'
-import { useRouter } from 'next/router'
-import { classnames } from '../../services/importHelpers'
-import { COLOR } from '../../styles/_color'
-import ReactMarkdown from 'react-markdown'
-import { ArticleLabel } from '../models/ArticleLabel'
-import { ImageSet } from '../../image/models/ImageSet'
 import { ImageFormat } from '../models/ImageFormat'
-import { Image } from '../../shared/image/Image'
-import { BREAKPOINT, CONTAINER_MAX_WIDTHS } from '../../styles/layout'
+import { TextContentModel } from '../models/TextContent.model'
+import s from './ArticlePreview.module.scss'
 
 interface Props {
   article: ArticleModel
@@ -108,7 +108,16 @@ export const ArticlePreview = observer((props: Props) => {
   ])
 
   return (
-    <article className={classnames(s.article, className)}>
+    <article
+      className={classnames(
+        s.article,
+        className,
+        article.sponsored && s.sponsored,
+      )}
+    >
+      {!!article.sponsored && (
+        <div className={s.sponsoredTag}>Sponsored content</div>
+      )}
       <Image
         sizes={calculatedSizes}
         priority={preloadImage}
