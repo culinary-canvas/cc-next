@@ -23,8 +23,6 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
 
   useEffect(() => setArticle(propArticle), [propArticle])
 
-  console.debug('verifying')
-
   const loadRelated = useCallback(async () => {
     if (!article.isPopulated) {
       await ArticleService.populate(article)
