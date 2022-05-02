@@ -44,21 +44,16 @@ export const Header = () => {
         isSignedIn && s.isSignedIn,
       )}
     >
-      <ClientRender>
-        <BrowserView>
-          <Menu
-            className={classnames(s.menu, s.desktop)}
-            collapsed={collapsed}
-          />
-        </BrowserView>
-        <MobileView>
-          <MobileMenu
-            collapsed={collapsed}
-            className={classnames(s.menu, s.mobile)}
-            buttonClassName={classnames(s.mobile, s.mobileButton)}
-          />
-        </MobileView>
-      </ClientRender>
+      <BrowserView>
+        <Menu className={classnames(s.menu, s.desktop)} collapsed={collapsed} />
+      </BrowserView>
+      <MobileView>
+        <MobileMenu
+          collapsed={collapsed}
+          className={classnames(s.menu, s.mobile)}
+          buttonClassName={classnames(s.mobile, s.mobileButton)}
+        />
+      </MobileView>
     </header>
   )
 }

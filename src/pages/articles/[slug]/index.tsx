@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React, { useEffect } from 'react'
 import { ArticleApi } from '../../../article/Article.api'
+import { ArticleService } from '../../../article/Article.service'
 import { ArticleModel } from '../../../article/models/Article.model'
 import { ContentType } from '../../../article/models/ContentType'
 import { SectionModel } from '../../../article/models/Section.model'
@@ -22,6 +23,10 @@ interface Props {
 const ArticlePage = observer(({ articleData }: Props) => {
   const article = useTransformToModel(articleData, ArticleModel)
   const { isSignedIn } = useAuth()
+
+  useEffect(() => {
+    ArticleService.populateIssues([article])
+  }, [article])
 
   useEffect(() => {
     if (!!article) {

@@ -46,15 +46,6 @@ export const IssueForm = observer((props: Props) => {
     return null
   }
 
-  console.log(
-    formControl.isValid,
-    formControl.errors,
-    formControl.errorFields,
-    loading,
-    formControl.isClean,
-    issue.publishMonth,
-  )
-
   return (
     <article className={s.container}>
       <div className={s.buttonsContainer}>

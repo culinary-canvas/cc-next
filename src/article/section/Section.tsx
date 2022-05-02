@@ -1,15 +1,18 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
-import { ArticleModel } from '../models/Article.model'
-import { SectionModel } from '../models/Section.model'
-import { observer } from 'mobx-react-lite'
-import { ImageContentModel } from '../models/ImageContent.model'
-import { classnames } from '../../services/importHelpers'
-import s from './Section.module.scss'
-import { TextContent } from '../content/text/TextContent'
-import { ImageContent } from '../content/image/ImageContent'
-import { GridPositionService } from '../grid/GridPosition.service'
-import { TextContentModel } from '../models/TextContent.model'
 import { motion } from 'framer-motion'
+import { observer } from 'mobx-react-lite'
+import React, { CSSProperties, useEffect, useState } from 'react'
+import { classnames } from '../../services/importHelpers'
+import { ArticleService } from '../Article.service'
+import { ImageContent } from '../content/image/ImageContent'
+import { IssueContent } from '../content/issue/IssueContent'
+import { TextContent } from '../content/text/TextContent'
+import { GridPositionService } from '../grid/GridPosition.service'
+import { ArticleModel } from '../models/Article.model'
+import { ImageContentModel } from '../models/ImageContent.model'
+import { IssueContentModel } from '../models/IssueContent.model'
+import { SectionModel } from '../models/Section.model'
+import { TextContentModel } from '../models/TextContent.model'
+import s from './Section.module.scss'
 
 interface Props {
   article: ArticleModel
@@ -52,6 +55,12 @@ export const Section = observer((props: Props) => {
               article={article}
               content={content}
               index={i}
+            />
+          ) : content instanceof IssueContentModel ? (
+            <IssueContent
+              article={article}
+              content={content}
+              key={content.uid}
             />
           ) : (
             <ImageContent

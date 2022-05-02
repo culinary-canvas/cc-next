@@ -1,0 +1,24 @@
+@import '../../styles/layout';
+@import '../../styles/listPage';
+
+.container {
+  @include listPage();
+  h1 {
+    border: none;
+  }
+}
+
+.list {
+  width: 100%;
+  @include main-content-width;
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.toggleButtons {
+  display: flex;
+  gap: 8px;
+}

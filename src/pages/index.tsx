@@ -41,6 +41,7 @@ function Start({ articlesData }: Props) {
           insertComponent={() => <Splash />}
           insertComponentAtIndex={1}
           useBig
+          useFirst
           initialArticles={articles}
           load={async (lastLoaded) =>
             ArticleApi.publishedPagedBySortOrderDesc(

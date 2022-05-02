@@ -111,7 +111,7 @@
 
   &.toggleable:not(.selected) {
     border-color: $grey;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 
   &.toggleable.selected {
@@ -153,11 +153,11 @@
 }
 
 @mixin verticalForm {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 1rem;
   background-color: $grey-lighter;
-  position: relative;
 
   label {
     font-weight: 300;
@@ -169,15 +169,15 @@
 
   input {
     border-bottom: none;
-    &.error{
+    &.error {
       outline: 2px auto $red;
     }
   }
 
   button {
-    margin-top: 1rem;
     width: fit-content !important;
-    &.error{
+    margin-top: 1rem;
+    &.error {
       outline: 1px auto $red;
     }
   }

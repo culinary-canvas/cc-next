@@ -1,0 +1,6 @@
+@import '../../styles/layout';
+@import '../../styles/listPage';
+
+.container {
+  @include listPage();
+}

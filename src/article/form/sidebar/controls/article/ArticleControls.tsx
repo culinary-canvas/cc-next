@@ -2,6 +2,7 @@ import { runInAction, toJS } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { isEmpty } from 'voca'
 import copyPasteIcon from '../../../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import editIcon from '../../../../../../public/assets/icons/streamline-icon-pencil-write-3-alternate@140x140.svg'
 import { useAdmin } from '../../../../../admin/Admin.context'
@@ -128,10 +129,20 @@ export const ArticleControls = observer(() => {
         <Select
           showEmptyOption
           id="issue"
-          value={article.issue}
+          value={article.issueId}
           options={issues}
           valueGetter={(v) => v?.id ?? null}
-          onChange={(v) => runInAction(() => (article.issueId = v ?? null))}
+          onChange={(v) =>
+            runInAction(() => {
+              if (isEmpty(v)) {
+                article.issueId = null
+                article.issue = null
+              } else {
+                article.issueId = v
+                article.issue = issues.find((i) => i.id === v)
+              }
+            })
+          }
           displayFormatter={IssueService.toDisplayText}
         />
       </ControlContainer>

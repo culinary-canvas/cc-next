@@ -1,23 +1,24 @@
+import { runInAction } from 'mobx'
+import { v4 as uuid } from 'uuid'
+import { Transformer } from '../../services/db/Transformer'
+import { cloneDeep } from '../../services/importHelpers'
+import { COLOR } from '../../styles/_color'
+import { FONT } from '../../styles/font'
+import { GridPosition } from '../grid/GridPosition'
+import { GridPositionService } from '../grid/GridPosition.service'
+import { ContentModel } from '../models/ContentModel'
+import { ContentType } from '../models/ContentType'
+import { HorizontalAlign } from '../models/HorizontalAlign'
+import { ImageContentModel } from '../models/ImageContent.model'
+import { ImageFit } from '../models/ImageFit'
+import { IssueContentModel } from '../models/IssueContent.model'
+import { Padding } from '../models/Padding'
 import { SectionModel } from '../models/Section.model'
 import { SectionPreset } from '../models/SectionPreset'
-import { ContentService } from '../services/Content.service'
-import { ContentType } from '../models/ContentType'
-import { ImageContentModel } from '../models/ImageContent.model'
-import { Padding } from '../models/Padding'
+import { Size } from '../models/Size'
 import { TextContentModel } from '../models/TextContent.model'
 import { VerticalAlign } from '../models/VerticalAlign'
-import { HorizontalAlign } from '../models/HorizontalAlign'
-import { ContentModel } from '../models/ContentModel'
-import { v4 as uuid } from 'uuid'
-import { cloneDeep } from '../../services/importHelpers'
-import { FONT } from '../../styles/font'
-import { COLOR } from '../../styles/_color'
-import { GridPosition } from '../grid/GridPosition'
-import { Size } from '../models/Size'
-import { Transformer } from '../../services/db/Transformer'
-import { GridPositionService } from '../grid/GridPosition.service'
-import { runInAction } from 'mobx'
-import { ImageFit } from '../models/ImageFit'
+import { ContentService } from '../services/Content.service'
 
 export class SectionService {
   static create() {
@@ -288,6 +289,8 @@ export class SectionService {
         o,
         !!o.type && o.type === ContentType.IMAGE
           ? ImageContentModel
+          : o.type === ContentType.ISSUE
+          ? IssueContentModel
           : TextContentModel,
       ),
     )

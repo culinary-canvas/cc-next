@@ -1,23 +1,25 @@
-import React, { useState } from 'react'
-import { Select } from '../../../../../shared/select/Select'
-import { ContentType } from '../../../../models/ContentType'
-import StringUtils from '../../../../../services/utils/StringUtils'
-import { ContentService } from '../../../../services/Content.service'
-import { TextContentModel } from '../../../../models/TextContent.model'
-import { TextControls } from './Text/TextControls'
-import { ImageContentModel } from '../../../../models/ImageContent.model'
-import { ImageControls } from './Image/ImageControls'
-import { Button } from '../../../../../shared/button/Button'
-import { COLOR } from '../../../../../styles/_color'
-import { observer } from 'mobx-react-lite'
-import s from './ContentControls.module.scss'
-import { classnames } from '../../../../../services/importHelpers'
-import { useAdmin } from '../../../../../admin/Admin.context'
-import { GridControl } from '../shared/gridControl/GridControl'
 import { runInAction } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import React, { useState } from 'react'
+import { useAdmin } from '../../../../../admin/Admin.context'
+import { classnames } from '../../../../../services/importHelpers'
+import StringUtils from '../../../../../services/utils/StringUtils'
+import { Button } from '../../../../../shared/button/Button'
 import { Modal } from '../../../../../shared/modal/Modal'
+import { Select } from '../../../../../shared/select/Select'
+import { COLOR } from '../../../../../styles/_color'
+import { ContentType } from '../../../../models/ContentType'
+import { ImageContentModel } from '../../../../models/ImageContent.model'
+import { IssueContentModel } from '../../../../models/IssueContent.model'
+import { TextContentModel } from '../../../../models/TextContent.model'
 import { SectionService } from '../../../../section/Section.service'
+import { ContentService } from '../../../../services/Content.service'
 import { ControlContainer } from '../shared/controlContainer/ControlContainer'
+import { GridControl } from '../shared/gridControl/GridControl'
+import s from './ContentControls.module.scss'
+import { ImageControls } from './Image/ImageControls'
+import { IssueControls } from './issue/IssueControls'
+import { TextControls } from './Text/TextControls'
 
 export const ContentControls = observer(() => {
   const admin = useAdmin()
@@ -69,6 +71,7 @@ export const ContentControls = observer(() => {
 
       {content instanceof TextContentModel && <TextControls />}
       {content instanceof ImageContentModel && <ImageControls />}
+      {content instanceof IssueContentModel && <IssueControls />}
 
       <Button
         loading={deleting}

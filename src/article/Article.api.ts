@@ -26,18 +26,20 @@ import { ArticleModel } from './models/Article.model'
 export class ArticleApi {
   static readonly COLLECTION = 'articles'
 
-  static async fetchRawArticles(pageSize: number) {
+  static async fetchRawArticles(pageSize: number, onlyShowOnStartPage = true) {
     const { db } = firebase()
-
-    const response = await getDocs(
-      query(
-        collection(db, this.COLLECTION),
-        where('published', '==', true),
-        where('showOnStartPage', '==', true),
-        orderBy('sortOrder', 'desc'),
-        limit(pageSize),
-      ),
+    let _query = query(
+      collection(db, this.COLLECTION),
+      where('published', '==', true),
+      orderBy('sortOrder', 'desc'),
+      limit(pageSize),
     )
+
+    if (onlyShowOnStartPage) {
+      _query = query(_query, where('showOnStartPage', '==', true))
+    }
+
+    const response = await getDocs(_query)
     return !!response.size
       ? response.docs
           .map((d) => ({ id: d.id, ...d.data() }))

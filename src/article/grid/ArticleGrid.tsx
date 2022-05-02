@@ -14,6 +14,7 @@ interface Props<T extends ArticleModel | ArticleWithLabels> {
   load?: (last: T) => Promise<T[]>
   insertComponent?: () => any
   insertComponentAtIndex?: number
+  useFirst?: boolean
   useBig?: boolean
   className?: string
   preloadImages?: boolean
@@ -28,6 +29,7 @@ export const ArticleGrid = observer(
       insertComponent = false,
       insertComponentAtIndex = 0,
       useBig = false,
+      useFirst = false,
       className,
       preloadImages = false,
       preloadLimit,
@@ -95,7 +97,7 @@ export const ArticleGrid = observer(
                   >
                     <ArticlePreview
                       article={article}
-                      first={i === 0}
+                      first={useFirst && i === 0}
                       labels={labels}
                       preloadImage={
                         preloadImages && !!preloadLimit

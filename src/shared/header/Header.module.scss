@@ -38,10 +38,18 @@
       max-height: 54px;
       //transform: translateY(-1.5rem);
     }
+
+    > * {
+      pointer-events: all;
+
+      &:after {
+        display: none;
+      }
+    }
   }
   @include media('<=phone') {
-    padding: 1rem 1rem;
     max-height: $header-height;
+    padding: 1rem 1rem;
 
     .desktop {
       display: none;

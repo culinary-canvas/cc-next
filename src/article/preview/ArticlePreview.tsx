@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { ImageSet } from '../../image/models/ImageSet'
-import { IssueService } from '../../issue/Issue.service'
+import { IssueDisplay } from '../../issue/issueDisplay/IssueDisplay'
 import { classnames } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
 import { Button } from '../../shared/button/Button'
@@ -128,16 +128,7 @@ export const ArticlePreview = observer((props: Props) => {
 
       <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         {!!article.issueId ? (
-          <Button
-            className={s.articleType}
-            unsetStyle
-            onClick={(e) => {
-              e.preventDefault()
-              router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
-            }}
-          >
-            {IssueService.toDisplayText(article.issue)}
-          </Button>
+          <IssueDisplay issue={article.issue} />
         ) : (
           <Button
             className={s.articleType}

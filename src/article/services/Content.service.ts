@@ -1,18 +1,15 @@
-import { ContentType } from '../models/ContentType'
-import { ContentModel } from '../models/ContentModel'
-import { ImageContentModel } from '../models/ImageContent.model'
-import { TextContentModel } from '../models/TextContent.model'
-import { cloneDeep } from '../../services/importHelpers'
-import { SortableService } from '../../services/sortable/Sortable.service'
 import { loremIpsum } from 'lorem-ipsum'
-import StringUtils from '../../services/utils/StringUtils'
 import { action } from 'mobx'
-import { SectionModel } from '../models/Section.model'
-import { GridPositionService } from '../grid/GridPosition.service'
-import { GridPosition } from '../grid/GridPosition'
-import { HorizontalAlign } from '../models/HorizontalAlign'
-import { FONT } from '../../styles/font'
+import { cloneDeep } from '../../services/importHelpers'
+import StringUtils from '../../services/utils/StringUtils'
 import { COLOR } from '../../styles/_color'
+import { FONT } from '../../styles/font'
+import { ContentModel } from '../models/ContentModel'
+import { ContentType } from '../models/ContentType'
+import { HorizontalAlign } from '../models/HorizontalAlign'
+import { ImageContentModel } from '../models/ImageContent.model'
+import { IssueContentModel } from '../models/IssueContent.model'
+import { TextContentModel } from '../models/TextContent.model'
 import { TextFormat } from '../models/TextFormat'
 
 export class ContentService {
@@ -29,7 +26,12 @@ export class ContentService {
   ): T {
     let content: ContentModel
 
-    if (type === ContentType.IMAGE && !(source instanceof ImageContentModel)) {
+    if (type === ContentType.ISSUE && !(source instanceof IssueContentModel)) {
+      content = new IssueContentModel()
+    } else if (
+      type === ContentType.IMAGE &&
+      !(source instanceof ImageContentModel)
+    ) {
       content = new ImageContentModel()
     } else if (
       type !== ContentType.IMAGE &&

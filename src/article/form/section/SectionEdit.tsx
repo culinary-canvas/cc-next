@@ -1,17 +1,19 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react'
-import { ArticleModel } from '../../models/Article.model'
-import { SectionModel } from '../../models/Section.model'
 import { observer } from 'mobx-react-lite'
-import { useAutorun } from '../../../hooks/useAutorun'
-import { ImageContentModel } from '../../models/ImageContent.model'
-import { classnames } from '../../../services/importHelpers'
-import styles from './SectionEdit.module.scss'
+import React, { CSSProperties, useRef, useState } from 'react'
 import { useAdmin } from '../../../admin/Admin.context'
-import { TextContentEdit } from '../text/TextContentEdit'
-import { ImageContentEdit } from '../image/ImageContentEdit'
-import { GridPositionService } from '../../grid/GridPosition.service'
-import { TextContentModel } from '../../models/TextContent.model'
+import { useAutorun } from '../../../hooks/useAutorun'
+import { classnames } from '../../../services/importHelpers'
+import { IssueContent } from '../../content/issue/IssueContent'
 import { TextContent } from '../../content/text/TextContent'
+import { GridPositionService } from '../../grid/GridPosition.service'
+import { ArticleModel } from '../../models/Article.model'
+import { ImageContentModel } from '../../models/ImageContent.model'
+import { IssueContentModel } from '../../models/IssueContent.model'
+import { SectionModel } from '../../models/Section.model'
+import { TextContentModel } from '../../models/TextContent.model'
+import { ImageContentEdit } from '../image/ImageContentEdit'
+import { TextContentEdit } from '../text/TextContentEdit'
+import styles from './SectionEdit.module.scss'
 
 interface Props {
   article: ArticleModel
@@ -68,6 +70,12 @@ export const SectionEdit = observer((props: Props) => {
                 index={i}
               />
             )
+          ) : content instanceof IssueContentModel ? (
+            <IssueContent
+              key={content.uid}
+              content={content}
+              article={article}
+            />
           ) : (
             <ImageContentEdit
               key={content.uid}

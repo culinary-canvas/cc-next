@@ -220,7 +220,6 @@ export class ArticleService {
       if (!tagExists) {
         const tag = new TagModel()
         tag.name = tagName
-        console.log(tag)
         await TagApi.save(tag, userId)
       }
       runInAction(() => {
@@ -288,6 +287,7 @@ export class ArticleService {
       const companies = await CompanyApi.byIds(article.companyIds)
       runInAction(() => (article.companies = companies))
     }
+    await this.populateIssues([article])
   }
 
   static async populateIssues(articles: ArticleModel[]): Promise<void> {
@@ -295,7 +295,9 @@ export class ArticleService {
     const issueIds = new Set(articlesWithIssueIds.map((a) => a.issueId))
     const issues = await IssueApi.byIds(Array.from(issueIds))
     const issuesById = mapBy(issues, 'id')
-    articlesWithIssueIds.forEach((a) => (a.issue = issuesById.get(a.issueId)))
+    articlesWithIssueIds.forEach((a) =>
+      runInAction(() => (a.issue = issuesById.get(a.issueId))),
+    )
   }
 
   static isPublished(article: ArticleModel) {

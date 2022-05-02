@@ -1,0 +1,36 @@
+@import '../../styles/layout';
+
+.section {
+
+  h2 {
+    border-bottom: 1px solid black;
+  }
+
+  ul {
+  }
+
+  li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    > :not(:first-child) {
+      margin-left: 2rem;
+    }
+
+    a {
+      color: black;
+    }
+  }
+}
+
+.image {
+  border-radius: 100%;
+}
+
+.textContainer {
+  h4 {
+    margin: 0;
+  }
+}

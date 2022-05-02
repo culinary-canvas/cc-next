@@ -41,18 +41,14 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
     <select
       ref={ref}
       id={id}
-      onBlur={(e) =>
-        _onChange(e.target.value === 'None' ? undefined : e.target.value)
-      }
-      onChange={(e) =>
-        _onChange(e.target.value === 'None' ? undefined : e.target.value)
-      }
+      onBlur={(e) => _onChange(e.target.value)}
+      onChange={(e) => _onChange(e.target.value)}
       onFocus={() => !!onFocus && onFocus()}
       value={value}
       disabled={disabled}
       className={className}
     >
-      {showEmptyOption && <option value="None">- None -</option>}
+      {showEmptyOption && <option value="">- None -</option>}
 
       {options.map((option) => (
         <option

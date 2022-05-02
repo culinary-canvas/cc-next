@@ -1,4 +1,5 @@
 export enum ContentType {
+  ISSUE = 'ISSUE',
   EXTRACT = 'EXTRACT',
   HEADING = 'HEADING',
   SUB_HEADING = 'SUB_HEADING',

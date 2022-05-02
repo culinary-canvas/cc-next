@@ -13,6 +13,7 @@ module.exports = withBundleAnalyzer(
       deviceSizes: [172, 248, 344, 496, 688, 992, 1024, 1312, 2048, 4096],
       minimumCacheTTL: 31536000,
     },
+    optimizeFonts: false,
   }),
 )
 

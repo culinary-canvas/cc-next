@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAdmin } from '../../admin/Admin.context'
 import { classnames } from '../../services/importHelpers'
+import { ArticleService } from '../Article.service'
 import { ArticlePreview } from '../preview/ArticlePreview'
 import { ArticleFooter } from '../shared/footer/ArticleFooter'
 import s from './ArticleForm.module.scss'
@@ -10,6 +11,10 @@ import { SectionEdit } from './section/SectionEdit'
 export const ArticleForm = observer(() => {
   const admin = useAdmin()
   const { article } = admin
+
+  useEffect(() => {
+    !!article && ArticleService.populateIssues([article])
+  }, [article])
 
   if (!article) {
     return null
