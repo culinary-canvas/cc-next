@@ -1,13 +1,10 @@
 import { GetServerSideProps } from 'next'
-import { useRouter } from 'next/router'
 import React from 'react'
-import { IssueList } from '../../../issue/list/IssueList'
-import { IssueModel } from '../../../issue/models/Issue.model'
-import { CompanyList } from '../../../company/list/CompanyList'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
 import { IssueApi } from '../../../issue/Issue.api'
-import { Button } from '../../../shared/button/Button'
+import { IssueList } from '../../../issue/list/IssueList'
+import { IssueModel } from '../../../issue/models/Issue.model'
 import s from './IssuesListPage.module.scss'
 
 interface Props {
@@ -17,7 +14,6 @@ interface Props {
 function IssueListPage({ issuesData }: Props) {
   const issues = useTransformToModels(issuesData, IssueModel)
   const allowed = useAuthGuard()
-  const router = useRouter()
 
   if (!allowed) {
     return null
