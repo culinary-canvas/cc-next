@@ -18,7 +18,7 @@ export class TextContentService {
     if (isServer) {
       return `${fontSize}px`
     }
-    const vw = fontSize / (window.innerWidth < BREAKPOINT.DESKTOP_S ? 15 : 20)
+    const vw = fontSize / (window.innerWidth < BREAKPOINT.DESKTOP_S ? 20 : 20)
     const px = window.innerWidth * (vw / 100)
     const min = fontSize < 16 ? fontSize : 16
     return px < min
