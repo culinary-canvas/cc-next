@@ -1,0 +1,21 @@
+@import 'layout';
+
+@mixin textHorizontalAlign {
+  .horizontal-align-LEFT {
+    @include media('<=phone') {
+      justify-content: flex-end;
+      justify-self: flex-end;
+    }
+    @include media('>phone') {
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+    text-align: left;
+  }
+  .horizontal-align-CENTER {
+    text-align: center;
+  }
+  .horizontal-align-RIGHT {
+    text-align: right;
+  }
+}

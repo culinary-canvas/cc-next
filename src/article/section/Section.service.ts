@@ -294,4 +294,18 @@ export class SectionService {
           : TextContentModel,
       ),
     )
+
+  static sortContents = (sections: SectionModel[]) => {
+    sections.forEach((section) => this.sortSectionContents(section))
+  }
+  static sortSectionContents = (section: SectionModel) => {
+    section.contents.sort((c1, c2) => {
+      if (c1.format.gridPosition.startRow !== c2.format.gridPosition.startRow) {
+        return c1.format.gridPosition.startRow - c2.format.gridPosition.startRow
+      }
+      return (
+        c1.format.gridPosition.startColumn - c2.format.gridPosition.startColumn
+      )
+    })
+  }
 }

@@ -128,7 +128,7 @@ export const ArticlePreview = observer((props: Props) => {
 
       <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
         {!!article.issueId ? (
-          <IssueDisplay issue={article.issue} />
+          <IssueDisplay issue={article.issue} className={s.issue} />
         ) : (
           <Button
             className={s.articleType}

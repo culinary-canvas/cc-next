@@ -1,14 +1,34 @@
+@import 'layout';
+
 @mixin verticalAlign {
   .vertical-align-TOP {
-    align-items: flex-start;
-    align-self: flex-start;
+    @include media('<=phone') {
+      justify-content: flex-start;
+      justify-self: flex-start;
+    }
+    @include media('>phone') {
+      align-items: flex-start;
+      align-self: flex-start;
+    }
   }
   .vertical-align-CENTER {
-    align-items: center;
-    align-self: center;
+    @include media('<=phone') {
+      justify-content: center;
+      justify-self: center;
+    }
+    @include media('>phone') {
+      align-items: center;
+      align-self: center;
+    }
   }
   .vertical-align-BOTTOM {
-    align-items: flex-end;
-    align-self: flex-end;
+    @include media('<=phone') {
+      justify-content: flex-end;
+      justify-self: flex-end;
+    }
+    @include media('>phone') {
+      align-items: flex-end;
+      align-self: flex-end;
+    }
   }
 }

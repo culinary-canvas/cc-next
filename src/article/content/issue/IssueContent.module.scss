@@ -6,9 +6,15 @@
 @import '../../../styles/horizontalAlign';
 @import '../../../styles/verticalAlign';
 
-@include textHorizontalAlign();
+@include horizontalAlign();
 @include verticalAlign();
 
 .content {
   display: flex;
+
+  @include media('<=phone') {
+    grid-area: unset !important;
+    grid-row-start: unset !important;
+    padding: 1rem 0;
+  }
 }

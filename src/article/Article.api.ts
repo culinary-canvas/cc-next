@@ -22,6 +22,7 @@ import { SortableService } from '../services/sortable/Sortable.service'
 import { ExtractGeneric } from '../services/types/ExtractGeneric'
 import { ArticleService } from './Article.service'
 import { ArticleModel } from './models/Article.model'
+import { SectionService } from './section/Section.service'
 
 export class ArticleApi {
   static readonly COLLECTION = 'articles'
@@ -323,6 +324,10 @@ export class ArticleApi {
     if (isNil(article.sortOrder)) {
       article.sortOrder = (await this.all()).length
     }
+
+    SectionService.sortContents(article.sections)
+
+    console.log('sirte')
 
     !!onProgress && onProgress(0.9)
     ModelService.beforeSave(article, userId)

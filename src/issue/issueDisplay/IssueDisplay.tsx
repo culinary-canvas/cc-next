@@ -1,18 +1,23 @@
+import classNames from 'classnames'
 import { format } from 'date-fns'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import s from './IssueDisplay.module.scss'
+import { ClientRender } from '../../shared/ClientRender/ClientRender'
 import { IssueModel } from '../models/Issue.model'
+import s from './IssueDisplay.module.scss'
 
 interface Props {
   issue: IssueModel
+  className?: string
 }
 
-export const IssueDisplay = observer(({ issue }: Props) => {
+export const IssueDisplay = observer(({ issue, className }: Props) => {
   return (
-    <div className={s.issue}>
-      <span>{issue?.name}</span>
-      <small>{!!issue && format(issue.publishMonth, 'MMMM yyyy')}</small>
-    </div>
+    <ClientRender>
+      <div className={classNames(s.issue, !issue && s.hidden, className)}>
+        <span>{issue?.name}</span>
+        <small>{!!issue && format(issue.publishMonth, 'MMMM yyyy')}</small>
+      </div>
+    </ClientRender>
   )
 })

@@ -1,11 +1,34 @@
-@mixin textHorizontalAlign {
+@import 'layout';
+
+@mixin horizontalAlign {
   .horizontal-align-LEFT {
-    text-align: left;
+    @include media('<=phone') {
+      align-items: flex-start;
+      align-self: flex-start;
+    }
+    @include media('>phone') {
+      justify-content: flex-start;
+      justify-self: flex-start;
+    }
   }
   .horizontal-align-CENTER {
-    text-align: center;
+    @include media('<=phone') {
+      align-items: center;
+      align-self: center;
+    }
+    @include media('>phone') {
+      justify-content: center;
+      justify-self: center;
+    }
   }
   .horizontal-align-RIGHT {
-    text-align: right;
+    @include media('<=phone') {
+      align-items: flex-end;
+      align-self: flex-end;
+    }
+    @include media('>phone') {
+      justify-content: flex-end;
+      justify-self: flex-end;
+    }
   }
 }
