@@ -79,7 +79,7 @@ export class ContentService {
       case ContentType.SUB_HEADING:
         content.format.color = COLOR.BLACK
         content.format.fontSize = FONT.SIZE.L
-        content.format.fontFamily = FONT.FAMILY.GARAMOND
+        content.format.fontFamily = FONT.FAMILY.NEUE_HAAS_GROTESK
         break
       case ContentType.LEAD:
         content.format.fontWeight = 500
@@ -94,7 +94,7 @@ export class ContentService {
         content.format.fontSize = FONT.SIZE.M
         break
       default:
-        content.format.fontFamily = FONT.FAMILY.GARAMOND
+        content.format.fontFamily = FONT.FAMILY.NEUE_HAAS_GROTESK
         content.format.fontSize = FONT.SIZE.L
     }
   }
