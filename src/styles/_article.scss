@@ -17,14 +17,6 @@ $article-border-radius: 1rem;
     margin-inline-start: 0;
     margin-inline-end: 0;
   }
-
-  article > :first-child {
-    @if ($admin) {
-      max-height: calc(100vh - #{$header-height} - #{$admin-bar-height});
-    } @else {
-      max-height: calc(100vh - #{$header-height});
-    }
-  }
 }
 
 @mixin articleGrid {

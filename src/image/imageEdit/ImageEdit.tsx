@@ -69,8 +69,8 @@ export const ImageEdit = observer((props: Props) => {
         <Image
           imageSet={set}
           id={id}
-          width={format.fit === ImageFit.CONTAIN && set.width}
-          height={format.fit === ImageFit.CONTAIN && set.height}
+          width={set.width}
+          height={set.height}
           onClick={() => {
             if (!disabled) {
               enableModal && setModalOpen(true)
@@ -83,8 +83,7 @@ export const ImageEdit = observer((props: Props) => {
               onFocus && onFocus()
             }
           }}
-          // @ts-ignore
-          layout={format.fit === ImageFit.CONTAIN ? 'responsive' : 'fill'}
+          layout="responsive"
           objectFit={format.fit.toLowerCase() as 'contain' | 'cover'}
           objectPosition={`${format.verticalAlign.toLowerCase()} ${format.horizontalAlign.toLowerCase()}`}
           className={classnames([
@@ -92,6 +91,7 @@ export const ImageEdit = observer((props: Props) => {
             { [s.disabled]: disabled },
             className,
           ])}
+          figureClassName={s.figure}
         />
       )}
 

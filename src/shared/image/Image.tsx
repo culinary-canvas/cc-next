@@ -1,19 +1,17 @@
-import React, { CSSProperties } from 'react'
 import { observer } from 'mobx-react-lite'
 import NextImage, { ImageProps as NextImageProps } from 'next/image'
+import React, { CSSProperties } from 'react'
 import { ImageSet } from '../../image/models/ImageSet'
 
 type Props = Omit<
   NextImageProps,
-  'src' | 'srcset' | 'sizes' | 'alt' | 'placeholder' | 'quality'
+  'src' | 'srcset' | 'sizes' | 'alt' | 'placeholder'
 > & {
   imageSet: ImageSet
   sizes?: string
   placeholder?: () => JSX.Element
   figureClassName?: string
   figureStyle?: CSSProperties
-  quality?: number
-  layout?: 'fill' | 'responsize' | 'fixed' | 'intrinsic'
 }
 
 export const Image = observer((props: Props) => {

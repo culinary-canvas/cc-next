@@ -1,14 +1,14 @@
-import React, { CSSProperties, useMemo, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import React, { CSSProperties, useMemo, useState } from 'react'
 import { useAutorun } from '../../../hooks/useAutorun'
-import { SectionModel } from '../../models/Section.model'
 import { classnames, isNil } from '../../../services/importHelpers'
-import { ImageContentModel } from '../../models/ImageContent.model'
-import s from './ImageContent.module.scss'
-import { GridPositionService } from '../../grid/GridPosition.service'
-import { Size } from '../../models/Size'
 import { Image } from '../../../shared/image/Image'
 import { BREAKPOINT } from '../../../styles/layout'
+import { GridPositionService } from '../../grid/GridPosition.service'
+import { ImageContentModel } from '../../models/ImageContent.model'
+import { SectionModel } from '../../models/Section.model'
+import { Size } from '../../models/Size'
+import s from './ImageContent.module.scss'
 
 interface Props {
   content: ImageContentModel
@@ -54,7 +54,7 @@ export const ImageContent = observer((props: Props) => {
       backgroundColor: format.backgroundColor,
       minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
       maxHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
-      height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
+      height: `calc(${!isNil(format.maxHeight) ? `${format.maxHeight}px` : '100%'} - ${format.padding.top}px - ${format.padding.bottom}px)`,
       width: `calc(100% - ${format.padding.left}px - ${format.padding.right}px)`,
       marginTop: `${format.padding.top}px`,
       marginBottom: `${format.padding.bottom}px`,
@@ -97,12 +97,10 @@ export const ImageContent = observer((props: Props) => {
           section.format.height === Size.FIT_CONTENT && content.set.image.height
         }
         // @ts-ignore
-        layout={
-          section.format.height === Size.FIT_CONTENT ? 'responsive' : 'fill'
-        }
+        layout="responsive"
         priority={first}
-        objectFit="cover"
-        objectPosition="center"
+        objectFit={content.format.fit.toLowerCase() as 'contain' | 'cover'}
+        objectPosition={`${content.format.verticalAlign.toLowerCase()} ${content.format.horizontalAlign.toLowerCase()}`}
         className={classnames(s.content, {
           [s.circle]: content.format.circle,
         })}

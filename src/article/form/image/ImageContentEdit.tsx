@@ -30,7 +30,9 @@ export const ImageContentEdit = observer((props: Props) => {
       backgroundColor: format.backgroundColor,
       minHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
       maxHeight: !isNil(format.maxHeight) ? `${format.maxHeight}px` : undefined,
-      height: `calc(100% - ${format.padding.top}px - ${format.padding.bottom}px)`,
+      height: `calc(${
+        !isNil(format.maxHeight) ? `${format.maxHeight}px` : '100%'
+      } - ${format.padding.top}px - ${format.padding.bottom}px)`,
       marginTop: `${format.padding.top}px`,
       marginBottom: `${format.padding.bottom}px`,
       marginLeft: `${format.padding.left}px`,
@@ -46,7 +48,7 @@ export const ImageContentEdit = observer((props: Props) => {
   }, [content, section, content.format])
 
   return (
-    <figure
+    <div
       className={classnames([
         s.container,
         s[`fit-${content.format.fit}`],
@@ -71,6 +73,6 @@ export const ImageContentEdit = observer((props: Props) => {
         enableModal={admin.content?.uid === content.uid}
         onChange={(set) => runInAction(() => (content.set = set))}
       />
-    </figure>
+    </div>
   )
 })
