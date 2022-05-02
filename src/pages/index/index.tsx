@@ -22,7 +22,6 @@ interface Props {
 function Index({ personsData, companiesData }: Props) {
   const persons = useTransformToModels(personsData, PersonModel)
   const companies = useTransformToModels(companiesData, CompanyModel)
-  const router = useRouter()
 
   const [viewing, setViewing] = useState<'persons' | 'companies'>('persons')
 
@@ -51,14 +50,6 @@ function Index({ personsData, companiesData }: Props) {
   }, [persons, companies])
 
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
-
-  if (router.isFallback) {
-    if (isServer) {
-      return null
-    }
-    router.replace('/')
-    return null
-  }
 
   return (
     <>
