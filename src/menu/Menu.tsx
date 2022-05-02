@@ -19,10 +19,10 @@ export function Menu(props: Props) {
   return (
     <nav className={classnames(s.container, className)}>
       <div className={s.leftMenu}>
-        <Link href="/index">
+        <Link href="/the-index">
           <a
             className={classNames(
-              router.asPath.startsWith('/index') && s.active,
+              router.asPath.startsWith('/the-index') && s.active,
             )}
           >
             Index

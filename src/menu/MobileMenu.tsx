@@ -99,10 +99,10 @@ export function MobileMenu(props: Props) {
           </a>
         </Link>
 
-        <Link href="/index">
+        <Link href="/the-index">
           <a
             className={classNames(
-              router.asPath.startsWith('/index') && s.active,
+              router.asPath.startsWith('/the-index') && s.active,
             )}
           >
             Index
