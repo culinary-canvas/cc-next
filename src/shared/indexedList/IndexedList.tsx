@@ -21,7 +21,9 @@ export function IndexedList({ objects, pathPrefix, smallPaths = [] }: Props) {
       object,
       letter: object.name.substring(0, 1),
     }))
-    return Array.from(groupBy(withLetter, 'letter').entries())
+    return Array.from(groupBy(withLetter, 'letter').entries()).sort(
+      ([l1], [l2]) => l1.localeCompare(l2),
+    )
   }, [objects])
 
   return (
