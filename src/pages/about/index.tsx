@@ -53,6 +53,12 @@ export default function About() {
             <SocialMediaLinks
               containerClassName={s.socialMediaContainer}
               linkClassName={s.socialMediaLink}
+              facebookUrl={'https://www.facebook.com/CulinaryCanvasBlog/'}
+              facebookTitle={'Follow us on Facebook'}
+              instagramUrl={'https://www.instagram.com/CulinaryCanvas_/'}
+              instagramTitle={'Follow us on Instagram'}
+              pinterestUrl={'https://www.pinterest.com/Culinary_Canvas/'}
+              pinterestTitle={'Follow us on Pinterest'}
             />
 
             {!!imageSize && (

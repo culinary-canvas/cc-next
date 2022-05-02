@@ -1,10 +1,10 @@
-import React from 'react'
 import { observer } from 'mobx-react-lite'
-import s from './Footer.module.scss'
 import Link from 'next/link'
-import { SocialMediaLinks } from '../socialMediaLinks/SocialMediaLinks'
-import { COLOR } from '../../styles/_color'
+import React from 'react'
 import Logo from '../../../public/assets/logo.svg'
+import { COLOR } from '../../styles/_color'
+import { SocialMediaLinks } from '../socialMediaLinks/SocialMediaLinks'
+import s from './Footer.module.scss'
 
 export const Footer = observer(() => {
   return (
@@ -38,6 +38,12 @@ export const Footer = observer(() => {
           color={COLOR.WHITE}
           containerClassName={s.socialMediaContainer}
           linkClassName={s.socialMediaLink}
+          facebookUrl={'https://www.facebook.com/CulinaryCanvasBlog/'}
+          facebookTitle={'Follow us on Facebook'}
+          instagramUrl={'https://www.instagram.com/CulinaryCanvas_/'}
+          instagramTitle={'Follow us on Instagram'}
+          pinterestUrl={'https://www.pinterest.com/Culinary_Canvas/'}
+          pinterestTitle={'Follow us on Pinterest'}
         />
 
         <section className={s.copyright}>
