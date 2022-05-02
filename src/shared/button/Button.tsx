@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes, forwardRef, useState } from 'react'
-import { Spinner } from '../spinner/Spinner'
 import { classnames } from '../../services/importHelpers'
 import { COLOR, ColorType } from '../../styles/_color'
+import { Spinner } from '../spinner/Spinner'
 import s from './Button.module.scss'
 
 export interface ButtonProps
@@ -81,3 +81,5 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     )
   },
 )
+
+Button.displayName = 'Button'

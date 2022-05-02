@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     es6: true,
   },
-  ignorePatterns: ['node_modules/*'],
+  ignorePatterns: ['node_modules/*', '.next'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -77,4 +77,20 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['next.config.js'],
+      parser: 'espree',
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+      rules: {
+        'import/order': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+      },
+    },
+  ],
 }

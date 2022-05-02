@@ -53,12 +53,17 @@ export const CompaniesArticleControl = observer((props: Props) => {
         <ul>
           {inArticle.map((c) => (
             <li key={c.id}>
-              <figure>{!!c.imageSet && <img src={c.imageSet.url} />}</figure>
+              <figure>
+                {!!c.imageSet && (
+                  <img src={c.imageSet.url} alt={c.imageSet.alt} />
+                )}
+              </figure>
 
               <a
                 className={s.companyLink}
                 href={`/admin/companies/${c.id}`}
                 target="_blank"
+                rel="noreferrer"
               >
                 {c.name}
               </a>
@@ -78,7 +83,7 @@ export const CompaniesArticleControl = observer((props: Props) => {
                 title="Remove"
                 className={s.removeButton}
               >
-                <img src={removeIcon} />
+                <img src={removeIcon} alt="Remove icon" />
               </Button>
             </li>
           ))}

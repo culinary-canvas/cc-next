@@ -1,18 +1,3 @@
-import React, { useEffect, useState } from 'react'
-import s from './articlesByTag.module.scss'
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { ArticleModel } from '../../../article/models/Article.model'
-import { PageHead } from '../../../shared/head/PageHead'
-import { classnames } from '../../../services/importHelpers'
-import { ArticleGrid } from '../../../article/grid/ArticleGrid'
-import ArticleApi from '../../../article/Article.api'
-import { firebase } from '../../../services/firebase/Firebase'
-import { useRouter } from 'next/router'
-import { isServer } from '../../_app'
-import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
-import { ArticleLabel } from '../../../article/models/ArticleLabel'
-import { useTransformToModels } from '../../../hooks/useTransformToModels'
-import { ArticleService } from '../../../article/Article.service'
 import {
   collection,
   getDocs,
@@ -21,6 +6,21 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import ArticleApi from '../../../article/Article.api'
+import { ArticleService } from '../../../article/Article.service'
+import { ArticleGrid } from '../../../article/grid/ArticleGrid'
+import { ArticleModel } from '../../../article/models/Article.model'
+import { ArticleLabel } from '../../../article/models/ArticleLabel'
+import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { firebase } from '../../../services/firebase/Firebase'
+import { classnames } from '../../../services/importHelpers'
+import { PageHead } from '../../../shared/head/PageHead'
+import { isServer } from '../../_app'
+import s from './articlesByTag.module.scss'
 
 interface Props {
   articlesData: any[]
@@ -39,15 +39,9 @@ function ArticlesByTag({ articlesData, tag }: Props) {
 
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
-  if (router.isFallback) {
-    if (isServer) {
-      return null
-    }
-    router.replace('/')
-    return null
-  }
-
-  useEffect(() => setLabel(new ArticleLabel(tag, `/tags/${tag}`)), [tag])
+  useEffect(() => {
+    setLabel(new ArticleLabel(tag, `/tags/${tag}`))
+  }, [tag])
 
   useEffect(() => {
     !!articles &&
@@ -55,6 +49,14 @@ function ArticlesByTag({ articlesData, tag }: Props) {
         articles.map((a) => new ArticleWithLabels(a, label)),
       )
   }, [articles, label])
+
+  if (router.isFallback) {
+    if (isServer) {
+      return null
+    }
+    router.replace('/')
+    return null
+  }
 
   return (
     <>

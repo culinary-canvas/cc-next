@@ -6,7 +6,7 @@ export function useAuthGuard() {
   const auth = useAuth()
   const router = useRouter()
 
-  let timeout = useRef<any>()
+  const timeout = useRef<any>()
 
   useEffect(() => {
     if (auth.isSignedIn) {

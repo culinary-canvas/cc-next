@@ -1,20 +1,20 @@
+import { runInAction } from 'mobx'
+import { observer } from 'mobx-react-lite'
 import React, { useCallback, useEffect, useState } from 'react'
-import { ArticleModel } from '../../../../../models/Article.model'
+import slugify from 'voca/slugify'
+import addIcon from '../../../../../../../public/assets/icons/streamline-icon-add-bold@140x140.svg'
+import removeIcon from '../../../../../../../public/assets/icons/streamline-icon-remove-bold@140x140.svg'
+import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { PersonModel } from '../../../../../../person/models/Person.model'
 import { PersonApi } from '../../../../../../person/Person.api'
 import { PersonService } from '../../../../../../person/Person.service'
-import s from './PersonArticleControl.module.scss'
-import { LookupSelect } from '../../../../../../shared/lookupSelect/LookupSelect'
-import { runInAction } from 'mobx'
-import { useAutorun } from '../../../../../../hooks/useAutorun'
 import { useAuth } from '../../../../../../services/auth/Auth'
-import addIcon from '../../../../../../../public/assets/icons/streamline-icon-add-bold@140x140.svg'
-import removeIcon from '../../../../../../../public/assets/icons/streamline-icon-remove-bold@140x140.svg'
 import { Button } from '../../../../../../shared/button/Button'
-import { observer } from 'mobx-react-lite'
-import { ArticleService } from '../../../../../Article.service'
-import slugify from 'voca/slugify'
 import { useErrorModal } from '../../../../../../shared/error/useErrorModal'
+import { LookupSelect } from '../../../../../../shared/lookupSelect/LookupSelect'
+import { ArticleService } from '../../../../../Article.service'
+import { ArticleModel } from '../../../../../models/Article.model'
+import s from './PersonArticleControl.module.scss'
 
 interface Props {
   article: ArticleModel
@@ -55,13 +55,18 @@ export const PersonsArticleControl = observer((props: Props) => {
         <ul>
           {inArticle.map((p) => (
             <li key={p.id}>
-              <figure>{!!p.imageSet && <img src={p.imageSet.url} />}</figure>
+              <figure>
+                {!!p.imageSet && (
+                  <img src={p.imageSet.url} alt={p.imageSet.alt} />
+                )}
+              </figure>
 
               <div className={s.info}>
                 <a
                   className={s.personLink}
                   href={`/admin/persons/${p.id}`}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   {p.name}
                 </a>
@@ -70,6 +75,7 @@ export const PersonsArticleControl = observer((props: Props) => {
                     className={s.companyLink}
                     href={`/admin/companies/${p.companyId}`}
                     target="_blank"
+                    rel="noreferrer"
                   >
                     {p.company?.name}
                   </a>
@@ -81,7 +87,7 @@ export const PersonsArticleControl = observer((props: Props) => {
                       }
                       title="Add company to article"
                     >
-                      <img src={addIcon} />
+                      <img src={addIcon} alt="Add icon" />
                     </Button>
                   )}
                 </div>
@@ -102,7 +108,7 @@ export const PersonsArticleControl = observer((props: Props) => {
                 title="Remove"
                 className={s.removeButton}
               >
-                <img src={removeIcon} />
+                <img src={removeIcon} alt="Remove icon" />
               </Button>
             </li>
           ))}

@@ -17,9 +17,9 @@ import { TextFormat } from '../models/TextFormat'
 
 export class ContentService {
   static create<T extends ContentModel>(type = ContentType.PARAGRAPH): T {
-    const content: T = ((type === ContentType.IMAGE
+    const content: T = (type === ContentType.IMAGE
       ? new ImageContentModel()
-      : new TextContentModel()) as unknown) as T
+      : new TextContentModel()) as unknown as T
     return this.getTypeAppliedContent<T>(content, type)
   }
 

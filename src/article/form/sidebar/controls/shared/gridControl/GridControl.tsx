@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useReducer, useState } from 'react'
-import './GridControl.module.scss'
 import s from './GridControl.module.scss'
 import { GridPositionService } from '../../../../../grid/GridPosition.service'
 import { ArticlePart } from '../../../../../models/ArticlePart'

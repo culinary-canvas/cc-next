@@ -8,7 +8,8 @@ import StringUtils from '../../services/utils/StringUtils'
 import { ArticlePart } from './ArticlePart'
 
 export abstract class ContentModel<T extends Format = Format>
-  implements ArticlePart {
+  implements ArticlePart
+{
   @transient()
   readonly uid: string
 

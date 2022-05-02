@@ -1,8 +1,7 @@
 import React from 'react'
-import './AddSection.module.scss'
+import s from './AddSection.module.scss'
 import { SectionModel } from '../../models/Section.model'
 import { ContentService } from '../../services/Content.service'
-import s from './AddSection.module.scss'
 import { SectionService } from '../../section/Section.service'
 
 interface Props {

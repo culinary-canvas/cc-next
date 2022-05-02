@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import s from './GridControlMenu.module.scss'
+import React, { useEffect, useState } from 'react'
+import EditPosition from '../../../../../../../public/assets/icons/streamline-icon-cursor-select-2@140x140.svg'
 import DownArrow from '../../../../../../../public/assets/icons/streamline-icon-keyboard-arrow-down@140x140.svg'
 import UpArrow from '../../../../../../../public/assets/icons/streamline-icon-keyboard-arrow-up@140x140.svg'
 import LayerUp from '../../../../../../../public/assets/icons/streamline-icon-layers-select-front@140x140.svg'
 import LayerDown from '../../../../../../../public/assets/icons/streamline-icon-layers-select@140x140.svg'
-import EditPosition from '../../../../../../../public/assets/icons/streamline-icon-cursor-select-2@140x140.svg'
 import { classnames } from '../../../../../../services/importHelpers'
+import { Modal } from '../../../../../../shared/modal/Modal'
 import { GridPositionService } from '../../../../../grid/GridPosition.service'
-import { GridMap } from './GridMap'
 import { ArticlePart } from '../../../../../models/ArticlePart'
 import { SectionModel } from '../../../../../models/Section.model'
+import s from './GridControlMenu.module.scss'
 import { GridControlMenuButton } from './GridControlMenuButton'
-import { Modal } from '../../../../../../shared/modal/Modal'
+import { GridMap } from './GridMap'
 
 interface Props<T extends ArticlePart> {
   gridMap: GridMap<T>
@@ -102,7 +102,7 @@ export const GridControlMenu = observer(
                 onRowUpClick()
               }}
             >
-              <img src={UpArrow} />
+              <img src={UpArrow} alt="Up arrow" />
             </GridControlMenuButton>
 
             <GridControlMenuButton
@@ -113,7 +113,7 @@ export const GridControlMenu = observer(
                 onRowDownClick()
               }}
             >
-              <img src={DownArrow} />
+              <img src={DownArrow} alt="Down arrow" />
             </GridControlMenuButton>
           </section>
 
@@ -124,7 +124,7 @@ export const GridControlMenu = observer(
                 disabled={false}
                 onClick={() => onEditPosition()}
               >
-                <img src={EditPosition} />
+                <img src={EditPosition} alt="Edit icon" />
               </GridControlMenuButton>
 
               <GridControlMenuButton
@@ -132,7 +132,7 @@ export const GridControlMenu = observer(
                 disabled={isLayerUpDisabled}
                 onClick={() => GridPositionService.layerUp(part, gridMap.parts)}
               >
-                <img src={LayerUp} />
+                <img src={LayerUp} alt="Layer up icon" />
               </GridControlMenuButton>
 
               <GridControlMenuButton
@@ -142,7 +142,7 @@ export const GridControlMenu = observer(
                   GridPositionService.layerDown(part, gridMap.parts)
                 }
               >
-                <img src={LayerDown} />
+                <img src={LayerDown} alt="Layer down icon" />
               </GridControlMenuButton>
             </section>
           )}

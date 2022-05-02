@@ -1,21 +1,3 @@
-import React, { useEffect, useState } from 'react'
-import s from './articlesByPerson.module.scss'
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import { ArticleModel } from '../../../article/models/Article.model'
-import { PageHead } from '../../../shared/head/PageHead'
-import { classnames, isNil } from '../../../services/importHelpers'
-import { ArticleGrid } from '../../../article/grid/ArticleGrid'
-import ArticleApi from '../../../article/Article.api'
-import { firebase } from '../../../services/firebase/Firebase'
-import { useRouter } from 'next/router'
-import { isServer } from '../../_app'
-import { PersonModel } from '../../../person/models/Person.model'
-import { PersonView } from '../../../person/view/PersonView'
-import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
-import { ArticleLabel } from '../../../article/models/ArticleLabel'
-import { useTransformToModels } from '../../../hooks/useTransformToModels'
-import { ArticleService } from '../../../article/Article.service'
 import {
   collection,
   getDocs,
@@ -24,6 +6,24 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import ArticleApi from '../../../article/Article.api'
+import { ArticleService } from '../../../article/Article.service'
+import { ArticleGrid } from '../../../article/grid/ArticleGrid'
+import { ArticleModel } from '../../../article/models/Article.model'
+import { ArticleLabel } from '../../../article/models/ArticleLabel'
+import { ArticleWithLabels } from '../../../article/models/ArticleWithLabels'
+import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { PersonModel } from '../../../person/models/Person.model'
+import { PersonView } from '../../../person/view/PersonView'
+import { firebase } from '../../../services/firebase/Firebase'
+import { classnames, isNil } from '../../../services/importHelpers'
+import { PageHead } from '../../../shared/head/PageHead'
+import { isServer } from '../../_app'
+import s from './articlesByPerson.module.scss'
 
 interface Props {
   articlesData: any[]
@@ -44,14 +44,6 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
 
   useEffect(() => window.scrollTo({ behavior: 'smooth', top: 0 }), [])
 
-  if (router.isFallback) {
-    if (isServer) {
-      return null
-    }
-    router.replace('/')
-    return null
-  }
-
   useEffect(
     () =>
       !!person &&
@@ -66,6 +58,14 @@ function ArticlesByPerson({ articlesData, personData }: Props) {
         articles.map((a) => new ArticleWithLabels(a, label)),
       )
   }, [articles, label])
+
+  if (router.isFallback) {
+    if (isServer) {
+      return null
+    }
+    router.replace('/')
+    return null
+  }
 
   return (
     <>

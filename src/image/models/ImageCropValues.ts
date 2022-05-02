@@ -1,4 +1,4 @@
-import { observable, makeObservable } from 'mobx';
+import { observable, makeObservable } from 'mobx'
 import { field } from '../../services/db/decorators/field.decorator'
 
 export class ImageCropValues {

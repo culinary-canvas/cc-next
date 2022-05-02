@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
-import {AdminBar} from '../admin/adminBar/AdminBar'
+import { AdminBar } from '../admin/adminBar/AdminBar'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
 import TagManager from 'react-gtm-module'
 import { AdminContext, useAdminState } from '../admin/Admin.context'
@@ -27,7 +27,7 @@ export const IS_PROD = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production'
 Modal.setAppElement('#__next')
 enableStaticRendering(isServer)
 
-interface Props extends AppProps {}
+type Props = AppProps
 
 function App({ Component, pageProps }: Props) {
   useEffect(() => {

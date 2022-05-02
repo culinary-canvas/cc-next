@@ -1,5 +1,5 @@
+import React, { useCallback } from 'react'
 import { useOverlay } from '../overlay/OverlayStore'
-import { useCallback } from 'react'
 import { ErrorModalContent } from './ErrorModalContent'
 
 export interface UseErrorModal {

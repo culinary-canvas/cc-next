@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
-import { useFormControl } from '../../services/formControl/useFormControl'
-import { LeadFormObject } from './LeadFormObject'
 import { runInAction } from 'mobx'
-import { Button } from '../button/Button'
 import { observer } from 'mobx-react-lite'
-import { Checkbox } from '../checkbox/Checkbox'
+import React, { useRef, useState } from 'react'
+import successIcon from '../../../public/assets/icons/streamline-icon-party-confetti-whistle@140x140.svg'
 import { EmailService } from '../../services/email/Email.service'
+import { useFormControl } from '../../services/formControl/useFormControl'
+import { Button } from '../button/Button'
+import { Checkbox } from '../checkbox/Checkbox'
 import { FormControlFieldErrorMessage } from '../formControlFieldErrorMessage/FormControlFieldErrorMessage'
 import s from './LeadForm.module.scss'
-import successIcon from '../../../public/assets/icons/streamline-icon-party-confetti-whistle@140x140.svg'
+import { LeadFormObject } from './LeadFormObject'
 
 export const LeadForm = observer(() => {
   const _formObject = useRef(new LeadFormObject()).current
@@ -30,7 +30,7 @@ export const LeadForm = observer(() => {
     <form name="leadForm" className={s.form}>
       {submitSuccessful && (
         <div className={s.submitSuccessful}>
-          <img src={successIcon} />
+          <img src={successIcon} alt="Successful" />
           <h2>All set, {form.firstName}!</h2>
           <p>
             We will drop you an email at {form.email} with more information.

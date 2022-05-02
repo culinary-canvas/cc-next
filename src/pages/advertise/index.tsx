@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageHead } from '../../shared/head/PageHead'
-import {GetStaticProps} from 'next'
+import { GetStaticProps } from 'next'
 
 export default function Advertise() {
   return (
@@ -22,4 +22,3 @@ export default function Advertise() {
 export const getStaticProps: GetStaticProps = async () => {
   return { props: {} }
 }
-

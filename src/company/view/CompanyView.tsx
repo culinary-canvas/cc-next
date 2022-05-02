@@ -1,13 +1,13 @@
+import { observer } from 'mobx-react-lite'
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import { classnames } from '../../services/importHelpers'
+import StringUtils from '../../services/utils/StringUtils'
+import { Image } from '../../shared/image/Image'
+import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
 import { CompanyModel } from '../models/Company.model'
 import s from './CompanyView.module.scss'
-import { SocialMediaLinks } from '../../shared/socialMediaLinks/SocialMediaLinks'
-import { classnames } from '../../services/importHelpers'
-import Link from 'next/link'
-import StringUtils from '../../services/utils/StringUtils'
-import ReactMarkdown from 'react-markdown'
-import { Image } from '../../shared/image/Image'
-import { observer } from 'mobx-react-lite'
 
 interface Props {
   company: CompanyModel
@@ -88,7 +88,13 @@ export const CompanyView = observer((props: Props) => {
             <ReactMarkdown
               components={{
                 link: ({ node }) => (
-                  <a href={node.url as string} rel="noopener" target="_blank">
+                  <a
+                    // @ts-ignore
+                    href={node.url as string}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {/*@ts-ignore*/}
                     {node.children[0].value}
                   </a>
                 ),

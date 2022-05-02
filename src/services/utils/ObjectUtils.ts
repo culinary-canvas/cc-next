@@ -34,7 +34,7 @@ class ObjectUtils {
     }
 
     if (this.hasEqualsMethod(object1)) {
-      ;((object1 as unknown) as Record<'equals', (other: T) => boolean>).equals(
+      ;(object1 as unknown as Record<'equals', (other: T) => boolean>).equals(
         object2,
       )
     }

@@ -58,10 +58,10 @@ export function useImageModalState(): ImageModalState {
     setReady(true)
   }, [])
 
-  const image = useMemo<ImageFile>(() => newImage || inputImage, [
-    newImage,
-    inputImage,
-  ])
+  const image = useMemo<ImageFile>(
+    () => newImage || inputImage,
+    [newImage, inputImage],
+  )
   const hasImageContent = useMemo<boolean>(() => !!image?.fileName, [image])
   const cropValues = useMemo<ImageCropValues>(
     () => newCropValues || inputCropValues || initialCropValues,

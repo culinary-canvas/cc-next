@@ -69,9 +69,7 @@ export const IssueForm = observer((props: Props) => {
               )
               setTimeout(() => overlay.toggle(false), 1000)
               router.replace(
-                !!router.query.id
-                  ? `/admin/issues`
-                  : `/admin/issues/${id}`,
+                !!router.query.id ? `/admin/issues` : `/admin/issues/${id}`,
               )
             } catch (e) {
               showError(e)

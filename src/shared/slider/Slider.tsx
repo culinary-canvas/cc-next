@@ -69,7 +69,7 @@ export const Slider = observer((props: Props) => {
         value={value}
         type="number"
         onChange={(v) => {
-          let inputValue = Number(v.target.value)
+          const inputValue = Number(v.target.value)
           if (inputValue <= max && inputValue >= min) {
             onChange(inputValue)
           }

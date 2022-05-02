@@ -1,9 +1,8 @@
 import React from 'react'
-import './Tabs.module.scss'
+import s from './Tabs.module.scss'
 import { isString } from 'lodash'
 import { classnames } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
-import s from './Tabs.module.scss'
 
 interface TabProperty {
   id: string

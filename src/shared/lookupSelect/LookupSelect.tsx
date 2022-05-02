@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import s from './LookupSelect.module.scss'
 import { observer } from 'mobx-react-lite'
-import { Button } from '../button/Button'
-import viewIcon from '../../../public/assets/icons/streamline-icon-view-1@140x140.svg'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { DomUtils } from '../../services/utils/DomUtils'
+import viewIcon from '../../../public/assets/icons/streamline-icon-view-1@140x140.svg'
 import { isNil } from '../../services/importHelpers'
+import { DomUtils } from '../../services/utils/DomUtils'
+import { Button } from '../button/Button'
+import s from './LookupSelect.module.scss'
 
 interface Props<T extends { [key: string]: any }> {
   id?: string
@@ -118,8 +118,13 @@ export const LookupSelect = observer(
           }}
         />
         {!!url && !!selected && input === selected[displayField] && (
-          <a className={s.linkButton} href={url} target="_blank">
-            <img src={viewIcon} />
+          <a
+            className={s.linkButton}
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={viewIcon} alt="Go to" />
           </a>
         )}
         {focused && (

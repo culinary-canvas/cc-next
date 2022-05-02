@@ -169,6 +169,7 @@ export const PersonForm = observer((props: Props) => {
             className={s.link}
             href={`/persons/${person.slug}`}
             target="_blank"
+            rel="noreferrer"
           >
             {`/persons/${person.slug}`}
           </a>

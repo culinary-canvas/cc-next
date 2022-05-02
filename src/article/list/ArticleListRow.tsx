@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
-import {IssueService} from '../../issue/Issue.service'
+import { IssueService } from '../../issue/Issue.service'
 import { useAuth } from '../../services/auth/Auth'
 import StringUtils from '../../services/utils/StringUtils'
 import { Button } from '../../shared/button/Button'

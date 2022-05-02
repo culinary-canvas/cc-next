@@ -34,7 +34,11 @@ export const Footer = observer(() => {
           </nav>
         </section>
 
-        <SocialMediaLinks color={COLOR.WHITE} containerClassName={s.socialMediaContainer}  linkClassName={s.socialMediaLink}/>
+        <SocialMediaLinks
+          color={COLOR.WHITE}
+          containerClassName={s.socialMediaContainer}
+          linkClassName={s.socialMediaLink}
+        />
 
         <section className={s.copyright}>
           {new Date().getFullYear()} © Culinary Canvas

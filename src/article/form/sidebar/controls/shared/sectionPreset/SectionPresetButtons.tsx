@@ -17,7 +17,7 @@ export function SectionPresetButtons(props: Props) {
   const { section, onSelected, id, disabled = false } = props
   const selected = section.preset
 
-  let titlePresets = [
+  const titlePresets = [
     SectionPreset.FULL_SCREEN_TITLE,
     SectionPreset.HALF_SCREEN_TITLE,
     SectionPreset.INLINE_TITLE,
@@ -27,8 +27,10 @@ export function SectionPresetButtons(props: Props) {
       {Object.values(SectionPreset)
         .filter(
           (p) =>
-            (section.format.gridPosition.startRow === 1 && titlePresets.includes(p)) ||
-            (section.format.gridPosition.startRow !== 1 && !titlePresets.includes(p)),
+            (section.format.gridPosition.startRow === 1 &&
+              titlePresets.includes(p)) ||
+            (section.format.gridPosition.startRow !== 1 &&
+              !titlePresets.includes(p)),
         )
         .map((preset) => (
           <Button

@@ -1,4 +1,3 @@
-import 'firebase/firestore'
 import {
   addDoc,
   collection,

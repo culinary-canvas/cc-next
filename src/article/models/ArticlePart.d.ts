@@ -1,6 +1,6 @@
-import {Format} from './Format'
+import { Format } from './Format'
 
-export interface ArticlePart{
+export interface ArticlePart {
   uid: string
   displayName: string
   format: Format

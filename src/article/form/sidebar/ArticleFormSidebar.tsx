@@ -1,20 +1,18 @@
-import React, { useState } from 'react'
-import { observer } from 'mobx-react-lite'
 import classnames from 'classnames'
-import { Button } from '../../../shared/button/Button'
-import { useAuth } from '../../../services/auth/Auth'
-import s from './ArticleFormSidebar.module.scss'
+import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 import { useAdmin } from '../../../admin/Admin.context'
-import { useOverlay } from '../../../shared/overlay/OverlayStore'
-import { Controls } from './controls/Controls'
-import ArticleApi from '../../Article.api'
-import { OverlayConfirm } from '../../../shared/overlay/OverlayConfirm'
 import { MenuButton } from '../../../menu/button/MenuButton'
+import { useAuth } from '../../../services/auth/Auth'
+import { Button } from '../../../shared/button/Button'
+import { OverlayConfirm } from '../../../shared/overlay/OverlayConfirm'
+import { useOverlay } from '../../../shared/overlay/OverlayStore'
+import ArticleApi from '../../Article.api'
+import s from './ArticleFormSidebar.module.scss'
+import { Controls } from './controls/Controls'
 
-interface Props {}
-
-const ArticleFormSidebar = observer((props: Props) => {
+const ArticleFormSidebar = observer(() => {
   const auth = useAuth()
   const router = useRouter()
   const admin = useAdmin()

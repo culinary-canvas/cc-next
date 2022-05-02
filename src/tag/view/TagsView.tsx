@@ -17,6 +17,7 @@ export function TagsView(props: Props) {
   const router = useRouter()
 
   return (
+    // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
     <section
       id={id}
       className={classnames(s.tagsContainer, containerClassName)}
@@ -24,11 +25,7 @@ export function TagsView(props: Props) {
       onMouseOut={() => !!onBlur && onBlur()}
     >
       {tags.map((tag) => (
-        <Tag
-          key={tag}
-          tag={tag}
-          onClick={() => router.push(`/tags/${tag}`)}
-        />
+        <Tag key={tag} tag={tag} onClick={() => router.push(`/tags/${tag}`)} />
       ))}
     </section>
   )

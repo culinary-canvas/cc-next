@@ -60,21 +60,23 @@ export default function ArticleEdit({ articleData }) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<Props, { slug: string }> =
-  async ({ params }) => {
-    const { db } = firebase()
+export const getServerSideProps: GetServerSideProps<
+  Props,
+  { slug: string }
+> = async ({ params }) => {
+  const { db } = firebase()
 
-    const response = await getDocs(
-      query(collection(db, 'articles'), where('slug', '==', params.slug)),
-    )
+  const response = await getDocs(
+    query(collection(db, 'articles'), where('slug', '==', params.slug)),
+  )
 
-    const articleData = !!response.size
-      ? { id: response.docs[0].id, ...response.docs[0].data() }
-      : []
+  const articleData = !!response.size
+    ? { id: response.docs[0].id, ...response.docs[0].data() }
+    : []
 
-    return {
-      props: {
-        articleData: JSON.parse(JSON.stringify(articleData)),
-      },
-    }
+  return {
+    props: {
+      articleData: JSON.parse(JSON.stringify(articleData)),
+    },
   }
+}

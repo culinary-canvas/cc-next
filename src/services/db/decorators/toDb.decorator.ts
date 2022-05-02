@@ -17,10 +17,8 @@ export function hasToDb(target: any): boolean {
 }
 
 export function getToDb<T>(target: T): (obj: T) => DocumentData {
-  const transformMethod = Object.getOwnPropertyNames(
-    target.constructor,
-  ).find((key) =>
-    Reflect.hasMetadata('toDb', target.constructor, key),
+  const transformMethod = Object.getOwnPropertyNames(target.constructor).find(
+    (key) => Reflect.hasMetadata('toDb', target.constructor, key),
   )
   return target.constructor[transformMethod]
 }

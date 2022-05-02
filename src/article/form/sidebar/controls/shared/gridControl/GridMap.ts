@@ -1,4 +1,4 @@
-import { action, computed, observable, makeObservable } from 'mobx';
+import { action, computed, observable, makeObservable } from 'mobx'
 import { ArticlePart } from '../../../../../models/ArticlePart'
 import { GridPositionService } from '../../../../../grid/GridPosition.service'
 import { ArrayUtils } from '../../../../../../services/utils/ArrayUtils'
@@ -37,7 +37,7 @@ export class GridMap<T extends ArticlePart> {
   }
 
   constructor(rows: number, columns: number, parts: T[]) {
-    makeObservable(this);
+    makeObservable(this)
     this.rowCount = rows
     this.columnsCount = columns
     this.parts = parts
@@ -74,7 +74,7 @@ export class GridRow<T extends ArticlePart> {
   @observable private readonly columnsMap = new Map<number, GridColumn<T>>()
 
   constructor() {
-    makeObservable(this);
+    makeObservable(this)
   }
 
   @computed get columns() {
@@ -102,7 +102,7 @@ export class GridRow<T extends ArticlePart> {
       .filter((p) => p instanceof SectionModel)
       .some(
         (p) =>
-          ((p as unknown) as SectionModel).format.height === Size.FULL_SCREEN,
+          (p as unknown as SectionModel).format.height === Size.FULL_SCREEN,
       )
   }
 }
@@ -115,7 +115,7 @@ export class GridColumn<T extends ArticlePart> {
   }
 
   constructor(parts: T[] = []) {
-    makeObservable(this);
+    makeObservable(this)
     this.parts = parts
   }
 }

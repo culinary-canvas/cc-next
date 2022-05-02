@@ -24,7 +24,6 @@ export function Modal({
   style = {},
   y,
 }: Props) {
-
   const [position, setPosition] = useState<CSSProperties>({})
   useEffect(() => {
     if (!isNil(y)) {

@@ -202,7 +202,7 @@ export class ImageService {
   }
 
   static getDeviceSize(size: number): number {
-    for (let deviceSize of this.NEXTJS_DEVICE_SIZES) {
+    for (const deviceSize of this.NEXTJS_DEVICE_SIZES) {
       if (deviceSize >= size) {
         return deviceSize
       }

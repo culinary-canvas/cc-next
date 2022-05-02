@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Button } from '../../../../../../shared/button/Button'
 import { runInAction } from 'mobx'
 import s from './SortOrderButtons.module.scss'
-import '../../../../../../services/types/Sortable'
-import {Sortable} from '../../../../../../services/types/Sortable'
+import { Sortable } from '../../../../../../services/types/Sortable'
 
 interface Props<T extends Sortable> {
   target: T
@@ -27,10 +26,7 @@ export const SortOrderButtons = observer(
     } = props
 
     return (
-      <section
-        className={s.container}
-        id={id}
-      >
+      <section className={s.container} id={id}>
         <Button
           disabled={
             disabled ||

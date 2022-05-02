@@ -15,8 +15,8 @@ import { firebase } from '../firebase/Firebase'
 export async function updateImagesContentType(userId: string) {
   const { storage } = firebase()
   const articles = await ArticleApi.all()
-  for (let article of articles) {
-    for (let imageContent of article.imageContents) {
+  for (const article of articles) {
+    for (const imageContent of article.imageContents) {
       if (
         !!imageContent.set.original?.fileName &&
         StorageService.isThisStorage(imageContent.set.original?.url)
@@ -47,7 +47,7 @@ export async function updateImagesContentType(userId: string) {
   }
 
   const persons = await PersonApi.all()
-  for (let person of persons) {
+  for (const person of persons) {
     if (
       !!person.imageSet.original?.fileName &&
       StorageService.isThisStorage(person.imageSet.original?.url)
@@ -63,7 +63,7 @@ export async function updateImagesContentType(userId: string) {
   }
 
   const companies = await CompanyApi.all()
-  for (let company of companies) {
+  for (const company of companies) {
     if (
       !!company.imageSet.original?.fileName &&
       StorageService.isThisStorage(company.imageSet.original?.url)

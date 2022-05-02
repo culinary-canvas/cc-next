@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-import { observable, makeObservable } from 'mobx';
+import { observable, makeObservable } from 'mobx'
 
 export class LeadFormObject {
   readonly id = uuid()

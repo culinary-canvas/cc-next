@@ -1,14 +1,7 @@
+import validator from 'validator'
+
 export class TextEditService {
-  private static readonly linkRegex = /\[(.*?)\]\((.*?)\)/gim
-  private static readonly urlPattern = new RegExp(
-    '^(https?:\\/\\/)?' +
-      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-      '((\\d{1,3}\\.){3}\\d{1,3}))' +
-      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-      '(\\?[;&a-z\\d%_.~+=-]*)?' +
-      '(\\#[-a-z\\d_]*)?$',
-    'i',
-  )
+  private static readonly linkRegex = /\[(.*?)\]\((.*?)\)/g
 
   private static hasLinkForMatchInPosition(
     text: string,
@@ -85,6 +78,6 @@ export class TextEditService {
   }
 
   static validURL(str: string) {
-    return !!str && this.urlPattern.test(str)
+    return !!str && validator.isURL(str)
   }
 }

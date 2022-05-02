@@ -92,7 +92,9 @@ export const TextContent = observer((props: Props) => {
       <ReactMarkdown
         components={{
           link: ({ node }) => (
+            // @ts-ignore
             <a href={node.url as string} rel="noreferrer" target="_blank">
+              {/*@ts-ignore*/}
               {node.children[0].value}
             </a>
           ),

@@ -38,7 +38,7 @@ export const FileInput = (props: Props) => {
         id={id}
         ref={inputRef}
         onChange={(e: any) => onChange(e.target.files[0])}
-        onClick={(e) => !!onClick && onClick((e as unknown) as MouseEvent)}
+        onClick={(e) => !!onClick && onClick(e as unknown as MouseEvent)}
         accept="image/*"
       />
       <span aria-label="File name">{children}</span>

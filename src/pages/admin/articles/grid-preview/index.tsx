@@ -1,16 +1,16 @@
-import React from 'react'
-import s from './gridPreview.module.scss'
-import { GetStaticProps } from 'next'
-import { ArticleModel } from '../../../../article/models/Article.model'
-import { PageHead } from '../../../../shared/head/PageHead'
-import { classnames } from '../../../../services/importHelpers'
-import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
-import { ArticleApi } from '../../../../article/Article.api'
-import { useAuthGuard } from '../../../../hooks/useAuthGuard'
-import { firebase } from '../../../../services/firebase/Firebase'
-import { useTransformToModels } from '../../../../hooks/useTransformToModels'
-import { Splash } from '../../../../article/grid/splash/Splash'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
+import { GetStaticProps } from 'next'
+import React from 'react'
+import { ArticleApi } from '../../../../article/Article.api'
+import { ArticleGrid } from '../../../../article/grid/ArticleGrid'
+import { Splash } from '../../../../article/grid/splash/Splash'
+import { ArticleModel } from '../../../../article/models/Article.model'
+import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { useTransformToModels } from '../../../../hooks/useTransformToModels'
+import { firebase } from '../../../../services/firebase/Firebase'
+import { classnames } from '../../../../services/importHelpers'
+import { PageHead } from '../../../../shared/head/PageHead'
+import s from './gridPreview.module.scss'
 
 interface Props {
   articlesData: any[]
@@ -35,7 +35,7 @@ function Start({ articlesData }: Props) {
           load={async (lastLoaded) =>
             ArticleApi.allPagedBySortOrderDesc(PAGE_SIZE, lastLoaded.sortOrder)
           }
-          usePromoted
+          useBig
           insertComponent={() => <Splash />}
           insertComponentAtIndex={1}
         />
