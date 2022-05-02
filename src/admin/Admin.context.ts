@@ -32,10 +32,8 @@ export interface AdminContext {
 }
 
 export function useAdminState(): AdminContext {
-  const [
-    showUnpublishedOnStartPage,
-    setShowUnpublishedOnStartPage,
-  ] = useState<boolean>(false)
+  const [showUnpublishedOnStartPage, setShowUnpublishedOnStartPage] =
+    useState<boolean>(false)
   const [sidebar, setSidebar] = useState<boolean>(false)
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
   const [formControl, setFormControl] = useState<FormControl<ArticleModel>>()

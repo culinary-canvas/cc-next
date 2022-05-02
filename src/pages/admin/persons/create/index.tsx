@@ -1,16 +1,14 @@
-import React, { useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { PersonModel } from '../../../../person/models/Person.model'
 import { GetServerSideProps } from 'next'
+import React, { useRef } from 'react'
 import { PersonForm } from '../../../../person/form/PersonForm'
-import { AdminMenu } from '../../../../admin/menu/AdminMenu'
+import { PersonModel } from '../../../../person/models/Person.model'
 import s from './personCreatePage.module.scss'
 
 const PersonCreatePage = observer(() => {
   const person = useRef(new PersonModel()).current
   return (
     <main className={s.container}>
-      <AdminMenu />
       <PersonForm person={person} />
     </main>
   )

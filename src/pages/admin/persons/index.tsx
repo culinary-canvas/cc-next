@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
-import s from './personList.module.scss'
+import React, { useEffect } from 'react'
 import { useAuthGuard } from '../../../hooks/useAuthGuard'
+import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { PersonList } from '../../../person/list/PersonList'
 import { PersonModel } from '../../../person/models/Person.model'
 import { PersonApi } from '../../../person/Person.api'
-import { PersonList } from '../../../person/list/PersonList'
-import { AdminMenu } from '../../../admin/menu/AdminMenu'
 import { PersonService } from '../../../person/Person.service'
-import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import s from './personList.module.scss'
 
 interface Props {
   personsData: { [key: string]: any }[]
@@ -27,8 +26,9 @@ function PersonListPage({ personsData }: Props) {
 
   return (
     <main className={s.container}>
-      <AdminMenu />
-      <PersonList persons={persons} />
+      <article className={s.list}>
+        <PersonList persons={persons} />
+      </article>
     </main>
   )
 }

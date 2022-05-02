@@ -1,5 +1,6 @@
 export const FONT = {
   FAMILY: {
+    NEUE_HAAS_GROTESK: 'neue-haas-grotesk-display',
     FILSON: 'filson-pro',
     GARAMOND: 'garamond-premier-pro-caption',
     ELOQUENT: 'eloquent-jf-pro',

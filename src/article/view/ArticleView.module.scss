@@ -9,10 +9,6 @@
   @include articleFooter();
 }
 
-.editButton {
-  @include articleEditButton();
-}
-
 @include media('<=phone') {
   .content {
     grid-template-columns: 1fr;
@@ -44,9 +40,5 @@
         }
       }
     }
-  }
-
-  .editButton {
-    display: none !important;
   }
 }

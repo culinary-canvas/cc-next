@@ -1,13 +1,12 @@
-import React from 'react'
 import { observer } from 'mobx-react-lite'
-import { CompanyModel } from '../../../../company/models/Company.model'
-import { CompanyApi } from '../../../../company/Company.api'
 import { GetServerSideProps } from 'next'
-import { useTransformToModel } from '../../../../hooks/useTransformToModel'
+import React from 'react'
+import { CompanyApi } from '../../../../company/Company.api'
 import { CompanyForm } from '../../../../company/form/CompanyForm'
-import { AdminMenu } from '../../../../admin/menu/AdminMenu'
-import s from './companyEditPage.module.scss'
+import { CompanyModel } from '../../../../company/models/Company.model'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { useTransformToModel } from '../../../../hooks/useTransformToModel'
+import s from './companyEditPage.module.scss'
 
 interface Props {
   data: { [key: string]: any }
@@ -24,7 +23,6 @@ const CompanyEditPage = observer((props: Props) => {
 
   return (
     <main className={s.container}>
-      <AdminMenu />
       <CompanyForm company={company} />
     </main>
   )

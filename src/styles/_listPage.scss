@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  @include responsive-header-height-padding-top();
+  @include responsive-header-height-margin-top();
 
   > h2,
   > h1 {

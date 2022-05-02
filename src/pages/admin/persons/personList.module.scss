@@ -5,3 +5,14 @@
   @include pageContainer();
   background-color: $white;
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  a {
+    color: black;
+    font-weight: 600;
+  }
+}

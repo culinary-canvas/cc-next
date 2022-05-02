@@ -1,13 +1,14 @@
-import React from 'react'
-import { ArticleList } from '../../../article/list/ArticleList'
 import { GetServerSideProps } from 'next'
-import { ArticleModel } from '../../../article/models/Article.model'
-import s from './articleList.module.scss'
-import { useAuthGuard } from '../../../hooks/useAuthGuard'
-import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import { useRouter } from 'next/router'
+import React, { useEffect } from 'react'
 import ArticleApi from '../../../article/Article.api'
-import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { ArticleService } from '../../../article/Article.service'
+import { ArticleList } from '../../../article/list/ArticleList'
+import { ArticleModel } from '../../../article/models/Article.model'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import { Button } from '../../../shared/button/Button'
+import s from './articleList.module.scss'
 
 interface Props {
   articleData: { [key: string]: any }[]
@@ -16,13 +17,18 @@ interface Props {
 function ArticleListPage({ articleData }: Props) {
   const articles = useTransformToModels(articleData, ArticleModel)
   const allowed = useAuthGuard()
+  const router = useRouter()
+
+  useEffect(() => {
+    ArticleService.populateIssues(articles)
+  }, [articles])
 
   if (!allowed) {
     return null
   }
   return (
     <main className={s.container}>
-      <AdminMenu/>
+      <Button onClick={() => router.push('/admin/issues')}>Edit issues</Button>
       <ArticleList articles={articles} />
     </main>
   )

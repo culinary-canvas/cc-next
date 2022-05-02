@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import s from './MobileMenu.module.scss'
+import classNames from 'classnames'
+import Image from 'next/image'
 import Link from 'next/link'
-import { menuOptions } from './models/menuOptions'
-import { useMenu } from './Menu.context'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import Logo from '../../public/assets/culinary-canvas-logo-mark.svg'
 import { classnames } from '../services/importHelpers'
 import { MenuButton } from './button/MenuButton'
-import { useRouter } from 'next/router'
+import s from './MobileMenu.module.scss'
 
 interface Props {
   className?: string
   buttonClassName?: string
+  collapsed: boolean
 }
 
 export function MobileMenu(props: Props) {
-  const { className, buttonClassName } = props
-  const { activeMenuOption } = useMenu()
+  const { className, buttonClassName, collapsed } = props
   const router = useRouter()
 
   const [open, setOpen] = useState<boolean>(false)
@@ -43,7 +44,22 @@ export function MobileMenu(props: Props) {
   }, [open])
 
   return (
-    <>
+    <div className={s.container}>
+      <button
+        className={classNames(s.logoButton, collapsed && s.collapsed)}
+        onClick={() => {
+          router.push('/')
+        }}
+      >
+        <Image
+          src={Logo}
+          alt="Culinary Canvas"
+          // className={s.logo}
+          title="Go to start"
+          height={60}
+          width={60}
+        />
+      </button>
       <MenuButton
         open={open}
         onClick={() => {
@@ -68,50 +84,41 @@ export function MobileMenu(props: Props) {
 
       <div
         className={classnames(
-          s.container,
+          s.dropdown,
           { [s.open]: open, [s.close]: !open && !first },
           className,
         )}
       >
-        {Object.values(menuOptions).map((option) =>
-          !!option.subMenu ? (
-            <div className={s.optionWithSubMenu} key={option.href}>
-              <Link key={option.href} href={option.href}>
-                <a
-                  className={classnames({
-                    [s.active]: option.equals(activeMenuOption),
-                  })}
-                >
-                  {option.text}
-                </a>
-              </Link>
-              <div className={s.subMenu}>
-                {option.subMenu.map((subOption) => (
-                  <Link key={subOption.href} href={subOption.href}>
-                    <a
-                      className={classnames({
-                        [s.active]: subOption.equals(activeMenuOption),
-                      })}
-                    >
-                      {subOption.text}
-                    </a>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <Link key={option.href} href={option.href}>
-              <a
-                className={classnames({
-                  [s.active]: option.equals(activeMenuOption),
-                })}
-              >
-                {option.text}
-              </a>
-            </Link>
-          ),
-        )}
+        <Link href="/articles">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/articles') && s.active,
+            )}
+          >
+            Articles
+          </a>
+        </Link>
+
+        <Link href="/index">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/index') && s.active,
+            )}
+          >
+            Index
+          </a>
+        </Link>
+
+        <Link href="/about">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/about') && s.active,
+            )}
+          >
+            About
+          </a>
+        </Link>
       </div>
-    </>
+    </div>
   )
 }

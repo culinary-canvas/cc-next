@@ -2,11 +2,49 @@
 @import '../styles/color';
 @import '../styles/animation';
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  //border: 1px solid black;
+}
+
+.logoButton {
+  width: 60px;
+  height: 60px;
+  max-width: 60px;
+  max-height: 60px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  > span {
+    max-width: 60px;
+    max-height: 60px;
+    transition: all 400ms ease-in-out;
+  }
+  &.collapsed > span {
+    max-width: 30px;
+    max-height: 30px;
+  }
+
+  &:hover {
+    opacity: 0.4 !important;
+  }
+}
+
 .button {
+  position: absolute;
+  right: 2rem;
   z-index: 1001;
-  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.2);
+
   &.open {
     background-color: $grey-lighter;
+  }
+
+  &:after {
+    background: none !important;
   }
 }
 
@@ -60,7 +98,7 @@
   content: '';
 
   &.open {
-    transform: translateX(-100vw);
+    transform: translateX(-120vw);
     animation-duration: $animation-slow;
     animation-name: backdrop-in;
     animation-timing-function: ease-in-out;
@@ -75,7 +113,7 @@
   }
 }
 
-.container {
+.dropdown {
   position: fixed;
   top: 0;
   right: -80vw;
@@ -100,7 +138,7 @@
     flex-direction: column;
     align-items: center;
 
-    > a:after{
+    > a:after {
       content: none;
     }
 

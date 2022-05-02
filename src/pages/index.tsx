@@ -1,25 +1,29 @@
-import React, { useEffect } from 'react'
-import s from './start.module.scss'
-import { classnames } from '../services/importHelpers'
-import { ArticleModel } from '../article/models/Article.model'
-import { PageHead } from '../shared/head/PageHead'
-import { ArticleGrid } from '../article/grid/ArticleGrid'
-import { ArticleApi } from '../article/Article.api'
 import { GetStaticProps } from 'next'
+import React, { useEffect } from 'react'
+import { ArticleApi } from '../article/Article.api'
+import { ArticleService } from '../article/Article.service'
+import { ArticleGrid } from '../article/grid/ArticleGrid'
 import { Splash } from '../article/grid/splash/Splash'
+import { ArticleModel } from '../article/models/Article.model'
 import { useTransformToModels } from '../hooks/useTransformToModels'
 import { useMenu } from '../menu/Menu.context'
 import { menuOptions } from '../menu/models/menuOptions'
-import { ArticleService } from '../article/Article.service'
+import { classnames } from '../services/importHelpers'
+import { PageHead } from '../shared/head/PageHead'
+import s from './start.module.scss'
 
 interface Props {
   articlesData: any[]
 }
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 9
 
 function Start({ articlesData }: Props) {
   const articles = useTransformToModels(articlesData, ArticleModel)
+
+  useEffect(() => {
+    ArticleService.populateIssues(articles)
+  }, [articles])
 
   const { setActiveMenuOption } = useMenu()
   useEffect(() => setActiveMenuOption(menuOptions.ALL), [])
@@ -36,8 +40,8 @@ function Start({ articlesData }: Props) {
         <ArticleGrid
           insertComponent={() => <Splash />}
           insertComponentAtIndex={1}
+          useBig
           initialArticles={articles}
-          usePromoted
           load={async (lastLoaded) =>
             ArticleApi.publishedPagedBySortOrderDesc(
               PAGE_SIZE,
@@ -53,16 +57,7 @@ function Start({ articlesData }: Props) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const promotedArticlesData = await ArticleApi.fetchRawArticles(
-    PAGE_SIZE / 2,
-    true,
-  )
-  const nonPromotedArticlesData = await ArticleApi.fetchRawArticles(
-    PAGE_SIZE / 2,
-    false,
-  )
-
-  const articlesData = [...promotedArticlesData, ...nonPromotedArticlesData]
+  const articlesData = await ArticleApi.fetchRawArticles(PAGE_SIZE)
 
   return {
     props: {

@@ -26,7 +26,7 @@ import { ArticleModel } from './models/Article.model'
 export class ArticleApi {
   static readonly COLLECTION = 'articles'
 
-  static async fetchRawArticles(pageSize: number, promoted: boolean) {
+  static async fetchRawArticles(pageSize: number) {
     const { db } = firebase()
 
     const response = await getDocs(
@@ -34,7 +34,6 @@ export class ArticleApi {
         collection(db, this.COLLECTION),
         where('published', '==', true),
         where('showOnStartPage', '==', true),
-        where('promoted', '==', promoted),
         orderBy('sortOrder', 'desc'),
         limit(pageSize),
       ),

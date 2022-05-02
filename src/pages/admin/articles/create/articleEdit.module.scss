@@ -1,5 +1,8 @@
-@import '../../../../styles/article';
+@use '../../../../styles/article';
+@use '../../../../styles/layout';
+
+$totalHeaderHeight: layout.$admin-bar-height + layout.$header-height;
 
 .container {
-  @include articleContainer();
+  @include article.articleContainer($totalHeaderHeight);
 }

@@ -1,23 +1,14 @@
+import Compressor from 'compressorjs'
 import { ImageCropValues } from '../image/models/ImageCropValues'
 import { ImageFile } from '../image/models/ImageFile'
-import { FileService } from './file/FileService'
-import Compressor from 'compressorjs'
-import { Overlay } from '../shared/overlay/OverlayStore'
 import { ImageSet } from '../image/models/ImageSet'
+import { Overlay } from '../shared/overlay/OverlayStore'
+import { FileService } from './file/FileService'
 import { isNil } from './importHelpers'
 
 export class ImageService {
   static readonly NEXTJS_DEVICE_SIZES = [
-    172,
-    248,
-    344,
-    496,
-    688,
-    992,
-    1024,
-    1312,
-    2048,
-    4096,
+    172, 248, 344, 496, 688, 992, 1024, 1312, 2048, 4096,
   ]
 
   static async getImageElement(url: string) {
@@ -71,6 +62,7 @@ export class ImageService {
   }
 
   private static async getCroppedUrl(image: ImageFile, crop: ImageCropValues) {
+    console.log(crop)
     const x = (crop.x / 100) * image.width
     const y = (crop.y / 100) * image.height
     const width = (crop.width / 100) * image.width
@@ -140,9 +132,10 @@ export class ImageService {
     return `${name}_${width}x${height}.${extension}`
   }
 
-  private static getFileNameAndExtensionParts(
-    fileName: string,
-  ): { name: string; extension: string } {
+  private static getFileNameAndExtensionParts(fileName: string): {
+    name: string
+    extension: string
+  } {
     const periodPosition = fileName.lastIndexOf('.')
     const name = fileName.substring(0, periodPosition)
     const extension = fileName.substring(periodPosition + 1)

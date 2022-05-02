@@ -28,7 +28,7 @@ export class TextFormat extends Format {
 
   @field()
   @observable
-  fontFamily: FontFamily = FONT.FAMILY.FILSON
+  fontFamily: FontFamily = FONT.FAMILY.NEUE_HAAS_GROTESK
 
   @field()
   @observable

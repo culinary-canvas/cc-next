@@ -1,13 +1,12 @@
-import React from 'react'
 import { observer } from 'mobx-react-lite'
-import { PersonModel } from '../../../../person/models/Person.model'
-import { PersonApi } from '../../../../person/Person.api'
 import { GetServerSideProps } from 'next'
+import React from 'react'
+import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 import { useTransformToModel } from '../../../../hooks/useTransformToModel'
 import { PersonForm } from '../../../../person/form/PersonForm'
-import { AdminMenu } from '../../../../admin/menu/AdminMenu'
+import { PersonModel } from '../../../../person/models/Person.model'
+import { PersonApi } from '../../../../person/Person.api'
 import s from './personEditPage.module.scss'
-import { useAuthGuard } from '../../../../hooks/useAuthGuard'
 
 interface Props {
   data: { [key: string]: any }
@@ -24,7 +23,6 @@ const PersonEditPage = observer((props: Props) => {
 
   return (
     <main className={s.container}>
-      <AdminMenu />
       <PersonForm person={person} />
     </main>
   )

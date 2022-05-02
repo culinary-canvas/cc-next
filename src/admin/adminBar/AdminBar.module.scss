@@ -1,0 +1,44 @@
+@use '../../styles/color';
+@import '../../styles/layout';
+
+.bar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  z-index: 41;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: $admin-bar-height;
+  padding: 0 16px;
+  background: black;
+  font-size: 14px;
+  gap: 2rem;
+
+  @include media('<=phone') {
+    display: none;
+  }
+
+
+  > span {
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+  }
+  a {
+    color: rgba(255, 255, 255, 1);
+    font-weight: 500;
+    transition: all 150ms;
+    &:after {
+      background-color: color.$green-medium;
+    }
+    &.active:after {
+      max-width: 110%;
+      opacity: 1;
+    }
+  }
+}
+
+.right {
+  margin-right: 0;
+  margin-left: auto;
+}

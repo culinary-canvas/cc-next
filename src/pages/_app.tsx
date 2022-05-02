@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import classnames from 'classnames'
 import Modal from 'react-modal'
 import '../styles/global.scss'
+import {AdminBar} from '../admin/adminBar/AdminBar'
 import { AuthContext, useAuthState } from '../services/auth/Auth'
 import TagManager from 'react-gtm-module'
 import { AdminContext, useAdminState } from '../admin/Admin.context'
@@ -56,11 +57,9 @@ function App({ Component, pageProps }: Props) {
               {IS_PROD && <CookieBanner />}
 
               {overlay.isVisible && (
-                <Overlay
-                  text={overlay.text}
-                  progress={overlay.progress}
-                  children={overlay.children}
-                />
+                <Overlay text={overlay.text} progress={overlay.progress}>
+                  {overlay.children}
+                </Overlay>
               )}
 
               {auth.isSignedIn && admin.sidebar && <ArticleFormSidebar />}
@@ -71,6 +70,7 @@ function App({ Component, pageProps }: Props) {
                   'showing-sidebar': admin.sidebarOpen,
                 })}
               >
+                <AdminBar />
                 <Header />
                 <Component {...pageProps} />
                 <Footer />

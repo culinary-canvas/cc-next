@@ -1,9 +1,9 @@
 import { makeObservable, observable } from 'mobx'
-import { field } from '../../services/db/decorators/field.decorator'
-import { CompanyType } from './CompanyType'
-import { Model } from '../../services/db/Model'
-import { ImageSet } from '../../image/models/ImageSet'
 import { ImageFormat } from '../../article/models/ImageFormat'
+import { ImageSet } from '../../image/models/ImageSet'
+import { field } from '../../services/db/decorators/field.decorator'
+import { Model } from '../../services/db/Model'
+import { CompanyType } from './CompanyType'
 
 export class CompanyModel implements Model {
   @observable
@@ -62,10 +62,9 @@ export class CompanyModel implements Model {
   @field(ImageSet)
   imageSet: ImageSet
 
-
   /**
    * @deprecated
-   */  @observable
+   */ @observable
   @field(ImageSet)
   image: ImageSet
 

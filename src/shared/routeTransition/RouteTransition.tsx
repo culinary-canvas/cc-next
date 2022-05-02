@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 import { classnames } from '../../services/importHelpers'
 import s from './RouteTransition.module.scss'
 

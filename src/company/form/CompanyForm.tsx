@@ -191,6 +191,7 @@ export const CompanyForm = observer((props: Props) => {
             className={s.link}
             href={`/companies/${company.slug}`}
             target="_blank"
+            rel="noreferrer"
           >
             {`/companies/${company.slug}`}
           </a>
@@ -333,7 +334,9 @@ export const CompanyForm = observer((props: Props) => {
           company.imageSet = new ImageSet()
           company.imageFormat = new ImageFormat()
         }}
-        onChange={(imageSet) => runInAction(() => (company.imageSet = imageSet))}
+        onChange={(imageSet) =>
+          runInAction(() => (company.imageSet = imageSet))
+        }
       />
     </article>
   )

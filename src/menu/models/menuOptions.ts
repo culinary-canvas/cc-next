@@ -4,16 +4,16 @@ import { ArticleType } from '../../article/models/ArticleType'
 
 export const menuOptions = {
   ALL: new MenuOption('All', '/'),
-  [ArticleType.DISH]: new MenuOption(
-    'Dishes',
+  index: new MenuOption(
+    'Index',
     `/${StringUtils.toLowerKebabCase(ArticleType.DISH)}`,
   ),
-  [ArticleType.PORTRAIT]: new MenuOption(
-    'Portraits',
+  articles: new MenuOption(
+    'Articles',
     `/${StringUtils.toLowerKebabCase(ArticleType.PORTRAIT)}`,
   ),
-  [ArticleType.RECIPE]: new MenuOption(
-    'Recipes',
+  about: new MenuOption(
+    'About',
     `/${StringUtils.toLowerKebabCase(ArticleType.RECIPE)}`,
   ),
   [ArticleType.TIDBITS]: new MenuOption(

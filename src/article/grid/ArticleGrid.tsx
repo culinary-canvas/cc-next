@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { ArticleModel } from '../models/Article.model'
-import s from './ArticleGrid.module.scss'
-import { classnames } from '../../services/importHelpers'
 import Link from 'next/link'
-import { ArticlePreview } from '../preview/ArticlePreview'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { classnames } from '../../services/importHelpers'
 import { Spinner } from '../../shared/spinner/Spinner'
 import { COLOR } from '../../styles/_color'
+import { ArticleModel } from '../models/Article.model'
 import { ArticleWithLabels } from '../models/ArticleWithLabels'
+import { ArticlePreview } from '../preview/ArticlePreview'
+import s from './ArticleGrid.module.scss'
 
 interface Props<T extends ArticleModel | ArticleWithLabels> {
   initialArticles?: T[]
   load?: (last: T) => Promise<T[]>
   insertComponent?: () => any
   insertComponentAtIndex?: number
-  usePromoted?: boolean
+  useBig?: boolean
   className?: string
   preloadImages?: boolean
   preloadLimit?: number
@@ -27,7 +27,7 @@ export const ArticleGrid = observer(
       load: loadFn,
       insertComponent = false,
       insertComponentAtIndex = 0,
-      usePromoted = false,
+      useBig = false,
       className,
       preloadImages = false,
       preloadLimit,
@@ -88,10 +88,10 @@ export const ArticleGrid = observer(
                   insertComponent()}
                 <Link href={`/articles/${article.slug}`}>
                   <a
-                    className={classnames(s.articleContainer, {
-                      [s.promoted]:
-                        usePromoted && (article.promoted || i === 0),
-                    })}
+                    className={classnames(
+                      s.articleContainer,
+                      useBig && [0, 3, 7, 13, 17].includes(i) && s.big,
+                    )}
                   >
                     <ArticlePreview
                       article={article}

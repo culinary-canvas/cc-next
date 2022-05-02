@@ -1,4 +1,4 @@
-import React, { CSSProperties, forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 
 interface Props {
   id?: string
@@ -6,6 +6,7 @@ interface Props {
   options: readonly any[]
   onChange: (value: any) => any
   displayFormatter?: (value: any) => any
+  valueGetter?: (value: any) => any
   showEmptyOption?: boolean
   disabled?: boolean
   onFocus?: () => any
@@ -19,6 +20,7 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
     options,
     onChange,
     displayFormatter,
+    valueGetter,
     showEmptyOption = false,
     disabled = false,
     onFocus,
@@ -50,10 +52,13 @@ export const Select = forwardRef<HTMLSelectElement, Props>((props, ref) => {
       disabled={disabled}
       className={className}
     >
-      {showEmptyOption && <option value="None">None</option>}
+      {showEmptyOption && <option value="None">- None -</option>}
 
       {options.map((option) => (
-        <option key={option} value={option}>
+        <option
+          key={!!valueGetter ? valueGetter(option) : option}
+          value={!!valueGetter ? valueGetter(option) : option}
+        >
           {!!displayFormatter ? displayFormatter(option) : option}
         </option>
       ))}

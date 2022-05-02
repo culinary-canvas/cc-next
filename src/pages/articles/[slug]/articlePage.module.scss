@@ -3,3 +3,7 @@
 .container {
   @include articleContainer();
 }
+
+.containerAsAdmin {
+  @include articleContainer(true);
+}

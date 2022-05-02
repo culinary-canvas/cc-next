@@ -1,18 +1,19 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React, { useEffect } from 'react'
 import { ArticleApi } from '../../../article/Article.api'
 import { ArticleModel } from '../../../article/models/Article.model'
 import { ContentType } from '../../../article/models/ContentType'
+import { SectionModel } from '../../../article/models/Section.model'
 import { TextContentModel } from '../../../article/models/TextContent.model'
 import { ArticleView } from '../../../article/view/ArticleView'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import { useAuth } from '../../../services/auth/Auth'
 import { firebase } from '../../../services/firebase/Firebase'
 import { PageHead } from '../../../shared/head/PageHead'
 import s from './articlePage.module.scss'
-import { SectionModel } from '../../../article/models/Section.model'
-import { runInAction, toJS } from 'mobx'
 
 interface Props {
   articleData: any
@@ -20,6 +21,7 @@ interface Props {
 
 const ArticlePage = observer(({ articleData }: Props) => {
   const article = useTransformToModel(articleData, ArticleModel)
+  const { isSignedIn } = useAuth()
 
   useEffect(() => {
     if (!!article) {
@@ -47,7 +49,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
           )?.value
         }
       />
-      <main className={s.container}>
+      <main className={isSignedIn ? s.containerAsAdmin : s.container}>
         <ArticleView article={article} />
       </main>
     </>
@@ -68,7 +70,7 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
         slug: article.slug,
       },
     })),
-    fallback: 'blocking',
+    fallback: true,
   }
 }
 

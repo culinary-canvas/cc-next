@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { ImageSet } from '../../image/models/ImageSet'
+import {IssueService} from '../../issue/Issue.service'
 import { classnames } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
 import { Button } from '../../shared/button/Button'
@@ -39,18 +40,9 @@ export const ArticlePreview = observer((props: Props) => {
   const [title, setTitle] = useState<string>()
   const [subHeading, setSubHeading] = useState<string>()
 
-  const calculateSize = useCallback(
-    (containerMaxWidth: number) => {
-      return Math.round(
-        first
-          ? containerMaxWidth
-          : article.promoted
-          ? containerMaxWidth * 0.66
-          : containerMaxWidth * 0.33,
-      )
-    },
-    [article.promoted],
-  )
+  const calculateSize = useCallback((containerMaxWidth: number) => {
+    return Math.round(first ? containerMaxWidth : containerMaxWidth * 0.33)
+  }, [])
 
   const calculatedSizes = useMemo<string>(() => {
     const mobile = `(max-width: ${BREAKPOINT.PHONE}px) calc(100vw - 2rem)`
@@ -113,6 +105,7 @@ export const ArticlePreview = observer((props: Props) => {
         s.article,
         className,
         article.sponsored && s.sponsored,
+        first && s.first,
       )}
     >
       {!!article.sponsored && (
@@ -129,20 +122,34 @@ export const ArticlePreview = observer((props: Props) => {
             ? imageFormat.verticalAlign.toLowerCase()
             : 'center'
         }
-        figureClassName={s.image}
-        quality={50}
+        figureClassName={s.figure}
+        quality={60}
       />
+
       <section className={classnames(s.text, { [s.hasLabels]: !!labels })}>
-        <Button
-          className={s.articleType}
-          unsetStyle
-          onClick={(e) => {
-            e.preventDefault()
-            router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
-          }}
-        >
-          {StringUtils.toDisplayText(article.type)}
-        </Button>
+        {!!article.issueId ? (
+          <Button
+            className={s.articleType}
+            unsetStyle
+            onClick={(e) => {
+              e.preventDefault()
+              router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
+            }}
+          >
+            {IssueService.toDisplayText(article.issue)}
+          </Button>
+        ) : (
+          <Button
+            className={s.articleType}
+            unsetStyle
+            onClick={(e) => {
+              e.preventDefault()
+              router.push(`/${StringUtils.toLowerKebabCase(article.type)}`)
+            }}
+          >
+            {StringUtils.toDisplayText(article.type)}
+          </Button>
+        )}
 
         <h2 className={s.title}>{title}</h2>
 

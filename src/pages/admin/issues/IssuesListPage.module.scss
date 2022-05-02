@@ -1,0 +1,20 @@
+@import '../../../styles/page';
+@import '../../../styles/layout';
+@import '../../../styles/color';
+@import '../../../styles/table';
+
+.container {
+  @include pageContainer();
+  background-color: $white;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  a {
+    color: black;
+    font-weight: 600;
+  }
+}

@@ -4,7 +4,7 @@
 
 $article-border-radius: 1rem;
 
-@mixin articleContainer {
+@mixin articleContainer($admin: false) {
   width: 100%;
 
   p,
@@ -17,6 +17,14 @@ $article-border-radius: 1rem;
     margin-inline-start: 0;
     margin-inline-end: 0;
   }
+
+  article > :first-child {
+    @if ($admin) {
+      max-height: calc(100vh - #{$header-height} - #{$admin-bar-height});
+    } @else {
+      max-height: calc(100vh - #{$header-height});
+    }
+  }
 }
 
 @mixin articleGrid {
@@ -25,7 +33,7 @@ $article-border-radius: 1rem;
   grid-auto-flow: row;
   grid-template-columns:
     1fr
-    repeat(4, minmax(12.5%, 240px))
+    repeat(4, minmax(12.5%, 190px))
     1fr;
   grid-template-rows: 1fr;
 }
@@ -33,7 +41,6 @@ $article-border-radius: 1rem;
 @mixin articleContent {
   position: relative;
   @include media('>phone') {
-    gap: 2rem;
     @include articleGrid();
   }
 
@@ -69,14 +76,6 @@ $article-border-radius: 1rem;
   margin-top: 2rem;
   border-top: 1px solid black;
   font-size: $font-size-s;
-}
-
-@mixin articleEditButton {
-  position: absolute;
-  top: 5rem;
-  right: 3rem;
-  z-index: 200;
-  background-color: $white !important;
 }
 
 @mixin sponsoredFrame {

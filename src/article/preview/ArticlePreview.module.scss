@@ -18,16 +18,16 @@
 
 .article {
   position: relative;
-  display: grid;
-  grid-template:
-    'image' 1fr
-    'text' auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
-  max-width: 100%;
   cursor: pointer;
   transition: box-shadow $animation-medium $cubic-spring-more,
     transform $animation-fast linear;
   overflow-anchor: none;
+  align-items: center;
+  justify-content: center;
 
   &.sponsored {
     border: 10px solid $green-light;
@@ -36,57 +36,49 @@
     height: calc(100% - 10px);
   }
 
-  &:after {
-    position: absolute;
-    bottom: 25%;
-    left: 0;
-    z-index: -1;
-    width: 100%;
-    height: 50%;
-    background-color: $pink-light;
-    opacity: 0;
-    transition: opacity $animation-medium $cubic-spring-more,
-      transform $animation-medium $cubic-spring-more;
-    content: '';
-  }
-
-  &:hover {
-    box-shadow: $superSoftDownShadow;
-
-    &:after {
-      opacity: 1;
-      transform: translateY(5%) scaleX(1.1);
+  @include media('>phone') {
+    &.first {
+      .text {
+        padding-left: 4rem;
+        > .title {
+          font-size: 54px;
+          font-weight: 500;
+        }
+        > .subHeading {
+          //padding-left: 2rem;
+        }
+        > .articleType {
+          left: 4rem;
+          transform: translateX(0);
+        }
+      }
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: auto;
+      grid-template-areas: 'image text';
+      align-items: flex-end;
     }
   }
 
-  .image {
+  .figure {
     position: relative;
     grid-area: image;
     height: 100%;
-    min-height: 50vmin;
     overflow: hidden;
+    width: 100%;
+    min-height: 40vh;
+
+    @include media('>phone') {
+      min-height: 60vh;
+    }
   }
 
   .text {
     position: relative;
-    display: grid;
-    justify-content: flex-start;
-    grid-area: text;
-
-    &.hasLabels {
-      grid-template:
-        'title' auto
-        'sub-heading' auto
-        'labels' auto;
-    }
-
-    &:not(.hasLabels) {
-      grid-template:
-        'title' auto
-        'sub-heading' auto;
-    }
-
-    padding: 1rem 1rem 3rem;
+    display: flex;
+    //justify-content: flex-start;
+    flex-direction: column;
+    padding: 1rem 0.5rem 3rem;
     background-color: $white;
     gap: 1rem;
 
@@ -99,13 +91,15 @@
       background-color: $white;
       border-radius: 0;
       color: $black !important;
-      justify-self: center;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .title {
-      grid-area: title;
       padding: 1rem 0 0;
-      font-weight: 800;
+      font-weight: 600;
+      font-size: 32px;
+      line-height: 1.2;
     }
 
     .subHeading {
@@ -149,11 +143,24 @@
     }
 
     .subHeading {
-      font-family: $font-family-garamond;
+      font-weight: 500;
+      font-size: 20px;
     }
 
     .tags {
       padding: 1rem 0;
+    }
+
+    @include media('<=phone') {
+      text-align: center;
+      padding-bottom: 5rem;
+      .title {
+        font-size: 28px;
+      }
+
+      .subHeading {
+        font-size: 18px;
+      }
     }
   }
 

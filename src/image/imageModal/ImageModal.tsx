@@ -1,17 +1,17 @@
+import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef } from 'react'
-import s from './ImageModal.module.scss'
+import { FileDrop } from 'react-file-drop'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import { FileInput } from '../../shared/fileInput/FileInput'
-import { observer } from 'mobx-react-lite'
 import Modal from 'react-modal'
-import { Button } from '../../shared/button/Button'
-import { FileDrop } from 'react-file-drop'
-import { ImageFile } from '../models/ImageFile'
-import { ImageCropValues } from '../models/ImageCropValues'
 import { ImageService } from '../../services/Image.service'
 import { cloneDeep } from '../../services/importHelpers'
+import { Button } from '../../shared/button/Button'
+import { FileInput } from '../../shared/fileInput/FileInput'
 import { COLOR } from '../../styles/_color'
+import { ImageCropValues } from '../models/ImageCropValues'
+import { ImageFile } from '../models/ImageFile'
+import s from './ImageModal.module.scss'
 import { useImageModal } from './ImageModal.store'
 
 export interface ImageModalProps {
@@ -72,16 +72,15 @@ export const ImageModal = observer((props: ImageModalProps) => {
                     onDrop={async (files) =>
                       store.setNewImage(await ImageService.getImage(files[0]))
                     }
+                  ></FileDrop>
+                  <FileInput
+                    onChange={async (file) =>
+                      store.setNewImage(await ImageService.getImage(file))
+                    }
+                    id="file-upload-1"
                   >
-                    <FileInput
-                      onChange={async (file) =>
-                        store.setNewImage(await ImageService.getImage(file))
-                      }
-                      id="file-upload-1"
-                    >
-                      No image selected
-                    </FileInput>
-                  </FileDrop>
+                    No image selected
+                  </FileInput>
                 </>
               )}
             </main>

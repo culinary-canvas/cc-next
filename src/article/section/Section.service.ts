@@ -78,7 +78,7 @@ export class SectionService {
       const name = this.getOrCreateParagraph(section, 0)
       name.format.fontWeight = 500
       name.format.fontSize = FONT.SIZE.L
-      name.format.fontFamily = FONT.FAMILY.FILSON
+      name.format.fontFamily = FONT.FAMILY.NEUE_HAAS_GROTESK
       name.placeholder = 'Name'
       name.format.padding = new Padding(16, 16, 0, 16)
       name.format.gridPosition = new GridPosition(1, 5, 2, 3)

@@ -1,23 +1,25 @@
-import { ArticleModel } from './models/Article.model'
-import { ArticleType } from './models/ArticleType'
-import { SectionModel } from './models/Section.model'
-import { runInAction, toJS } from 'mobx'
-import { SectionService } from './section/Section.service'
-import { SectionPreset } from './models/SectionPreset'
-import StringUtils from '../services/utils/StringUtils'
-import { ImageContentModel } from './models/ImageContent.model'
-import { StorageService } from '../services/storage/Storage.service'
-import { GridPositionService } from './grid/GridPosition.service'
-import { GridPosition } from './grid/GridPosition'
-import { TagApi } from '../tag/Tag.api'
-import { TagModel } from '../tag/models/Tag.model'
-import { ContentType } from './models/ContentType'
-import { TextContentModel } from './models/TextContent.model'
-import { TextEditService } from './form/text/TextEdit.service'
-import { PersonApi } from '../person/Person.api'
+import { DocumentData, Timestamp } from 'firebase/firestore'
+import { runInAction } from 'mobx'
 import { CompanyApi } from '../company/Company.api'
 import { ImageFile } from '../image/models/ImageFile'
-import { DocumentData, Timestamp } from 'firebase/firestore'
+import { IssueApi } from '../issue/Issue.api'
+import { PersonApi } from '../person/Person.api'
+import { StorageService } from '../services/storage/Storage.service'
+import { mapBy } from '../services/utils/mapBy'
+import StringUtils from '../services/utils/StringUtils'
+import { TagModel } from '../tag/models/Tag.model'
+import { TagApi } from '../tag/Tag.api'
+import { TextEditService } from './form/text/TextEdit.service'
+import { GridPosition } from './grid/GridPosition'
+import { GridPositionService } from './grid/GridPosition.service'
+import { ArticleModel } from './models/Article.model'
+import { ArticleType } from './models/ArticleType'
+import { ContentType } from './models/ContentType'
+import { ImageContentModel } from './models/ImageContent.model'
+import { SectionModel } from './models/Section.model'
+import { SectionPreset } from './models/SectionPreset'
+import { TextContentModel } from './models/TextContent.model'
+import { SectionService } from './section/Section.service'
 
 export class ArticleService {
   private static readonly IMAGE_SET_PROPERTY_NAMES = ['original', 'image']
@@ -218,6 +220,7 @@ export class ArticleService {
       if (!tagExists) {
         const tag = new TagModel()
         tag.name = tagName
+        console.log(tag)
         await TagApi.save(tag, userId)
       }
       runInAction(() => {
@@ -285,6 +288,14 @@ export class ArticleService {
       const companies = await CompanyApi.byIds(article.companyIds)
       runInAction(() => (article.companies = companies))
     }
+  }
+
+  static async populateIssues(articles: ArticleModel[]): Promise<void> {
+    const articlesWithIssueIds = articles.filter((a) => a.issueId && !a.issue)
+    const issueIds = new Set(articlesWithIssueIds.map((a) => a.issueId))
+    const issues = await IssueApi.byIds(Array.from(issueIds))
+    const issuesById = mapBy(issues, 'id')
+    articlesWithIssueIds.forEach((a) => (a.issue = issuesById.get(a.issueId)))
   }
 
   static isPublished(article: ArticleModel) {

@@ -1,9 +1,6 @@
 import classNames from 'classnames'
 import { observer } from 'mobx-react-lite'
-import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useAuth } from '../../services/auth/Auth'
-import { Button } from '../../shared/button/Button'
 import { Related } from '../../shared/related/Related'
 import { ArticleService } from '../Article.service'
 import { ArticleModel } from '../models/Article.model'
@@ -17,8 +14,6 @@ interface Props {
 }
 
 export const ArticleView = observer(({ article: propArticle }: Props) => {
-  const router = useRouter()
-  const auth = useAuth()
   const [article, setArticle] = useState<ArticleModel>(propArticle)
 
   useEffect(() => setArticle(propArticle), [propArticle])
@@ -32,14 +27,6 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
 
   return (
     <>
-      {auth.isSignedIn && (
-        <Button
-          className={s.editButton}
-          onClick={() => router.push(`/admin/articles/${article.slug}`)}
-        >
-          Edit
-        </Button>
-      )}
       <article
         className={classNames(s.content, article.sponsored && s.sponsored)}
         style={{ backgroundColor: article.format.backgroundColor }}

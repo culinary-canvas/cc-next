@@ -1,13 +1,11 @@
-import React from 'react'
 import { GetServerSideProps } from 'next'
-import s from './companyList.module.scss'
-import { useAuthGuard } from '../../../hooks/useAuthGuard'
-import { useTransformToModel } from '../../../hooks/useTransformToModel'
-import { CompanyModel } from '../../../company/models/Company.model'
+import React from 'react'
 import { CompanyApi } from '../../../company/Company.api'
 import { CompanyList } from '../../../company/list/CompanyList'
-import { AdminMenu } from '../../../admin/menu/AdminMenu'
+import { CompanyModel } from '../../../company/models/Company.model'
+import { useAuthGuard } from '../../../hooks/useAuthGuard'
 import { useTransformToModels } from '../../../hooks/useTransformToModels'
+import s from './companyList.module.scss'
 
 interface Props {
   companiesData: { [key: string]: any }[]
@@ -22,8 +20,9 @@ function CompanyListPage({ companiesData }: Props) {
   }
   return (
     <main className={s.container}>
-      <AdminMenu />
-      <CompanyList companies={companies} />
+      <article className={s.list}>
+        <CompanyList companies={companies} />
+      </article>
     </main>
   )
 }

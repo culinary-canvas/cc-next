@@ -25,10 +25,14 @@
   position: fixed;
   right: 0;
   bottom: -100vh;
+  display: flex;
   z-index: 2000;
+  justify-content: center;
+  align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: $pink;
+  opacity: 0.9;
+  background-color: $green;
 
   &.animateIn {
     animation-duration: $animation-slow;
@@ -38,7 +42,7 @@
   }
 
   &.animateOut {
-    animation-duration: $animation-medium;
+    animation-duration: $animation-fast;
     animation-name: route-change-out;
     animation-timing-function: ease-out;
     animation-fill-mode: both;

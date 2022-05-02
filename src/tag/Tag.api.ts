@@ -1,11 +1,10 @@
-import { TagModel } from './models/Tag.model'
-import { Transformer } from '../services/db/Transformer'
-import { firebase } from '../services/firebase/Firebase'
 import 'firebase/firestore'
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
+  DocumentReference,
   getDoc,
   getDocs,
   query,
@@ -13,6 +12,9 @@ import {
   where,
 } from 'firebase/firestore'
 import { ModelService } from '../services/db/Model.service'
+import { Transformer } from '../services/db/Transformer'
+import { firebase } from '../services/firebase/Firebase'
+import { TagModel } from './models/Tag.model'
 
 export class TagApi {
   private static readonly COLLECTION = 'tags'
@@ -39,10 +41,18 @@ export class TagApi {
   static async save(tag: TagModel, userId: string): Promise<string> {
     const { db } = firebase()
     ModelService.beforeSave(tag, userId)
-    const ref = doc(db, this.COLLECTION, tag?.id).withConverter(
-      Transformer.firestoreConverter(TagModel),
-    )
-    await setDoc(ref, tag)
+    let ref: DocumentReference
+    if (!!tag.id) {
+      ref = doc(db, this.COLLECTION, tag.id).withConverter(
+        Transformer.firestoreConverter(TagModel),
+      )
+      await setDoc(ref, tag)
+    } else {
+      const collRef = collection(db, this.COLLECTION).withConverter(
+        Transformer.firestoreConverter(TagModel),
+      )
+      ref = await addDoc(collRef, tag)
+    }
     return ref.id
   }
 

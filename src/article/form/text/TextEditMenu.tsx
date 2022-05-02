@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import s from './TextEditMenu.module.scss'
-import { Button } from '../../../shared/button/Button'
 import { runInAction } from 'mobx'
+import React, { useCallback, useEffect, useState } from 'react'
 import { classnames } from '../../../services/importHelpers'
+import { Button } from '../../../shared/button/Button'
 import { TextEditService } from './TextEdit.service'
+import s from './TextEditMenu.module.scss'
 
 interface Props {
   text: string
@@ -22,7 +22,7 @@ export function TextEditMenu(props: Props) {
   useEffect(() => {
     setLinkAction(
       (existingUrl !== '' && url === '') ||
-      (existingUrl !== '' && existingUrl === url)
+        (existingUrl !== '' && existingUrl === url)
         ? 'unlink'
         : existingUrl !== '' && url !== ''
         ? 'update'

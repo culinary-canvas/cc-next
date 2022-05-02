@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
-import s from './articleEdit.module.scss'
-import { useFormControl } from '../../../../services/formControl/useFormControl'
-import { ArticleForm } from '../../../../article/form/ArticleForm'
-import { ArticleService } from '../../../../article/Article.service'
+import React, { useEffect } from 'react'
 import { useAdmin } from '../../../../admin/Admin.context'
+import { ArticleService } from '../../../../article/Article.service'
+import { ArticleForm } from '../../../../article/form/ArticleForm'
 import { useAuthGuard } from '../../../../hooks/useAuthGuard'
+import { useFormControl } from '../../../../services/formControl/useFormControl'
+import s from './articleEdit.module.scss'
 
-export default function ArticleEdit({ articleData }) {
+export default function ArticleEdit() {
   const admin = useAdmin()
   const allowed = useAuthGuard()
 

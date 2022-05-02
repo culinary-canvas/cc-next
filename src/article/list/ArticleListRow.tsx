@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { ArticleModel } from '../models/Article.model'
 import Link from 'next/link'
-import s from './ArticleListRow.module.scss'
-import { SortOrder } from './SortOrder'
+import React, { useState } from 'react'
+import {IssueService} from '../../issue/Issue.service'
+import { useAuth } from '../../services/auth/Auth'
 import StringUtils from '../../services/utils/StringUtils'
-import { ArticleService } from '../Article.service'
 import { Button } from '../../shared/button/Button'
 import { ArticleApi } from '../Article.api'
-import { useAuth } from '../../services/auth/Auth'
+import { ArticleService } from '../Article.service'
+import { ArticleModel } from '../models/Article.model'
+import s from './ArticleListRow.module.scss'
+import { SortOrder } from './SortOrder'
 
 interface Props {
   article: ArticleModel
@@ -69,9 +70,9 @@ export const ArticleListRow = (props: Props) => {
           <a>{article.title}</a>
         </Link>
       </td>
+      <td>{IssueService.toDisplayText(article.issue)}</td>
       <td>{StringUtils.toDisplayText(article.type)}</td>
       <td>{article.published ? 'Published' : 'WIP'}</td>
-      <td>{article.promoted ? 'Promoted' : 'No'}</td>
       <td>{article.created.toLocaleDateString()}</td>
       <td>{article.modified.toLocaleDateString()}</td>
     </tr>

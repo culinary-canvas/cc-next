@@ -5,41 +5,43 @@
   @include main-container-width();
 
   @include media('<=phone') {
-    grid-auto-rows: minmax(1fr, 800px);
-    grid-template-columns: 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
     padding: 1rem;
     gap: 2rem;
   }
 
   @include media('>phone') {
-    grid-auto-flow: dense;
-    grid-auto-rows: minmax(1fr, 800px);
+    grid-auto-flow: row;
+    grid-auto-rows: auto;
     grid-template-columns: 1fr 1fr 1fr;
     padding-bottom: 4rem;
-    gap: 4rem;
+    column-gap: 4rem;
+    row-gap: 8rem;
   }
 
   a {
     color: black;
-  }
-
-  .articleContainer {
     &:after {
       display: none;
     }
+  }
+
+  .articleContainer {
     @include media('>tablet') {
       height: 100%;
 
-      &:first-child.promoted {
+      &:first-child.big {
         grid-column-end: span 3;
-        min-height: 85vh;
       }
 
-      &:not(:first-child).promoted {
+      &:not(:first-child).big {
         grid-column-end: span 2;
       }
 
-      &:not(:first-child, .promoted) {
+      &:not(:first-child, .big) {
         grid-column-end: span 1;
       }
     }
@@ -56,7 +58,6 @@
     }
 
     @include media('<=phone') {
-      height: 80vh;
       &.promoted {
         grid-column-end: span 1;
       }

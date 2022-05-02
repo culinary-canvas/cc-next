@@ -1,28 +1,31 @@
+import { runInAction, toJS } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import copyPasteIcon from '../../../../../../public/assets/icons/streamline-icon-copy-paste@140x140.svg'
 import editIcon from '../../../../../../public/assets/icons/streamline-icon-pencil-write-3-alternate@140x140.svg'
-import { Checkbox } from '../../../../../shared/checkbox/Checkbox'
-import { Select } from '../../../../../shared/select/Select'
-import { runInAction, toJS } from 'mobx'
-import { Button } from '../../../../../shared/button/Button'
-import StringUtils from '../../../../../services/utils/StringUtils'
-import { copyTextToClipboard } from '../../../../../services/utils/Utils'
-import { ArticleType } from '../../../../models/ArticleType'
-import s from './ArticleControls.module.scss'
-import { ArticleApi } from '../../../../Article.api'
 import { useAdmin } from '../../../../../admin/Admin.context'
 import { useReaction } from '../../../../../hooks/useReaction'
-import { COLOR } from '../../../../../styles/_color'
-import { useOverlay } from '../../../../../shared/overlay/OverlayStore'
+import { IssueApi } from '../../../../../issue/Issue.api'
+import { IssueService } from '../../../../../issue/Issue.service'
+import { IssueModel } from '../../../../../issue/models/Issue.model'
 import { useAuth } from '../../../../../services/auth/Auth'
-import { useRouter } from 'next/router'
-import { ColorPicker } from '../shared/colorPicker/ColorPicker'
-import { observer } from 'mobx-react-lite'
-import { TagsForm } from '../../../../../tag/form/TagsForm'
-import { PersonsArticleControl } from '../shared/personsArticleControl/PersonsArticleControl'
-import { ControlContainer } from '../shared/controlContainer/ControlContainer'
-import { CompaniesArticleControl } from '../shared/companyArticleControl/CompaniesArticleControl'
+import StringUtils from '../../../../../services/utils/StringUtils'
+import { copyTextToClipboard } from '../../../../../services/utils/Utils'
+import { Button } from '../../../../../shared/button/Button'
+import { Checkbox } from '../../../../../shared/checkbox/Checkbox'
 import { DatePicker } from '../../../../../shared/datePIcker/DatePicker'
+import { useOverlay } from '../../../../../shared/overlay/OverlayStore'
+import { Select } from '../../../../../shared/select/Select'
+import { COLOR } from '../../../../../styles/_color'
+import { TagsForm } from '../../../../../tag/form/TagsForm'
+import { ArticleApi } from '../../../../Article.api'
+import { ArticleType } from '../../../../models/ArticleType'
+import { ColorPicker } from '../shared/colorPicker/ColorPicker'
+import { CompaniesArticleControl } from '../shared/companyArticleControl/CompaniesArticleControl'
+import { ControlContainer } from '../shared/controlContainer/ControlContainer'
+import { PersonsArticleControl } from '../shared/personsArticleControl/PersonsArticleControl'
+import s from './ArticleControls.module.scss'
 
 export const ArticleControls = observer(() => {
   const auth = useAuth()
@@ -30,6 +33,12 @@ export const ArticleControls = observer(() => {
   const admin = useAdmin()
   const overlay = useOverlay()
   const { article } = admin
+
+  const [issues, setIssues] = useState<IssueModel[]>([])
+
+  useEffect(() => {
+    IssueApi.all().then(setIssues)
+  }, [])
 
   const [editingSlug, editSlug] = useState<boolean>(false)
   const [title, setTitle] = useState<string>(article.title)
@@ -115,6 +124,18 @@ export const ArticleControls = observer(() => {
         />
       </ControlContainer>
 
+      <ControlContainer label="Issue" id="issue">
+        <Select
+          showEmptyOption
+          id="issue"
+          value={article.issue}
+          options={issues}
+          valueGetter={(v) => v?.id ?? null}
+          onChange={(v) => runInAction(() => (article.issueId = v ?? null))}
+          displayFormatter={IssueService.toDisplayText}
+        />
+      </ControlContainer>
+
       <ControlContainer label="Type" id="type">
         <Select
           id="type"
@@ -156,11 +177,6 @@ export const ArticleControls = observer(() => {
           label="Show on start page"
           checked={article.showOnStartPage}
           onChange={(v) => runInAction(() => (article.showOnStartPage = v))}
-        />
-        <Checkbox
-          label="Promoted"
-          checked={article.promoted}
-          onChange={(v) => runInAction(() => (article.promoted = v))}
         />
       </ControlContainer>
 

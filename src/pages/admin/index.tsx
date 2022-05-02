@@ -1,23 +1,16 @@
-import React from 'react'
-import { useAuth } from '../../services/auth/Auth'
-import { useRouter } from 'next/router'
-import { SignIn } from '../../admin/signIn/SingIn'
-import s from './admin.module.scss'
-import { AdminMenu } from '../../admin/menu/AdminMenu'
 import { GetStaticProps } from 'next'
+import React from 'react'
+import { SignIn } from '../../admin/signIn/SingIn'
+import { useAuth } from '../../services/auth/Auth'
+import s from './admin.module.scss'
 
 function AdminHome() {
   const auth = useAuth()
-  const router = useRouter()
 
   return (
     <main className={s.container}>
       <h1>Admin</h1>
-      {!auth.isSignedIn ? (
-        <SignIn />
-      ) : (
-        <AdminMenu className={s.menuContainer} linkClassName={s.link} />
-      )}
+      {!auth.isSignedIn && <SignIn />}
     </main>
   )
 }

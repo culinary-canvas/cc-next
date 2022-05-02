@@ -16,7 +16,8 @@ body {
   margin: 0;
   background-color: $white;
   color: $black;
-  font-family: filson-pro, sans-serif;
+  font-family: $font-family-neue;
+  font-weight: 500;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -63,18 +64,18 @@ a {
   &:after {
     position: absolute;
     bottom: 12%;
-    left: -3%;
+    left: -5%;
     z-index: -1;
-    width: 106%;
-    height: 35%;
+    width: 110%;
+    height: 25%;
     max-width: 0;
-    background-color: $pink-light;
+    background-color: $green-light;
     opacity: 0;
     transition: max-width $animation-medium $cubic-spring;
     content: '';
   }
   &:hover:after {
-    max-width: 106%;
+    max-width: 110%;
     opacity: 1;
   }
 }
@@ -91,10 +92,10 @@ figure {
 }
 
 p {
-  white-space: pre-wrap;
+  //white-space: pre-wrap;
 
   a {
-    color: $blue;
+    color: $green;
   }
 }
 
@@ -120,7 +121,7 @@ textarea {
 input,
 select {
   border: 0;
-  border-bottom: 2px solid $black;
+  border-bottom: 1px solid $black;
 }
 
 input:disabled,

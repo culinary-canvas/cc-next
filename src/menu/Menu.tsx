@@ -1,95 +1,72 @@
-import React, { useEffect, useRef, useState } from 'react'
-import s from './Menu.module.scss'
+import classNames from 'classnames'
+import Image from 'next/image'
 import Link from 'next/link'
-import { menuOptions } from './models/menuOptions'
-import { useMenu } from './Menu.context'
+import { useRouter } from 'next/router'
+import React from 'react'
+import Logo from '../../public/assets/culinary-canvas-logo-mark.svg'
 import { classnames } from '../services/importHelpers'
-import { useAuth } from '../services/auth/Auth'
-import { MenuOption } from './models/MenuOption'
+import s from './Menu.module.scss'
 
 interface Props {
   className?: string
+  collapsed: boolean
 }
 
 export function Menu(props: Props) {
-  const { className } = props
-  const { activeMenuOption } = useMenu()
-  const auth = useAuth()
-
-  const [activeSubMenu, setActiveSubMenu] = useState<MenuOption>()
-  const [closeSubMenu, setCloseSubMenu] = useState<boolean>(false)
-  const closeSubMenuTimeout = useRef<NodeJS.Timeout>()
-
-  useEffect(() => {
-    if (closeSubMenu) {
-      closeSubMenuTimeout.current = setTimeout(() => {
-        setCloseSubMenu(false)
-        setActiveSubMenu(null)
-      }, 1000)
-    } else {
-      if (closeSubMenuTimeout) {
-        clearTimeout(closeSubMenuTimeout.current)
-      }
-    }
-  }, [activeSubMenu, closeSubMenu])
+  const { className, collapsed } = props
+  const router = useRouter()
 
   return (
-    <div className={classnames(s.container, className)}>
-      {Object.values(menuOptions).map((option) =>
-        !!option.subMenu ? (
-          <div
-            className={s.optionWithSubMenu}
-            onMouseOver={() => {
-              setActiveSubMenu(option)
-              setCloseSubMenu(false)
-            }}
-            onMouseOut={() => setCloseSubMenu(true)}
-            key={option.href}
-          >
-            <Link href={option.href}>
-              <a
-                className={classnames({
-                  [s.active]: option.equals(activeMenuOption),
-                })}
-                onClick={() => setActiveSubMenu(option)}
-              >
-                {option.text}
-              </a>
-            </Link>
-
-            {activeSubMenu?.equals(option) && (
-              <div className={s.subMenu}>
-                {option.subMenu.map((subOption) => (
-                  <Link key={subOption.href} href={subOption.href}>
-                    <a
-                      className={classnames({
-                        [s.active]: subOption.equals(activeMenuOption),
-                      })}
-                    >
-                      {subOption.text}
-                    </a>
-                  </Link>
-                ))}
-              </div>
+    <nav className={classnames(s.container, className)}>
+      <div className={s.leftMenu}>
+        <Link href="/index">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/index') && s.active,
             )}
-          </div>
-        ) : (
-          <Link key={option.href} href={option.href}>
-            <a
-              className={classnames({
-                [s.active]: option.equals(activeMenuOption),
-              })}
-            >
-              {option.text}
-            </a>
-          </Link>
-        ),
-      )}
-      {auth.isSignedIn && (
-        <Link href="/admin">
-          <a className={s.adminLink}>Admin</a>
+          >
+            Index
+          </a>
         </Link>
-      )}
-    </div>
+
+        <Link href="/articles">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/articles') && s.active,
+            )}
+          >
+            Articles
+          </a>
+        </Link>
+      </div>
+
+      <button
+        className={classNames(s.logoButton, collapsed && s.collapsed)}
+        onClick={() => {
+          router.push('/')
+        }}
+      >
+        <Image
+          src={Logo}
+          alt="Culinary Canvas"
+          // className={s.logo}
+          title="Go to start"
+          height={60}
+          width={60}
+        />
+      </button>
+      {/*<Menu className={classnames(s.menu, s.desktop)} />*/}
+      <div className={s.rightMenu}>
+        <Link href="/about">
+          <a
+            className={classNames(
+              router.asPath.startsWith('/about') && s.active,
+            )}
+          >
+            About
+          </a>
+        </Link>
+      </div>
+    </nav>
   )
 }

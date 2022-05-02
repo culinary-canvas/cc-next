@@ -1,45 +1,38 @@
+import sv from 'date-fns/locale/sv'
+import React from 'react'
 import ReactDatePicker, {
-  getDefaultLocale,
+  ReactDatePickerProps,
   registerLocale,
   setDefaultLocale,
 } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import sv from 'date-fns/locale/sv'
 import s from './DatePicker.module.scss'
 
 registerLocale('sv', sv)
 setDefaultLocale('sv')
 
-interface Props {
-  selected: Date
-  onChange: (d: Date) => any
+interface Props extends ReactDatePickerProps {
   containerClassName?: string
-  className?: string
-  disabled?: boolean
 }
 
-export function DatePicker(props: Props) {
-  const {
-    selected,
-    onChange,
-    className,
-    containerClassName,
-    disabled = false,
-  } = props
+export function DatePicker({
+  showWeekNumbers = true,
+  showTimeSelect = true,
+  dateFormat = 'HH:mm EEEE d MMMM yyyy',
+  containerClassName,
+  ...props
+}: Props) {
   return (
     <ReactDatePicker
-      showTimeSelect
-      showWeekNumbers
-      dateFormat="HH:mm EEEE d MMMM yyyy"
-      className={className}
+      showTimeSelect={showTimeSelect}
+      showWeekNumbers={showWeekNumbers}
+      dateFormat={dateFormat}
       locale="sv"
-      selected={selected}
-      onChange={(d) => onChange(d as Date)}
       popperPlacement="bottom-end"
-      disabled={disabled}
       wrapperClassName={containerClassName}
       popperClassName={s.popper}
       calendarClassName={s.calendar}
+      {...props}
     />
   )
 }

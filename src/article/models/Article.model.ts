@@ -1,19 +1,20 @@
-import { Model } from '../../services/db/Model'
 import { computed, makeObservable, observable } from 'mobx'
-import { SectionModel } from './Section.model'
-import { ArticleType } from './ArticleType'
-import { ContentType } from './ContentType'
+import { CompanyModel } from '../../company/models/Company.model'
+import { PersonModel } from '../../person/models/Person.model'
 import { field } from '../../services/db/decorators/field.decorator'
-import { TextContentModel } from './TextContent.model'
-import { ContentModel } from './ContentModel'
-import { ImageContentModel } from './ImageContent.model'
+import { transient } from '../../services/db/decorators/transient.decorator'
+import { Model } from '../../services/db/Model'
 import { Sortable } from '../../services/types/Sortable'
 import { isSystemColor } from '../../styles/_color'
 import { ArticleFormat } from './ArticleFormat'
-import { transient } from '../../services/db/decorators/transient.decorator'
-import { PersonModel } from '../../person/models/Person.model'
-import { CompanyModel } from '../../company/models/Company.model'
 import { ArticlePreviewModel } from './ArticlePreview.model'
+import { ArticleType } from './ArticleType'
+import { ContentModel } from './ContentModel'
+import { ContentType } from './ContentType'
+import { ImageContentModel } from './ImageContent.model'
+import { IssueModel } from '../../issue/models/Issue.model'
+import { SectionModel } from './Section.model'
+import { TextContentModel } from './TextContent.model'
 
 export class ArticleModel implements Model, Sortable {
   @observable
@@ -58,8 +59,15 @@ export class ArticleModel implements Model, Sortable {
 
   @observable
   @field()
+  issueId: string
+
+  @observable
+  @field()
   tagNames: string[] = []
 
+  /**
+   * @deprecated
+   */
   @observable
   @field()
   promoted = false
@@ -103,6 +111,10 @@ export class ArticleModel implements Model, Sortable {
   @observable
   @transient()
   companies: CompanyModel[] = []
+
+  @observable
+  @transient()
+  issue: IssueModel | null
 
   constructor() {
     makeObservable(this)

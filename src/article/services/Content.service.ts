@@ -80,11 +80,11 @@ export class ContentService {
         content.format.fontFamily = FONT.FAMILY.GARAMOND
         break
       case ContentType.LEAD:
-        content.format.fontWeight = 700
+        content.format.fontWeight = 500
         break
       case ContentType.TITLE:
-        content.format.fontFamily = FONT.FAMILY.FILSON
-        content.format.fontWeight = 900
+        content.format.fontFamily = FONT.FAMILY.NEUE_HAAS_GROTESK
+        content.format.fontWeight = 500
         content.format.fontSize = FONT.SIZE.XXXXL
         break
       case ContentType.BYLINE:

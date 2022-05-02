@@ -1,14 +1,14 @@
-import React, { useCallback, useState } from 'react'
-import { ImageModal } from '../imageModal/ImageModal'
-import s from './ImageEdit.module.scss'
-import { ImageSet } from '../models/ImageSet'
-import { classnames } from '../../services/importHelpers'
-import { ImageService } from '../../services/Image.service'
-import { useOverlay } from '../../shared/overlay/OverlayStore'
-import { ImageFormat } from '../../article/models/ImageFormat'
-import { ImageFit } from '../../article/models/ImageFit'
 import { observer } from 'mobx-react-lite'
+import React, { useState } from 'react'
+import { ImageFit } from '../../article/models/ImageFit'
+import { ImageFormat } from '../../article/models/ImageFormat'
+import { ImageService } from '../../services/Image.service'
+import { classnames } from '../../services/importHelpers'
 import { Image } from '../../shared/image/Image'
+import { useOverlay } from '../../shared/overlay/OverlayStore'
+import { ImageModal } from '../imageModal/ImageModal'
+import { ImageSet } from '../models/ImageSet'
+import s from './ImageEdit.module.scss'
 
 interface Props {
   set: ImageSet
@@ -95,32 +95,32 @@ export const ImageEdit = observer((props: Props) => {
         />
       )}
 
-        <ImageModal
-          image={set?.original}
-          cropValues={set?.cropValues}
-          isOpen={isModalOpen}
-          onOk={async (newImage, newCropValues) => {
-            setModalOpen(false)
+      <ImageModal
+        image={set?.original}
+        cropValues={set?.cropValues}
+        isOpen={isModalOpen}
+        onOk={async (newImage, newCropValues) => {
+          setModalOpen(false)
 
-            if (!!newImage || !!newCropValues) {
-              overlay.toggle()
+          if (!!newImage || !!newCropValues) {
+            overlay.toggle()
 
-              const newSet = await ImageService.createNewSet(
-                overlay,
-                set?.alt,
-                newImage || set.original,
-                newCropValues || set.cropValues,
-              )
+            const newSet = await ImageService.createNewSet(
+              overlay,
+              set?.alt,
+              newImage || set.original,
+              newCropValues || set.cropValues,
+            )
 
-              setTimeout(() => overlay.toggle(false), 500)
-              onChange(newSet)
-            }
-          }}
-          onCancel={() => {
-            setModalOpen(false)
-            onCancel && onCancel()
-          }}
-        />
+            setTimeout(() => overlay.toggle(false), 500)
+            onChange(newSet)
+          }
+        }}
+        onCancel={() => {
+          setModalOpen(false)
+          onCancel && onCancel()
+        }}
+      />
     </>
   )
 })

@@ -1,0 +1,65 @@
+@import '../../styles/layout';
+@import '../../styles/color';
+@import '../../styles/font';
+@import '../../styles/form';
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 20%;
+  margin: 0 0 $header-height;
+  background-color: $white;
+  @include main-content-width();
+
+  label {
+    color: $grey;
+    font-size: $font-size-m;
+    &:first-child {
+      margin-top: 4rem;
+    }
+  }
+
+  textarea {
+    min-height: 2.2rem;
+    border-right: 2px solid $black;
+    border-bottom: 2px solid $black;
+    border-left: 2px solid $black;
+
+    &::placeholder {
+      color: $grey;
+      font-weight: 300;
+    }
+  }
+
+  input:not([type='checkbox']),
+  select,
+  textarea {
+    margin-bottom: 2rem;
+    font-size: $font-size-m;
+  }
+
+  .buttonsContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    button {
+      width: fit-content;
+      margin: 0 1rem 0 0;
+    }
+
+    .link {
+      @include a();
+      height: 1.5rem;
+      margin-right: 0;
+      margin-left: auto;
+      font-size: $font-size-s;
+    }
+  }
+}
+
+
+.datePicker {
+  text-transform: capitalize;
+}
