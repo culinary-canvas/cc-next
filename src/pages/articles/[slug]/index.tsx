@@ -75,7 +75,7 @@ export const getStaticPaths: GetStaticPaths<StaticProps> = async () => {
         slug: article.slug,
       },
     })),
-    fallback: true,
+    fallback: 'blocking',
   }
 }
 

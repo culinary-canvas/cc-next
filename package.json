@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "build:stage": "NODE_ENV=test next build",
     "start": "next start",
     "start:stage": "NODE_ENV=test next start",
@@ -30,6 +31,7 @@
     "next": "^12.1.5",
     "next-images": "^1.8.4",
     "next-plugin-custom-babel-config": "^1.0.5",
+    "next-sitemap": "^2.5.20",
     "react": "^18.1.0",
     "react-color": "^2.19.3",
     "react-cookie-consent": "^7.4.1",

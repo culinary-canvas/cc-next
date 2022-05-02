@@ -1,4 +1,11 @@
-User-Agent: *
+# *
+User-agent: *
+Disallow: /admin
 Disallow: /admin/*
 Disallow: /assets/*
 
+# Host
+Host: https://culinary-canvas.com
+
+# Sitemaps
+Sitemap: https://culinary-canvas.com/sitemap.xml
