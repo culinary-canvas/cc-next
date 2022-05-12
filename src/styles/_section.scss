@@ -21,9 +21,9 @@
     }
 
     &.height-FULL_SCREEN {
-      height: 100vh;
+      height: calc(100vh - #{$header-height});
       > * {
-        max-height: 100vh;
+        max-height: calc(100vh - #{$header-height});
       }
     }
 
@@ -46,6 +46,5 @@
         color: $black !important;
       }
     }
-
   }
 }
