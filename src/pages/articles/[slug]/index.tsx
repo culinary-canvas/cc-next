@@ -12,6 +12,7 @@ import { TextContentModel } from '../../../article/models/TextContent.model'
 import { ArticleView } from '../../../article/view/ArticleView'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
+import { useUnmount } from '../../../hooks/useUnmount'
 import { useAuth } from '../../../services/auth/Auth'
 import { firebase } from '../../../services/firebase/Firebase'
 import { PageHead } from '../../../shared/head/PageHead'
@@ -32,6 +33,7 @@ const ArticlePage = observer(({ articleData }: Props) => {
   }, [article])
 
   useAutorun(() => setCurrentArticle(article), [article])
+  useUnmount(() => setCurrentArticle(null))
 
   useEffect(() => {
     if (!!article) {

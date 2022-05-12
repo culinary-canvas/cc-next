@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { useAdmin } from '../../admin/Admin.context'
 import { useAutorun } from '../../hooks/useAutorun'
+import { useUnmount } from '../../hooks/useUnmount'
 import { classnames } from '../../services/importHelpers'
 import { useHeader } from '../../shared/header/Header.context'
 import { ArticleService } from '../Article.service'
@@ -20,6 +21,7 @@ export const ArticleForm = observer(() => {
   }, [article])
 
   useAutorun(() => setCurrentArticle(article), [article])
+  useUnmount(() => setCurrentArticle(null))
 
   if (!article) {
     return null
