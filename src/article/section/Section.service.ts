@@ -119,35 +119,41 @@ export class SectionService {
         ContentType.IMAGE,
         section,
       )
-      image.format.gridPosition = new GridPosition(1, 5, 1, 4)
+      image.format.gridPosition = new GridPosition(1, 5, 1, 5)
       image.format.layer = 0
       image.format.fit = ImageFit.COVER
+
+      const issue = this.getOrCreateType(ContentType.ISSUE, section)
+      issue.format.verticalAlign = VerticalAlign.BOTTOM
+      issue.format.horizontalAlign = HorizontalAlign.CENTER
+      issue.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      issue.format.layer = 1
 
       const title = this.getOrCreateType(ContentType.TITLE, section)
       title.format.verticalAlign = VerticalAlign.BOTTOM
       title.format.horizontalAlign = HorizontalAlign.CENTER
-      title.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      title.format.gridPosition = new GridPosition(1, 5, 2, 3)
       title.format.layer = 1
 
       const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
       subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-      subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
+      subHeading.format.gridPosition = new GridPosition(1, 5, 3, 4)
       subHeading.format.layer = 1
 
       const byline = this.getOrCreateType(ContentType.BYLINE, section)
       byline.format.horizontalAlign = HorizontalAlign.CENTER
       byline.format.verticalAlign = VerticalAlign.BOTTOM
-      byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
+      byline.format.gridPosition = new GridPosition(1, 5, 4, 5)
       byline.format.layer = 1
 
       image.format.padding = new Padding(0)
-      title.format.padding = new Padding(16, 80, 16, 80)
+      title.format.padding = new Padding(0, 80, 16, 80)
       subHeading.format.padding = new Padding(16, 80, 16, 80)
       byline.format.padding = new Padding(16)
 
       section.format.height = Size.FULL_SCREEN
       section.format.gridPosition = new GridPosition(1, 7)
-      section.contents = [image, title, subHeading, byline]
+      section.contents = [image, issue, title, subHeading, byline]
     })
   }
 
@@ -159,31 +165,38 @@ export class SectionService {
         ContentType.IMAGE,
         section,
       )
-      image.format.gridPosition = new GridPosition(1, 3, 1, 4)
+      image.format.gridPosition = new GridPosition(1, 3, 1, 5)
       image.format.fit = ImageFit.COVER
+
+      const issue = this.getOrCreateType(ContentType.ISSUE, section)
+      issue.format.verticalAlign = VerticalAlign.BOTTOM
+      issue.format.horizontalAlign = HorizontalAlign.CENTER
+      issue.format.gridPosition = new GridPosition(3, 5, 1, 2)
+      issue.format.layer = 1
 
       const title = this.getOrCreateType(ContentType.TITLE, section)
       title.format.verticalAlign = VerticalAlign.BOTTOM
       title.format.horizontalAlign = HorizontalAlign.CENTER
-      title.format.gridPosition = new GridPosition(3, 5, 1, 2)
+      title.format.gridPosition = new GridPosition(3, 5, 2, 3)
 
       const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
       subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-      subHeading.format.gridPosition = new GridPosition(3, 5, 2, 3)
+      subHeading.format.gridPosition = new GridPosition(3, 5, 3, 4)
 
       const byline = this.getOrCreateType(ContentType.BYLINE, section)
       byline.format.horizontalAlign = HorizontalAlign.CENTER
       byline.format.verticalAlign = VerticalAlign.BOTTOM
-      byline.format.gridPosition = new GridPosition(3, 5, 3, 4)
+      byline.format.gridPosition = new GridPosition(3, 5, 6, 5)
 
       image.format.padding = new Padding(0)
-      title.format.padding = new Padding(16, 40, 16, 40)
+      issue.format.padding = new Padding(80, 0, 0, 0)
+      title.format.padding = new Padding(0, 40, 16, 40)
       subHeading.format.padding = new Padding(16, 40, 16, 40)
       byline.format.padding = new Padding(16)
 
       section.format.height = Size.FULL_SCREEN
       section.format.gridPosition = new GridPosition(1, 7)
-      section.contents = [image, title, subHeading, byline]
+      section.contents = [image, issue, title, subHeading, byline]
     })
   }
 
@@ -191,31 +204,38 @@ export class SectionService {
     runInAction(() => {
       section.preset = SectionPreset.INLINE_TITLE
 
+      const issue = this.getOrCreateType(ContentType.ISSUE, section)
+      issue.format.verticalAlign = VerticalAlign.BOTTOM
+      issue.format.horizontalAlign = HorizontalAlign.CENTER
+      issue.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      issue.format.layer = 1
+
       const title = this.getOrCreateType(ContentType.TITLE, section)
       title.format.verticalAlign = VerticalAlign.BOTTOM
       title.format.horizontalAlign = HorizontalAlign.CENTER
-      title.format.gridPosition = new GridPosition(1, 5, 1, 2)
+      title.format.gridPosition = new GridPosition(1, 5, 2, 3)
 
       const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
       subHeading.format.horizontalAlign = HorizontalAlign.CENTER
-      subHeading.format.gridPosition = new GridPosition(1, 5, 2, 3)
-
-      const byline = this.getOrCreateType(ContentType.BYLINE, section)
-      byline.format.horizontalAlign = HorizontalAlign.CENTER
-      byline.format.verticalAlign = VerticalAlign.BOTTOM
-      byline.format.gridPosition = new GridPosition(1, 5, 3, 4)
+      subHeading.format.gridPosition = new GridPosition(1, 5, 3, 4)
 
       const image = this.getOrCreateType(ContentType.IMAGE, section)
       image.format.gridPosition = new GridPosition(1, 5, 4, 5)
 
+      const byline = this.getOrCreateType(ContentType.BYLINE, section)
+      byline.format.horizontalAlign = HorizontalAlign.CENTER
+      byline.format.verticalAlign = VerticalAlign.BOTTOM
+      byline.format.gridPosition = new GridPosition(1, 5, 5, 6)
+
       image.format.padding = new Padding(16)
-      title.format.padding = new Padding(120, 16, 0, 16)
-      subHeading.format.padding = new Padding(40)
+      issue.format.padding = new Padding(80, 16, 16, 16)
+      title.format.padding = new Padding(0, 16, 0, 16)
+      subHeading.format.padding = new Padding(16, 16, 80)
       byline.format.padding = new Padding(32)
 
       section.format.height = Size.FIT_CONTENT
       section.format.gridPosition = new GridPosition(2, 6)
-      section.contents = [image, title, subHeading, byline]
+      section.contents = [image, issue, title, subHeading, byline]
     })
   }
 
@@ -283,8 +303,8 @@ export class SectionService {
   static contentsToDb = (objects: any[]) =>
     objects?.map((o) => Transformer.modelToDb(o))
 
-  static contentsToApp = (objects: any[]) =>
-    objects?.map((o) =>
+  static contentsToApp = (objects: any[]) => {
+    return objects?.map((o) =>
       Transformer.dbToModel<ContentModel>(
         o,
         !!o.type && o.type === ContentType.IMAGE
@@ -294,10 +314,12 @@ export class SectionService {
           : TextContentModel,
       ),
     )
+  }
 
   static sortContents = (sections: SectionModel[]) => {
     sections.forEach((section) => this.sortSectionContents(section))
   }
+
   static sortSectionContents = (section: SectionModel) => {
     section.contents.sort((c1, c2) => {
       if (c1.format.gridPosition.startRow !== c2.format.gridPosition.startRow) {

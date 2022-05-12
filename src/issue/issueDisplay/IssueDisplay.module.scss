@@ -12,6 +12,7 @@
   font-weight: 500;
   transition: all 250ms;
   gap: 0.5rem;
+  z-index: 2;
   &.hidden {
     opacity: 0;
   }

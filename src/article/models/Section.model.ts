@@ -1,13 +1,13 @@
 import { computed, makeObservable, observable } from 'mobx'
-import { field } from '../../services/db/decorators/field.decorator'
-import { transient } from '../../services/db/decorators/transient.decorator'
 import { v1 as uuid } from 'uuid'
-import { SectionFormat } from './SectionFormat'
-import { ContentModel } from './ContentModel'
-import { SectionPreset } from './SectionPreset'
+import { field } from '../../services/db/decorators/field.decorator'
 import { transform } from '../../services/db/decorators/transform.decorator'
-import { ArticlePart } from './ArticlePart'
+import { transient } from '../../services/db/decorators/transient.decorator'
 import { SectionService } from '../section/Section.service'
+import { ArticlePart } from './ArticlePart'
+import { ContentModel } from './ContentModel'
+import { SectionFormat } from './SectionFormat'
+import { SectionPreset } from './SectionPreset'
 
 export class SectionModel implements ArticlePart {
   @transient()

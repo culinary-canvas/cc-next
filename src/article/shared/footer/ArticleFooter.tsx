@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useAutorun } from '../../../hooks/useAutorun'
 import s from './ArticleFooter.module.scss'
 import { TagsView } from '../../../tag/view/TagsView'
 import { Share } from '../share/Share'
@@ -18,7 +19,7 @@ export const ArticleFooter = observer(({ article }: Props) => {
 
   const [gridRow, setGridRow] = useState<number>()
 
-  useEffect(
+  useAutorun(
     () =>
       setGridRow(
         article.sections.reduce(
@@ -29,7 +30,7 @@ export const ArticleFooter = observer(({ article }: Props) => {
           0,
         ),
       ),
-    [article],
+    [article.sections],
   )
 
   return (

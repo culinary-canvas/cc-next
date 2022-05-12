@@ -46,7 +46,10 @@ export const ContentControls = observer(() => {
               content,
               type,
             )
-            section.contents.splice(contentIndex, 1, appliedContent)
+            console.log('HÄRÅ?')
+            runInAction(() =>
+              section.contents.splice(contentIndex, 1, appliedContent),
+            )
             admin.setContent(appliedContent)
           }}
         />

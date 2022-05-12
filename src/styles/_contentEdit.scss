@@ -3,6 +3,6 @@
 @mixin contentInEdit {
   .inEdit,
   .inEdit:hover {
-    box-shadow: 0 0 20px 8px transparentize($blue-light, 0.8);
-  }
+    box-shadow: 0 0 10px 8px transparentize($blue-light, 0.9);  }
+
 }

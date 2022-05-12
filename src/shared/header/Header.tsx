@@ -6,12 +6,15 @@ import { isServer } from '../../pages/_app'
 import { useAuth } from '../../services/auth/Auth'
 import { classnames } from '../../services/importHelpers'
 import { ClientRender } from '../ClientRender/ClientRender'
+import { useHeader } from './Header.context'
 import s from './Header.module.scss'
 
 export const Header = () => {
   const { isSignedIn } = useAuth()
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [collapsing, setCollapsing] = useState<boolean>(false)
+  const { currentArticle } = useHeader()
+
   useEffect(() => {
     function onScroll(e) {
       if (!collapsing) {
@@ -43,6 +46,7 @@ export const Header = () => {
         collapsed && s.collapsed,
         isSignedIn && s.isSignedIn,
       )}
+      style={{ backgroundColor: currentArticle?.format.backgroundColor }}
     >
       <ClientRender>
         <BrowserView>

@@ -1,11 +1,11 @@
-import { Format } from './Format'
-import { transient } from '../../services/db/decorators/transient.decorator'
-import { field } from '../../services/db/decorators/field.decorator'
-import { computed, makeObservable, observable } from 'mobx'
+import { computed, observable } from 'mobx'
 import { v4 as uuid } from 'uuid'
-import { ContentType } from './ContentType'
+import { field } from '../../services/db/decorators/field.decorator'
+import { transient } from '../../services/db/decorators/transient.decorator'
 import StringUtils from '../../services/utils/StringUtils'
 import { ArticlePart } from './ArticlePart'
+import { ContentType } from './ContentType'
+import { Format } from './Format'
 
 export abstract class ContentModel<T extends Format = Format>
   implements ArticlePart

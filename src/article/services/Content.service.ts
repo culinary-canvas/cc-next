@@ -1,5 +1,5 @@
 import { loremIpsum } from 'lorem-ipsum'
-import { action } from 'mobx'
+import { action, makeObservable } from 'mobx'
 import { cloneDeep } from '../../services/importHelpers'
 import StringUtils from '../../services/utils/StringUtils'
 import { COLOR } from '../../styles/_color'
@@ -16,6 +16,8 @@ export class ContentService {
   static create<T extends ContentModel>(type = ContentType.PARAGRAPH): T {
     const content: T = (type === ContentType.IMAGE
       ? new ImageContentModel()
+      : type === ContentType.ISSUE
+      ? new IssueContentModel()
       : new TextContentModel()) as unknown as T
     return this.getTypeAppliedContent<T>(content, type)
   }
@@ -35,11 +37,12 @@ export class ContentService {
       content = new ImageContentModel()
     } else if (
       type !== ContentType.IMAGE &&
+      type !== ContentType.ISSUE &&
       !(source instanceof TextContentModel)
     ) {
       content = new TextContentModel()
     } else {
-      content = cloneDeep(source)
+      content = makeObservable(cloneDeep(source))
     }
 
     content.format.gridPosition = source.format.gridPosition
@@ -61,6 +64,7 @@ export class ContentService {
     }
   }
 
+  @action
   private static applyTextFormatForType(content: TextContentModel) {
     content.format = new TextFormat({
       gridPosition: content.format.gridPosition,
@@ -73,8 +77,9 @@ export class ContentService {
         content.format.fontSize = FONT.SIZE.XL
         break
       case ContentType.HEADING:
-        content.format.fontSize = FONT.SIZE.L
-        content.format.fontWeight = 900
+        content.format.fontSize = FONT.SIZE.XL
+        content.format.fontWeight = 600
+        content.format.padding.bottom = 0
         break
       case ContentType.SUB_HEADING:
         content.format.color = COLOR.BLACK

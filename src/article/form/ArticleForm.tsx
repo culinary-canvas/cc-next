@@ -1,7 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { useAdmin } from '../../admin/Admin.context'
+import { useAutorun } from '../../hooks/useAutorun'
 import { classnames } from '../../services/importHelpers'
+import { useHeader } from '../../shared/header/Header.context'
 import { ArticleService } from '../Article.service'
 import { ArticlePreview } from '../preview/ArticlePreview'
 import { ArticleFooter } from '../shared/footer/ArticleFooter'
@@ -11,10 +13,13 @@ import { SectionEdit } from './section/SectionEdit'
 export const ArticleForm = observer(() => {
   const admin = useAdmin()
   const { article } = admin
+  const { setCurrentArticle } = useHeader()
 
   useEffect(() => {
     !!article && ArticleService.populateIssues([article])
   }, [article])
+
+  useAutorun(() => setCurrentArticle(article), [article])
 
   if (!article) {
     return null

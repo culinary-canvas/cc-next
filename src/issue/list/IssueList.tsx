@@ -17,7 +17,9 @@ export function IssueList({ issues }: Props) {
     <>
       <h1>
         Issues
-        <Button onClick={() => router.push('/admin/issues/create')}>Create</Button>
+        <Button onClick={() => router.push('/admin/issues/create')}>
+          Create
+        </Button>
       </h1>
       <table className={s.table}>
         <thead>

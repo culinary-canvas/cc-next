@@ -1,15 +1,15 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react'
+import { runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
+import React, { CSSProperties, useEffect, useRef, useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize'
-import { TextContentModel } from '../../models/TextContent.model'
 import { useAdmin } from '../../../admin/Admin.context'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { classnames } from '../../../services/importHelpers'
-import s from './TextContentEdit.module.scss'
 import { GridPositionService } from '../../grid/GridPosition.service'
-import { runInAction } from 'mobx'
-import { TextEditMenu } from './TextEditMenu'
+import { TextContentModel } from '../../models/TextContent.model'
 import { TextContentService } from '../../services/TextContent.service'
+import s from './TextContentEdit.module.scss'
+import { TextEditMenu } from './TextEditMenu'
 
 interface Props {
   content: TextContentModel
@@ -73,12 +73,14 @@ export const TextContentEdit = observer((props: Props) => {
       )}
       style={{ ...gridWrapperStyle }}
     >
-      <TextEditMenu
-        text={content.value}
-        selectionStart={selection.start}
-        selectionEnd={selection.end}
-        onTextChange={(text) => runInAction(() => (content.value = text))}
-      />
+      {!!(selection.end - selection.start) && (
+        <TextEditMenu
+          text={content.value}
+          selectionStart={selection.start}
+          selectionEnd={selection.end}
+          onTextChange={(text) => runInAction(() => (content.value = text))}
+        />
+      )}
       <TextareaAutosize
         ref={textareaRef}
         className={classnames([

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react-lite'
 import React, { CSSProperties, useState } from 'react'
+import { useAdmin } from '../../../admin/Admin.context'
 import { useAutorun } from '../../../hooks/useAutorun'
 import { IssueDisplay } from '../../../issue/issueDisplay/IssueDisplay'
 import { classnames } from '../../../services/importHelpers'
@@ -16,8 +17,10 @@ interface Props {
 
 export const IssueContent = observer((props: Props) => {
   const { article, content } = props
+
   const [formatStyle, setFormatStyle] = useState<CSSProperties>({})
   const [formatClassNames, setFormatClassNames] = useState<string>('')
+  const admin = useAdmin()
 
   useAutorun(() => {
     const { format } = content
@@ -53,6 +56,7 @@ export const IssueContent = observer((props: Props) => {
       transition={{ delay: 0.5 }}
       className={formatClassNames}
       style={formatStyle}
+      onClick={() => admin.setContent(content)}
     >
       <IssueDisplay issue={article.issue} />
     </motion.div>

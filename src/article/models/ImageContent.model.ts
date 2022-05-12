@@ -1,9 +1,9 @@
 import { computed, makeObservable, observable } from 'mobx'
-import { field } from '../../services/db/decorators/field.decorator'
 import { ImageSet } from '../../image/models/ImageSet'
-import { ImageFormat } from './ImageFormat'
+import { field } from '../../services/db/decorators/field.decorator'
 import { ContentModel } from './ContentModel'
 import { ContentType } from './ContentType'
+import { ImageFormat } from './ImageFormat'
 
 export class ImageContentModel extends ContentModel<ImageFormat> {
   @field(ImageSet)

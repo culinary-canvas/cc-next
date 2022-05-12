@@ -10,10 +10,12 @@ import { ContentType } from '../../../article/models/ContentType'
 import { SectionModel } from '../../../article/models/Section.model'
 import { TextContentModel } from '../../../article/models/TextContent.model'
 import { ArticleView } from '../../../article/view/ArticleView'
+import { useAutorun } from '../../../hooks/useAutorun'
 import { useTransformToModel } from '../../../hooks/useTransformToModel'
 import { useAuth } from '../../../services/auth/Auth'
 import { firebase } from '../../../services/firebase/Firebase'
 import { PageHead } from '../../../shared/head/PageHead'
+import { useHeader } from '../../../shared/header/Header.context'
 import s from './articlePage.module.scss'
 
 interface Props {
@@ -23,10 +25,13 @@ interface Props {
 const ArticlePage = observer(({ articleData }: Props) => {
   const article = useTransformToModel(articleData, ArticleModel)
   const { isSignedIn } = useAuth()
+  const { setCurrentArticle } = useHeader()
 
   useEffect(() => {
     ArticleService.populateIssues([article])
   }, [article])
+
+  useAutorun(() => setCurrentArticle(article), [article])
 
   useEffect(() => {
     if (!!article) {

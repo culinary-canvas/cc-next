@@ -1,9 +1,9 @@
-import { field } from '../../services/db/decorators/field.decorator'
+import { loremIpsum } from 'lorem-ipsum'
 import { makeObservable, observable } from 'mobx'
-import { TextFormat } from './TextFormat'
+import { field } from '../../services/db/decorators/field.decorator'
 import { ContentModel } from './ContentModel'
 import { ContentType } from './ContentType'
-import { loremIpsum } from 'lorem-ipsum'
+import { TextFormat } from './TextFormat'
 
 export class TextContentModel extends ContentModel<TextFormat> {
   @field()

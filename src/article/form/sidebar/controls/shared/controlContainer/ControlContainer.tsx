@@ -1,7 +1,7 @@
-import React from 'react'
 import { observer } from 'mobx-react-lite'
-import s from './ControlContainer.module.scss'
+import React from 'react'
 import { classnames } from '../../../../../../services/importHelpers'
+import s from './ControlContainer.module.scss'
 
 interface Props {
   label?: string
