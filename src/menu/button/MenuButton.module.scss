@@ -11,7 +11,6 @@ $bar-width: 28px;
   width: $bar-width + $gap * 2;
   height: 2rem;
   margin: 0;
-  background-color: $white;
   border: none;
   > * {
     position: absolute;
