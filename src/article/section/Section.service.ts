@@ -186,7 +186,7 @@ export class SectionService {
       const byline = this.getOrCreateType(ContentType.BYLINE, section)
       byline.format.horizontalAlign = HorizontalAlign.CENTER
       byline.format.verticalAlign = VerticalAlign.BOTTOM
-      byline.format.gridPosition = new GridPosition(3, 5, 6, 5)
+      byline.format.gridPosition = new GridPosition(3, 5, 4, 5)
 
       image.format.padding = new Padding(0)
       issue.format.padding = new Padding(80, 0, 0, 0)
