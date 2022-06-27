@@ -21,7 +21,7 @@
     }
 
     &.height-FULL_SCREEN {
-      height: calc(100vh - #{$header-height});
+      min-height: calc(100vh - #{$header-height});
       > * {
         max-height: calc(100vh - #{$header-height});
       }
