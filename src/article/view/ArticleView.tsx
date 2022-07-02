@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Related } from '../../shared/related/Related'
 import { ArticleService } from '../Article.service'
 import { ArticleModel } from '../models/Article.model'
+import { ArticleType } from '../models/ArticleType'
 import { RelatedArticles } from '../related/RelatedArticles'
 import { Section } from '../section/Section'
 import { ArticleFooter } from '../shared/footer/ArticleFooter'
@@ -28,7 +29,11 @@ export const ArticleView = observer(({ article: propArticle }: Props) => {
   return (
     <>
       <article
-        className={classNames(s.content, article.sponsored && s.sponsored)}
+        className={classNames(
+          s.content,
+          s[`type-${article?.type}`],
+          article.sponsored && s.sponsored,
+        )}
         style={{ backgroundColor: article.format.backgroundColor }}
       >
         {article.sections.map((section) => (

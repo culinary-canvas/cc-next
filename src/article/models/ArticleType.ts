@@ -4,4 +4,5 @@ export enum ArticleType {
   RECIPE = 'RECIPE',
   TIDBITS = 'TIDBITS',
   FEATURE = 'FEATURE',
+  VERTICAL = 'VERTICAL',
 }

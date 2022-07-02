@@ -40,8 +40,8 @@ export function PersonView(props: Props) {
         figureClassName={classnames(s.figure, {
           [s.noImage]: !person.imageSet?.url,
         })}
-        objectFit="contain"
-        objectPosition="top"
+        objectFit="cover"
+        objectPosition="center"
         layout="fill"
         placeholder={() => (
           <div className={s.noImagePlaceholder}>

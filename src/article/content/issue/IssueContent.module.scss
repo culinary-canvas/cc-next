@@ -15,6 +15,6 @@
   @include media('<=phone') {
     grid-area: unset !important;
     grid-row-start: unset !important;
-    padding: 1rem 0;
+    padding: 1rem 0 !important;
   }
 }

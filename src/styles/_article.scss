@@ -55,6 +55,13 @@ $article-border-radius: 1rem;
       right: 0;
     }
   }
+
+  &.type-VERTICAL {
+    padding: 0.5rem;
+    section{
+      max-width: 100%;
+    }
+  }
 }
 
 @mixin articleFooter {

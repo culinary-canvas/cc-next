@@ -59,6 +59,21 @@ export const ArticleControls = observer(() => {
     (t) => setTitle(t),
   )
 
+  useReaction(
+    () => article.type === ArticleType.VERTICAL,
+    (is) => {
+      if (is) {
+        article.format.backgroundColor = COLOR.GREY_LIGHTER
+        article.sections.forEach(
+          (s) => (s.format.backgroundColor = COLOR.WHITE),
+        )
+      } else {
+        article.format.backgroundColor = 'transparent'
+        article.sections.forEach((s) => (s.format.backgroundColor = undefined))
+      }
+    },
+  )
+
   if (!article) {
     return null
   }

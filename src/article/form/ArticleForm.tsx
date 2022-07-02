@@ -47,7 +47,7 @@ export const ArticleForm = observer(() => {
         <article
           className={classnames(
             s.content,
-            `type-${article?.type}`,
+            s[`type-${article?.type}`],
             article.sponsored && s.sponsored,
           )}
           style={{ backgroundColor: article.format.backgroundColor }}
