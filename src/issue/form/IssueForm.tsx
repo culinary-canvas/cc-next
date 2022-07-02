@@ -2,12 +2,7 @@ import { runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import TextareaAutosize from 'react-textarea-autosize'
-import { TextEditMenu } from '../../article/form/text/TextEditMenu'
-import { ImageFormat } from '../../article/models/ImageFormat'
-import { IssueModel } from '../models/Issue.model'
-import { ImageEdit } from '../../image/imageEdit/ImageEdit'
-import { ImageSet } from '../../image/models/ImageSet'
+import { ColorPicker } from '../../article/form/sidebar/controls/shared/colorPicker/ColorPicker'
 import { useAuth } from '../../services/auth/Auth'
 import { useFormControl } from '../../services/formControl/useFormControl'
 import { Button } from '../../shared/button/Button'
@@ -16,6 +11,8 @@ import { useErrorModal } from '../../shared/error/useErrorModal'
 import { OverlayConfirm } from '../../shared/overlay/OverlayConfirm'
 import { useOverlay } from '../../shared/overlay/OverlayStore'
 import { IssueApi } from '../Issue.api'
+import { IssueDisplay } from '../issueDisplay/IssueDisplay'
+import { IssueModel } from '../models/Issue.model'
 import s from './IssueForm.module.scss'
 
 interface Props {
@@ -117,54 +114,85 @@ export const IssueForm = observer((props: Props) => {
         dateFormat={'MMMM yyyy'}
       />
 
-      <label htmlFor="description" style={{ marginTop: '3rem' }}>
-        Description
-      </label>
-      <TextEditMenu
-        text={issue.description}
-        selectionStart={selection.start}
-        selectionEnd={selection.end}
-        onTextChange={(text) =>
-          runInAction(() => (formControl.mutable.description = text))
-        }
-      />
-      <TextareaAutosize
-        ref={textareaRef}
-        id="description"
-        onChange={(e) =>
-          runInAction(() => (issue.description = e.target.value))
-        }
-        value={issue.description}
-        placeholder="Write a short description"
-        onBlur={(e) => {
-          e.target.setSelectionRange(selection.start, selection.end)
-        }}
-        onMouseUp={() =>
-          setSelection({
-            start: textareaRef.current.selectionStart,
-            end: textareaRef.current.selectionEnd,
-          })
-        }
-        onKeyUp={() =>
-          setSelection({
-            start: textareaRef.current.selectionStart,
-            end: textareaRef.current.selectionEnd,
-          })
-        }
-      />
+      <label htmlFor="backgroundColor">Background color</label>
+      <div style={{ width: '200px' }}>
+        <ColorPicker
+          id="backgroundColor"
+          background
+          value={issue.backgroundColor}
+          onSelect={(color) => {
+            console.log(color)
+            runInAction(() => (formControl.mutable.backgroundColor = color))
+          }}
+        />
+      </div>
 
-      <label htmlFor="image" style={{ marginBottom: '1rem' }}>
-        Image
-      </label>
-      <ImageEdit
-        set={issue.imageSet}
-        format={issue.imageFormat}
-        onFocus={() => {
-          issue.imageSet = new ImageSet()
-          issue.imageFormat = new ImageFormat()
-        }}
-        onChange={(imageSet) => runInAction(() => (issue.imageSet = imageSet))}
-      />
+      <label htmlFor="color">Text color</label>
+      <div style={{ width: '200px' }}>
+        <ColorPicker
+          id="color"
+          background
+          value={issue.color}
+          onSelect={(color) => {
+            console.log(color)
+            runInAction(() => (formControl.mutable.color = color))
+          }}
+        />
+      </div>
+
+      <div className={s.preview}>
+        <h3>Preview</h3>
+        <IssueDisplay issue={issue} />
+      </div>
+
+      {/*<label htmlFor="description" style={{ marginTop: '3rem' }}>*/}
+      {/*  Description*/}
+      {/*</label>*/}
+      {/*<TextEditMenu*/}
+      {/*  text={issue.description}*/}
+      {/*  selectionStart={selection.start}*/}
+      {/*  selectionEnd={selection.end}*/}
+      {/*  onTextChange={(text) =>*/}
+      {/*    runInAction(() => (formControl.mutable.description = text))*/}
+      {/*  }*/}
+      {/*/>*/}
+      {/*<TextareaAutosize*/}
+      {/*  ref={textareaRef}*/}
+      {/*  id="description"*/}
+      {/*  onChange={(e) =>*/}
+      {/*    runInAction(() => (issue.description = e.target.value))*/}
+      {/*  }*/}
+      {/*  value={issue.description}*/}
+      {/*  placeholder="Write a short description"*/}
+      {/*  onBlur={(e) => {*/}
+      {/*    e.target.setSelectionRange(selection.start, selection.end)*/}
+      {/*  }}*/}
+      {/*  onMouseUp={() =>*/}
+      {/*    setSelection({*/}
+      {/*      start: textareaRef.current.selectionStart,*/}
+      {/*      end: textareaRef.current.selectionEnd,*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*  onKeyUp={() =>*/}
+      {/*    setSelection({*/}
+      {/*      start: textareaRef.current.selectionStart,*/}
+      {/*      end: textareaRef.current.selectionEnd,*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*/>*/}
+
+      {/*<label htmlFor="image" style={{ marginBottom: '1rem' }}>*/}
+      {/*  Image*/}
+      {/*</label>*/}
+      {/*<ImageEdit*/}
+      {/*  set={issue.imageSet}*/}
+      {/*  format={issue.imageFormat}*/}
+      {/*  onFocus={() => {*/}
+      {/*    issue.imageSet = new ImageSet()*/}
+      {/*    issue.imageFormat = new ImageFormat()*/}
+      {/*  }}*/}
+      {/*  onChange={(imageSet) => runInAction(() => (issue.imageSet = imageSet))}*/}
+      {/*/>*/}
     </article>
   )
 })

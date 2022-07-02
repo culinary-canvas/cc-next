@@ -14,7 +14,10 @@ interface Props {
 export const IssueDisplay = observer(({ issue, className }: Props) => {
   return (
     <ClientRender>
-      <div className={classNames(s.issue, !issue && s.hidden, className)}>
+      <div
+        className={classNames(s.issue, !issue && s.hidden, className)}
+        style={{ backgroundColor: issue?.backgroundColor, color: issue?.color }}
+      >
         <span>{issue?.name}</span>
         <small>{!!issue && format(issue.publishMonth, 'MMMM yyyy')}</small>
       </div>

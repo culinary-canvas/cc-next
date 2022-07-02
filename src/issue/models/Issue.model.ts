@@ -38,6 +38,14 @@ export class IssueModel implements Model {
   publishMonth: Date
 
   @observable
+  @field()
+  backgroundColor = ''
+
+  @observable
+  @field()
+  color = ''
+
+  @observable
   @field(ImageSet)
   imageSet: ImageSet
 

@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { runInAction } from 'mobx'
 import React, { useCallback, useEffect, useState } from 'react'
 import { classnames } from '../../../services/importHelpers'
@@ -64,7 +65,7 @@ export function TextEditMenu(props: Props) {
   )
 
   return (
-    <div className={s.container}>
+    <div className={classNames(s.container, start === end && s.hidden)}>
       <input
         type="url"
         className={s.linkInput}

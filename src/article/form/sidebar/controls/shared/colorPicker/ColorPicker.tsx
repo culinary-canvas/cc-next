@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import s from './ColorPicker.module.scss'
-import { COLOR, ColorType } from '../../../../../../styles/_color'
-import { classnames, isNil } from '../../../../../../services/importHelpers'
-import { BlockPicker } from 'react-color'
-import { Button } from '../../../../../../shared/button/Button'
+import React, { useEffect, useState } from 'react'
+import { SketchPicker } from 'react-color'
 import { config, useSpring } from 'react-spring'
+import { classnames, isNil } from '../../../../../../services/importHelpers'
+import { Button } from '../../../../../../shared/button/Button'
 import { Modal } from '../../../../../../shared/modal/Modal'
+import { COLOR, ColorType } from '../../../../../../styles/_color'
+import s from './ColorPicker.module.scss'
 
 interface Props {
   value: ColorType | string
@@ -82,11 +82,9 @@ export const ColorPicker = observer((props: Props) => {
           <Button className={s.closeButton} onClick={() => showModal(false)}>
             Close
           </Button>
-          <BlockPicker
-            width="100%"
-            colors={palette}
+          <SketchPicker
+            presetColors={palette}
             color={value}
-            triangle="hide"
             onChangeComplete={(color) => onSelect(color.hex)}
             className={s.colorPicker}
           />

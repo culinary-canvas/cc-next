@@ -8,7 +8,6 @@
   justify-content: flex-start;
   align-items: center;
   padding: 8px 12px;
-  background-color: $yellow;
   font-weight: 500;
   transition: all 250ms;
   gap: 0.5rem;
@@ -25,7 +24,7 @@
   }
 
   small {
-    opacity: 1;
+    opacity: 0.8;
     text-transform: uppercase;
     font-weight: 600;
     line-height: 1;
