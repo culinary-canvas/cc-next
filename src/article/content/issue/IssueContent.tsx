@@ -58,7 +58,7 @@ export const IssueContent = observer((props: Props) => {
       style={formatStyle}
       onClick={() => admin.setContent(content)}
     >
-      <IssueDisplay issue={article.issue} />
+      <IssueDisplay issue={article.issue} article={article}/>
     </motion.div>
   )
 })

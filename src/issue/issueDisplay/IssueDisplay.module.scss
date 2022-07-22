@@ -1,32 +1,36 @@
 @import '../../styles/font';
 @import '../../styles/layout';
 @import '../../styles/color';
+@import '../../styles/shadow';
 
-.issue {
+.container {
   display: flex;
-  flex-direction: column-reverse;
+  z-index: 2;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 8px 12px;
   font-weight: 500;
   transition: all 250ms;
   gap: 0.5rem;
-  z-index: 2;
+  box-shadow: $superSoftDownShadow;
+  background-color: $white;
   &.hidden {
     opacity: 0;
   }
+}
 
-  span {
-    font-family: $font-family-garamond;
-    font-size: 22px;
-    font-style: italic;
-    line-height: 1;
-  }
+.name {
+  font-family: $font-family-garamond;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1;
+}
 
-  small {
-    opacity: 0.8;
-    text-transform: uppercase;
-    font-weight: 600;
-    line-height: 1;
-  }
+.month {
+  opacity: 0.8;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1;
+  font-size: 13px;
 }
