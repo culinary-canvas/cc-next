@@ -213,10 +213,12 @@ export class SectionService {
       const title = this.getOrCreateType(ContentType.TITLE, section)
       title.format.verticalAlign = VerticalAlign.BOTTOM
       title.format.horizontalAlign = HorizontalAlign.CENTER
+      title.format.fontSize = FONT.SIZE.XXML
       title.format.gridPosition = new GridPosition(1, 5, 2, 3)
 
       const subHeading = this.getOrCreateType(ContentType.SUB_HEADING, section)
       subHeading.format.horizontalAlign = HorizontalAlign.CENTER
+      subHeading.format.fontSize = FONT.SIZE.XL
       subHeading.format.gridPosition = new GridPosition(1, 5, 3, 4)
 
       const image = this.getOrCreateType(ContentType.IMAGE, section)
@@ -225,12 +227,13 @@ export class SectionService {
       const byline = this.getOrCreateType(ContentType.BYLINE, section)
       byline.format.horizontalAlign = HorizontalAlign.CENTER
       byline.format.verticalAlign = VerticalAlign.BOTTOM
+      byline.format.fontWeight = 200
       byline.format.gridPosition = new GridPosition(1, 5, 5, 6)
 
-      image.format.padding = new Padding(16)
-      issue.format.padding = new Padding(80, 16, 16, 16)
-      title.format.padding = new Padding(0, 16, 0, 16)
-      subHeading.format.padding = new Padding(16, 16, 80)
+      image.format.padding = new Padding(40)
+      issue.format.padding = new Padding(60, 16, 16, 16)
+      title.format.padding = new Padding(40, 16, 0, 16)
+      subHeading.format.padding = new Padding(16, 16, 40)
       byline.format.padding = new Padding(32)
 
       section.format.height = Size.FIT_CONTENT

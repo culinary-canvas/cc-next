@@ -1,8 +1,8 @@
-import { ContentType } from '../models/ContentType'
 import { loremIpsum } from 'lorem-ipsum'
+import { isServer } from '../../pages/_app'
 import StringUtils from '../../services/utils/StringUtils'
 import { BREAKPOINT } from '../../styles/layout'
-import { isServer } from '../../pages/_app'
+import { ContentType } from '../models/ContentType'
 
 export class TextContentService {
   static placeholder(type: ContentType) {
@@ -15,12 +15,12 @@ export class TextContentService {
   }
 
   static getResponsiveFontSize(fontSize: number): string {
-    if (isServer) {
+    if (isServer || window.innerWidth >= BREAKPOINT.DESKTOP_S) {
       return `${fontSize}px`
     }
-    const vw = fontSize / (window.innerWidth < BREAKPOINT.DESKTOP_S ? 12 : 20)
-    const px = window.innerWidth * (vw / 100)
-    const min = fontSize < 16 ? fontSize : 16
+    const px = fontSize * 0.75
+    const min = fontSize < 18 ? fontSize : 18
+
     return px < min
       ? `${min}px`
       : px > fontSize

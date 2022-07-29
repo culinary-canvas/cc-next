@@ -8,13 +8,13 @@
 
   @include media('<=phone') {
     .content-type-TITLE {
-      font-size: $font-size-xl !important;
+      //font-size: $font-size-xl !important;
     }
     .content-type-LEAD {
-      font-size: 18px !important;
+      //font-size: 18px !important;
     }
     .content-type-PARAGRAPH {
-      font-size: 18px !important;
+      //font-size: 18px !important;
     }
   }
 }
