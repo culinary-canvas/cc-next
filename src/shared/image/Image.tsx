@@ -24,7 +24,7 @@ export const Image = observer((props: Props) => {
     figureStyle,
     width,
     height,
-    quality = 65,
+    quality = 75,
     layout = 'responsive',
     ...restNextImageProps
   } = props
